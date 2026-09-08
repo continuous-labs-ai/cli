@@ -31,10 +31,21 @@ jobs:
         with:
           go-version-file: go.mod
       - run: go mod tidy
+      - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        with:
+          name: dependency-locks
+          path: |
+            go.mod
+            go.sum
       - run: go vet ./...
       - run: go test ./...
       - run: go build -o dist/continuous ./cmd/continuous
       - run: python3 tests/smoke.py dist/continuous
+      - uses: goreleaser/goreleaser-action@e435ccd777264be153ace6237001ef4d979d3a7a
+        with:
+          version: "~> v2"
+          args: release --snapshot --clean --skip=publish
+      - run: python3 tests/release.py
 
   all-green:
     name: All green
