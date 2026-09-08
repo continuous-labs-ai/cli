@@ -4,8 +4,8 @@ package cli
 
 import (
 	"fmt"
-	"github.com/continuous-labs-ai/continuous-simulation-cli/internal/config"
-	"github.com/continuous-labs-ai/continuous-simulation-cli/internal/usage"
+	"github.com/continuous-labs-ai/cli/internal/config"
+	"github.com/continuous-labs-ai/cli/internal/usage"
 	"github.com/spf13/cobra"
 )
 

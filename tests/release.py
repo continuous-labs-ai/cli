@@ -1,6 +1,8 @@
 from pathlib import Path
 import hashlib
+import subprocess
 import tarfile
+import tempfile
 import zipfile
 
 
@@ -21,4 +23,13 @@ for entry in Path("dist/checksums.txt").read_text().splitlines():
     artifact = Path("dist") / name.lstrip("*")
     assert hashlib.sha256(artifact.read_bytes()).hexdigest() == digest
 
-print("All six installer archives and their checksums passed.")
+with tempfile.TemporaryDirectory() as install_dir:
+    executable = Path(install_dir) / "continuous"
+    with tarfile.open("dist/continuous_Linux_x86_64.tar.gz") as package:
+        executable.write_bytes(package.extractfile("continuous").read())
+    executable.chmod(0o755)
+    result = subprocess.run([str(executable), "version"], capture_output=True, text=True, timeout=15)
+    assert result.returncode == 0, result.stderr
+    assert "continuous" in result.stdout.lower(), result.stdout
+
+print("All six archives, checksums, and the extracted Linux binary passed.")

@@ -11,8 +11,8 @@ import (
 	"strings"
 	"time"
 
-	"github.com/continuous-labs-ai/continuous-simulation-cli/internal/sdk/optionalnullable"
-	"github.com/continuous-labs-ai/continuous-simulation-cli/internal/sdk/types"
+	"github.com/continuous-labs-ai/cli/internal/sdk/optionalnullable"
+	"github.com/continuous-labs-ai/cli/internal/sdk/types"
 )
 
 func GenerateURL(_ context.Context, serverURL, path string, pathParams interface{}, globals interface{}) (string, error) {

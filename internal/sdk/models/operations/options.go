@@ -4,8 +4,8 @@ package operations
 
 import (
 	"errors"
-	"github.com/continuous-labs-ai/continuous-simulation-cli/internal/sdk/retry"
-	"github.com/continuous-labs-ai/continuous-simulation-cli/internal/sdk/sdkinternal/utils"
+	"github.com/continuous-labs-ai/cli/internal/sdk/retry"
+	"github.com/continuous-labs-ai/cli/internal/sdk/sdkinternal/utils"
 	"time"
 )
 

@@ -3,7 +3,7 @@
 package operations
 
 import (
-	"github.com/continuous-labs-ai/continuous-simulation-cli/internal/sdk/models/components"
+	"github.com/continuous-labs-ai/cli/internal/sdk/models/components"
 )
 
 type DeleteSimulatorRequest struct {

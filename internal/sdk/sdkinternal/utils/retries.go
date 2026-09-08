@@ -6,7 +6,7 @@ import (
 	"context"
 	"errors"
 	"fmt"
-	"github.com/continuous-labs-ai/continuous-simulation-cli/internal/sdk/retry"
+	"github.com/continuous-labs-ai/cli/internal/sdk/retry"
 	"io"
 	"math"
 	"math/rand"

@@ -52,7 +52,7 @@ cli:
       repositoryOwner: ""
   enableCustomCodeRegions: false
   envVarPrefix: CONTINUOUS
-  generateRelease: true
+  generateRelease: false
   idiomaticMethodCollisionNames: true
   imports:
     option: openapi
@@ -70,5 +70,5 @@ cli:
     errorColor: '#F87171'
     subtleColor: '#475569'
     successColor: '#4ADE80'
-  packageName: github.com/continuous-labs-ai/continuous-simulation-cli
+  packageName: github.com/continuous-labs-ai/cli
   removeStutter: true

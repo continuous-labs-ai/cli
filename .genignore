@@ -1,0 +1,5 @@
+/README.md
+/.gitattributes
+/internal/sdk/.gitattributes
+/.goreleaser.yaml
+/.github/workflows/release.yaml

@@ -9,7 +9,7 @@ import (
 	"reflect"
 	"strings"
 
-	"github.com/continuous-labs-ai/continuous-simulation-cli/internal/sdk/optionalnullable"
+	"github.com/continuous-labs-ai/cli/internal/sdk/optionalnullable"
 )
 
 func PopulateHeaders(_ context.Context, req *http.Request, headers interface{}, globals interface{}) {

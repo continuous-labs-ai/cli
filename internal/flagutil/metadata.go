@@ -18,8 +18,8 @@ import (
 
 	"github.com/spf13/cobra"
 
-	"github.com/continuous-labs-ai/continuous-simulation-cli/internal/sdk/sdkinternal/utils"
-	"github.com/continuous-labs-ai/continuous-simulation-cli/internal/sdk/types"
+	"github.com/continuous-labs-ai/cli/internal/sdk/sdkinternal/utils"
+	"github.com/continuous-labs-ai/cli/internal/sdk/types"
 )
 
 // FlagKind describes what kind of value a flag carries.

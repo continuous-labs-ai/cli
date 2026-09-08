@@ -7,11 +7,11 @@ package sdk
 import (
 	"context"
 	"fmt"
-	"github.com/continuous-labs-ai/continuous-simulation-cli/internal/sdk/models/components"
-	"github.com/continuous-labs-ai/continuous-simulation-cli/internal/sdk/retry"
-	"github.com/continuous-labs-ai/continuous-simulation-cli/internal/sdk/sdkinternal/config"
-	"github.com/continuous-labs-ai/continuous-simulation-cli/internal/sdk/sdkinternal/hooks"
-	"github.com/continuous-labs-ai/continuous-simulation-cli/internal/sdk/sdkinternal/utils"
+	"github.com/continuous-labs-ai/cli/internal/sdk/models/components"
+	"github.com/continuous-labs-ai/cli/internal/sdk/retry"
+	"github.com/continuous-labs-ai/cli/internal/sdk/sdkinternal/config"
+	"github.com/continuous-labs-ai/cli/internal/sdk/sdkinternal/hooks"
+	"github.com/continuous-labs-ai/cli/internal/sdk/sdkinternal/utils"
 	"net/http"
 	"time"
 )
@@ -134,7 +134,7 @@ func New(opts ...SDKOption) *ContinuousSimulation {
 	sdk := &ContinuousSimulation{
 		SDKVersion: "0.0.1",
 		sdkConfiguration: config.SDKConfiguration{
-			UserAgent:         "speakeasy-sdk/go 0.0.1 2.935.1 v1 github.com/continuous-labs-ai/continuous-simulation-cli/internal/sdk",
+			UserAgent:         "speakeasy-sdk/go 0.0.1 2.935.1 v1 github.com/continuous-labs-ai/cli/internal/sdk",
 			SDKVersion:        "0.0.1",
 			GenVersion:        "2.935.1",
 			OpenAPIDocVersion: "v1",
