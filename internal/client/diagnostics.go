@@ -12,7 +12,7 @@ import (
 
 	"github.com/spf13/cobra"
 
-	"github.com/continuous-labs-ai/continuous-simulation-cli/internal/flagutil"
+	"github.com/continuous-labs-ai/cli/internal/flagutil"
 )
 
 // maxBodyPreview is the maximum number of bytes to show in body previews.

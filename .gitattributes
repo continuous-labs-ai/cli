@@ -1,2 +1,18 @@
-# This allows generated code to be indexed correctly
-*.go linguist-generated=false
+/cmd/** linguist-generated=true
+/internal/** linguist-generated=true
+/USAGE.md linguist-generated=true
+/go.mod linguist-generated=true
+/go.sum linguist-generated=true
+/.speakeasy/gen.lock linguist-generated=true
+/.speakeasy/workflow.lock linguist-generated=true
+/.speakeasy/out.openapi.yaml linguist-generated=true
+/.speakeasy/gen.yaml linguist-generated=false
+/.speakeasy/workflow.yaml linguist-generated=false
+/.github/** linguist-generated=false
+/tests/** linguist-generated=false
+/scripts/** linguist-generated=false
+/.gitattributes linguist-generated=false
+/.genignore linguist-generated=false
+/.goreleaser.yaml linguist-generated=false
+/README.md linguist-generated=false
+/CONTRIBUTING.md linguist-generated=false

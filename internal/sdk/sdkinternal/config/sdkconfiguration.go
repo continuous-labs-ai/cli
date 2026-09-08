@@ -4,7 +4,7 @@ package config
 
 import (
 	"context"
-	"github.com/continuous-labs-ai/continuous-simulation-cli/internal/sdk/retry"
+	"github.com/continuous-labs-ai/cli/internal/sdk/retry"
 	"net/http"
 	"time"
 )

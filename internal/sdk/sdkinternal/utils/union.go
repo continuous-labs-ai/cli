@@ -9,7 +9,7 @@ import (
 	"strings"
 	"time"
 
-	"github.com/continuous-labs-ai/continuous-simulation-cli/internal/sdk/types"
+	"github.com/continuous-labs-ai/cli/internal/sdk/types"
 )
 
 // UnionCandidate represents a candidate type during union deserialization

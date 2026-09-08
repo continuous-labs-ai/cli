@@ -14,7 +14,7 @@ import (
 	"time"
 	"unsafe"
 
-	"github.com/continuous-labs-ai/continuous-simulation-cli/internal/sdk/types"
+	"github.com/continuous-labs-ai/cli/internal/sdk/types"
 )
 
 func MarshalJSON(v interface{}, tag reflect.StructTag, topLevel bool) ([]byte, error) {

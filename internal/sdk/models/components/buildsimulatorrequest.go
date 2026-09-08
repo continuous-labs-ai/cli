@@ -5,7 +5,7 @@ package components
 import (
 	"encoding/json"
 	"fmt"
-	"github.com/continuous-labs-ai/continuous-simulation-cli/internal/sdk/sdkinternal/utils"
+	"github.com/continuous-labs-ai/cli/internal/sdk/sdkinternal/utils"
 )
 
 // Builder provider. The default is claude.

@@ -5,7 +5,7 @@ package hooks
 import (
 	"context"
 	"errors"
-	"github.com/continuous-labs-ai/continuous-simulation-cli/internal/sdk/sdkinternal/config"
+	"github.com/continuous-labs-ai/cli/internal/sdk/sdkinternal/config"
 	"net/http"
 )
 

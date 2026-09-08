@@ -18,10 +18,10 @@ import (
 	"github.com/spf13/cobra"
 	"gopkg.in/yaml.v3"
 
-	"github.com/continuous-labs-ai/continuous-simulation-cli/internal/config"
-	"github.com/continuous-labs-ai/continuous-simulation-cli/internal/flagutil"
-	"github.com/continuous-labs-ai/continuous-simulation-cli/internal/sdk/models/operations"
-	"github.com/continuous-labs-ai/continuous-simulation-cli/internal/sdk/sdkinternal/utils"
+	"github.com/continuous-labs-ai/cli/internal/config"
+	"github.com/continuous-labs-ai/cli/internal/flagutil"
+	"github.com/continuous-labs-ai/cli/internal/sdk/models/operations"
+	"github.com/continuous-labs-ai/cli/internal/sdk/sdkinternal/utils"
 )
 
 // cliName is the CLI binary name, injected at generation time.

@@ -6,7 +6,7 @@ import (
 	"fmt"
 	"os"
 
-	"github.com/continuous-labs-ai/continuous-simulation-cli/internal/cli"
+	"github.com/continuous-labs-ai/cli/internal/cli"
 )
 
 // version and buildTime can be set at build time using Go linker flags:

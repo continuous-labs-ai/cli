@@ -1,5 +1,6 @@
 # yaml-language-server: $schema=https://goreleaser.com/static/schema.json
 version: 2
+project_name: continuous
 
 before:
   hooks:
@@ -38,13 +39,13 @@ archives:
         formats: [zip]
     files:
       - README.md
-      - LICENSE*
+      - CONTRIBUTING.md
 
 release:
   github:
     owner: continuous-labs-ai
-    name: continuous-simulation-cli
-  draft: false
+    name: cli
+  draft: true
   prerelease: auto
   mode: append
 

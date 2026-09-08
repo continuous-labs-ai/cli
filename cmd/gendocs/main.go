@@ -11,7 +11,7 @@ import (
 	"path/filepath"
 	"strings"
 
-	"github.com/continuous-labs-ai/continuous-simulation-cli/internal/cli"
+	"github.com/continuous-labs-ai/cli/internal/cli"
 	"github.com/spf13/cobra"
 	"github.com/spf13/cobra/doc"
 )

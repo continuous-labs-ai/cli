@@ -4,11 +4,11 @@ package client
 
 import (
 	"fmt"
-	"github.com/continuous-labs-ai/continuous-simulation-cli/internal/config"
-	"github.com/continuous-labs-ai/continuous-simulation-cli/internal/flagutil"
-	"github.com/continuous-labs-ai/continuous-simulation-cli/internal/sdk"
-	"github.com/continuous-labs-ai/continuous-simulation-cli/internal/sdk/models/components"
-	"github.com/continuous-labs-ai/continuous-simulation-cli/internal/testclient"
+	"github.com/continuous-labs-ai/cli/internal/config"
+	"github.com/continuous-labs-ai/cli/internal/flagutil"
+	"github.com/continuous-labs-ai/cli/internal/sdk"
+	"github.com/continuous-labs-ai/cli/internal/sdk/models/components"
+	"github.com/continuous-labs-ai/cli/internal/testclient"
 	"github.com/spf13/cobra"
 	"net/http"
 	"strconv"

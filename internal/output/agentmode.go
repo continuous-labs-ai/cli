@@ -11,7 +11,7 @@ import (
 
 	"github.com/spf13/cobra"
 
-	"github.com/continuous-labs-ai/continuous-simulation-cli/internal/flagutil"
+	"github.com/continuous-labs-ai/cli/internal/flagutil"
 )
 
 var (

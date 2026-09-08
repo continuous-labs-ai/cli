@@ -4,14 +4,14 @@ package worlds
 
 import (
 	"fmt"
-	"github.com/continuous-labs-ai/continuous-simulation-cli/internal/client"
-	"github.com/continuous-labs-ai/continuous-simulation-cli/internal/flagutil"
-	"github.com/continuous-labs-ai/continuous-simulation-cli/internal/interactive"
-	"github.com/continuous-labs-ai/continuous-simulation-cli/internal/output"
-	"github.com/continuous-labs-ai/continuous-simulation-cli/internal/sdk"
-	"github.com/continuous-labs-ai/continuous-simulation-cli/internal/sdk/models/components"
-	"github.com/continuous-labs-ai/continuous-simulation-cli/internal/sdk/models/operations"
-	"github.com/continuous-labs-ai/continuous-simulation-cli/internal/usage"
+	"github.com/continuous-labs-ai/cli/internal/client"
+	"github.com/continuous-labs-ai/cli/internal/flagutil"
+	"github.com/continuous-labs-ai/cli/internal/interactive"
+	"github.com/continuous-labs-ai/cli/internal/output"
+	"github.com/continuous-labs-ai/cli/internal/sdk"
+	"github.com/continuous-labs-ai/cli/internal/sdk/models/components"
+	"github.com/continuous-labs-ai/cli/internal/sdk/models/operations"
+	"github.com/continuous-labs-ai/cli/internal/usage"
 	"github.com/spf13/cobra"
 )
 
