@@ -18,9 +18,14 @@ gh release download v0.0.1 --repo continuous-labs-ai/cli \
 sha256sum --ignore-missing --check checksums.txt
 tar -xzf continuous_Linux_x86_64.tar.gz continuous
 ./continuous version
+mkdir -p "$HOME/.local/bin"
+install -m 755 continuous "$HOME/.local/bin/continuous"
+export PATH="$HOME/.local/bin:$PATH"
 ```
 
 Replace the version with an approved release. Select `Darwin` for macOS or `Windows` for Windows.
+
+Add `$HOME/.local/bin` to your shell profile to keep the command available in new terminals.
 
 Select `arm64` for ARM systems. Windows archives use `.zip` and contain `continuous.exe`.
 

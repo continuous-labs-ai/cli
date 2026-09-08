@@ -50,12 +50,6 @@ Checksums are unsigned. Download private assets through authenticated GitHub CLI
 
 Do not push a release tag before the version passes review and checks.
 
-## Current generator defects
+Track generator defects in the owning issue. Keep regression tests enabled until the generator fixes their behavior.
 
-Keep the failing behavior tests enabled until the generator fixes their behavior:
-
-- JSON error output contains more than one document.
-- `--agent-mode=false` does not override agent environment detection.
-- The generated Simulator build example omits its requested name.
-
-Speakeasy 1.796.4 remains the latest verified release. Do not replace these tests with handwritten runtime patches.
+Do not replace failing tests with handwritten runtime patches.
