@@ -3,3 +3,5 @@
 /internal/sdk/.gitattributes
 /.goreleaser.yaml
 /.github/workflows/release.yaml
+**/*_test.go
+/tests/**

@@ -2,9 +2,9 @@
 
 Use `continuous` to call the public Continuous Simulation API. This repository and its releases require authorized GitHub access.
 
-Speakeasy generates the command implementation. The repository owns generation settings, checks, release configuration, and this guide.
+Speakeasy generates the command implementation. The repository owns generation settings, build checks, release configuration, and this guide.
 
-This setup remains in draft. Behavior tests expose generator defects, so no installable release is available yet.
+Build checks cover generation, compilation, and packaging. This repository does not contain a CLI test suite.
 
 ## Install an approved release
 
