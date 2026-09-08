@@ -1,0 +1,49 @@
+name: Generate
+
+on:
+  workflow_dispatch:
+    inputs:
+      mode:
+        description: Test generation or open a generation pull request
+        type: choice
+        options: [test, pr]
+        default: test
+
+permissions:
+  contents: read
+
+jobs:
+  generate-test:
+    if: inputs.mode == 'test'
+    uses: speakeasy-api/sdk-generation-action/.github/workflows/workflow-executor.yaml@68f3bfefb79354d39358bf4699863dabd2cea0f6
+    with:
+      mode: test
+      target: continuous-simulation-cli
+      force: "true"
+      skip_versioning: "true"
+    secrets:
+      github_access_token: ${{ secrets.GITHUB_TOKEN }}
+      speakeasy_api_key: ${{ secrets.SPEAKEASY_API_KEY }}
+
+  require-pr-token:
+    if: github.event_name == 'workflow_dispatch' && inputs.mode == 'pr'
+    runs-on: ubuntu-latest
+    steps:
+      - env:
+          GENERATION_TOKEN: ${{ secrets.SPEAKEASY_GITHUB_TOKEN }}
+        run: |
+          if [ -z "$GENERATION_TOKEN" ]; then
+            echo 'Set SPEAKEASY_GITHUB_TOKEN with repository contents and pull request write access.'
+            exit 1
+          fi
+
+  generate-pr:
+    needs: require-pr-token
+    uses: speakeasy-api/sdk-generation-action/.github/workflows/workflow-executor.yaml@68f3bfefb79354d39358bf4699863dabd2cea0f6
+    with:
+      mode: pr
+      target: continuous-simulation-cli
+      force: "true"
+    secrets:
+      github_access_token: ${{ secrets.SPEAKEASY_GITHUB_TOKEN }}
+      speakeasy_api_key: ${{ secrets.SPEAKEASY_API_KEY }}
