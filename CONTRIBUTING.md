@@ -6,7 +6,7 @@ Change the API contract in `continuous-labs-ai/continuous`. Keep Eval and Intern
 
 Set command names and generator options in `.speakeasy/gen.yaml`. Do not patch generated runtime files.
 
-Review owned settings, workflows, documentation, and behavior tests. Treat generated source as build output, not an exhaustive source review target.
+Review owned settings, workflows, and documentation. Treat generated source as build output, not an exhaustive source review target.
 
 Keep generated output marked with `linguist-generated`. Keep owned files visible during review.
 
@@ -18,13 +18,17 @@ Run generation with Speakeasy 1.796.4:
 speakeasy run --target continuous-simulation-cli
 ```
 
-Run checks in GitHub Actions. The `Checks` workflow builds the binary and tests it against a local fixture server.
+Run checks in GitHub Actions. The `Checks` workflow verifies generation, compiles the binary, and builds snapshot archives.
+
+CLI test suites are disabled. Keep generated test files excluded through `.genignore` and the generator settings.
 
 ## Generation workflow
 
 Store `SPEAKEASY_API_KEY` as a repository secret. Run the `Generate` workflow in `test` mode first.
 
-Use `pr` mode after the test succeeds. This mode requires the `SPEAKEASY_GITHUB_TOKEN` repository secret.
+The `test` mode verifies generation without publishing changes. It does not run a CLI test suite.
+
+Use `pr` mode after generation verification succeeds. This mode requires the `SPEAKEASY_GITHUB_TOKEN` repository secret.
 
 Use a fine-grained token limited to this repository. Grant read and write access to contents and pull requests.
 
@@ -44,12 +48,10 @@ The `Release` workflow runs the same `Checks` workflow before creating a draft r
 
 The workflow checks `main` again before packaging. Archives support Linux, macOS, and Windows on amd64 and arm64.
 
-The archive prefix is `continuous`. Checks verify archive names, binary extraction, execution, and SHA-256 checksums.
+The archive prefix is `continuous`. GoReleaser creates platform archives and SHA-256 checksums during snapshot packaging.
 
 Checksums are unsigned. Download private assets through authenticated GitHub CLI access, as described in the README.
 
 Do not push a release tag before the version passes review and checks.
 
-Track generator defects in the owning issue. Keep regression tests enabled until the generator fixes their behavior.
-
-Do not replace failing tests with handwritten runtime patches.
+Track generator defects in the owning issue. Do not patch generated runtime files.

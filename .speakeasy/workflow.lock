@@ -15,3 +15,5 @@ workflow:
         continuous-simulation-cli:
             target: cli
             source: continuous-simulation
+            testing:
+                enabled: false

@@ -9,7 +9,6 @@
 /.speakeasy/gen.yaml linguist-generated=false
 /.speakeasy/workflow.yaml linguist-generated=false
 /.github/** linguist-generated=false
-/tests/** linguist-generated=false
 /scripts/** linguist-generated=false
 /.gitattributes linguist-generated=false
 /.genignore linguist-generated=false
