@@ -2,6 +2,7 @@ import json
 import os
 from pathlib import Path
 import re
+import shlex
 import subprocess
 import sys
 import tempfile
@@ -82,7 +83,7 @@ class CLISmoke(unittest.TestCase):
         self.thread.join()
         self.config.cleanup()
 
-    def run_cli(self, *args, success=True, input=None):
+    def run_cli(self, *args, success=True, input=None, extra_env=None):
         result = subprocess.run(
             [BINARY, "--agent-mode=false", "--server-url", self.url, *args],
             env={
@@ -90,6 +91,7 @@ class CLISmoke(unittest.TestCase):
                 "XDG_CONFIG_HOME": self.config.name,
                 "CONTINUOUS_API_KEY_AUTH": "Bearer fixture-secret",
                 "NO_COLOR": "1",
+                **(extra_env or {}),
             },
             input=input,
             capture_output=True,
@@ -175,11 +177,40 @@ class CLISmoke(unittest.TestCase):
     def test_api_error_has_nonzero_exit(self):
         self.server.status = 401
         self.server.content_type = "application/problem+json"
-        self.server.response = {"title": "Unauthorized", "status": 401,
+        self.server.response = {"code": "unauthorized",
                                 "detail": "Invalid API key"}
         result = self.run_cli("simulations", "list", "--output-format", "json", success=False)
-        self.assertIn("401", result.stderr)
+        self.assertIn("Invalid API key", result.stderr)
+        self.assertIn("unauthorized", result.stderr)
         self.assertNotIn("fixture-secret", result.stderr)
+
+    def test_json_error_is_one_machine_readable_document(self):
+        self.server.status = 401
+        self.server.content_type = "application/problem+json"
+        self.server.response = {"code": "unauthorized", "detail": "Invalid API key"}
+        result = self.run_cli("simulations", "list", "--output-format", "json", success=False)
+        json.loads(result.stderr)
+
+    def test_agent_mode_false_overrides_agent_environment(self):
+        baseline = self.run_cli("simulations", "list")
+        detected = self.run_cli("simulations", "list", extra_env={"CLAUDE_CODE": "1"})
+        self.assertEqual(detected.stdout, baseline.stdout)
+
+    def test_build_help_example_sends_its_named_request(self):
+        help_text = self.run_cli("simulators", "build", "--help").stdout
+        example = re.search(r"^\s*(continuous simulators build .+)$", help_text, re.MULTILINE)
+        self.assertIsNotNone(example)
+        self.server.status = 202
+        self.server.response = {"id": "smr_fixture", "status": "building"}
+        self.run_cli(*shlex.split(example[1])[1:], "--output-format", "json")
+        _, _, headers, body = self.server.requests[0]
+        message = BytesParser(policy=default).parsebytes(
+            ("Content-Type: " + headers["Content-Type"] + "\r\n\r\n").encode() + body
+        )
+        request_part = next(p for p in message.iter_parts()
+                            if p.get_param("name", header="content-disposition") == "request")
+        request = json.loads(request_part.get_payload(decode=True))
+        self.assertEqual(request.get("name"), "billing-api")
 
 
 if __name__ == "__main__":
