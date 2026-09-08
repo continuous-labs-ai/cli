@@ -1,0 +1,2115 @@
+components:
+  examples:
+    auth_forbidden_catalog:
+      value:
+        code: auth_forbidden
+        detail: The Simulator with ID "smr_01J8Z5X4K7M2N9P0Q1R2S3T4V5" belongs to the Continuous catalog and cannot be changed.
+    auth_forbidden_owner:
+      value:
+        code: auth_forbidden
+        detail: Only the workspace that owns the Simulator with ID "smr_01J8Z5X4K7M2N9P0Q1R2S3T4V5" can cancel its build.
+    auth_invalid:
+      value:
+        code: auth_invalid
+        detail: The API key is missing or invalid.
+    bad_request:
+      value:
+        code: bad_request
+        detail: The cursor is invalid.
+    build_quota_exceeded:
+      value:
+        code: build_quota_exceeded
+        detail: The workspace has 2 active Simulator builds, which is its limit. Wait for a build to finish or ask an operator to increase the limit.
+    build_rate_exceeded:
+      value:
+        code: build_rate_exceeded
+        detail: The workspace has used its limit of 10 Simulator builds for the current UTC day. The limit resets at 2026-09-02T00:00:00Z.
+    internal:
+      value:
+        code: internal
+        detail: The server encountered an unexpected error.
+    payload_too_large:
+      value:
+        code: payload_too_large
+        detail: The API description exceeds the maximum allowed size.
+    simulation_capacity:
+      value:
+        code: simulation_capacity
+        detail: Continuous has no available Simulation capacity. Retry after a short delay.
+    simulation_not_found:
+      value:
+        code: simulation_not_found
+        detail: No Simulation was found with ID "sim_01J8Z5X4K7M2N9P0Q1R2S3T4V6".
+    simulation_provider_unavailable:
+      value:
+        code: simulation_provider_unavailable
+        detail: The Simulation runtime provider is unavailable. Retry the request after a short delay.
+    simulation_quota_exceeded:
+      value:
+        code: simulation_quota_exceeded
+        detail: The workspace has 5 active Simulations, which is its limit. Stop a Simulation or wait for one to be deleted.
+    simulation_quota_exceeded_world:
+      value:
+        code: simulation_quota_exceeded
+        detail: The workspace has 4 of its 5 Simulation slots in use and cannot start all 3 World Simulations. Stop other Simulations or wait for one to be deleted.
+    simulation_stopped:
+      value:
+        code: simulation_stopped
+        detail: The Simulation with ID "sim_01J8Z5X4K7M2N9P0Q1R2S3T4V6" is stopped. Start it before you retry this request.
+    simulation_template_missing:
+      value:
+        code: simulation_template_missing
+        detail: The Simulation runtime template is unavailable. Contact Continuous support before you retry the request.
+    simulation_timeout:
+      value:
+        code: simulation_timeout
+        detail: The Simulation runtime did not start before the timeout. Retry the request.
+    simulation_world_owned:
+      value:
+        code: simulation_world_owned
+        detail: The Simulation with ID "sim_01J8Z5X4K7M2N9P0Q1R2S3T4V6" belongs to the World with ID "wld_01J8Z5X4K7M2N9P0Q1R2S3T4V7". Manage it through the World.
+    simulator_in_use:
+      value:
+        code: simulator_in_use
+        detail: The Simulator with ID "smr_01J8Z5X4K7M2N9P0Q1R2S3T4V5" has dependent Worlds, Simulations, or child Simulators. Delete those resources before you delete this Simulator.
+    simulator_not_found:
+      value:
+        code: simulator_not_found
+        detail: No Simulator was found with ID "smr_01J8Z5X4K7M2N9P0Q1R2S3T4V5".
+    simulator_not_ready:
+      value:
+        code: simulator_not_ready
+        detail: The Simulator with ID "smr_01J8Z5X4K7M2N9P0Q1R2S3T4V5" is not ready. Wait for its build to finish before you retry.
+    simulator_not_ready_base:
+      value:
+        code: simulator_not_ready
+        detail: The base Simulator with ID "smr_01J8Z5X4K7M2N9P0Q1R2S3T4V5" is not ready. Wait for its build to finish before you retry.
+    simulator_unknown:
+      value:
+        code: simulator_unknown
+        detail: No Simulator was found with ID "smr_01J8Z5X4K7M2N9P0Q1R2S3T4V5".
+    simulator_unknown_parent:
+      value:
+        code: simulator_unknown
+        detail: No Simulator was found with ID "smr_01J8Z5X4K7M2N9P0Q1R2S3T4V5".
+    validation:
+      value:
+        code: validation
+        detail: The request does not satisfy the API contract.
+    world_conflict:
+      value:
+        code: world_conflict
+        detail: The World with ID "wld_01J8Z5X4K7M2N9P0Q1R2S3T4V7" is in the failed state and cannot be started.
+    world_conflict_stop:
+      value:
+        code: world_conflict
+        detail: The World with ID "wld_01J8Z5X4K7M2N9P0Q1R2S3T4V7" is in the failed state and cannot be stopped.
+    world_not_found:
+      value:
+        code: world_not_found
+        detail: No World was found with ID "wld_01J8Z5X4K7M2N9P0Q1R2S3T4V7".
+  responses:
+    BadRequest:
+      content:
+        application/problem+json:
+          schema:
+            $ref: "#/components/schemas/Error"
+      description: Bad Request
+    Conflict:
+      content:
+        application/problem+json:
+          schema:
+            $ref: "#/components/schemas/Error"
+      description: Conflict
+    Forbidden:
+      content:
+        application/problem+json:
+          schema:
+            $ref: "#/components/schemas/Error"
+      description: Forbidden
+    GatewayTimeout:
+      content:
+        application/problem+json:
+          schema:
+            $ref: "#/components/schemas/Error"
+      description: Gateway Timeout
+    InternalServerError:
+      content:
+        application/problem+json:
+          examples:
+            internal:
+              $ref: "#/components/examples/internal"
+          schema:
+            $ref: "#/components/schemas/Error"
+      description: Internal Server Error
+    NotFound:
+      content:
+        application/problem+json:
+          schema:
+            $ref: "#/components/schemas/Error"
+      description: Not Found
+    PayloadTooLarge:
+      content:
+        application/problem+json:
+          schema:
+            $ref: "#/components/schemas/Error"
+      description: Request Entity Too Large
+    RequestTimeout:
+      content:
+        application/problem+json:
+          schema:
+            $ref: "#/components/schemas/Error"
+      description: Request Timeout
+    ServiceUnavailable:
+      content:
+        application/problem+json:
+          schema:
+            $ref: "#/components/schemas/Error"
+      description: Service Unavailable
+    Unauthorized:
+      content:
+        application/problem+json:
+          examples:
+            auth_invalid:
+              $ref: "#/components/examples/auth_invalid"
+          schema:
+            $ref: "#/components/schemas/Error"
+      description: Unauthorized
+    UnsupportedMediaType:
+      content:
+        application/problem+json:
+          schema:
+            $ref: "#/components/schemas/Error"
+      description: Unsupported Media Type
+  schemas:
+    BuildSimulatorRequest:
+      additionalProperties: false
+      examples:
+        - builder: claude
+          filter: []
+          instructions: Return stable example data for every operation.
+          name: billing-api
+          spec_kind: openapi
+      properties:
+        builder:
+          default: claude
+          description: Builder provider. The default is claude.
+          enum:
+            - openai
+            - claude
+          type: string
+        filter:
+          default: []
+          description: Optional operation filter regular expressions. Supply at most 64 expressions, with 1,024 characters in each expression. An empty list keeps all operations.
+          items:
+            maxLength: 1024
+            type: string
+          maxItems: 64
+          type: array
+        instructions:
+          description: Build guidance. At most 16,384 characters and 65,536 UTF-8 bytes. U+0000 is not permitted.
+          maxLength: 16384
+          type: string
+        name:
+          description: Optional Simulator name. Names cannot start with smr_. Omission generates a name.
+          maxLength: 128
+          pattern: ^$|^(?!smr_)[a-z0-9]+(?:[._-][a-z0-9]+)*$
+          type: string
+        parent_id:
+          description: Stable parent Simulator ID for an incremental build.
+          maxLength: 30
+          pattern: ^smr_[0-9A-HJKMNP-TV-Z]{26}$
+          type: string
+        spec_kind:
+          description: Source specification format. Omission detects the format.
+          enum:
+            - openapi
+            - wsdl
+          type: string
+      type: object
+    BuildWorldRequest:
+      additionalProperties: false
+      examples:
+        - instructions: Use stable example data for each Simulator.
+          simulators:
+            - smr_01J8Z5X4K7M2N9P0Q1R2S3T4V5
+      properties:
+        instructions:
+          description: Build guidance. At most 16,384 characters and 65,536 UTF-8 bytes. U+0000 is not permitted.
+          maxLength: 16384
+          type: string
+        simulators:
+          description: Stable Simulator IDs for the World.
+          items:
+            pattern: ^smr_[0-9A-HJKMNP-TV-Z]{26}$
+            type: string
+          minItems: 1
+          type: array
+      required:
+        - simulators
+      type: object
+    CreateSimulationRequest:
+      additionalProperties: false
+      examples:
+        - name: billing-sandbox
+          simulator_id: smr_01J8Z5X4K7M2N9P0Q1R2S3T4V5
+      properties:
+        name:
+          description: Optional Simulation name. Omission generates a name.
+          maxLength: 64
+          pattern: ^$|^[a-z][a-z0-9-]*$
+          type: string
+        simulator_id:
+          description: Stable ID of the ready Simulator.
+          minLength: 1
+          pattern: ^smr_[0-9A-HJKMNP-TV-Z]{26}$
+          type: string
+      required:
+        - simulator_id
+      type: object
+    CreatedSimulation:
+      additionalProperties: false
+      examples:
+        - created_at: "2026-01-15T12:00:00Z"
+          endpoint: https://api.continuouslabs.ai/sim/sim_01J8Z5X4K7M2N9P0Q1R2S3T4V6
+          expires_at: "2026-01-15T13:00:00Z"
+          id: sim_01J8Z5X4K7M2N9P0Q1R2S3T4V6
+          name: billing-sandbox
+          parent_id: sim_01J8Z5X4K7M2N9P0Q1R2S3T4V8
+          simulator_id: smr_01J8Z5X4K7M2N9P0Q1R2S3T4V5
+          status: running
+          token: <redacted>
+      properties:
+        created_at:
+          description: Simulation creation time.
+          format: date-time
+          type: string
+        endpoint:
+          description: Data-plane endpoint for the Simulation.
+          format: uri
+          type: string
+        expires_at:
+          description: Token expiration time.
+          format: date-time
+          type: string
+        id:
+          description: Stable Simulation ID.
+          pattern: ^sim_[0-9A-HJKMNP-TV-Z]{26}$
+          type: string
+        name:
+          description: Simulation name.
+          maxLength: 64
+          pattern: ^[a-z][a-z0-9-]*$
+          type: string
+        parent_id:
+          description: Stable source Simulation ID for a fork, or null.
+          pattern: ^sim_[0-9A-HJKMNP-TV-Z]{26}$
+          type:
+            - string
+            - "null"
+        simulator_id:
+          description: Stable ID of the Simulator.
+          pattern: ^smr_[0-9A-HJKMNP-TV-Z]{26}$
+          type: string
+        status:
+          description: Current Simulation status.
+          enum:
+            - running
+            - paused
+            - stopped
+          type: string
+        token:
+          description: One-time data-plane token.
+          type: string
+      required:
+        - id
+        - name
+        - simulator_id
+        - parent_id
+        - status
+        - endpoint
+        - token
+        - expires_at
+        - created_at
+      type: object
+    Error:
+      additionalProperties: false
+      properties:
+        code:
+          description: Stable machine-readable error code.
+          minLength: 1
+          type: string
+        detail:
+          description: Safe human-readable error detail.
+          minLength: 1
+          type: string
+      required:
+        - code
+        - detail
+      type: object
+    ForkSimulationRequest:
+      additionalProperties: false
+      examples:
+        - at_step: 42
+          name: billing-fork
+      properties:
+        at_step:
+          description: Completed step to fork from. Omission forks from the latest state.
+          format: int64
+          maximum: 9.007199254740991e+15
+          minimum: 0
+          type: integer
+        name:
+          description: Optional child Simulation name. Omission generates a name.
+          maxLength: 64
+          pattern: ^$|^[a-z][a-z0-9-]*$
+          type: string
+      type: object
+    ListSimulationStepsResponse:
+      additionalProperties: false
+      properties:
+        next_cursor:
+          description: Cursor for the next page, or null.
+          type:
+            - string
+            - "null"
+        steps:
+          description: Recorded steps in this page.
+          items:
+            $ref: "#/components/schemas/Step"
+          type: array
+      required:
+        - steps
+        - next_cursor
+      type: object
+    ListSimulationsResponse:
+      additionalProperties: false
+      properties:
+        next_cursor:
+          description: Cursor for the next page, or null.
+          type:
+            - string
+            - "null"
+        simulations:
+          description: Simulations in this page.
+          items:
+            $ref: "#/components/schemas/Simulation"
+          type: array
+      required:
+        - simulations
+        - next_cursor
+      type: object
+    ListSimulatorsResponse:
+      additionalProperties: false
+      properties:
+        next_cursor:
+          description: Cursor for the next page, or null.
+          type:
+            - string
+            - "null"
+        simulators:
+          description: Simulators in this page.
+          items:
+            $ref: "#/components/schemas/Simulator"
+          type: array
+      required:
+        - simulators
+        - next_cursor
+      type: object
+    ListWorldsResponse:
+      additionalProperties: false
+      properties:
+        next_cursor:
+          description: Cursor for the next page, or null when this is the last page.
+          type:
+            - string
+            - "null"
+        worlds:
+          description: Worlds in this page.
+          items:
+            $ref: "#/components/schemas/World"
+          type: array
+      required:
+        - worlds
+        - next_cursor
+      type: object
+    MintSimulationTokenRequest:
+      additionalProperties: false
+      examples:
+        - ttl_seconds: 3600
+      properties:
+        ttl_seconds:
+          description: Token lifetime in seconds, from 60 through 86,400.
+          format: int64
+          maximum: 86400
+          minimum: 60
+          type: integer
+      required:
+        - ttl_seconds
+      type: object
+    ResourceError:
+      additionalProperties: false
+      properties:
+        code:
+          description: Stable machine-readable error code.
+          type: string
+        detail:
+          description: Safe human-readable error detail.
+          type: string
+      required:
+        - code
+        - detail
+      type:
+        - object
+        - "null"
+    Simulation:
+      additionalProperties: false
+      examples:
+        - created_at: "2026-01-15T12:00:00Z"
+          endpoint: https://api.continuouslabs.ai/sim/sim_01J8Z5X4K7M2N9P0Q1R2S3T4V6
+          id: sim_01J8Z5X4K7M2N9P0Q1R2S3T4V6
+          name: billing-sandbox
+          parent_id: sim_01J8Z5X4K7M2N9P0Q1R2S3T4V8
+          simulator_id: smr_01J8Z5X4K7M2N9P0Q1R2S3T4V5
+          status: running
+      properties:
+        created_at:
+          description: Simulation creation time.
+          format: date-time
+          type: string
+        endpoint:
+          description: Data-plane endpoint for the Simulation.
+          format: uri
+          type: string
+        id:
+          description: Stable Simulation ID.
+          pattern: ^sim_[0-9A-HJKMNP-TV-Z]{26}$
+          type: string
+        name:
+          description: Simulation name.
+          maxLength: 64
+          pattern: ^[a-z][a-z0-9-]*$
+          type: string
+        parent_id:
+          description: Stable source Simulation ID for a fork, or null.
+          pattern: ^sim_[0-9A-HJKMNP-TV-Z]{26}$
+          type:
+            - string
+            - "null"
+        simulator_id:
+          description: Stable ID of the Simulator.
+          pattern: ^smr_[0-9A-HJKMNP-TV-Z]{26}$
+          type: string
+        status:
+          description: Current Simulation status.
+          enum:
+            - running
+            - paused
+            - stopped
+          type: string
+      required:
+        - id
+        - name
+        - simulator_id
+        - parent_id
+        - status
+        - endpoint
+        - created_at
+      type: object
+    SimulationToken:
+      additionalProperties: false
+      examples:
+        - expires_at: "2026-01-15T13:00:00Z"
+          token: <redacted>
+      properties:
+        expires_at:
+          description: Token expiration time.
+          format: date-time
+          type: string
+        token:
+          description: New data-plane token.
+          type: string
+      required:
+        - token
+        - expires_at
+      type: object
+    Simulator:
+      additionalProperties: false
+      examples:
+        - created_at: "2026-01-15T12:00:00Z"
+          error: null
+          id: smr_01J8Z5X4K7M2N9P0Q1R2S3T4V5
+          name: billing-api
+          parent_id: smr_01J8Z5X4K7M2N9P0Q1R2S3T4V9
+          source: workspace
+          status: building
+      properties:
+        created_at:
+          description: Simulator creation time.
+          format: date-time
+          type: string
+        error:
+          $ref: "#/components/schemas/ResourceError"
+          description: Safe build error, or null.
+        id:
+          description: Stable Simulator ID.
+          pattern: ^smr_[0-9A-HJKMNP-TV-Z]{26}$
+          type: string
+        name:
+          description: Simulator name. Names cannot start with smr_.
+          maxLength: 128
+          pattern: ^(?!smr_)[a-z0-9]+(?:[._-][a-z0-9]+)*$
+          type: string
+        parent_id:
+          description: Stable parent Simulator ID, or null.
+          pattern: ^smr_[0-9A-HJKMNP-TV-Z]{26}$
+          type:
+            - string
+            - "null"
+        source:
+          description: Simulator source.
+          enum:
+            - workspace
+            - catalog
+          type: string
+        status:
+          description: Current build status.
+          enum:
+            - building
+            - ready
+            - failed
+            - canceled
+          type: string
+      required:
+        - id
+        - name
+        - source
+        - parent_id
+        - status
+        - error
+        - created_at
+      type: object
+    Step:
+      additionalProperties: false
+      properties:
+        label:
+          description: Request label. It usually contains the HTTP method and path.
+          type: string
+        step:
+          description: Completed request number. Use this value as at_step when you fork the Simulation.
+          format: int64
+          type: integer
+      required:
+        - step
+        - label
+      type: object
+    World:
+      additionalProperties: false
+      examples:
+        - created_at: "2026-01-15T12:00:00Z"
+          error: null
+          id: wld_01J8Z5X4K7M2N9P0Q1R2S3T4V7
+          instructions: Use stable example data for each Simulator.
+          simulations: []
+          simulators:
+            - smr_01J8Z5X4K7M2N9P0Q1R2S3T4V5
+          status: building
+      properties:
+        created_at:
+          description: Time when the World build started.
+          format: date-time
+          type: string
+        error:
+          $ref: "#/components/schemas/ResourceError"
+          description: Safe failure information, or null when no failure exists.
+        id:
+          description: Stable World ID.
+          pattern: ^wld_[0-9A-HJKMNP-TV-Z]{26}$
+          type: string
+        instructions:
+          description: Build guidance stored with the World.
+          type: string
+        simulations:
+          description: Created member Simulations. This list is empty before first start.
+          items:
+            $ref: "#/components/schemas/WorldSimulation"
+          type: array
+        simulators:
+          description: Stable Simulator IDs in member order.
+          items:
+            pattern: ^smr_[0-9A-HJKMNP-TV-Z]{26}$
+            type: string
+          type: array
+        status:
+          description: Current World lifecycle status.
+          enum:
+            - building
+            - ready
+            - running
+            - stopped
+            - failed
+            - canceled
+          type: string
+      required:
+        - id
+        - status
+        - simulators
+        - instructions
+        - simulations
+        - error
+        - created_at
+      type: object
+    WorldSimulation:
+      additionalProperties: false
+      properties:
+        id:
+          description: Stable ID of the created Simulation.
+          pattern: ^sim_[0-9A-HJKMNP-TV-Z]{26}$
+          type: string
+        simulator_id:
+          description: Stable ID of the Simulator that this Simulation runs.
+          pattern: ^smr_[0-9A-HJKMNP-TV-Z]{26}$
+          type: string
+      required:
+        - id
+        - simulator_id
+      type: object
+  securitySchemes:
+    apiKeyAuth:
+      bearerFormat: Continuous API key
+      description: Use a Continuous API key. Send it in the Authorization header as a Bearer token.
+      scheme: bearer
+      type: http
+info:
+  description: The Continuous Simulation API builds reusable Simulators and runs isolated Simulations and Worlds. This document describes the stable v1 public contract.
+  title: Continuous Simulation API
+  version: v1
+openapi: 3.1.0
+paths:
+  /v1/simulations:
+    get:
+      description: Returns all Simulations that the API key can access. Results can be filtered by status or Simulator.
+      operationId: list-simulations
+      parameters:
+        - description: Optional lifecycle status filter.
+          explode: false
+          in: query
+          name: status
+          schema:
+            description: Optional lifecycle status filter.
+            enum:
+              - running
+              - paused
+              - stopped
+            type: string
+        - description: Optional stable Simulator ID filter.
+          explode: false
+          in: query
+          name: simulator_id
+          schema:
+            description: Optional stable Simulator ID filter.
+            pattern: ^smr_[0-9A-HJKMNP-TV-Z]{26}$
+            type: string
+        - description: Page size. Values below 1 use 50. Values above 200 use 200.
+          explode: false
+          in: query
+          name: limit
+          schema:
+            default: 50
+            description: Page size. Values below 1 use 50. Values above 200 use 200.
+            format: int64
+            type: integer
+        - description: Opaque next_cursor value from a previous page.
+          explode: false
+          in: query
+          name: cursor
+          schema:
+            description: Opaque next_cursor value from a previous page.
+            type: string
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ListSimulationsResponse"
+          description: OK
+        "400":
+          content:
+            application/problem+json:
+              examples:
+                bad_request:
+                  $ref: "#/components/examples/bad_request"
+                simulator_unknown:
+                  $ref: "#/components/examples/simulator_unknown"
+              schema:
+                $ref: "#/components/schemas/Error"
+          description: Bad Request
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+        "403":
+          $ref: "#/components/responses/Forbidden"
+        "404":
+          $ref: "#/components/responses/NotFound"
+        "422":
+          content:
+            application/problem+json:
+              examples:
+                validation:
+                  $ref: "#/components/examples/validation"
+              schema:
+                $ref: "#/components/schemas/Error"
+          description: Unprocessable Entity
+        "500":
+          $ref: "#/components/responses/InternalServerError"
+        "503":
+          $ref: "#/components/responses/ServiceUnavailable"
+      security:
+        - apiKeyAuth: []
+      summary: List Simulations
+      tags:
+        - simulations
+    post:
+      description: Creates an isolated runtime from a ready Simulator. The response includes its endpoint and a 1-hour token.
+      operationId: create-simulation
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CreateSimulationRequest"
+        required: true
+      responses:
+        "201":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/CreatedSimulation"
+          description: Created
+        "400":
+          content:
+            application/problem+json:
+              examples:
+                simulator_unknown:
+                  $ref: "#/components/examples/simulator_unknown"
+              schema:
+                $ref: "#/components/schemas/Error"
+          description: Bad Request
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+        "403":
+          $ref: "#/components/responses/Forbidden"
+        "404":
+          $ref: "#/components/responses/NotFound"
+        "408":
+          $ref: "#/components/responses/RequestTimeout"
+        "409":
+          content:
+            application/problem+json:
+              examples:
+                simulator_not_ready:
+                  $ref: "#/components/examples/simulator_not_ready"
+              schema:
+                $ref: "#/components/schemas/Error"
+          description: Conflict
+        "413":
+          $ref: "#/components/responses/PayloadTooLarge"
+        "415":
+          $ref: "#/components/responses/UnsupportedMediaType"
+        "422":
+          content:
+            application/problem+json:
+              examples:
+                validation:
+                  $ref: "#/components/examples/validation"
+              schema:
+                $ref: "#/components/schemas/Error"
+          description: Unprocessable Entity
+        "429":
+          content:
+            application/problem+json:
+              examples:
+                simulation_capacity:
+                  $ref: "#/components/examples/simulation_capacity"
+                simulation_quota_exceeded:
+                  $ref: "#/components/examples/simulation_quota_exceeded"
+              schema:
+                $ref: "#/components/schemas/Error"
+          description: Too Many Requests
+        "500":
+          content:
+            application/problem+json:
+              examples:
+                internal:
+                  $ref: "#/components/examples/internal"
+                simulation_template_missing:
+                  $ref: "#/components/examples/simulation_template_missing"
+              schema:
+                $ref: "#/components/schemas/Error"
+          description: Internal Server Error
+        "503":
+          content:
+            application/problem+json:
+              examples:
+                simulation_provider_unavailable:
+                  $ref: "#/components/examples/simulation_provider_unavailable"
+              schema:
+                $ref: "#/components/schemas/Error"
+          description: Service Unavailable
+        "504":
+          content:
+            application/problem+json:
+              examples:
+                simulation_timeout:
+                  $ref: "#/components/examples/simulation_timeout"
+              schema:
+                $ref: "#/components/schemas/Error"
+          description: Gateway Timeout
+      security:
+        - apiKeyAuth: []
+      summary: Create Simulation
+      tags:
+        - simulations
+  /v1/simulations/{id}:
+    delete:
+      description: Deletes a Simulation and its saved runtime state. Delete World-owned Simulations through their World.
+      operationId: delete-simulation
+      parameters:
+        - description: Stable resource ID.
+          in: path
+          name: id
+          required: true
+          schema:
+            description: Stable resource ID.
+            pattern: ^sim_[0-9A-HJKMNP-TV-Z]{26}$
+            type: string
+      responses:
+        "204":
+          description: No Content
+        "400":
+          $ref: "#/components/responses/BadRequest"
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+        "403":
+          $ref: "#/components/responses/Forbidden"
+        "404":
+          content:
+            application/problem+json:
+              examples:
+                simulation_not_found:
+                  $ref: "#/components/examples/simulation_not_found"
+              schema:
+                $ref: "#/components/schemas/Error"
+          description: Not Found
+        "409":
+          content:
+            application/problem+json:
+              examples:
+                simulation_world_owned:
+                  $ref: "#/components/examples/simulation_world_owned"
+              schema:
+                $ref: "#/components/schemas/Error"
+          description: Conflict
+        "500":
+          $ref: "#/components/responses/InternalServerError"
+        "503":
+          $ref: "#/components/responses/ServiceUnavailable"
+        "504":
+          $ref: "#/components/responses/GatewayTimeout"
+      security:
+        - apiKeyAuth: []
+      summary: Delete Simulation
+      tags:
+        - simulations
+    get:
+      description: Returns a Simulation and its current runtime status. The response does not include data-plane tokens.
+      operationId: get-simulation
+      parameters:
+        - description: Stable Simulation ID.
+          in: path
+          name: id
+          required: true
+          schema:
+            description: Stable Simulation ID.
+            pattern: ^sim_[0-9A-HJKMNP-TV-Z]{26}$
+            type: string
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Simulation"
+          description: OK
+        "400":
+          $ref: "#/components/responses/BadRequest"
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+        "403":
+          $ref: "#/components/responses/Forbidden"
+        "404":
+          content:
+            application/problem+json:
+              examples:
+                simulation_not_found:
+                  $ref: "#/components/examples/simulation_not_found"
+              schema:
+                $ref: "#/components/schemas/Error"
+          description: Not Found
+        "500":
+          $ref: "#/components/responses/InternalServerError"
+        "503":
+          $ref: "#/components/responses/ServiceUnavailable"
+      security:
+        - apiKeyAuth: []
+      summary: Get Simulation
+      tags:
+        - simulations
+  /v1/simulations/{id}/fork:
+    post:
+      description: Creates a Simulation with a 1-hour token. The source Simulation continues to run.
+      operationId: fork-simulation
+      parameters:
+        - description: Stable source Simulation ID.
+          in: path
+          name: id
+          required: true
+          schema:
+            description: Stable source Simulation ID.
+            pattern: ^sim_[0-9A-HJKMNP-TV-Z]{26}$
+            type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/ForkSimulationRequest"
+        required: true
+      responses:
+        "201":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/CreatedSimulation"
+          description: Created
+        "400":
+          $ref: "#/components/responses/BadRequest"
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+        "403":
+          $ref: "#/components/responses/Forbidden"
+        "404":
+          content:
+            application/problem+json:
+              examples:
+                simulation_not_found:
+                  $ref: "#/components/examples/simulation_not_found"
+              schema:
+                $ref: "#/components/schemas/Error"
+          description: Not Found
+        "408":
+          $ref: "#/components/responses/RequestTimeout"
+        "409":
+          content:
+            application/problem+json:
+              examples:
+                simulation_stopped:
+                  $ref: "#/components/examples/simulation_stopped"
+              schema:
+                $ref: "#/components/schemas/Error"
+          description: Conflict
+        "413":
+          $ref: "#/components/responses/PayloadTooLarge"
+        "415":
+          $ref: "#/components/responses/UnsupportedMediaType"
+        "422":
+          content:
+            application/problem+json:
+              examples:
+                validation:
+                  $ref: "#/components/examples/validation"
+              schema:
+                $ref: "#/components/schemas/Error"
+          description: Unprocessable Entity
+        "429":
+          content:
+            application/problem+json:
+              examples:
+                simulation_capacity:
+                  $ref: "#/components/examples/simulation_capacity"
+                simulation_quota_exceeded:
+                  $ref: "#/components/examples/simulation_quota_exceeded"
+              schema:
+                $ref: "#/components/schemas/Error"
+          description: Too Many Requests
+        "500":
+          content:
+            application/problem+json:
+              examples:
+                internal:
+                  $ref: "#/components/examples/internal"
+                simulation_template_missing:
+                  $ref: "#/components/examples/simulation_template_missing"
+              schema:
+                $ref: "#/components/schemas/Error"
+          description: Internal Server Error
+        "503":
+          content:
+            application/problem+json:
+              examples:
+                simulation_provider_unavailable:
+                  $ref: "#/components/examples/simulation_provider_unavailable"
+              schema:
+                $ref: "#/components/schemas/Error"
+          description: Service Unavailable
+        "504":
+          content:
+            application/problem+json:
+              examples:
+                simulation_timeout:
+                  $ref: "#/components/examples/simulation_timeout"
+              schema:
+                $ref: "#/components/schemas/Error"
+          description: Gateway Timeout
+      security:
+        - apiKeyAuth: []
+      summary: Fork Simulation
+      tags:
+        - simulations
+  /v1/simulations/{id}/start:
+    post:
+      description: Starts a stopped Simulation from its saved runtime state. Its endpoint becomes available after the runtime starts.
+      operationId: start-simulation
+      parameters:
+        - description: Stable Simulation ID.
+          in: path
+          name: id
+          required: true
+          schema:
+            description: Stable Simulation ID.
+            pattern: ^sim_[0-9A-HJKMNP-TV-Z]{26}$
+            type: string
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Simulation"
+          description: OK
+        "400":
+          $ref: "#/components/responses/BadRequest"
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+        "403":
+          $ref: "#/components/responses/Forbidden"
+        "404":
+          content:
+            application/problem+json:
+              examples:
+                simulation_not_found:
+                  $ref: "#/components/examples/simulation_not_found"
+              schema:
+                $ref: "#/components/schemas/Error"
+          description: Not Found
+        "409":
+          content:
+            application/problem+json:
+              examples:
+                simulation_world_owned:
+                  $ref: "#/components/examples/simulation_world_owned"
+              schema:
+                $ref: "#/components/schemas/Error"
+          description: Conflict
+        "429":
+          content:
+            application/problem+json:
+              examples:
+                simulation_capacity:
+                  $ref: "#/components/examples/simulation_capacity"
+                simulation_quota_exceeded:
+                  $ref: "#/components/examples/simulation_quota_exceeded"
+              schema:
+                $ref: "#/components/schemas/Error"
+          description: Too Many Requests
+        "500":
+          content:
+            application/problem+json:
+              examples:
+                internal:
+                  $ref: "#/components/examples/internal"
+                simulation_template_missing:
+                  $ref: "#/components/examples/simulation_template_missing"
+              schema:
+                $ref: "#/components/schemas/Error"
+          description: Internal Server Error
+        "503":
+          content:
+            application/problem+json:
+              examples:
+                simulation_provider_unavailable:
+                  $ref: "#/components/examples/simulation_provider_unavailable"
+              schema:
+                $ref: "#/components/schemas/Error"
+          description: Service Unavailable
+        "504":
+          content:
+            application/problem+json:
+              examples:
+                simulation_timeout:
+                  $ref: "#/components/examples/simulation_timeout"
+              schema:
+                $ref: "#/components/schemas/Error"
+          description: Gateway Timeout
+      security:
+        - apiKeyAuth: []
+      summary: Start Simulation
+      tags:
+        - simulations
+  /v1/simulations/{id}/steps:
+    get:
+      description: Returns recorded steps for a running or paused Simulation. Use any step to create a deterministic fork.
+      operationId: list-simulation-steps
+      parameters:
+        - description: Stable Simulation ID.
+          in: path
+          name: id
+          required: true
+          schema:
+            description: Stable Simulation ID.
+            pattern: ^sim_[0-9A-HJKMNP-TV-Z]{26}$
+            type: string
+        - description: Opaque next_cursor value from a previous page.
+          explode: false
+          in: query
+          name: cursor
+          schema:
+            description: Opaque next_cursor value from a previous page.
+            type: string
+        - description: Page size. Values below 1 use 50. Values above 200 use 200.
+          explode: false
+          in: query
+          name: limit
+          schema:
+            default: 50
+            description: Page size. Values below 1 use 50. Values above 200 use 200.
+            format: int64
+            type: integer
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ListSimulationStepsResponse"
+          description: OK
+        "400":
+          content:
+            application/problem+json:
+              examples:
+                bad_request:
+                  $ref: "#/components/examples/bad_request"
+              schema:
+                $ref: "#/components/schemas/Error"
+          description: Bad Request
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+        "403":
+          $ref: "#/components/responses/Forbidden"
+        "404":
+          content:
+            application/problem+json:
+              examples:
+                simulation_not_found:
+                  $ref: "#/components/examples/simulation_not_found"
+              schema:
+                $ref: "#/components/schemas/Error"
+          description: Not Found
+        "409":
+          content:
+            application/problem+json:
+              examples:
+                simulation_stopped:
+                  $ref: "#/components/examples/simulation_stopped"
+              schema:
+                $ref: "#/components/schemas/Error"
+          description: Conflict
+        "422":
+          content:
+            application/problem+json:
+              examples:
+                validation:
+                  $ref: "#/components/examples/validation"
+              schema:
+                $ref: "#/components/schemas/Error"
+          description: Unprocessable Entity
+        "500":
+          $ref: "#/components/responses/InternalServerError"
+        "503":
+          $ref: "#/components/responses/ServiceUnavailable"
+      security:
+        - apiKeyAuth: []
+      summary: List Simulation Steps
+      tags:
+        - simulations
+  /v1/simulations/{id}/stop:
+    post:
+      description: Stops a Simulation and saves its runtime state. You can start it later from the saved state.
+      operationId: stop-simulation
+      parameters:
+        - description: Stable Simulation ID.
+          in: path
+          name: id
+          required: true
+          schema:
+            description: Stable Simulation ID.
+            pattern: ^sim_[0-9A-HJKMNP-TV-Z]{26}$
+            type: string
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Simulation"
+          description: OK
+        "400":
+          $ref: "#/components/responses/BadRequest"
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+        "403":
+          $ref: "#/components/responses/Forbidden"
+        "404":
+          content:
+            application/problem+json:
+              examples:
+                simulation_not_found:
+                  $ref: "#/components/examples/simulation_not_found"
+              schema:
+                $ref: "#/components/schemas/Error"
+          description: Not Found
+        "409":
+          content:
+            application/problem+json:
+              examples:
+                simulation_world_owned:
+                  $ref: "#/components/examples/simulation_world_owned"
+              schema:
+                $ref: "#/components/schemas/Error"
+          description: Conflict
+        "500":
+          $ref: "#/components/responses/InternalServerError"
+        "503":
+          $ref: "#/components/responses/ServiceUnavailable"
+        "504":
+          $ref: "#/components/responses/GatewayTimeout"
+      security:
+        - apiKeyAuth: []
+      summary: Stop Simulation
+      tags:
+        - simulations
+  /v1/simulations/{id}/tokens:
+    post:
+      description: Mints an expiring data-plane token. Send it in X-Continuous-Simulation-Token. Other unexpired tokens remain valid.
+      operationId: mint-simulation-token
+      parameters:
+        - description: Stable Simulation ID.
+          in: path
+          name: id
+          required: true
+          schema:
+            description: Stable Simulation ID.
+            pattern: ^sim_[0-9A-HJKMNP-TV-Z]{26}$
+            type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/MintSimulationTokenRequest"
+        required: true
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/SimulationToken"
+          description: OK
+        "400":
+          $ref: "#/components/responses/BadRequest"
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+        "403":
+          $ref: "#/components/responses/Forbidden"
+        "404":
+          content:
+            application/problem+json:
+              examples:
+                simulation_not_found:
+                  $ref: "#/components/examples/simulation_not_found"
+              schema:
+                $ref: "#/components/schemas/Error"
+          description: Not Found
+        "408":
+          $ref: "#/components/responses/RequestTimeout"
+        "409":
+          $ref: "#/components/responses/Conflict"
+        "413":
+          $ref: "#/components/responses/PayloadTooLarge"
+        "415":
+          $ref: "#/components/responses/UnsupportedMediaType"
+        "422":
+          content:
+            application/problem+json:
+              examples:
+                validation:
+                  $ref: "#/components/examples/validation"
+              schema:
+                $ref: "#/components/schemas/Error"
+          description: Unprocessable Entity
+        "500":
+          $ref: "#/components/responses/InternalServerError"
+        "503":
+          $ref: "#/components/responses/ServiceUnavailable"
+      security:
+        - apiKeyAuth: []
+      summary: Mint Simulation Token
+      tags:
+        - simulations
+  /v1/simulators:
+    get:
+      description: Returns all Simulators that the API key can access. Results can be filtered by status or name.
+      operationId: list-simulators
+      parameters:
+        - description: Optional build status filter.
+          explode: false
+          in: query
+          name: status
+          schema:
+            description: Optional build status filter.
+            enum:
+              - building
+              - ready
+              - failed
+              - canceled
+            type: string
+        - description: Optional exact Simulator name. Prefix a catalog name with continuous/. Names cannot start with smr_.
+          explode: false
+          in: query
+          name: name
+          schema:
+            description: Optional exact Simulator name. Prefix a catalog name with continuous/. Names cannot start with smr_.
+            maxLength: 139
+            pattern: ^$|^(?:continuous/)?(?!smr_)[a-z0-9]+(?:[._-][a-z0-9]+)*$
+            type: string
+        - description: Page size. Values below 1 use 50. Values above 200 use 200.
+          explode: false
+          in: query
+          name: limit
+          schema:
+            default: 50
+            description: Page size. Values below 1 use 50. Values above 200 use 200.
+            format: int64
+            type: integer
+        - description: Opaque next_cursor value from a previous page.
+          explode: false
+          in: query
+          name: cursor
+          schema:
+            description: Opaque next_cursor value from a previous page.
+            type: string
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ListSimulatorsResponse"
+          description: OK
+        "400":
+          content:
+            application/problem+json:
+              examples:
+                bad_request:
+                  $ref: "#/components/examples/bad_request"
+              schema:
+                $ref: "#/components/schemas/Error"
+          description: Bad Request
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+        "403":
+          $ref: "#/components/responses/Forbidden"
+        "404":
+          $ref: "#/components/responses/NotFound"
+        "422":
+          content:
+            application/problem+json:
+              examples:
+                validation:
+                  $ref: "#/components/examples/validation"
+              schema:
+                $ref: "#/components/schemas/Error"
+          description: Unprocessable Entity
+        "500":
+          $ref: "#/components/responses/InternalServerError"
+        "503":
+          $ref: "#/components/responses/ServiceUnavailable"
+      security:
+        - apiKeyAuth: []
+      summary: List Simulators
+      tags:
+        - simulators
+    post:
+      description: Creates a Simulator from an OpenAPI or WSDL source. The build runs asynchronously. Send multipart/form-data with one JSON request part, and one spec file part for a spec build.
+      operationId: build-simulator
+      requestBody:
+        content:
+          multipart/form-data:
+            encoding:
+              request:
+                contentType: application/json
+              spec:
+                contentType: application/octet-stream
+            schema:
+              additionalProperties: false
+              properties:
+                request:
+                  $ref: "#/components/schemas/BuildSimulatorRequest"
+                  description: Simulator build metadata as JSON.
+                spec:
+                  contentEncoding: binary
+                  contentMediaType: application/octet-stream
+                  description: OpenAPI or WSDL file. A spec build sends it. At most 67,108,864 UTF-8 bytes.
+                  format: binary
+                  type: string
+              required:
+                - request
+              type: object
+        required: true
+      responses:
+        "202":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Simulator"
+          description: Accepted
+        "400":
+          content:
+            application/problem+json:
+              examples:
+                simulator_unknown_parent:
+                  $ref: "#/components/examples/simulator_unknown_parent"
+              schema:
+                $ref: "#/components/schemas/Error"
+          description: Bad Request
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+        "403":
+          $ref: "#/components/responses/Forbidden"
+        "404":
+          $ref: "#/components/responses/NotFound"
+        "408":
+          $ref: "#/components/responses/RequestTimeout"
+        "409":
+          content:
+            application/problem+json:
+              examples:
+                simulator_not_ready_base:
+                  $ref: "#/components/examples/simulator_not_ready_base"
+              schema:
+                $ref: "#/components/schemas/Error"
+          description: Conflict
+        "413":
+          content:
+            application/problem+json:
+              examples:
+                payload_too_large:
+                  $ref: "#/components/examples/payload_too_large"
+              schema:
+                $ref: "#/components/schemas/Error"
+          description: Request Entity Too Large
+        "415":
+          $ref: "#/components/responses/UnsupportedMediaType"
+        "422":
+          content:
+            application/problem+json:
+              examples:
+                validation:
+                  $ref: "#/components/examples/validation"
+              schema:
+                $ref: "#/components/schemas/Error"
+          description: Unprocessable Entity
+        "429":
+          content:
+            application/problem+json:
+              examples:
+                build_quota_exceeded:
+                  $ref: "#/components/examples/build_quota_exceeded"
+                build_rate_exceeded:
+                  $ref: "#/components/examples/build_rate_exceeded"
+              schema:
+                $ref: "#/components/schemas/Error"
+          description: Too Many Requests
+        "500":
+          $ref: "#/components/responses/InternalServerError"
+        "503":
+          $ref: "#/components/responses/ServiceUnavailable"
+      security:
+        - apiKeyAuth: []
+      summary: Build Simulator
+      tags:
+        - simulators
+  /v1/simulators/{id}:
+    delete:
+      description: Deletes a Simulator that has no dependent Worlds, Simulations, or child Simulators.
+      operationId: delete-simulator
+      parameters:
+        - description: Stable Simulator ID.
+          in: path
+          name: id
+          required: true
+          schema:
+            description: Stable Simulator ID.
+            pattern: ^smr_[0-9A-HJKMNP-TV-Z]{26}$
+            type: string
+      responses:
+        "204":
+          description: No Content
+        "400":
+          $ref: "#/components/responses/BadRequest"
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+        "403":
+          content:
+            application/problem+json:
+              examples:
+                auth_forbidden_catalog:
+                  $ref: "#/components/examples/auth_forbidden_catalog"
+              schema:
+                $ref: "#/components/schemas/Error"
+          description: Forbidden
+        "404":
+          content:
+            application/problem+json:
+              examples:
+                simulator_not_found:
+                  $ref: "#/components/examples/simulator_not_found"
+              schema:
+                $ref: "#/components/schemas/Error"
+          description: Not Found
+        "409":
+          content:
+            application/problem+json:
+              examples:
+                simulator_in_use:
+                  $ref: "#/components/examples/simulator_in_use"
+              schema:
+                $ref: "#/components/schemas/Error"
+          description: Conflict
+        "422":
+          content:
+            application/problem+json:
+              examples:
+                validation:
+                  $ref: "#/components/examples/validation"
+              schema:
+                $ref: "#/components/schemas/Error"
+          description: Unprocessable Entity
+        "500":
+          $ref: "#/components/responses/InternalServerError"
+        "503":
+          $ref: "#/components/responses/ServiceUnavailable"
+      security:
+        - apiKeyAuth: []
+      summary: Delete Simulator
+      tags:
+        - simulators
+    get:
+      description: Returns a Simulator and its current build status.
+      operationId: get-simulator
+      parameters:
+        - description: Stable Simulator ID.
+          in: path
+          name: id
+          required: true
+          schema:
+            description: Stable Simulator ID.
+            pattern: ^smr_[0-9A-HJKMNP-TV-Z]{26}$
+            type: string
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Simulator"
+          description: OK
+        "400":
+          $ref: "#/components/responses/BadRequest"
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+        "403":
+          $ref: "#/components/responses/Forbidden"
+        "404":
+          content:
+            application/problem+json:
+              examples:
+                simulator_not_found:
+                  $ref: "#/components/examples/simulator_not_found"
+              schema:
+                $ref: "#/components/schemas/Error"
+          description: Not Found
+        "422":
+          content:
+            application/problem+json:
+              examples:
+                validation:
+                  $ref: "#/components/examples/validation"
+              schema:
+                $ref: "#/components/schemas/Error"
+          description: Unprocessable Entity
+        "500":
+          $ref: "#/components/responses/InternalServerError"
+        "503":
+          $ref: "#/components/responses/ServiceUnavailable"
+      security:
+        - apiKeyAuth: []
+      summary: Get Simulator
+      tags:
+        - simulators
+  /v1/simulators/{id}/cancel:
+    post:
+      description: Requests cancellation of an active Simulator build. The build can finish before cancellation takes effect.
+      operationId: cancel-simulator-build
+      parameters:
+        - description: Stable Simulator ID.
+          in: path
+          name: id
+          required: true
+          schema:
+            description: Stable Simulator ID.
+            pattern: ^smr_[0-9A-HJKMNP-TV-Z]{26}$
+            type: string
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Simulator"
+          description: OK
+        "400":
+          $ref: "#/components/responses/BadRequest"
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+        "403":
+          content:
+            application/problem+json:
+              examples:
+                auth_forbidden_owner:
+                  $ref: "#/components/examples/auth_forbidden_owner"
+              schema:
+                $ref: "#/components/schemas/Error"
+          description: Forbidden
+        "404":
+          content:
+            application/problem+json:
+              examples:
+                simulator_not_found:
+                  $ref: "#/components/examples/simulator_not_found"
+              schema:
+                $ref: "#/components/schemas/Error"
+          description: Not Found
+        "409":
+          $ref: "#/components/responses/Conflict"
+        "422":
+          content:
+            application/problem+json:
+              examples:
+                validation:
+                  $ref: "#/components/examples/validation"
+              schema:
+                $ref: "#/components/schemas/Error"
+          description: Unprocessable Entity
+        "500":
+          $ref: "#/components/responses/InternalServerError"
+        "503":
+          $ref: "#/components/responses/ServiceUnavailable"
+      security:
+        - apiKeyAuth: []
+      summary: Cancel Simulator Build
+      tags:
+        - simulators
+  /v1/worlds:
+    get:
+      description: Returns all Worlds that the API key can access.
+      operationId: list-worlds
+      parameters:
+        - description: Page size. Values below 1 use 50. Values above 200 use 200.
+          explode: false
+          in: query
+          name: limit
+          schema:
+            default: 50
+            description: Page size. Values below 1 use 50. Values above 200 use 200.
+            format: int64
+            type: integer
+        - description: Opaque cursor from the previous page.
+          explode: false
+          in: query
+          name: cursor
+          schema:
+            description: Opaque cursor from the previous page.
+            type: string
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ListWorldsResponse"
+          description: OK
+        "400":
+          content:
+            application/problem+json:
+              examples:
+                bad_request:
+                  $ref: "#/components/examples/bad_request"
+              schema:
+                $ref: "#/components/schemas/Error"
+          description: Bad Request
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+        "403":
+          $ref: "#/components/responses/Forbidden"
+        "404":
+          $ref: "#/components/responses/NotFound"
+        "422":
+          content:
+            application/problem+json:
+              examples:
+                validation:
+                  $ref: "#/components/examples/validation"
+              schema:
+                $ref: "#/components/schemas/Error"
+          description: Unprocessable Entity
+        "500":
+          $ref: "#/components/responses/InternalServerError"
+        "503":
+          $ref: "#/components/responses/ServiceUnavailable"
+      security:
+        - apiKeyAuth: []
+      summary: List Worlds
+      tags:
+        - worlds
+    post:
+      description: Builds a World definition from stable Simulator IDs. Start the World to create its Simulations.
+      operationId: build-world
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/BuildWorldRequest"
+        required: true
+      responses:
+        "202":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/World"
+          description: Accepted
+        "400":
+          content:
+            application/problem+json:
+              examples:
+                simulator_unknown:
+                  $ref: "#/components/examples/simulator_unknown"
+              schema:
+                $ref: "#/components/schemas/Error"
+          description: Bad Request
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+        "403":
+          $ref: "#/components/responses/Forbidden"
+        "404":
+          $ref: "#/components/responses/NotFound"
+        "408":
+          $ref: "#/components/responses/RequestTimeout"
+        "409":
+          content:
+            application/problem+json:
+              examples:
+                simulator_not_ready:
+                  $ref: "#/components/examples/simulator_not_ready"
+              schema:
+                $ref: "#/components/schemas/Error"
+          description: Conflict
+        "413":
+          $ref: "#/components/responses/PayloadTooLarge"
+        "415":
+          $ref: "#/components/responses/UnsupportedMediaType"
+        "422":
+          content:
+            application/problem+json:
+              examples:
+                validation:
+                  $ref: "#/components/examples/validation"
+              schema:
+                $ref: "#/components/schemas/Error"
+          description: Unprocessable Entity
+        "500":
+          $ref: "#/components/responses/InternalServerError"
+        "503":
+          $ref: "#/components/responses/ServiceUnavailable"
+      security:
+        - apiKeyAuth: []
+      summary: Build World
+      tags:
+        - worlds
+  /v1/worlds/{id}:
+    delete:
+      description: Deletes a World, all its Simulations, and their saved runtime states.
+      operationId: delete-world
+      parameters:
+        - description: Stable World ID.
+          in: path
+          name: id
+          required: true
+          schema:
+            description: Stable World ID.
+            pattern: ^wld_[0-9A-HJKMNP-TV-Z]{26}$
+            type: string
+      responses:
+        "204":
+          description: No Content
+        "400":
+          $ref: "#/components/responses/BadRequest"
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+        "403":
+          $ref: "#/components/responses/Forbidden"
+        "404":
+          content:
+            application/problem+json:
+              examples:
+                world_not_found:
+                  $ref: "#/components/examples/world_not_found"
+              schema:
+                $ref: "#/components/schemas/Error"
+          description: Not Found
+        "409":
+          $ref: "#/components/responses/Conflict"
+        "500":
+          $ref: "#/components/responses/InternalServerError"
+        "503":
+          $ref: "#/components/responses/ServiceUnavailable"
+      security:
+        - apiKeyAuth: []
+      summary: Delete World
+      tags:
+        - worlds
+    get:
+      description: Returns a World, its build instructions, and its Simulator IDs.
+      operationId: get-world
+      parameters:
+        - description: Stable World ID.
+          in: path
+          name: id
+          required: true
+          schema:
+            description: Stable World ID.
+            pattern: ^wld_[0-9A-HJKMNP-TV-Z]{26}$
+            type: string
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/World"
+          description: OK
+        "400":
+          $ref: "#/components/responses/BadRequest"
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+        "403":
+          $ref: "#/components/responses/Forbidden"
+        "404":
+          content:
+            application/problem+json:
+              examples:
+                world_not_found:
+                  $ref: "#/components/examples/world_not_found"
+              schema:
+                $ref: "#/components/schemas/Error"
+          description: Not Found
+        "500":
+          $ref: "#/components/responses/InternalServerError"
+        "503":
+          $ref: "#/components/responses/ServiceUnavailable"
+      security:
+        - apiKeyAuth: []
+      summary: Get World
+      tags:
+        - worlds
+  /v1/worlds/{id}/cancel:
+    post:
+      description: Cancels an active World build. Repeated cancellation returns the current World.
+      operationId: cancel-world-build
+      parameters:
+        - description: Stable World ID.
+          in: path
+          name: id
+          required: true
+          schema:
+            description: Stable World ID.
+            pattern: ^wld_[0-9A-HJKMNP-TV-Z]{26}$
+            type: string
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/World"
+          description: OK
+        "400":
+          $ref: "#/components/responses/BadRequest"
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+        "403":
+          $ref: "#/components/responses/Forbidden"
+        "404":
+          content:
+            application/problem+json:
+              examples:
+                world_not_found:
+                  $ref: "#/components/examples/world_not_found"
+              schema:
+                $ref: "#/components/schemas/Error"
+          description: Not Found
+        "409":
+          $ref: "#/components/responses/Conflict"
+        "500":
+          $ref: "#/components/responses/InternalServerError"
+        "503":
+          $ref: "#/components/responses/ServiceUnavailable"
+      security:
+        - apiKeyAuth: []
+      summary: Cancel World Build
+      tags:
+        - worlds
+  /v1/worlds/{id}/start:
+    post:
+      description: Creates member Simulations on first start. Later starts restore stopped Simulations from saved state.
+      operationId: start-world
+      parameters:
+        - description: Stable World ID.
+          in: path
+          name: id
+          required: true
+          schema:
+            description: Stable World ID.
+            pattern: ^wld_[0-9A-HJKMNP-TV-Z]{26}$
+            type: string
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/World"
+          description: OK
+        "400":
+          $ref: "#/components/responses/BadRequest"
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+        "403":
+          $ref: "#/components/responses/Forbidden"
+        "404":
+          content:
+            application/problem+json:
+              examples:
+                world_not_found:
+                  $ref: "#/components/examples/world_not_found"
+              schema:
+                $ref: "#/components/schemas/Error"
+          description: Not Found
+        "409":
+          content:
+            application/problem+json:
+              examples:
+                world_conflict:
+                  $ref: "#/components/examples/world_conflict"
+              schema:
+                $ref: "#/components/schemas/Error"
+          description: Conflict
+        "429":
+          content:
+            application/problem+json:
+              examples:
+                simulation_quota_exceeded_world:
+                  $ref: "#/components/examples/simulation_quota_exceeded_world"
+              schema:
+                $ref: "#/components/schemas/Error"
+          description: Too Many Requests
+        "500":
+          $ref: "#/components/responses/InternalServerError"
+        "503":
+          $ref: "#/components/responses/ServiceUnavailable"
+      security:
+        - apiKeyAuth: []
+      summary: Start World
+      tags:
+        - worlds
+  /v1/worlds/{id}/stop:
+    post:
+      description: Stops a World and saves each Simulation state. You can start the World later from the saved states.
+      operationId: stop-world
+      parameters:
+        - description: Stable World ID.
+          in: path
+          name: id
+          required: true
+          schema:
+            description: Stable World ID.
+            pattern: ^wld_[0-9A-HJKMNP-TV-Z]{26}$
+            type: string
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/World"
+          description: OK
+        "400":
+          $ref: "#/components/responses/BadRequest"
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+        "403":
+          $ref: "#/components/responses/Forbidden"
+        "404":
+          content:
+            application/problem+json:
+              examples:
+                world_not_found:
+                  $ref: "#/components/examples/world_not_found"
+              schema:
+                $ref: "#/components/schemas/Error"
+          description: Not Found
+        "409":
+          content:
+            application/problem+json:
+              examples:
+                world_conflict_stop:
+                  $ref: "#/components/examples/world_conflict_stop"
+              schema:
+                $ref: "#/components/schemas/Error"
+          description: Conflict
+        "500":
+          $ref: "#/components/responses/InternalServerError"
+        "503":
+          $ref: "#/components/responses/ServiceUnavailable"
+      security:
+        - apiKeyAuth: []
+      summary: Stop World
+      tags:
+        - worlds
+servers:
+  - description: Continuous production API.
+    url: https://api.continuouslabs.ai
+tags:
+  - description: Create and control isolated runtime instances of ready Simulators.
+    name: simulations
+    x-group: Simulations
+  - description: Build, inspect, and delete reusable Simulator artifacts.
+    name: simulators
+    x-group: Simulators
+  - description: Build and control coordinated groups of Simulations.
+    name: worlds
+    x-group: Worlds

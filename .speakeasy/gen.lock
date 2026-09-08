@@ -1,0 +1,851 @@
+lockVersion: 2.0.0
+id: ad7b08dc-357d-414c-9f26-16cfbc099767
+management:
+  docChecksum: b78134a4b9138e88b87adae6d9276e53
+  docVersion: v1
+  speakeasyVersion: 1.796.4
+  generationVersion: 2.935.1
+  releaseVersion: 0.0.1
+  configChecksum: faa02a21ec32160d2f191bb633e34b34
+persistentEdits:
+  generation_id: feeb6eb5-e013-42f1-97b8-eb205aaf423d
+  pristine_commit_hash: e3aa5ea6f3a4a871dde8c72e35e47e0c28bbb66e
+  pristine_tree_hash: 59bd14516468274eff0d72f15346a75cbdd9746f
+features:
+  cli:
+    constsAndDefaults: 0.0.0
+    core: 0.2.19
+    globalSecurity: 0.0.1
+    globalServerURLs: 0.0.0
+    responseFormat: 0.1.1
+trackedFiles:
+  .gitattributes:
+    id: 24139dae6567
+    last_write_checksum: sha1:84b0115789fc3ea52e31df701d8a27f76077e29f
+    pristine_git_object: e6a994416d0f527912d2d272e2583458f4fc9bcb
+  .github/workflows/release.yaml:
+    id: 3679a1429145
+    last_write_checksum: sha1:ff4e1df729b880f7e346d013376669ee52735e11
+    pristine_git_object: 847aeb6046d7cb0c98b8dfe965ed33c18e3fca93
+  .goreleaser.yaml:
+    id: 3c333d227063
+    last_write_checksum: sha1:9501fc44269e2c5dfdf313029e34610b81579db8
+    pristine_git_object: 78228bfb3841a222ead57f50a87860d59ea1d6f7
+  USAGE.md:
+    id: 3aed33ce6e6f
+    last_write_checksum: sha1:44aa06e6ee0bdc4c0f94f7c6759199ea1c0020ab
+    pristine_git_object: 8b3be7393e61a5399ae94d2e56754becc74195a9
+  cmd/continuous/main.go:
+    id: ba408841b51f
+    last_write_checksum: sha1:a8c493066b1efb3d6fd7760e3462597bfdca4740
+    pristine_git_object: 23e893e472497ff12b9b42ac23fdecc7c20f12b6
+  cmd/gendocs/main.go:
+    id: 20d9382a7dff
+    last_write_checksum: sha1:0d9ef41c8a4cc04a3c5159e4ef98b3f2b9c04333
+    pristine_git_object: 1635ff6f701a4ec07cb081db63de8709a8efb0c4
+  go.mod:
+    id: c47645c391ad
+    last_write_checksum: sha1:0fb58239544a98f410046743c0c41ae70d5d1dc9
+    pristine_git_object: c156e5f9c99e4a28109f6b41248418578003d399
+  internal/cli/auth.go:
+    id: 5ae1b1dce495
+    last_write_checksum: sha1:b2d5e24f7920ca94c96e11fd4d18379711b5a178
+    pristine_git_object: 81c4cdf6a898de9fc601cab665157a1c96b8df64
+  internal/cli/configure.go:
+    id: 36d400bc4372
+    last_write_checksum: sha1:a81dd3b4aff338006d6c1516e74a2bbdf70766eb
+    pristine_git_object: 715b3b82bb030833d0413c646a2dc3e686818211
+  internal/cli/masking.go:
+    id: dd6ad60ba8bc
+    last_write_checksum: sha1:5a69fa055d628c1b8507cd123f3cd18309aa9a53
+    pristine_git_object: 50ef7ee485832714bbbc1c86cb50b7bcc8eb92c7
+  internal/cli/root.go:
+    id: 239d55a0d6be
+    last_write_checksum: sha1:46127730d0d79419ac8aa2767d66b15d443128aa
+    pristine_git_object: eea8df2d6e6de8bd017af2c632e97b64210bdc35
+  internal/cli/simulations/createsimulation.go:
+    id: 21bbb066ec37
+    last_write_checksum: sha1:fc8c69fc9524e7f6ffd260b02b72ea3a05a42ee8
+    pristine_git_object: 1e19f083a441e3dc24a478eb134a877cd28af826
+  internal/cli/simulations/deletesimulation.go:
+    id: 0f87ec7a53c2
+    last_write_checksum: sha1:983fd4c2918006d06f26a6c2ad0f4912b292f7d7
+    pristine_git_object: 4f0b870c0c98cb7eaa523d50cd574b6fe12a9ba4
+  internal/cli/simulations/forksimulation.go:
+    id: 36947b39e528
+    last_write_checksum: sha1:58f767c31e2e21b55f58238f3d2f1279bc6301ff
+    pristine_git_object: 2ada8464ea7672733e9a39a5fcaffbd7c01cb644
+  internal/cli/simulations/getsimulation.go:
+    id: 6c0a3643e748
+    last_write_checksum: sha1:de50a28626cbcac321307a1be4045495e09a238e
+    pristine_git_object: c761c3bdea05d0ff7219ec43c0f381b6bb396ff2
+  internal/cli/simulations/listsimulations.go:
+    id: ec9b43ba5a16
+    last_write_checksum: sha1:16f14f4d57418eff17c28b51438b694342d6b96b
+    pristine_git_object: 6aefad6ab7a8778aad3c7eea086e071dfd31d2e9
+  internal/cli/simulations/listsimulationsteps.go:
+    id: 495e2ecce809
+    last_write_checksum: sha1:1ef0b30dd19d7c2224f5614adc64d21dce24a724
+    pristine_git_object: e45f9ce1d197249164b66b3bcb8bcf2d4cde35fd
+  internal/cli/simulations/mintsimulationtoken.go:
+    id: 9ec41342408d
+    last_write_checksum: sha1:cc6b2aa758bcb32bb5cbfb714ff1868770c6d9c0
+    pristine_git_object: 7cba3ddeb43dc1cab2a52dd36432a277a8ed0a7d
+  internal/cli/simulations/root.go:
+    id: 53da55474864
+    last_write_checksum: sha1:268c0c91f400209fc4d471e7d8b852af6a8598c5
+    pristine_git_object: bf9d8772fb98b5440d3f22ebacff6c57bb6a1b15
+  internal/cli/simulations/startsimulation.go:
+    id: 958554851b56
+    last_write_checksum: sha1:0adbd209308c916ca0c8923269ebe6c70990f56b
+    pristine_git_object: d52bdc78c32b9949c46a4ed2172d2af9f71c24f5
+  internal/cli/simulations/stopsimulation.go:
+    id: c58a618f9a5b
+    last_write_checksum: sha1:832c6bbbd160c8b8579d193db8d7bc2af5b1a7d9
+    pristine_git_object: 7a0c99d908328accb8ff6a16d6321331485f6418
+  internal/cli/simulators/buildsimulator.go:
+    id: 8588410bc4ea
+    last_write_checksum: sha1:40897ba2bb1f3bfa8db63649f602a19edc621319
+    pristine_git_object: 3de63e403e812c6e0acc0d0a94eb62077882512b
+  internal/cli/simulators/cancelsimulatorbuild.go:
+    id: c44fc1f9b425
+    last_write_checksum: sha1:44d40150f38b2cf84d876267124e31d1c46e2212
+    pristine_git_object: ffbe74f19df27f5b4d3a30ce4f06518a13e645db
+  internal/cli/simulators/deletesimulator.go:
+    id: 67e02e3dea85
+    last_write_checksum: sha1:429dcf849cbfcd30945cd1309175f49f9cb7bd7d
+    pristine_git_object: 878ffac512590b6c181a8cde78df35167cb8a125
+  internal/cli/simulators/getsimulator.go:
+    id: 20f995188632
+    last_write_checksum: sha1:92f628b0843660cc3fdb708590c52e6824a9cf52
+    pristine_git_object: a02e5f9336ea6e8003c9f0db4c9fed8c43f0eb5b
+  internal/cli/simulators/listsimulators.go:
+    id: ecc9475a4464
+    last_write_checksum: sha1:3f4999849e9035442b1ea87e2488efbaf2255e3c
+    pristine_git_object: ef418788f0d478f0b80ce8fc0461b2f64e9162c7
+  internal/cli/simulators/root.go:
+    id: dd5adf98eb19
+    last_write_checksum: sha1:664efcda55561ed3c2278f1d8e4d1c64199f0bed
+    pristine_git_object: 349c249c29a0b5593a132c7e998e9215b3fa8f1c
+  internal/cli/version.go:
+    id: 7b0665492f72
+    last_write_checksum: sha1:78899ff3a9f47eacf8984d7e300f21b984fe7f72
+    pristine_git_object: 1d5fa6fbd3212fd45fd2fe7a1f2afaa5753195ff
+  internal/cli/whoami.go:
+    id: c1787f2298ec
+    last_write_checksum: sha1:d5a8244ae3546119b6c86b48a38cb792804ea604
+    pristine_git_object: fe9c79da4c8afd0e27029e56098de4417cc3846d
+  internal/cli/worlds/buildworld.go:
+    id: eb895422f8bd
+    last_write_checksum: sha1:e898f8ccf99b2b1a6d115cd5777d78595e882717
+    pristine_git_object: 8f092bfe371623061f3dfe846994646242da679c
+  internal/cli/worlds/cancelworldbuild.go:
+    id: 68d7a9504376
+    last_write_checksum: sha1:edac276527a0b90f7d3208b04fb946286ec7298f
+    pristine_git_object: a6bad3b52447c169d9176489dc5c54a266464e9c
+  internal/cli/worlds/deleteworld.go:
+    id: 6c1187046558
+    last_write_checksum: sha1:fa922a52d97a2def325b746d82d7b12430ae5cdb
+    pristine_git_object: db26ebec6d9b3a8fabf08529356fc1969f0b3fc2
+  internal/cli/worlds/getworld.go:
+    id: 153cf101a428
+    last_write_checksum: sha1:b49f1d7b02f1a000a3274b83590953369e1270c7
+    pristine_git_object: db73787671c5d7de69fb44031d0ab9876283f8a5
+  internal/cli/worlds/listworlds.go:
+    id: abed3cc73571
+    last_write_checksum: sha1:d596a2109bb17f9ba305fc1cc248e3596d344216
+    pristine_git_object: 03545af91a2a987f69c6ab1e46f34746a196ac5d
+  internal/cli/worlds/root.go:
+    id: b18f0d16d28c
+    last_write_checksum: sha1:7dd32e509843941e707015bff2422d8f9f24d0d7
+    pristine_git_object: 2ff08cff81cbd61637444c2f4ab8a30fd571dde8
+  internal/cli/worlds/startworld.go:
+    id: 5cb05ab50e4a
+    last_write_checksum: sha1:544902bc9fcb2589618c9f872055266b745640a5
+    pristine_git_object: 164b8baad3310e53ab8a2a0cddd18c966ca18f3f
+  internal/cli/worlds/stopworld.go:
+    id: 0ffd028b8702
+    last_write_checksum: sha1:7cbf769164ca6b7db7513ad343f831107caed193
+    pristine_git_object: a92561c1eba63df9eecc09636674359f3e5e5eb4
+  internal/client/client.go:
+    id: 5898305eedad
+    last_write_checksum: sha1:ab3da60aee37324933ab46f3942ee3a3dd7375ff
+    pristine_git_object: 427912e47ff5b0f56f61599d4b40ad3b3ee96126
+  internal/client/diagnostics.go:
+    id: b4a77b4f6df9
+    last_write_checksum: sha1:cbff6150a1494f1cc9de4b3176a6981a842a8115
+    pristine_git_object: 3957f062b3b375659f514e386ae6dae72b64836a
+  internal/config/config.go:
+    id: 4ccc1a5e56a7
+    last_write_checksum: sha1:e28a7770f544744251bffd2cbfd27574fc91a921
+    pristine_git_object: 886d42a66cd6d83834978cbe41ffcb7d34c695d9
+  internal/config/keyring.go:
+    id: 61bf1449e290
+    last_write_checksum: sha1:f72a8a7e8804523766bac15ca99e97af94c8ff30
+    pristine_git_object: d4499e5814718c226b6cc692dffad4315e23e35d
+  internal/explorer/explorer.go:
+    id: 544a9bc78db8
+    last_write_checksum: sha1:fce74125eb90e8db82b77cc0f0c96d10bc30bfb9
+    pristine_git_object: 5ef8f627ea103e8970265e216e4a49945dfd9b06
+  internal/explorer/styles.go:
+    id: f50091b6a6af
+    last_write_checksum: sha1:2828c2efe410bee01a8563e1cf7cc985d4d29ee8
+    pristine_git_object: f1124744344d02757ed0a8c87518a714e59cb854
+  internal/explorer/tree.go:
+    id: 81129f3c3c04
+    last_write_checksum: sha1:16dea1c4b16d808202bf0c6f819fb5fba285ade7
+    pristine_git_object: c85dee2441a6a8490edc0a5e7fbf33cde92f088e
+  internal/explorer/tui.go:
+    id: 9bee7d6a891e
+    last_write_checksum: sha1:6323b44c3089bf6cab45c7c7df1d862fea349b7c
+    pristine_git_object: 7035f3c6dbeb6eb30001ddb1d6d8ba97802183e3
+  internal/flagutil/flags.go:
+    id: 9e81d6ab2674
+    last_write_checksum: sha1:d4a4640b46562ae38fb0d55ec14eee7a7bcc7601
+    pristine_git_object: 469b0c9597280df2da7d1bda77c7ea06f9ed132f
+  internal/flagutil/metadata.go:
+    id: d22ccf2128e9
+    last_write_checksum: sha1:722a5c8dc178655cffba80d5336a464b59519dbe
+    pristine_git_object: 0b1ed93343b422df27daac9059fa5798944c0811
+  internal/interactive/interactive.go:
+    id: 35e3347980bb
+    last_write_checksum: sha1:fa77343141d37dddefb76a44717554fe255ffa5c
+    pristine_git_object: 7ab026a9fa4f8756365a6a173bfd38dd3dc4f5ea
+  internal/output/agentmode.go:
+    id: de6b0ed77d1c
+    last_write_checksum: sha1:de4764c4b9d8d748e39b8143b8ab749097d0ca17
+    pristine_git_object: 0059d6cb616a1a367aa3556b255b6e0b70d7d7ae
+  internal/output/color.go:
+    id: d240050a2a84
+    last_write_checksum: sha1:c618ec769569213c248114c0e42b07582fffefcc
+    pristine_git_object: d7c74560e580e33392f0667297d9fd6f5f0cd55e
+  internal/output/jq.go:
+    id: a0e589d8385d
+    last_write_checksum: sha1:37f028aa252cf0ae8b4c90b49396bcddab05c900
+    pristine_git_object: 93e700b50ec83246fa1ac65b530c41f89cb0806f
+  internal/output/output.go:
+    id: a9c3352b3b56
+    last_write_checksum: sha1:601eec63bb7eb583d51806235e78eaa214f638df
+    pristine_git_object: 3f724518502a0e81fa4afda83ac5e53979f40dc4
+  internal/output/pretty.go:
+    id: ef4c76789fd4
+    last_write_checksum: sha1:3a40fae5d40a578667ba06448419d8f6c5549e20
+    pristine_git_object: 942a964e78a81ad9d9590cc67138a0c4c3569fc9
+  internal/sdk/.gitattributes:
+    id: 1ea4c4e0a39d
+    last_write_checksum: sha1:84b0115789fc3ea52e31df701d8a27f76077e29f
+    pristine_git_object: e6a994416d0f527912d2d272e2583458f4fc9bcb
+  internal/sdk/continuoussimulation.go:
+    id: af3aeba7b54c
+    last_write_checksum: sha1:0e48a7df20a9ad720fbab682aecff9a277b1ec7d
+    pristine_git_object: 3082b4dd5edc086714f046913212cc421af6a376
+  internal/sdk/models/components/buildsimulatorrequest.go:
+    id: 510b20fc8bb2
+    last_write_checksum: sha1:e65a700a5637c3ba39999c8be0fceb41e29eb4ab
+    pristine_git_object: 43e50865a7e9ef10dce4e76805dbeea0b544fe40
+  internal/sdk/models/components/buildworldrequest.go:
+    id: 8827e29faed8
+    last_write_checksum: sha1:62c3234f9f637cb34f17e556da4386de686876ee
+    pristine_git_object: bb5901b987ff17826fd663d19fc3baa1724a2db6
+  internal/sdk/models/components/createdsimulation.go:
+    id: 4b3913365b48
+    last_write_checksum: sha1:2b2d3fcc0fc7900f8524b438194e8edfb966a919
+    pristine_git_object: 01a925c2ffd464a67c27ee8804a56cd9d646a7d7
+  internal/sdk/models/components/createsimulationrequest.go:
+    id: 6748442be31e
+    last_write_checksum: sha1:f5605bdc2c2e06d216f8bc10cbd06b7cf8499c24
+    pristine_git_object: 64196bd8651144c4b8af4f19825bd52b2b54e5a7
+  internal/sdk/models/components/forksimulationrequest.go:
+    id: 62005b08d17f
+    last_write_checksum: sha1:cc1b3191608fd781afb24145fd363cbcc77aa035
+    pristine_git_object: 4549d5b805e2a1691e1fe7f096b988d026e1dbe3
+  internal/sdk/models/components/httpmetadata.go:
+    id: 2e30cdb779b3
+    last_write_checksum: sha1:01a20fcff33179809ff9920ee431c7adabbd98f1
+    pristine_git_object: 148ec47fb2dea6c188ec68eb3532d93169608168
+  internal/sdk/models/components/listsimulationsresponse.go:
+    id: e64441286d19
+    last_write_checksum: sha1:f1f9405f3eb00a9c0430b19b16773e03d1b8d06e
+    pristine_git_object: f5104009a30f7122a6933baf59dd433f607e510f
+  internal/sdk/models/components/listsimulationstepsresponse.go:
+    id: 01831fea6810
+    last_write_checksum: sha1:b0b7e9139b709ea0568e346c15fd8383083caa35
+    pristine_git_object: 676a9c4deaabaa78aad34e15c07888576b7d20f9
+  internal/sdk/models/components/listsimulatorsresponse.go:
+    id: f7ef11ac4614
+    last_write_checksum: sha1:406765b8e56b26f2fff55dd5bc24489b65549ad2
+    pristine_git_object: 9d94481855a3f7b47506b169b202ba7cf720bdd8
+  internal/sdk/models/components/listworldsresponse.go:
+    id: bc0a35987031
+    last_write_checksum: sha1:509d6a44e109bbe09e2f9e1fcbc88b7baea1ec5b
+    pristine_git_object: 684cb65521d8caeccc31ffb61aec4a1a3906f757
+  internal/sdk/models/components/mintsimulationtokenrequest.go:
+    id: ab895b57b02d
+    last_write_checksum: sha1:4cae7c76c7b51be5cfbe882273a18cee0939d106
+    pristine_git_object: 79e6c7f4f32ff73834dfcf0754e12ddfe9805ed0
+  internal/sdk/models/components/resourceerror.go:
+    id: 9c32e98b4d1d
+    last_write_checksum: sha1:8eb52f3a4ef2f41f3f4655a811d655da61a85269
+    pristine_git_object: afe4a229b674574ad5c93b24682ccd346055b0eb
+  internal/sdk/models/components/security.go:
+    id: c1a78fe12ea5
+    last_write_checksum: sha1:a1a4d7a9c50f9ee03c71cf64dcc3a9af08d053d7
+    pristine_git_object: eca801da09061c06c8ca5a5c1229134922c4e601
+  internal/sdk/models/components/simulation.go:
+    id: c8c8df785fde
+    last_write_checksum: sha1:14f330faca36a85f91adcb2017d2844dff00c25d
+    pristine_git_object: 0c376ff1ad7c7b107e3c3b90445aa5f46e036cf7
+  internal/sdk/models/components/simulationtoken.go:
+    id: bcf4f68395c0
+    last_write_checksum: sha1:93820ce22ff7648dbda05926b4a3ee61d7c87d9b
+    pristine_git_object: e7d8b7cd96dcefe65d34fde84f8461cb6705326d
+  internal/sdk/models/components/simulator.go:
+    id: cb287534b8b9
+    last_write_checksum: sha1:af6cb9afc6568f381a059630db2f5ef93e306fc4
+    pristine_git_object: a1025cf0df5b77c551316c460807c4717cbd01eb
+  internal/sdk/models/components/step.go:
+    id: 35b6e20c4bef
+    last_write_checksum: sha1:05f79cb9c3338d2c0358918cf5f1d82270437421
+    pristine_git_object: d0b035740536e4b000eb31b1de00b3029e00795e
+  internal/sdk/models/components/world.go:
+    id: cca25436961e
+    last_write_checksum: sha1:b2e0d0ad4683b5882b1d68e048e46135341587db
+    pristine_git_object: 1c7117f06c4e219074c99e3d091156bd0d658c1c
+  internal/sdk/models/components/worldsimulation.go:
+    id: 1ad1eacbebff
+    last_write_checksum: sha1:ad36679c10e38f17d5519fba8380ba94e6e04eda
+    pristine_git_object: aa1cb19bfbd750e46fe442c3ee9369ebce2cdcb9
+  internal/sdk/models/operations/buildsimulator.go:
+    id: 0ead813b1137
+    last_write_checksum: sha1:c0858cd880aba601c42f69afb3abb32a92151b68
+    pristine_git_object: c436460db58fca46acb37c9fc2b97e79a6b1b038
+  internal/sdk/models/operations/buildworld.go:
+    id: ae2781abebd1
+    last_write_checksum: sha1:8ae681916c855adac010b6155248c83a7be30af4
+    pristine_git_object: 9ea33291a2fc68c4cff88346300d2ce36d66722c
+  internal/sdk/models/operations/cancelsimulatorbuild.go:
+    id: 67f77e66dd27
+    last_write_checksum: sha1:119e7854cad1d586887ee2f6df9c0ce33c955407
+    pristine_git_object: 4e48d9fa2792592a7a6a34ffc7f4c1c10242237e
+  internal/sdk/models/operations/cancelworldbuild.go:
+    id: 2329ee8201a3
+    last_write_checksum: sha1:78913c27e731c1ba4b1f7faffd06233ff9207b8d
+    pristine_git_object: 2f046c7cd4724c17d20e2d476d6ec525b8d383c3
+  internal/sdk/models/operations/createsimulation.go:
+    id: d5ade3b7e123
+    last_write_checksum: sha1:df7546910b8a78f17da496b1caf3ce18edc691a4
+    pristine_git_object: 91a6246659e279475eb4a1610e9938828c7c8218
+  internal/sdk/models/operations/deletesimulation.go:
+    id: 43e4ecf77238
+    last_write_checksum: sha1:2a6d23c2c7f9b0515671dee6394998c0d8894bd3
+    pristine_git_object: 26e197be1ae42955ec399f21c08a425757ddafc3
+  internal/sdk/models/operations/deletesimulator.go:
+    id: c5fe4a22df2b
+    last_write_checksum: sha1:90c8896521db2df07ebe005905d567cd373e0006
+    pristine_git_object: 2f6aa762816e5abdb0190f45e90e478fa3981ff6
+  internal/sdk/models/operations/deleteworld.go:
+    id: ba1e2f77c6ca
+    last_write_checksum: sha1:50454a10bb8746f787dc82f1753224bc8ff66668
+    pristine_git_object: 3ad284338df5bccf88d18c79760a41f3a1f1dfee
+  internal/sdk/models/operations/forksimulation.go:
+    id: 35c03c39a691
+    last_write_checksum: sha1:ee000ece3566216c7a9ac6e96ae623280d98b1b1
+    pristine_git_object: 9040c00f5147d98801e8f32c36f6d270b1b28f57
+  internal/sdk/models/operations/getsimulation.go:
+    id: 89d747a15c6c
+    last_write_checksum: sha1:61e06cae8cd86f7a924c0d3a0b09ef5811602314
+    pristine_git_object: cfba5adadfc07b56de54a0174a8c6aaad10a1ee3
+  internal/sdk/models/operations/getsimulator.go:
+    id: 3a569232d9c6
+    last_write_checksum: sha1:300ae893cd970b38a7cafaca238197907f7d0dcb
+    pristine_git_object: 52ba8a16ae39aa5c7617c69aa7c237c33b01af3d
+  internal/sdk/models/operations/getworld.go:
+    id: 7ea67f998ac5
+    last_write_checksum: sha1:9df6d4fed4a2bf90c5604240a133ba9f9a534c98
+    pristine_git_object: 5be5bc5c3871029549b0fdd54a2c3a5c2cc8e705
+  internal/sdk/models/operations/listsimulations.go:
+    id: b5b7771571e1
+    last_write_checksum: sha1:b9f83a90295de5ccf2380f43ee68646b789b9931
+    pristine_git_object: c54521098b79d6df5f3ff6510cb94863dcd8cd1b
+  internal/sdk/models/operations/listsimulationsteps.go:
+    id: ce33dd517bd6
+    last_write_checksum: sha1:1831370e0fc938e9bdbde0603d6808d5d187ee2a
+    pristine_git_object: dda97ba0ed0fbb7c0b8762827b87276a468e2375
+  internal/sdk/models/operations/listsimulators.go:
+    id: e900cac38937
+    last_write_checksum: sha1:dd88974916418aa424b5ff308b1695298995165a
+    pristine_git_object: 223ea950804aa76fbc60640649ccbff5d1aac566
+  internal/sdk/models/operations/listworlds.go:
+    id: b4f2dbae21ef
+    last_write_checksum: sha1:5810456f307415cb3eeb75fab9f6b8bef22f4afc
+    pristine_git_object: 4e7d18431de71b9f4942fa12e72fdffd82044a40
+  internal/sdk/models/operations/mintsimulationtoken.go:
+    id: 0a3027a06deb
+    last_write_checksum: sha1:9fb2d5bb467a138dbf32ad812af9858aa862da1a
+    pristine_git_object: a08535b73cc37c1fedc32a0c13a1c482fcaa169f
+  internal/sdk/models/operations/options.go:
+    id: 6d0d29414e00
+    last_write_checksum: sha1:79f19b20ab48555b542d4c535c9668c654b943ca
+    pristine_git_object: 1ebf0b3d7706280778a28157ff35139a099b80c7
+  internal/sdk/models/operations/startsimulation.go:
+    id: 73ecedbae067
+    last_write_checksum: sha1:d2b070a4a928586ab18fb765c371d8147b73dc00
+    pristine_git_object: 574bc608e010397be25c881f849116fba65d28d2
+  internal/sdk/models/operations/startworld.go:
+    id: 14230627edb0
+    last_write_checksum: sha1:49285f0bc27e6978dd4d9e349c61bb82c66d1565
+    pristine_git_object: 91801b329898459e43256f94ba03576927e9aa82
+  internal/sdk/models/operations/stopsimulation.go:
+    id: 3cb9a3e56e9c
+    last_write_checksum: sha1:ed644d42c19b83bf09b6c6fce82e4c8264e2f820
+    pristine_git_object: 246a259311cf7bf3448253c67ace2d01895061be
+  internal/sdk/models/operations/stopworld.go:
+    id: a5c1f070644e
+    last_write_checksum: sha1:1818d8dddf9fd6e407a62770f8e81e5888f83382
+    pristine_git_object: 6f930aaf62d46f516943d3db7923d22cf6d0ba97
+  internal/sdk/models/sdkerrors/error.go:
+    id: 4e5f6c928f11
+    last_write_checksum: sha1:dc831e7896d43c2a4e44308cb9d85c5df2016fb6
+    pristine_git_object: 1f7ba8cace4fe76b6d5c9f95d1db13b600d5428e
+  internal/sdk/models/sdkerrors/sdkdefaulterror.go:
+    id: 78e4ee2e2586
+    last_write_checksum: sha1:437b3a3eacb54d8648a68f80b3cd38fa5019f006
+    pristine_git_object: 29ad145394a59846a19bcb95c3f4cb4e0d5ba373
+  internal/sdk/optionalnullable/optionalnullable.go:
+    id: 4b83aa3f3df3
+    last_write_checksum: sha1:d6aff1a420c31e025ea21d46cf056e305ae76fe8
+    pristine_git_object: c6739be0619b6726565e0f11855ffe44b0e5607e
+  internal/sdk/optionalnullable/optionalnullable_test.go:
+    id: 3920a41dfc4c
+    last_write_checksum: sha1:2e9433eff1651ac77d6678ea76880d9a4980cbc2
+    pristine_git_object: e6e5a01c6e721e879e24a38a1f97e3e27d4686d4
+  internal/sdk/retry/config.go:
+    id: 7ea5fa9128b6
+    last_write_checksum: sha1:102d1953fbd7e9f312c4442c71ccca2eaaeaa27d
+    pristine_git_object: 767002c7898128324d8741ce9c534bd466492169
+  internal/sdk/sdkinternal/config/sdkconfiguration.go:
+    id: f175ab9b0273
+    last_write_checksum: sha1:ec7494b79a9f2381adeea1d71d5eee40817f50f8
+    pristine_git_object: 9466db5911ad04a142275c19d8de4c027d9521ef
+  internal/sdk/sdkinternal/hooks/hooks.go:
+    id: 0cdbe7360fd5
+    last_write_checksum: sha1:8d8ef26191139ec0817535fa21c78945b32c00a3
+    pristine_git_object: db2ae2b04e1f3e6656990a71655bcd2a21e7d313
+  internal/sdk/sdkinternal/utils/contenttype.go:
+    id: ad544f05ded3
+    last_write_checksum: sha1:ab5cfd860d02c6e6a37f89e2b5649a9859947fb1
+    pristine_git_object: f6487e01eb987c0aa49e7aa50b5ff24830314c63
+  internal/sdk/sdkinternal/utils/env.go:
+    id: 53fb5707bfee
+    last_write_checksum: sha1:1e0bcb2d2caed9f3657f1dbc99b55811bed0298c
+    pristine_git_object: 110d464eacf2387b347bad1cb903666354a339e9
+  internal/sdk/sdkinternal/utils/form.go:
+    id: d685469eb548
+    last_write_checksum: sha1:677ee268a4edcb938fe5bf241360d9854bb944f0
+    pristine_git_object: 90918a3af8ddb6a1a74cacf15e591f005467496d
+  internal/sdk/sdkinternal/utils/headers.go:
+    id: 8688b3dd5618
+    last_write_checksum: sha1:2fc80bef958567eba7b748005b2472fed36c83e0
+    pristine_git_object: 57ad273a6a2b2d28b88689904da05b1277a3b467
+  internal/sdk/sdkinternal/utils/json.go:
+    id: 3204a301ca6d
+    last_write_checksum: sha1:9cf1a2265300b12443b433f3a1f37c08a32830f2
+    pristine_git_object: 88baf2f41fe16e04bd236f5afee16985063f2a14
+  internal/sdk/sdkinternal/utils/pathparams.go:
+    id: 9fe9b40a3c1c
+    last_write_checksum: sha1:60579e60c24385f1c59b665e382440488659cc27
+    pristine_git_object: 40a3ffba1f21542c2f0660c05a2912108bdca4f0
+  internal/sdk/sdkinternal/utils/queryparams.go:
+    id: beaa4ae6c0a4
+    last_write_checksum: sha1:b0b34b7ca1c86ffa699153e931e67a86c221da6a
+    pristine_git_object: 4e03ecc8e255625da182671cf5a6e2a268ed15b5
+  internal/sdk/sdkinternal/utils/requestbody.go:
+    id: d0da812b8a0b
+    last_write_checksum: sha1:fce0af5bfee18fc199e993fa69e9aa8c9d7d2c9c
+    pristine_git_object: 9723e47926403713b613aea85fa90713f09d60da
+  internal/sdk/sdkinternal/utils/retries.go:
+    id: 95ebeea8a512
+    last_write_checksum: sha1:157c811622d9fe526c82ef9c680a980ff1055be4
+    pristine_git_object: 35c0a37a9c0b2e5caf492ca206e5b422aa2747b8
+  internal/sdk/sdkinternal/utils/security.go:
+    id: 3c39d5f860f3
+    last_write_checksum: sha1:49fee4e9252239953611e6de36f4682851499ab5
+    pristine_git_object: a2332ee8de013a2121880e4b7be332d3385c6f41
+  internal/sdk/sdkinternal/utils/union.go:
+    id: ec0c94b40a7d
+    last_write_checksum: sha1:297e8ca73453a2966fd7512a561985f87b74185c
+    pristine_git_object: 22c52e652a4dca02ee0b429b77d7a53ce53e9bd5
+  internal/sdk/sdkinternal/utils/union_test.go:
+    id: 79cdd83fbae3
+    last_write_checksum: sha1:bd5c7506e1d6238117c1ac4e340314a5a41401b5
+    pristine_git_object: 138f7e2a066b10dffd0a9957ecfcab9e00dd26fe
+  internal/sdk/sdkinternal/utils/utils.go:
+    id: f79aa64cde4d
+    last_write_checksum: sha1:0836cfcfcbd045add0143bb219266a2189faecec
+    pristine_git_object: 9106bda3d5505a23fb667b7cadcd91bf5aebef54
+  internal/sdk/simulations.go:
+    id: b61054fc5892
+    last_write_checksum: sha1:554815485bd980cb828b779ffa684d7e672f8a25
+    pristine_git_object: 19e3521d53fe9bd01b7152c47952317670f90e19
+  internal/sdk/simulators.go:
+    id: 847405821e0b
+    last_write_checksum: sha1:09c9ce09d69d2dfb9fffb2bc30a00ea2f6d695f2
+    pristine_git_object: dc1b92202b2568e5f0a3558ed4a8bcb5be4c8275
+  internal/sdk/types/bigint.go:
+    id: fc530b70337e
+    last_write_checksum: sha1:49b004005d0461fb04b846eca062b070b0360b31
+    pristine_git_object: 9c6a086d51595888a6ff787ebcb8693559afee95
+  internal/sdk/types/date.go:
+    id: c4bff082c66f
+    last_write_checksum: sha1:3036a2e1ed15a1d484c093367eba000c38f384d0
+    pristine_git_object: 5b2782f219efe6bfbce46fc2dec68998eb759438
+  internal/sdk/types/datetime.go:
+    id: a8109857c712
+    last_write_checksum: sha1:196d050af6450669214e9ae4fd28e56263ae2b5d
+    pristine_git_object: 3eff332daa04e34cec5ffb10add670bafd8ac454
+  internal/sdk/types/pointers.go:
+    id: 2f3f971639f6
+    last_write_checksum: sha1:fc2275ea006257ba9ba4ff6f2a2cdb6205371eef
+    pristine_git_object: 35c439d2661e08fcb6a854096fd7b9a8561b3938
+  internal/sdk/worlds.go:
+    id: 9c366ad7982f
+    last_write_checksum: sha1:fab3f44eac06ea7921e4462884bbe06a8c6e274d
+    pristine_git_object: 1ebeeab495d2aeba9b269bd298f35a5051f0c66d
+  internal/testclient/testclient.go:
+    id: 20fc511b8b00
+    last_write_checksum: sha1:7107e59d336235c44af152c5a61ee3896a7841fa
+    pristine_git_object: 159a87ec97aba99e4edd132f69652e123434303e
+  internal/usage/schema.go:
+    id: 0f40f4612437
+    last_write_checksum: sha1:62f9943d1255cd1dab515d0a3325c6e847fd3088
+    pristine_git_object: 08dd96788e6fafc9b695ae5870fec6b5f937fda0
+  scripts/install.ps1:
+    id: fee0853709e9
+    last_write_checksum: sha1:31065972f5b3cfd75d50bc43087bf14ba7af3f18
+    pristine_git_object: 2e8c4931d11c81ea460d2a701c179e31c500c763
+  scripts/install.sh:
+    id: 1f022802374d
+    last_write_checksum: sha1:2a2b94efe5cdbd75f056f511cfde8910d8ec0c82
+    pristine_git_object: 4ce0593ed7502adbe805e11f0a9c5325b97faf42
+examples:
+  list-simulations:
+    bad_request:
+      parameters:
+        query:
+          limit: 50
+      responses:
+        "400":
+          application/problem+json: {"code": "bad_request", "detail": "The cursor is invalid."}
+        "500":
+          application/problem+json: {"code": "bad_request", "detail": "The cursor is invalid."}
+    simulator_unknown:
+      parameters:
+        query:
+          limit: 50
+      responses:
+        "400":
+          application/problem+json: {"code": "simulator_unknown", "detail": "No Simulator was found with ID \"smr_01J8Z5X4K7M2N9P0Q1R2S3T4V5\"."}
+        "500":
+          application/problem+json: {"code": "simulator_unknown", "detail": "No Simulator was found with ID \"smr_01J8Z5X4K7M2N9P0Q1R2S3T4V5\"."}
+    speakeasy-default-list-simulations:
+      parameters:
+        query:
+          limit: 50
+      responses:
+        "200":
+          application/json: {"next_cursor": "<value>", "simulations": [{"created_at": "2026-01-15T12:00:00Z", "endpoint": "https://api.continuouslabs.ai/sim/sim_01J8Z5X4K7M2N9P0Q1R2S3T4V6", "id": "sim_01J8Z5X4K7M2N9P0Q1R2S3T4V6", "name": "billing-sandbox", "parent_id": "sim_01J8Z5X4K7M2N9P0Q1R2S3T4V8", "simulator_id": "smr_01J8Z5X4K7M2N9P0Q1R2S3T4V5", "status": "running"}]}
+        "400":
+          application/problem+json: {"code": "<value>", "detail": "<value>"}
+        "500":
+          application/problem+json: {"code": "<value>", "detail": "<value>"}
+  create-simulation:
+    simulator_unknown:
+      requestBody:
+        application/json: {"name": "billing-sandbox", "simulator_id": "smr_01J8Z5X4K7M2N9P0Q1R2S3T4V5"}
+      responses:
+        "400":
+          application/problem+json: {"code": "simulator_unknown", "detail": "No Simulator was found with ID \"smr_01J8Z5X4K7M2N9P0Q1R2S3T4V5\"."}
+        "500":
+          application/problem+json: {"code": "simulator_unknown", "detail": "No Simulator was found with ID \"smr_01J8Z5X4K7M2N9P0Q1R2S3T4V5\"."}
+    speakeasy-default-create-simulation:
+      requestBody:
+        application/json: {"name": "billing-sandbox", "simulator_id": "smr_01J8Z5X4K7M2N9P0Q1R2S3T4V5"}
+      responses:
+        "201":
+          application/json: {"created_at": "2026-01-15T12:00:00Z", "endpoint": "https://api.continuouslabs.ai/sim/sim_01J8Z5X4K7M2N9P0Q1R2S3T4V6", "expires_at": "2026-01-15T13:00:00Z", "id": "sim_01J8Z5X4K7M2N9P0Q1R2S3T4V6", "name": "billing-sandbox", "parent_id": "sim_01J8Z5X4K7M2N9P0Q1R2S3T4V8", "simulator_id": "smr_01J8Z5X4K7M2N9P0Q1R2S3T4V5", "status": "running", "token": "<redacted>"}
+        "400":
+          application/problem+json: {"code": "<value>", "detail": "<value>"}
+        "500":
+          application/problem+json: {"code": "<value>", "detail": "<value>"}
+  delete-simulation:
+    speakeasy-default-delete-simulation:
+      parameters:
+        path:
+          id: "<id>"
+      responses:
+        "400":
+          application/problem+json: {"code": "<value>", "detail": "<value>"}
+        "500":
+          application/problem+json: {"code": "<value>", "detail": "<value>"}
+  get-simulation:
+    speakeasy-default-get-simulation:
+      parameters:
+        path:
+          id: "<id>"
+      responses:
+        "200":
+          application/json: {"created_at": "2026-01-15T12:00:00Z", "endpoint": "https://api.continuouslabs.ai/sim/sim_01J8Z5X4K7M2N9P0Q1R2S3T4V6", "id": "sim_01J8Z5X4K7M2N9P0Q1R2S3T4V6", "name": "billing-sandbox", "parent_id": "sim_01J8Z5X4K7M2N9P0Q1R2S3T4V8", "simulator_id": "smr_01J8Z5X4K7M2N9P0Q1R2S3T4V5", "status": "running"}
+        "400":
+          application/problem+json: {"code": "<value>", "detail": "<value>"}
+        "500":
+          application/problem+json: {"code": "<value>", "detail": "<value>"}
+  fork-simulation:
+    speakeasy-default-fork-simulation:
+      parameters:
+        path:
+          id: "<id>"
+      requestBody:
+        application/json: {"at_step": 42, "name": "billing-fork"}
+      responses:
+        "201":
+          application/json: {"created_at": "2026-01-15T12:00:00Z", "endpoint": "https://api.continuouslabs.ai/sim/sim_01J8Z5X4K7M2N9P0Q1R2S3T4V6", "expires_at": "2026-01-15T13:00:00Z", "id": "sim_01J8Z5X4K7M2N9P0Q1R2S3T4V6", "name": "billing-sandbox", "parent_id": "sim_01J8Z5X4K7M2N9P0Q1R2S3T4V8", "simulator_id": "smr_01J8Z5X4K7M2N9P0Q1R2S3T4V5", "status": "running", "token": "<redacted>"}
+        "400":
+          application/problem+json: {"code": "<value>", "detail": "<value>"}
+        "500":
+          application/problem+json: {"code": "<value>", "detail": "<value>"}
+  start-simulation:
+    speakeasy-default-start-simulation:
+      parameters:
+        path:
+          id: "<id>"
+      responses:
+        "200":
+          application/json: {"created_at": "2026-01-15T12:00:00Z", "endpoint": "https://api.continuouslabs.ai/sim/sim_01J8Z5X4K7M2N9P0Q1R2S3T4V6", "id": "sim_01J8Z5X4K7M2N9P0Q1R2S3T4V6", "name": "billing-sandbox", "parent_id": "sim_01J8Z5X4K7M2N9P0Q1R2S3T4V8", "simulator_id": "smr_01J8Z5X4K7M2N9P0Q1R2S3T4V5", "status": "running"}
+        "400":
+          application/problem+json: {"code": "<value>", "detail": "<value>"}
+        "500":
+          application/problem+json: {"code": "<value>", "detail": "<value>"}
+  list-simulation-steps:
+    bad_request:
+      parameters:
+        path:
+          id: "<id>"
+        query:
+          limit: 50
+      responses:
+        "400":
+          application/problem+json: {"code": "bad_request", "detail": "The cursor is invalid."}
+        "500":
+          application/problem+json: {"code": "bad_request", "detail": "The cursor is invalid."}
+    speakeasy-default-list-simulation-steps:
+      parameters:
+        path:
+          id: "<id>"
+        query:
+          limit: 50
+      responses:
+        "200":
+          application/json: {"next_cursor": "<value>", "steps": [{"label": "<value>", "step": 499364}]}
+        "400":
+          application/problem+json: {"code": "<value>", "detail": "<value>"}
+        "500":
+          application/problem+json: {"code": "<value>", "detail": "<value>"}
+  stop-simulation:
+    speakeasy-default-stop-simulation:
+      parameters:
+        path:
+          id: "<id>"
+      responses:
+        "200":
+          application/json: {"created_at": "2026-01-15T12:00:00Z", "endpoint": "https://api.continuouslabs.ai/sim/sim_01J8Z5X4K7M2N9P0Q1R2S3T4V6", "id": "sim_01J8Z5X4K7M2N9P0Q1R2S3T4V6", "name": "billing-sandbox", "parent_id": "sim_01J8Z5X4K7M2N9P0Q1R2S3T4V8", "simulator_id": "smr_01J8Z5X4K7M2N9P0Q1R2S3T4V5", "status": "running"}
+        "400":
+          application/problem+json: {"code": "<value>", "detail": "<value>"}
+        "500":
+          application/problem+json: {"code": "<value>", "detail": "<value>"}
+  mint-simulation-token:
+    speakeasy-default-mint-simulation-token:
+      parameters:
+        path:
+          id: "<id>"
+      requestBody:
+        application/json: {"ttl_seconds": 3600}
+      responses:
+        "200":
+          application/json: {"expires_at": "2026-01-15T13:00:00Z", "token": "<redacted>"}
+        "400":
+          application/problem+json: {"code": "<value>", "detail": "<value>"}
+        "500":
+          application/problem+json: {"code": "<value>", "detail": "<value>"}
+  list-simulators:
+    bad_request:
+      parameters:
+        query:
+          limit: 50
+      responses:
+        "400":
+          application/problem+json: {"code": "bad_request", "detail": "The cursor is invalid."}
+        "500":
+          application/problem+json: {"code": "bad_request", "detail": "The cursor is invalid."}
+    speakeasy-default-list-simulators:
+      parameters:
+        query:
+          limit: 50
+      responses:
+        "200":
+          application/json: {"next_cursor": "<value>", "simulators": [{"created_at": "2026-01-15T12:00:00Z", "error": null, "id": "smr_01J8Z5X4K7M2N9P0Q1R2S3T4V5", "name": "billing-api", "parent_id": "smr_01J8Z5X4K7M2N9P0Q1R2S3T4V9", "source": "workspace", "status": "building"}]}
+        "400":
+          application/problem+json: {"code": "<value>", "detail": "<value>"}
+        "500":
+          application/problem+json: {"code": "<value>", "detail": "<value>"}
+  build-simulator:
+    simulator_unknown_parent:
+      requestBody:
+        multipart/form-data: {"request": {"builder": "claude", "filter": [], "instructions": "Return stable example data for every operation.", "name": "billing-api", "spec_kind": "openapi"}}
+      responses:
+        "400":
+          application/problem+json: {"code": "simulator_unknown", "detail": "No Simulator was found with ID \"smr_01J8Z5X4K7M2N9P0Q1R2S3T4V5\"."}
+        "500":
+          application/problem+json: {"code": "simulator_unknown", "detail": "No Simulator was found with ID \"smr_01J8Z5X4K7M2N9P0Q1R2S3T4V5\"."}
+    speakeasy-default-build-simulator:
+      requestBody:
+        multipart/form-data: {"request": {"builder": "claude", "filter": [], "instructions": "Return stable example data for every operation.", "name": "billing-api", "spec_kind": "openapi"}}
+      responses:
+        "202":
+          application/json: {"created_at": "2026-01-15T12:00:00Z", "error": null, "id": "smr_01J8Z5X4K7M2N9P0Q1R2S3T4V5", "name": "billing-api", "parent_id": "smr_01J8Z5X4K7M2N9P0Q1R2S3T4V9", "source": "workspace", "status": "building"}
+        "400":
+          application/problem+json: {"code": "<value>", "detail": "<value>"}
+        "500":
+          application/problem+json: {"code": "<value>", "detail": "<value>"}
+  delete-simulator:
+    speakeasy-default-delete-simulator:
+      parameters:
+        path:
+          id: "<id>"
+      responses:
+        "400":
+          application/problem+json: {"code": "<value>", "detail": "<value>"}
+        "500":
+          application/problem+json: {"code": "<value>", "detail": "<value>"}
+  get-simulator:
+    speakeasy-default-get-simulator:
+      parameters:
+        path:
+          id: "<id>"
+      responses:
+        "200":
+          application/json: {"created_at": "2026-01-15T12:00:00Z", "error": null, "id": "smr_01J8Z5X4K7M2N9P0Q1R2S3T4V5", "name": "billing-api", "parent_id": "smr_01J8Z5X4K7M2N9P0Q1R2S3T4V9", "source": "workspace", "status": "building"}
+        "400":
+          application/problem+json: {"code": "<value>", "detail": "<value>"}
+        "500":
+          application/problem+json: {"code": "<value>", "detail": "<value>"}
+  cancel-simulator-build:
+    speakeasy-default-cancel-simulator-build:
+      parameters:
+        path:
+          id: "<id>"
+      responses:
+        "200":
+          application/json: {"created_at": "2026-01-15T12:00:00Z", "error": null, "id": "smr_01J8Z5X4K7M2N9P0Q1R2S3T4V5", "name": "billing-api", "parent_id": "smr_01J8Z5X4K7M2N9P0Q1R2S3T4V9", "source": "workspace", "status": "building"}
+        "400":
+          application/problem+json: {"code": "<value>", "detail": "<value>"}
+        "500":
+          application/problem+json: {"code": "<value>", "detail": "<value>"}
+  list-worlds:
+    bad_request:
+      parameters:
+        query:
+          limit: 50
+      responses:
+        "400":
+          application/problem+json: {"code": "bad_request", "detail": "The cursor is invalid."}
+        "500":
+          application/problem+json: {"code": "bad_request", "detail": "The cursor is invalid."}
+    speakeasy-default-list-worlds:
+      parameters:
+        query:
+          limit: 50
+      responses:
+        "200":
+          application/json: {"next_cursor": "<value>", "worlds": [{"created_at": "2026-01-15T12:00:00Z", "error": null, "id": "wld_01J8Z5X4K7M2N9P0Q1R2S3T4V7", "instructions": "Use stable example data for each Simulator.", "simulations": [], "simulators": ["smr_01J8Z5X4K7M2N9P0Q1R2S3T4V5"], "status": "building"}]}
+        "400":
+          application/problem+json: {"code": "<value>", "detail": "<value>"}
+        "500":
+          application/problem+json: {"code": "<value>", "detail": "<value>"}
+  build-world:
+    simulator_unknown:
+      requestBody:
+        application/json: {"instructions": "Use stable example data for each Simulator.", "simulators": ["smr_01J8Z5X4K7M2N9P0Q1R2S3T4V5"]}
+      responses:
+        "400":
+          application/problem+json: {"code": "simulator_unknown", "detail": "No Simulator was found with ID \"smr_01J8Z5X4K7M2N9P0Q1R2S3T4V5\"."}
+        "500":
+          application/problem+json: {"code": "simulator_unknown", "detail": "No Simulator was found with ID \"smr_01J8Z5X4K7M2N9P0Q1R2S3T4V5\"."}
+    speakeasy-default-build-world:
+      requestBody:
+        application/json: {"instructions": "Use stable example data for each Simulator.", "simulators": ["smr_01J8Z5X4K7M2N9P0Q1R2S3T4V5"]}
+      responses:
+        "202":
+          application/json: {"created_at": "2026-01-15T12:00:00Z", "error": null, "id": "wld_01J8Z5X4K7M2N9P0Q1R2S3T4V7", "instructions": "Use stable example data for each Simulator.", "simulations": [], "simulators": ["smr_01J8Z5X4K7M2N9P0Q1R2S3T4V5"], "status": "building"}
+        "400":
+          application/problem+json: {"code": "<value>", "detail": "<value>"}
+        "500":
+          application/problem+json: {"code": "<value>", "detail": "<value>"}
+  delete-world:
+    speakeasy-default-delete-world:
+      parameters:
+        path:
+          id: "<id>"
+      responses:
+        "400":
+          application/problem+json: {"code": "<value>", "detail": "<value>"}
+        "500":
+          application/problem+json: {"code": "<value>", "detail": "<value>"}
+  get-world:
+    speakeasy-default-get-world:
+      parameters:
+        path:
+          id: "<id>"
+      responses:
+        "200":
+          application/json: {"created_at": "2026-01-15T12:00:00Z", "error": null, "id": "wld_01J8Z5X4K7M2N9P0Q1R2S3T4V7", "instructions": "Use stable example data for each Simulator.", "simulations": [], "simulators": ["smr_01J8Z5X4K7M2N9P0Q1R2S3T4V5"], "status": "building"}
+        "400":
+          application/problem+json: {"code": "<value>", "detail": "<value>"}
+        "500":
+          application/problem+json: {"code": "<value>", "detail": "<value>"}
+  cancel-world-build:
+    speakeasy-default-cancel-world-build:
+      parameters:
+        path:
+          id: "<id>"
+      responses:
+        "200":
+          application/json: {"created_at": "2026-01-15T12:00:00Z", "error": null, "id": "wld_01J8Z5X4K7M2N9P0Q1R2S3T4V7", "instructions": "Use stable example data for each Simulator.", "simulations": [], "simulators": ["smr_01J8Z5X4K7M2N9P0Q1R2S3T4V5"], "status": "building"}
+        "400":
+          application/problem+json: {"code": "<value>", "detail": "<value>"}
+        "500":
+          application/problem+json: {"code": "<value>", "detail": "<value>"}
+  start-world:
+    speakeasy-default-start-world:
+      parameters:
+        path:
+          id: "<id>"
+      responses:
+        "200":
+          application/json: {"created_at": "2026-01-15T12:00:00Z", "error": null, "id": "wld_01J8Z5X4K7M2N9P0Q1R2S3T4V7", "instructions": "Use stable example data for each Simulator.", "simulations": [], "simulators": ["smr_01J8Z5X4K7M2N9P0Q1R2S3T4V5"], "status": "building"}
+        "400":
+          application/problem+json: {"code": "<value>", "detail": "<value>"}
+        "500":
+          application/problem+json: {"code": "<value>", "detail": "<value>"}
+  stop-world:
+    speakeasy-default-stop-world:
+      parameters:
+        path:
+          id: "<id>"
+      responses:
+        "200":
+          application/json: {"created_at": "2026-01-15T12:00:00Z", "error": null, "id": "wld_01J8Z5X4K7M2N9P0Q1R2S3T4V7", "instructions": "Use stable example data for each Simulator.", "simulations": [], "simulators": ["smr_01J8Z5X4K7M2N9P0Q1R2S3T4V5"], "status": "building"}
+        "400":
+          application/problem+json: {"code": "<value>", "detail": "<value>"}
+        "500":
+          application/problem+json: {"code": "<value>", "detail": "<value>"}
+examplesVersion: 1.0.2
