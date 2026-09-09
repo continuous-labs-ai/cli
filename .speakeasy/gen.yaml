@@ -52,7 +52,7 @@ cli:
       repositoryOwner: ""
   enableCustomCodeRegions: false
   envVarPrefix: CONTINUOUS
-  generateRelease: false
+  generateRelease: true
   idiomaticMethodCollisionNames: true
   imports:
     option: openapi

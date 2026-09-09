@@ -40,7 +40,13 @@ Never use direct generation mode. Review generated changes before merging them.
 
 ## Releases
 
-Release infrastructure is owned, not generated. Keep `cli.generateRelease: false` so regeneration does not replace release controls.
+Release infrastructure is owned, not generated. Keep `cli.generateRelease: true` to generate `scripts/install.sh` and `scripts/install.ps1`.
+
+Keep `.goreleaser.yaml` and `.github/workflows/release.yaml` protected in `.genignore`. This preserves owned release controls during generation.
+
+Do not patch generated installers. The pinned generator does not add checksum verification or retain license notices during installation.
+
+Check installer archive names against published assets after generator changes. Keep manual checksum verification and license supplement guidance in the README.
 
 Push an approved tag that matches `cli.version`, such as `v0.1.0`. The tag must point to the current `main` commit.
 

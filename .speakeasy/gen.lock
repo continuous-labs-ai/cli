@@ -6,11 +6,11 @@ management:
   speakeasyVersion: 1.796.4
   generationVersion: 2.935.1
   releaseVersion: 0.1.0
-  configChecksum: a53944a700654f5e138274de1426a01c
+  configChecksum: 11bbd6d5ec8feb8f746049a9f62a7ce4
 persistentEdits:
-  generation_id: d448cb3e-dbae-4a60-95e7-97057a48136e
-  pristine_commit_hash: 75cdf32b6afa4895b6effb86835ca5e585232365
-  pristine_tree_hash: d3080b12f594ee9ad1f582f1a718f5da68af1abf
+  generation_id: ecb12521-9e1e-4130-9243-523eac8c049b
+  pristine_commit_hash: fafce72b4d8603822c4d35da68ef1a9dedad62d5
+  pristine_tree_hash: 36264c8c1b1901c8a0f6f516e821ba59bdf4e186
 features:
   cli:
     constsAndDefaults: 0.0.0
@@ -495,6 +495,14 @@ trackedFiles:
     id: 0f40f4612437
     last_write_checksum: sha1:b55935acd36c3c3912ed0c8ce3e377c49048af9b
     pristine_git_object: 876e96ab8224abf8e2848c79e1e66624157c625e
+  scripts/install.ps1:
+    id: fee0853709e9
+    last_write_checksum: sha1:35474849c47f6c0c0a9ad6bb2e81fb9a68c2be70
+    pristine_git_object: c942004315be94525e49eb95735e5cb5d7a7934b
+  scripts/install.sh:
+    id: 1f022802374d
+    last_write_checksum: sha1:05a593bdbc87f0ff0c0021905508565d1f09b1a4
+    pristine_git_object: 1a14e59e5fe6ef46676b5bc31eca7fb816b04bd6
 examples:
   list-simulations:
     bad_request:
