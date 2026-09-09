@@ -8,17 +8,13 @@
 /.speakeasy/out.openapi.yaml linguist-generated=true
 /.speakeasy/gen.yaml linguist-generated=false
 /.speakeasy/workflow.yaml linguist-generated=false
-/.speakeasy/patches/** linguist-generated=false whitespace=-blank-at-eol
+/.speakeasy/patches/** linguist-generated=false whitespace=-trailing-space
 /.github/** linguist-generated=false
-/scripts/** linguist-generated=false
-/scripts/install.sh linguist-generated=true
-/scripts/install.ps1 linguist-generated=true
+/.github/workflows/release.yaml linguist-generated=true
+/scripts/** linguist-generated=true
 /.gitattributes linguist-generated=false
 /.genignore linguist-generated=false
-/.goreleaser.yaml linguist-generated=false
+/.goreleaser.yaml linguist-generated=true
 /README.md linguist-generated=false
 /CONTRIBUTING.md linguist-generated=false
 /LICENSE linguist-generated=false
-/THIRD_PARTY_NOTICES.md linguist-generated=false
-/release-notes/** linguist-generated=false
-/third-party/** linguist-generated=false

@@ -6,6 +6,3 @@
 .env
 .env.local
 dist/
-THIRD_PARTY_NOTICES/
-third-party-notices.tar.gz
-legal-assets.sha256

@@ -63,6 +63,7 @@ func (s *Simulators) ListSimulators(ctx context.Context, request *operations.Lis
 		BaseURL:          baseURL,
 		Context:          ctx,
 		OperationID:      "list-simulators",
+		OAuth2Scopes:     nil,
 		SecuritySource:   s.sdkConfiguration.Security,
 	}
 
@@ -282,6 +283,7 @@ func (s *Simulators) BuildSimulator(ctx context.Context, request operations.Buil
 		BaseURL:          baseURL,
 		Context:          ctx,
 		OperationID:      "build-simulator",
+		OAuth2Scopes:     nil,
 		SecuritySource:   s.sdkConfiguration.Security,
 	}
 	bodyReader, reqContentType, err := utils.SerializeRequestBody(ctx, request, false, false, "Request", "multipart", `request:"mediaType=multipart/form-data"`)
@@ -514,6 +516,7 @@ func (s *Simulators) DeleteSimulator(ctx context.Context, request operations.Del
 		BaseURL:          baseURL,
 		Context:          ctx,
 		OperationID:      "delete-simulator",
+		OAuth2Scopes:     nil,
 		SecuritySource:   s.sdkConfiguration.Security,
 	}
 
@@ -702,6 +705,7 @@ func (s *Simulators) GetSimulator(ctx context.Context, request operations.GetSim
 		BaseURL:          baseURL,
 		Context:          ctx,
 		OperationID:      "get-simulator",
+		OAuth2Scopes:     nil,
 		SecuritySource:   s.sdkConfiguration.Security,
 	}
 
@@ -917,6 +921,7 @@ func (s *Simulators) CancelSimulatorBuild(ctx context.Context, request operation
 		BaseURL:          baseURL,
 		Context:          ctx,
 		OperationID:      "cancel-simulator-build",
+		OAuth2Scopes:     nil,
 		SecuritySource:   s.sdkConfiguration.Security,
 	}
 

@@ -41,25 +41,18 @@ jobs:
             go.sum
       - run: go vet ./...
       - run: go build -o dist/continuous ./cmd/continuous
-      - id: version
-        run: |
-          echo "version=$(sed -n 's/^  version: //p' .speakeasy/gen.yaml)" >> "$GITHUB_OUTPUT"
       - uses: goreleaser/goreleaser-action@e435ccd777264be153ace6237001ef4d979d3a7a
         with:
           version: v2.18.1
-          args: release --snapshot --clean --skip=publish --release-notes release-notes/v${{ steps.version.outputs.version }}.md
+          args: release --snapshot --clean --skip=publish,sign
       - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
         with:
           name: release-packaging
           if-no-files-found: error
           path: |
-            LICENSE
-            third-party-notices.tar.gz
-            legal-assets.sha256
             dist/*.tar.gz
             dist/*.zip
             dist/checksums.txt
-            dist/homebrew/Formula/continuous.rb
 
   all-green:
     name: All green
