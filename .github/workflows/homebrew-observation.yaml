@@ -30,6 +30,9 @@ jobs:
           brew install --cask observation/local/continuous
           cask_binary="$(brew --caskroom)/continuous/0.1.0/continuous"
           xattr -p com.apple.quarantine "$cask_binary"
+          spctl --status
           codesign --display --verbose=4 "$cask_binary" 2>&1 || true
           spctl --assess --type execute --verbose=4 "$cask_binary" 2>&1 || true
-          continuous --version
+          version_output="$(continuous version)"
+          printf '%s\n' "$version_output"
+          [[ "$version_output" == *"0.1.0"* ]]
