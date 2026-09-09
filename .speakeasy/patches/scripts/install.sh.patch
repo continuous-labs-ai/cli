@@ -1,5 +1,5 @@
 diff --git a/scripts/install.sh b/scripts/install.sh
-index 1a14e59..de73ffd 100644
+index 1a14e59..45ee90a 100644
 --- a/scripts/install.sh
 +++ b/scripts/install.sh
 @@ -14,7 +14,7 @@
@@ -161,7 +161,7 @@ index 1a14e59..de73ffd 100644
 +    local notice_dir="$INSTALL_DIR/continuous-notices/$VERSION"
 +    mkdir -p "$notice_dir"
 +    cp "$archive_dir/LICENSE" "$notice_dir/"
-+    cp -R "$archive_dir/THIRD_PARTY_NOTICES" "$notice_dir/"
++    cp -Rf "$archive_dir/THIRD_PARTY_NOTICES" "$notice_dir/"
 +    if [ -f "$archive_dir/THIRD_PARTY_NOTICES.md" ]; then
 +        cp "$archive_dir/THIRD_PARTY_NOTICES.md" "$notice_dir/"
 +    fi

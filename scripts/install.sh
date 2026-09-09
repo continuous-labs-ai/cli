@@ -248,7 +248,7 @@ install_cli() {
     local notice_dir="$INSTALL_DIR/continuous-notices/$VERSION"
     mkdir -p "$notice_dir"
     cp "$archive_dir/LICENSE" "$notice_dir/"
-    cp -R "$archive_dir/THIRD_PARTY_NOTICES" "$notice_dir/"
+    cp -Rf "$archive_dir/THIRD_PARTY_NOTICES" "$notice_dir/"
     if [ -f "$archive_dir/THIRD_PARTY_NOTICES.md" ]; then
         cp "$archive_dir/THIRD_PARTY_NOTICES.md" "$notice_dir/"
     fi
