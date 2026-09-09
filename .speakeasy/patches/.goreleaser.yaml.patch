@@ -1,0 +1,25 @@
+diff --git a/.goreleaser.yaml b/.goreleaser.yaml
+index 3743f02..282baee 100644
+--- a/.goreleaser.yaml
++++ b/.goreleaser.yaml
+@@ -1,5 +1,6 @@
+ # yaml-language-server: $schema=https://goreleaser.com/static/schema.json
+ version: 2
++project_name: continuous
+ 
+ before:
+   hooks:
+@@ -42,11 +43,12 @@ archives:
+ 
+ brews:
+   - name: continuous
++    directory: Formula
+     repository:
+       owner: continuous-labs-ai
+       name: homebrew-tap
+       branch: main
+-    token: "{{ .Env.HOMEBREW_TAP_GITHUB_TOKEN }}"
++      token: "{{ .Env.HOMEBREW_TAP_GITHUB_TOKEN }}"
+     homepage: "https://github.com/continuous-labs-ai/cli"
+     description: "Continuous Simulation API: The Continuous Simulation API builds reusable Simulators and runs isolated Simulations and Worlds. This document describes the stable v1 public contract."
+     install: |

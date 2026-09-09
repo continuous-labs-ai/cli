@@ -63,6 +63,7 @@ func (s *Worlds) ListWorlds(ctx context.Context, request *operations.ListWorldsR
 		BaseURL:          baseURL,
 		Context:          ctx,
 		OperationID:      "list-worlds",
+		OAuth2Scopes:     nil,
 		SecuritySource:   s.sdkConfiguration.Security,
 	}
 
@@ -282,6 +283,7 @@ func (s *Worlds) BuildWorld(ctx context.Context, request components.BuildWorldRe
 		BaseURL:          baseURL,
 		Context:          ctx,
 		OperationID:      "build-world",
+		OAuth2Scopes:     nil,
 		SecuritySource:   s.sdkConfiguration.Security,
 	}
 	bodyReader, reqContentType, err := utils.SerializeRequestBody(ctx, request, false, false, "Request", "json", `request:"mediaType=application/json"`)
@@ -512,6 +514,7 @@ func (s *Worlds) DeleteWorld(ctx context.Context, request operations.DeleteWorld
 		BaseURL:          baseURL,
 		Context:          ctx,
 		OperationID:      "delete-world",
+		OAuth2Scopes:     nil,
 		SecuritySource:   s.sdkConfiguration.Security,
 	}
 
@@ -698,6 +701,7 @@ func (s *Worlds) GetWorld(ctx context.Context, request operations.GetWorldReques
 		BaseURL:          baseURL,
 		Context:          ctx,
 		OperationID:      "get-world",
+		OAuth2Scopes:     nil,
 		SecuritySource:   s.sdkConfiguration.Security,
 	}
 
@@ -911,6 +915,7 @@ func (s *Worlds) CancelWorldBuild(ctx context.Context, request operations.Cancel
 		BaseURL:          baseURL,
 		Context:          ctx,
 		OperationID:      "cancel-world-build",
+		OAuth2Scopes:     nil,
 		SecuritySource:   s.sdkConfiguration.Security,
 	}
 
@@ -1126,6 +1131,7 @@ func (s *Worlds) StartWorld(ctx context.Context, request operations.StartWorldRe
 		BaseURL:          baseURL,
 		Context:          ctx,
 		OperationID:      "start-world",
+		OAuth2Scopes:     nil,
 		SecuritySource:   s.sdkConfiguration.Security,
 	}
 
@@ -1343,6 +1349,7 @@ func (s *Worlds) StopWorld(ctx context.Context, request operations.StopWorldRequ
 		BaseURL:          baseURL,
 		Context:          ctx,
 		OperationID:      "stop-world",
+		OAuth2Scopes:     nil,
 		SecuritySource:   s.sdkConfiguration.Security,
 	}
 

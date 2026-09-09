@@ -63,6 +63,7 @@ func (s *Simulations) ListSimulations(ctx context.Context, request *operations.L
 		BaseURL:          baseURL,
 		Context:          ctx,
 		OperationID:      "list-simulations",
+		OAuth2Scopes:     nil,
 		SecuritySource:   s.sdkConfiguration.Security,
 	}
 
@@ -282,6 +283,7 @@ func (s *Simulations) CreateSimulation(ctx context.Context, request components.C
 		BaseURL:          baseURL,
 		Context:          ctx,
 		OperationID:      "create-simulation",
+		OAuth2Scopes:     nil,
 		SecuritySource:   s.sdkConfiguration.Security,
 	}
 	bodyReader, reqContentType, err := utils.SerializeRequestBody(ctx, request, false, false, "Request", "json", `request:"mediaType=application/json"`)
@@ -516,6 +518,7 @@ func (s *Simulations) DeleteSimulation(ctx context.Context, request operations.D
 		BaseURL:          baseURL,
 		Context:          ctx,
 		OperationID:      "delete-simulation",
+		OAuth2Scopes:     nil,
 		SecuritySource:   s.sdkConfiguration.Security,
 	}
 
@@ -704,6 +707,7 @@ func (s *Simulations) GetSimulation(ctx context.Context, request operations.GetS
 		BaseURL:          baseURL,
 		Context:          ctx,
 		OperationID:      "get-simulation",
+		OAuth2Scopes:     nil,
 		SecuritySource:   s.sdkConfiguration.Security,
 	}
 
@@ -917,6 +921,7 @@ func (s *Simulations) ForkSimulation(ctx context.Context, request operations.For
 		BaseURL:          baseURL,
 		Context:          ctx,
 		OperationID:      "fork-simulation",
+		OAuth2Scopes:     nil,
 		SecuritySource:   s.sdkConfiguration.Security,
 	}
 	bodyReader, reqContentType, err := utils.SerializeRequestBody(ctx, request, false, false, "Body", "json", `request:"mediaType=application/json"`)
@@ -1151,6 +1156,7 @@ func (s *Simulations) StartSimulation(ctx context.Context, request operations.St
 		BaseURL:          baseURL,
 		Context:          ctx,
 		OperationID:      "start-simulation",
+		OAuth2Scopes:     nil,
 		SecuritySource:   s.sdkConfiguration.Security,
 	}
 
@@ -1370,6 +1376,7 @@ func (s *Simulations) ListSimulationSteps(ctx context.Context, request operation
 		BaseURL:          baseURL,
 		Context:          ctx,
 		OperationID:      "list-simulation-steps",
+		OAuth2Scopes:     nil,
 		SecuritySource:   s.sdkConfiguration.Security,
 	}
 
@@ -1591,6 +1598,7 @@ func (s *Simulations) StopSimulation(ctx context.Context, request operations.Sto
 		BaseURL:          baseURL,
 		Context:          ctx,
 		OperationID:      "stop-simulation",
+		OAuth2Scopes:     nil,
 		SecuritySource:   s.sdkConfiguration.Security,
 	}
 
@@ -1808,6 +1816,7 @@ func (s *Simulations) MintSimulationToken(ctx context.Context, request operation
 		BaseURL:          baseURL,
 		Context:          ctx,
 		OperationID:      "mint-simulation-token",
+		OAuth2Scopes:     nil,
 		SecuritySource:   s.sdkConfiguration.Security,
 	}
 	bodyReader, reqContentType, err := utils.SerializeRequestBody(ctx, request, false, false, "Body", "json", `request:"mediaType=application/json"`)

@@ -119,32 +119,10 @@ function Install-CLI {
         $manifest = Join-Path $tempDir "checksums.txt"
         Invoke-WebRequest -Uri "$releaseUrl/checksums.txt" -OutFile $manifest -UseBasicParsing
         Confirm-Download $manifest $archiveName $archivePath
-        if ($Version -eq "v0.1.0") {
-            $legalManifest = Join-Path $tempDir "legal-assets.sha256"
-            Invoke-WebRequest -Uri "$releaseUrl/legal-assets.sha256" -OutFile $legalManifest -UseBasicParsing
-            foreach ($fileName in @("LICENSE", "third-party-notices.tar.gz")) {
-                $filePath = Join-Path $tempDir $fileName
-                Invoke-WebRequest -Uri "$releaseUrl/$fileName" -OutFile $filePath -UseBasicParsing
-                Confirm-Download $legalManifest $fileName $filePath
-            }
-        }
 
         # Extract archive
         Write-ColorOutput "Extracting archive..." -Color Cyan
-        $archiveDir = Join-Path $tempDir "archive"
-        Expand-Archive -LiteralPath $archivePath -DestinationPath $archiveDir
-        if ($Version -eq "v0.1.0") {
-            & tar -xzf (Join-Path $tempDir "third-party-notices.tar.gz") -C $archiveDir
-            if ($LASTEXITCODE -ne 0) { throw "Notice extraction failed." }
-            Copy-Item -LiteralPath (Join-Path $tempDir "LICENSE") -Destination $archiveDir
-        } elseif (-not (Test-Path -LiteralPath (Join-Path $archiveDir "THIRD_PARTY_NOTICES.md") -PathType Leaf)) {
-            throw "The archive is missing THIRD_PARTY_NOTICES.md."
-        }
-        if (-not (Test-Path -LiteralPath (Join-Path $archiveDir "LICENSE") -PathType Leaf) -or
-            -not (Test-Path -LiteralPath (Join-Path $archiveDir "THIRD_PARTY_NOTICES") -PathType Container) -or
-            -not (Test-Path -LiteralPath (Join-Path $archiveDir $BinaryName) -PathType Leaf)) {
-            throw "The archive is missing the binary or license notices."
-        }
+        Expand-Archive -Path $archivePath -DestinationPath $tempDir -Force
 
         # Create install directory if it doesn't exist
         if (-not (Test-Path $InstallDir)) {
@@ -156,15 +134,12 @@ function Install-CLI {
         $binaryPath = Join-Path $InstallDir $BinaryName
         Write-ColorOutput "Installing to $binaryPath..." -Color Cyan
 
-        $noticeDir = Join-Path $InstallDir "continuous-notices/$Version"
-        New-Item -ItemType Directory -Path $noticeDir -Force | Out-Null
-        Copy-Item -LiteralPath (Join-Path $archiveDir "LICENSE") -Destination $noticeDir
-        Copy-Item -LiteralPath (Join-Path $archiveDir "THIRD_PARTY_NOTICES") -Destination $noticeDir -Recurse -Force
-        $noticeIndex = Join-Path $archiveDir "THIRD_PARTY_NOTICES.md"
-        if (Test-Path -LiteralPath $noticeIndex -PathType Leaf) {
-            Copy-Item -LiteralPath $noticeIndex -Destination $noticeDir
+        # Remove existing binary if it exists
+        if (Test-Path $binaryPath) {
+            Remove-Item $binaryPath -Force
         }
-        Copy-Item -LiteralPath (Join-Path $archiveDir $BinaryName) -Destination $binaryPath -Force
+
+        Copy-Item -Path (Join-Path $tempDir $BinaryName) -Destination $binaryPath -Force
 
         Write-ColorOutput "continuous $Version has been installed to $binaryPath" -Color Green
 
@@ -186,8 +161,8 @@ function Install-CLI {
     }
     finally {
         # Cleanup
-        if (Test-Path -LiteralPath $tempDir) {
-            Remove-Item -LiteralPath $tempDir -Recurse -Force
+        if (Test-Path $tempDir) {
+            Remove-Item $tempDir -Recurse -Force
         }
     }
 }

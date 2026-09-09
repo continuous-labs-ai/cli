@@ -10,7 +10,7 @@ Review owned settings, workflows, and documentation. Treat generated source as b
 
 Keep generated output marked with `linguist-generated`. Keep owned files visible during review.
 
-The `.genignore` file protects owned documentation, licenses, release notes, review attributes, and release configuration. Confirm that these files survive regeneration.
+The `.genignore` file protects owned documentation, the license, and review attributes. Confirm that these files survive regeneration.
 
 Run generation with Speakeasy 1.796.4:
 
@@ -24,88 +24,22 @@ CLI test suites are disabled. Keep generated test files excluded through `.genig
 
 ## Generation workflow
 
-Store `SPEAKEASY_API_KEY` as a repository secret. Run the `Generate` workflow in `test` mode first.
+The `Generate` workflow is the standard Speakeasy workflow that `speakeasy configure github` writes. It runs nightly, on manual dispatch, and when a pull request label changes. It opens a pull request when generation changes files; review those changes before merging them.
 
-The `test` mode verifies generation without publishing changes. It does not run a CLI test suite.
-
-Use `pr` mode after generation verification succeeds. This mode requires the `SPEAKEASY_GITHUB_TOKEN` repository secret.
-
-Use a fine-grained token limited to this repository. Grant read and write access to contents and pull requests.
-
-Use the scoped token for unattended generation checks. Pull requests from `GITHUB_TOKEN` can require approval before their checks run.
-
-Do not reuse a broad personal token. Keep generation unavailable until the scoped secret exists.
-
-Never use direct generation mode. Review generated changes before merging them.
+Store `SPEAKEASY_API_KEY` as a repository secret. Store `SPEAKEASY_GITHUB_TOKEN` too; the workflow passes it as `pr_creation_pat` so that checks run on generation pull requests. Use a fine-grained token limited to this repository with read and write access to contents and pull requests.
 
 ## Releases
 
-Release infrastructure is owned, not generated. Keep `cli.generateRelease: true` to generate `scripts/install.sh` and `scripts/install.ps1`.
+Speakeasy generates the release infrastructure. Keep `cli.generateRelease: true`; it writes `.goreleaser.yaml`, `.github/workflows/release.yaml`, `scripts/install.sh`, and `scripts/install.ps1`. These files are not in `.genignore`, so do not edit them by hand.
 
-Keep `.goreleaser.yaml` and `.github/workflows/release.yaml` protected in `.genignore`. This preserves owned release controls during generation.
+Owned release changes live in `.speakeasy/patches/`. `.goreleaser.yaml.patch` adds `project_name: continuous` so that archives keep the `continuous_<OS>_<arch>` names the installers download, moves the Homebrew `token` under `repository`, where GoReleaser reads it, and sets `directory: Formula` to match the tap layout. The installer patches add archive checksum verification and release tag validation. Speakeasy applies the patches after generation. After changing a patch, regenerate twice and confirm that the second run leaves no diff.
 
-Maintain only installer verification and notice retention in `.speakeasy/patches/scripts/install.sh.patch` and `install.ps1.patch`.
+To release, merge the `cli.version` change in `.speakeasy/gen.yaml`, then push the tag `v<cli.version>` at `main`. The generated `Release` workflow builds the archives, signs `checksums.txt`, publishes the GitHub release with GoReleaser's changelog, and pushes the Homebrew formula. Every `v*` tag, including a prerelease such as `v0.2.0-rc1`, updates the tap formula, so push a prerelease tag only when the tap should serve it.
 
-Speakeasy applies these patches after generation. Keep patch files reviewable and generated installer files marked as generated.
-
-Do not add installers to `.genignore`. Regenerate twice after patch changes and confirm that the changes persist.
-
-Do not extend this exception to CLI runtime files. Keep the repository, release assets, and public download URLs fixed in the installers.
-
-Check installer archive names against published assets after generator changes. Keep manual checksum verification and license supplement guidance in the README.
-
-Installer checksums detect corruption and mismatched files. They are unsigned and do not prove publisher identity.
-
-Push an approved tag that matches `cli.version`, such as `v0.1.0`. The tag must point to the current `main` commit.
-
-Write user-facing changes in `release-notes/v<version>.md` before requesting a release. Keep the file nonempty and review it with the version change.
-
-The release workflow passes that file through `--release-notes`. The configuration excludes raw commit lists and preserves existing release notes.
-
-The `Release` workflow runs the same `Checks` workflow before creating a draft release. A failed check prevents release creation.
-
-The workflow checks `main` again before packaging. Archives support Linux, macOS, and Windows on amd64 and arm64.
-
-The archive prefix is `continuous`. GoReleaser creates platform archives and SHA-256 checksums during snapshot packaging.
-
-Checksums are unsigned. Follow the README to download published releases without GitHub credentials.
-
-Draft releases require authorized GitHub access. Do not publish a draft without operator approval.
-
-Package releases from a clean checkout. The packaging script collects dependency notices for all six targets with `go-licenses/v2` at `v2.0.1`.
-
-Keep vendor notices unchanged. Include the project license, dependency notices, and Go license and patent grant with distributed binaries.
-
-The packaging artifact includes `LICENSE`, `third-party-notices.tar.gz`, and `legal-assets.sha256`. Use these separate assets to supplement the unchanged `v0.1.0` archives.
-
-Do not replace the original `v0.1.0` archives, checksums, or tag. Attach the supplements only after the operator approves the reviewed change.
-
-Do not push a release tag before the version passes review and checks.
-
-Track generator defects in the owning issue. Do not patch generated runtime files.
+The workflow needs the `CLI_GPG_SECRET_KEY`, `CLI_GPG_PASSPHRASE`, and `HOMEBREW_TAP_GITHUB_TOKEN` repository secrets and fails without them. It publishes on any `v*` tag push, so add a tag ruleset that restricts who can create `v*` tags.
 
 ## Homebrew
 
-Keep `cli.distribution.homebrew.enabled: true` and set its tap to `continuous-labs-ai/homebrew-tap`.
+Keep `cli.distribution.homebrew.enabled: true` with the tap `continuous-labs-ai/homebrew-tap`. Speakeasy writes the `brews` section of `.goreleaser.yaml` from these settings, and GoReleaser pushes `Formula/continuous.rb` to the tap's `main` branch with `HOMEBREW_TAP_GITHUB_TOKEN`.
 
-Speakeasy generates formula settings, not casks. The owned `.goreleaser.yaml` preserves the formula configuration and release controls.
-
-GoReleaser 2.18.1 still generates formulas through its deprecated `brews` configuration. Review this limitation before upgrading GoReleaser.
-
-Keep `skip_upload: true`. Package `continuous.rb` with each draft release, using the same archives and hashes.
-
-Use Homebrew's native completion helper in the formula. Keep license installation and generated completions in the owned `brews.install` setting.
-
-The `Publish Homebrew` workflow copies that exact asset only after the latest stable release becomes public. It never rebuilds archives.
-
-The workflow rejects drafts, prereleases, missing assets, mismatched hashes, and version downgrades. Repeating a completed update leaves the tap unchanged.
-
-Use the workflow's tag input to retry a failed update. Select the latest public stable version.
-
-Create the public `continuous-labs-ai/homebrew-tap` repository with a `main` branch before publication.
-
-Store `HOMEBREW_TAP_GITHUB_TOKEN` as a CLI repository secret. Limit this fine-grained token to the tap repository with contents read and write access.
-
-Do not reuse the generation token or a broad personal token. Pull request checks do not need tap credentials.
-
-Homebrew distribution starts with the next approved release. Do not replace `v0.1.0` assets or add a formula for that version.
+Limit that fine-grained token to the tap repository with contents read and write access. Do not reuse the generation token.

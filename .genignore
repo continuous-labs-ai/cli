@@ -1,12 +1,6 @@
 /README.md
 /.gitattributes
 /internal/sdk/.gitattributes
-/.goreleaser.yaml
-/.github/workflows/release.yaml
 **/*_test.go
 /tests/**
 /LICENSE
-/THIRD_PARTY_NOTICES.md
-/THIRD_PARTY_NOTICES/**
-/release-notes/**
-/third-party/**
