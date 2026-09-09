@@ -7,6 +7,54 @@ permissions:
   contents: read
 
 jobs:
+  formula-package:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+        with:
+          persist-credentials: false
+      - uses: actions/setup-go@40f1582b2485089dde7abd97c1529aa768e1baff
+        with:
+          go-version-file: go.mod
+      - uses: goreleaser/goreleaser-action@e435ccd777264be153ace6237001ef4d979d3a7a
+        with:
+          version: v2.18.1
+          args: release --snapshot --clean --skip=publish --config .github/observations/goreleaser-formula.yaml --release-notes release-notes/v0.1.0.md
+      - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        with:
+          name: homebrew-formula-probe
+          if-no-files-found: error
+          path: |
+            dist/homebrew/**
+            dist/checksums.txt
+            dist/*.tar.gz
+
+  formula-install:
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [macos-15, macos-15-intel]
+    runs-on: ${{ matrix.os }}
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+        with:
+          persist-credentials: false
+      - name: Install the published archive with a Homebrew formula
+        env:
+          HOMEBREW_NO_AUTO_UPDATE: "1"
+          HOMEBREW_NO_ANALYTICS: "1"
+        run: |
+          uname -m
+          brew --version
+          brew tap-new observation/local
+          cp .github/observations/formula/continuous.rb "$(brew --repository observation/local)/Formula/continuous.rb"
+          brew install --formula observation/local/continuous
+          spctl --status
+          xattr "$(brew --prefix continuous)/bin/continuous"
+          version_output="$(continuous version)"
+          printf '%s\n' "$version_output"
+          [[ "$version_output" == *"0.1.0"* ]]
+
   install:
     strategy:
       fail-fast: false
