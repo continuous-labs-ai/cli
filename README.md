@@ -59,12 +59,7 @@ continuous version
 
 Add `$HOME/.local/bin` to your shell profile to keep the command available in new terminals.
 
-The checksum proves that the archive matches the manifest. For releases that ship `checksums.txt.sig`, import the project's public signing key and verify the manifest before you check the archive:
-
-```bash
-curl -fL "$release_url/checksums.txt.sig" -o checksums.txt.sig
-gpg --verify checksums.txt.sig checksums.txt
-```
+The checksum proves that the archive matches the manifest. The project's public signing key is not published yet; verifying `checksums.txt.sig` becomes possible once it is.
 
 ### Windows
 

@@ -34,7 +34,7 @@ Speakeasy generates the release infrastructure. Keep `cli.generateRelease: true`
 
 Owned release changes live in `.speakeasy/patches/`. `.goreleaser.yaml.patch` adds `project_name: continuous` so that archives keep the `continuous_<OS>_<arch>` names the installers download, moves the Homebrew `token` under `repository`, where GoReleaser reads it, and sets `directory: Formula` to match the tap layout. The installer patches add archive checksum verification and release tag validation. Speakeasy applies the patches after generation. After changing a patch, regenerate twice and confirm that the second run leaves no diff.
 
-To release, merge the `cli.version` change in `.speakeasy/gen.yaml`, then push the tag `v<cli.version>` at `main`. The generated `Release` workflow builds the archives, signs `checksums.txt`, publishes the GitHub release with GoReleaser's changelog, and pushes the Homebrew formula.
+To release, merge the `cli.version` change in `.speakeasy/gen.yaml`, then push the tag `v<cli.version>` at `main`. The generated `Release` workflow builds the archives, signs `checksums.txt`, publishes the GitHub release with GoReleaser's changelog, and pushes the Homebrew formula. Every `v*` tag, including a prerelease such as `v0.2.0-rc1`, updates the tap formula, so push a prerelease tag only when the tap should serve it.
 
 The workflow needs the `CLI_GPG_SECRET_KEY`, `CLI_GPG_PASSPHRASE`, and `HOMEBREW_TAP_GITHUB_TOKEN` repository secrets and fails without them. It publishes on any `v*` tag push, so add a tag ruleset that restricts who can create `v*` tags.
 
