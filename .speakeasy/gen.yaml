@@ -36,8 +36,8 @@ cli:
   cliName: continuous
   distribution:
     homebrew:
-      enabled: false
-      tap: ""
+      enabled: true
+      tap: continuous-labs-ai/homebrew-tap
     nfpm:
       enabled: false
       formats: deb,rpm

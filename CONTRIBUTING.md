@@ -83,3 +83,29 @@ Do not replace the original `v0.1.0` archives, checksums, or tag. Attach the sup
 Do not push a release tag before the version passes review and checks.
 
 Track generator defects in the owning issue. Do not patch generated runtime files.
+
+## Homebrew
+
+Keep `cli.distribution.homebrew.enabled: true` and set its tap to `continuous-labs-ai/homebrew-tap`.
+
+Speakeasy generates formula settings, not casks. The owned `.goreleaser.yaml` preserves the formula configuration and release controls.
+
+GoReleaser 2.18.1 still generates formulas through its deprecated `brews` configuration. Review this limitation before upgrading GoReleaser.
+
+Keep `skip_upload: true`. Package `continuous.rb` with each draft release, using the same archives and hashes.
+
+Use Homebrew's native completion helper in the formula. Keep license installation and generated completions in the owned `brews.install` setting.
+
+The `Publish Homebrew` workflow copies that exact asset only after the latest stable release becomes public. It never rebuilds archives.
+
+The workflow rejects drafts, prereleases, missing assets, mismatched hashes, and version downgrades. Repeating a completed update leaves the tap unchanged.
+
+Use the workflow's tag input to retry a failed update. Select the latest public stable version.
+
+Create the public `continuous-labs-ai/homebrew-tap` repository with a `main` branch before publication.
+
+Store `HOMEBREW_TAP_GITHUB_TOKEN` as a CLI repository secret. Limit this fine-grained token to the tap repository with contents read and write access.
+
+Do not reuse the generation token or a broad personal token. Pull request checks do not need tap credentials.
+
+Homebrew distribution starts with the next approved release. Do not replace `v0.1.0` assets or add a formula for that version.

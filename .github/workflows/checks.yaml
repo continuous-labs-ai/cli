@@ -59,6 +59,7 @@ jobs:
             dist/*.tar.gz
             dist/*.zip
             dist/checksums.txt
+            dist/homebrew/Formula/continuous.rb
 
   all-green:
     name: All green
