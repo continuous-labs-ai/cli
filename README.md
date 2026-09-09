@@ -153,15 +153,52 @@ Verify both supplemental files against `legal-assets.sha256`. Keep them alongsid
 
 ## Use the API
 
-Set `CONTINUOUS_API_KEY_AUTH` to `Bearer <API-key>`. Keep API keys out of commands, logs, and source files.
+### Interactive authentication
+
+Run these commands in a terminal:
 
 ```bash
-continuous simulations list --output-format json
+continuous auth login
+continuous auth whoami
+```
+
+Enter your API key at the prompt. This command stores credentials locally. It does not open a browser login.
+
+The CLI uses the OS keychain when available. It falls back to its configuration file if keychain storage fails.
+
+The `whoami` command shows masked credential settings and their sources. It does not check your key with the API.
+
+Verify API access with a read-only request:
+
+```bash
 continuous simulators list --output-format json
-continuous worlds list --output-format json
+```
+
+Run `continuous auth logout` to remove stored credentials. Environment variables can still supply credentials after logout.
+
+### Automation
+
+Supply your API key through the `CONTINUOUS_API_KEY_AUTH` environment variable. Use your automation system's secret store.
+
+The CLI adds the `Bearer` prefix. It also accepts a key that already includes that prefix.
+
+Keep API keys out of commands, logs, and source files. Disable prompts and select JSON output in scripts:
+
+```bash
+continuous simulations list --no-interactive --output-format json
+continuous simulators list --no-interactive --output-format json
+continuous worlds list --no-interactive --output-format json
 ```
 
 Use `--server-url` to select another API endpoint. Run `continuous --help` to inspect commands.
+
+### Shell completion
+
+Homebrew installs completions with the formula. For other installation methods, inspect the generated instructions:
+
+```bash
+continuous completion --help
+```
 
 ## Maintain the CLI
 
