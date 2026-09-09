@@ -15,3 +15,6 @@
 /.goreleaser.yaml linguist-generated=false
 /README.md linguist-generated=false
 /CONTRIBUTING.md linguist-generated=false
+/LICENSE linguist-generated=false
+/THIRD_PARTY_NOTICES.md linguist-generated=false
+/release-notes/** linguist-generated=false

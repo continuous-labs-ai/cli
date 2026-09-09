@@ -5,3 +5,7 @@
 /.github/workflows/release.yaml
 **/*_test.go
 /tests/**
+/LICENSE
+/THIRD_PARTY_NOTICES.md
+/THIRD_PARTY_NOTICES/**
+/release-notes/**
