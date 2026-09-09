@@ -1,0 +1,33 @@
+name: Installer observation
+
+on:
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  linux:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+        with:
+          persist-credentials: false
+      - shell: bash
+        run: |
+          export CONTINUOUS_INSTALL_DIR="$RUNNER_TEMP/continuous-observation"
+          export CONTINUOUS_VERSION=v0.1.0
+          bash scripts/install.sh
+          "$CONTINUOUS_INSTALL_DIR/continuous" version
+  windows:
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+        with:
+          persist-credentials: false
+      - shell: pwsh
+        run: |
+          $env:CONTINUOUS_INSTALL_DIR = Join-Path $env:RUNNER_TEMP "continuous-observation"
+          $env:CONTINUOUS_VERSION = "v0.1.0"
+          & .\scripts\install.ps1
+          & (Join-Path $env:CONTINUOUS_INSTALL_DIR "continuous.exe") version

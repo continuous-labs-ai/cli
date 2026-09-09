@@ -10,7 +10,9 @@ Build checks cover generation, compilation, and packaging. This repository does 
 
 Use a published release from the [release page](https://github.com/continuous-labs-ai/cli/releases). Published downloads do not need GitHub credentials.
 
-Draft releases are not available through anonymous downloads. The initial `v0.1.0` release remains a draft until approved.
+Draft releases are not available through anonymous downloads. Version `v0.1.0` is published.
+
+Use the manual instructions below to verify archive checksums before installation.
 
 ### Linux and macOS
 
@@ -78,6 +80,47 @@ continuous version
 ```
 
 Move the extracted directory to a permanent location. Add that location to your user `PATH`.
+
+### Optional generated installers
+
+Speakeasy generates installers for Linux, macOS, and Windows. These scripts download through HTTPS but do not verify checksums or signatures.
+
+The installers keep only the binary. They do not retain licenses or notices, including the separate [v0.1.0 supplements](#initial-v010-notices).
+
+Use the manual instructions when you need checksum verification. The published checksums are unsigned.
+
+For Linux or macOS, download the script:
+
+```bash
+curl -fL https://raw.githubusercontent.com/continuous-labs-ai/cli/main/scripts/install.sh -o install.sh
+```
+
+Inspect `install.sh`. Then install the selected version in your user directory:
+
+```bash
+CONTINUOUS_VERSION=v0.1.0 CONTINUOUS_INSTALL_DIR="$HOME/.local/bin" bash install.sh
+export PATH="$HOME/.local/bin:$PATH"
+continuous version
+```
+
+For Windows, download the script in PowerShell:
+
+```powershell
+Invoke-WebRequest https://raw.githubusercontent.com/continuous-labs-ai/cli/main/scripts/install.ps1 -OutFile install.ps1
+```
+
+Inspect `install.ps1`. Then run it:
+
+```powershell
+$env:CONTINUOUS_VERSION = "v0.1.0"
+$env:CONTINUOUS_INSTALL_DIR = Join-Path $env:LOCALAPPDATA "Programs\continuous"
+& .\install.ps1
+continuous version
+```
+
+The Windows installer can update your user `PATH`. Restart your terminal if the command is not available.
+
+Omit `CONTINUOUS_VERSION` to select the latest published release. Set `CONTINUOUS_INSTALL_DIR` to choose another installation directory.
 
 ### Initial v0.1.0 notices
 

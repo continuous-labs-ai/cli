@@ -10,6 +10,8 @@
 /.speakeasy/workflow.yaml linguist-generated=false
 /.github/** linguist-generated=false
 /scripts/** linguist-generated=false
+/scripts/install.sh linguist-generated=true
+/scripts/install.ps1 linguist-generated=true
 /.gitattributes linguist-generated=false
 /.genignore linguist-generated=false
 /.goreleaser.yaml linguist-generated=false
