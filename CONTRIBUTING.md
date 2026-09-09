@@ -38,6 +38,8 @@ To release, merge the `cli.version` change in `.speakeasy/gen.yaml`, then push t
 
 The workflow needs the `CLI_GPG_SECRET_KEY`, `CLI_GPG_PASSPHRASE`, and `HOMEBREW_TAP_GITHUB_TOKEN` repository secrets and fails without them. It publishes on any `v*` tag push, so add a tag ruleset that restricts who can create `v*` tags.
 
+`release-signing-key.asc` at the repository root is the public key that matches `CLI_GPG_SECRET_KEY`. When the key rotates, replace that file and update the fingerprint in the README.
+
 ## Homebrew
 
 Keep `cli.distribution.homebrew.enabled: true` with the tap `continuous-labs-ai/homebrew-tap`. Speakeasy writes the `brews` section of `.goreleaser.yaml` from these settings, and GoReleaser pushes `Formula/continuous.rb` to the tap's `main` branch with `HOMEBREW_TAP_GITHUB_TOKEN`.
