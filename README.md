@@ -23,11 +23,21 @@ Run `brew upgrade continuous-labs-ai/tap/continuous` to install a later version.
 
 ### Linux and macOS
 
-Run these commands in Bash. Replace `v0.1.1` with the version you want.
+These steps need `gpg`. On macOS, install it with `brew install gnupg`. Homebrew and the generated installers do not need it.
+
+Run these commands in Bash. First import the signing key. It is [`release-signing-key.asc`](release-signing-key.asc) in this repository, with fingerprint `3F97 24EA E595 A2F9 F3E8 EDA1 AF88 CF5D 4448 F191`. Check that the printed fingerprint matches.
+
+```bash
+curl -fL https://raw.githubusercontent.com/continuous-labs-ai/cli/main/release-signing-key.asc -o release-signing-key.asc
+gpg --show-keys --with-fingerprint release-signing-key.asc
+gpg --import release-signing-key.asc
+```
+
+Then install a signed release. Replace `v0.1.2` with the version you want.
 
 ```bash
 set -euo pipefail
-version=v0.1.1
+version=v0.1.2
 case "$(uname -s)" in
   Linux) platform=Linux ;;
   Darwin) platform=Darwin ;;
@@ -44,6 +54,8 @@ download_dir=$(mktemp -d)
 cd "$download_dir"
 curl -fL "$release_url/$archive" -o "$archive"
 curl -fL "$release_url/checksums.txt" -o checksums.txt
+curl -fL "$release_url/checksums.txt.sig" -o checksums.txt.sig
+gpg --verify checksums.txt.sig checksums.txt
 awk -v archive="$archive" '$2 == archive { print; count++ } END { if (count != 1) exit 1 }' checksums.txt > selected.sha256
 if [ "$platform" = Darwin ]; then
   shasum -a 256 -c selected.sha256
@@ -59,7 +71,7 @@ continuous version
 
 Add `$HOME/.local/bin` to your shell profile to keep the command available in new terminals.
 
-The checksum proves that the archive matches the manifest. The project's public signing key is not published yet; verifying `checksums.txt.sig` becomes possible once it is.
+The signature proves that the manifest came from the project. The checksum proves that the archive matches the manifest.
 
 ### Windows
 
@@ -67,7 +79,7 @@ Select `x86_64` for amd64 or `arm64` for ARM64. Run these commands in PowerShell
 
 ```powershell
 $ErrorActionPreference = "Stop"
-$version = "v0.1.1"
+$version = "v0.1.2"
 $architecture = "x86_64"
 $archive = "continuous_Windows_$architecture.zip"
 $releaseUrl = "https://github.com/continuous-labs-ai/cli/releases/download/$version"
@@ -86,7 +98,7 @@ $env:PATH = "$((Resolve-Path continuous).Path);$env:PATH"
 continuous version
 ```
 
-Move the extracted directory to a permanent location. Add that location to your user `PATH`.
+Move the extracted directory to a permanent location. Add that location to your user `PATH`. These commands check the checksum but not the signature.
 
 ### Generated installers
 
