@@ -5,6 +5,7 @@ project_name: continuous
 before:
   hooks:
     - go mod tidy
+    - bash scripts/package_notices.sh
 
 builds:
   - id: continuous
@@ -40,6 +41,9 @@ archives:
     files:
       - README.md
       - CONTRIBUTING.md
+      - LICENSE
+      - THIRD_PARTY_NOTICES.md
+      - THIRD_PARTY_NOTICES/**
 
 release:
   github:
@@ -47,7 +51,15 @@ release:
     name: cli
   draft: true
   prerelease: auto
-  mode: append
+  mode: keep-existing
+  extra_files:
+    - glob: LICENSE
+    - glob: third-party-notices.tar.gz
+    - glob: legal-assets.sha256
+
+changelog:
+  filters:
+    exclude: [".*"]
 
 checksum:
   name_template: "checksums.txt"

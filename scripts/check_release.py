@@ -34,6 +34,8 @@ def main():
     cli_config = config.split("\ncli:\n", 1)[1]
     version = re.search(r"^  version: ([^\s]+)$", cli_config, re.MULTILINE)[1]
     validate_release(os.environ["GITHUB_REF"], git("rev-parse", "HEAD"), main_head, version)
+    if not Path(f"release-notes/v{version}.md").read_text().strip():
+        raise ValueError("Write release notes before creating a draft release.")
     print("The tag matches the configured version and current main commit.")
 
 

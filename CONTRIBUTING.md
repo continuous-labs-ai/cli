@@ -1,6 +1,6 @@
 # Maintain the CLI
 
-Generate this CLI from the public Continuous Simulation API. Keep the repository private.
+Generate this CLI from the public Continuous Simulation API. Keep credentials and private API contracts out of this repository.
 
 Change the API contract in `continuous-labs-ai/continuous`. Keep Eval and Internal APIs out of this repository.
 
@@ -10,7 +10,7 @@ Review owned settings, workflows, and documentation. Treat generated source as b
 
 Keep generated output marked with `linguist-generated`. Keep owned files visible during review.
 
-The `.genignore` file protects the owned README, review attributes, and release configuration. Confirm that these files survive regeneration.
+The `.genignore` file protects owned documentation, licenses, release notes, review attributes, and release configuration. Confirm that these files survive regeneration.
 
 Run generation with Speakeasy 1.796.4:
 
@@ -44,13 +44,27 @@ Release infrastructure is owned, not generated. Keep `cli.generateRelease: false
 
 Push an approved tag that matches `cli.version`, such as `v0.1.0`. The tag must point to the current `main` commit.
 
+Write user-facing changes in `release-notes/v<version>.md` before requesting a release. Keep the file nonempty and review it with the version change.
+
+The release workflow passes that file through `--release-notes`. The configuration excludes raw commit lists and preserves existing release notes.
+
 The `Release` workflow runs the same `Checks` workflow before creating a draft release. A failed check prevents release creation.
 
 The workflow checks `main` again before packaging. Archives support Linux, macOS, and Windows on amd64 and arm64.
 
 The archive prefix is `continuous`. GoReleaser creates platform archives and SHA-256 checksums during snapshot packaging.
 
-Checksums are unsigned. Download private assets through authenticated GitHub CLI access, as described in the README.
+Checksums are unsigned. Follow the README to download published releases without GitHub credentials.
+
+Draft releases require authorized GitHub access. Do not publish a draft without operator approval.
+
+Package releases from a clean checkout. The packaging script collects dependency notices for all six targets with `go-licenses/v2` at `v2.0.1`.
+
+Keep vendor notices unchanged. Include the project license, dependency notices, and Go license and patent grant with distributed binaries.
+
+The packaging artifact includes `LICENSE`, `third-party-notices.tar.gz`, and `legal-assets.sha256`. Use these separate assets to supplement the unchanged `v0.1.0` archives.
+
+Do not replace the original `v0.1.0` archives, checksums, or tag. Attach the supplements only after the operator approves the reviewed change.
 
 Do not push a release tag before the version passes review and checks.
 

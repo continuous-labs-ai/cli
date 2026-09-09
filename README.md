@@ -1,6 +1,6 @@
 # Continuous CLI
 
-Use `continuous` to call the public Continuous Simulation API. This repository and its releases require authorized GitHub access.
+Use `continuous` to call the public Continuous Simulation API.
 
 Speakeasy generates the command implementation. The repository owns generation settings, build checks, release configuration, and this guide.
 
@@ -8,30 +8,84 @@ Build checks cover generation, compilation, and packaging. This repository does 
 
 ## Install an approved release
 
-Authenticate GitHub CLI with access to `continuous-labs-ai/cli`.
+Use a published release from the [release page](https://github.com/continuous-labs-ai/cli/releases). Published downloads do not need GitHub credentials.
 
-Download the Linux amd64 archive and its checksums:
+Draft releases are not available through anonymous downloads. The initial `v0.1.0` release remains a draft until approved.
+
+### Linux and macOS
+
+Run these commands in Bash. Replace `v0.1.0` with the approved, published version.
 
 ```bash
-gh release download v0.1.0 --repo continuous-labs-ai/cli \
-  --pattern continuous_Linux_x86_64.tar.gz --pattern checksums.txt
-sha256sum --ignore-missing --check checksums.txt
-tar -xzf continuous_Linux_x86_64.tar.gz continuous
-./continuous version
+set -euo pipefail
+version=v0.1.0
+case "$(uname -s)" in
+  Linux) platform=Linux ;;
+  Darwin) platform=Darwin ;;
+  *) echo "Use the Windows instructions for Windows." >&2; exit 1 ;;
+esac
+case "$(uname -m)" in
+  x86_64) architecture=x86_64 ;;
+  arm64|aarch64) architecture=arm64 ;;
+  *) echo "Unsupported architecture." >&2; exit 1 ;;
+esac
+archive="continuous_${platform}_${architecture}.tar.gz"
+release_url="https://github.com/continuous-labs-ai/cli/releases/download/$version"
+download_dir=$(mktemp -d)
+cd "$download_dir"
+curl -fL "$release_url/$archive" -o "$archive"
+curl -fL "$release_url/checksums.txt" -o checksums.txt
+awk -v archive="$archive" '$2 == archive { print; count++ } END { if (count != 1) exit 1 }' checksums.txt > selected.sha256
+if [ "$platform" = Darwin ]; then
+  shasum -a 256 -c selected.sha256
+else
+  sha256sum --check selected.sha256
+fi
+tar -xzf "$archive"
 mkdir -p "$HOME/.local/bin"
 install -m 755 continuous "$HOME/.local/bin/continuous"
 export PATH="$HOME/.local/bin:$PATH"
+continuous version
 ```
-
-Replace the version with an approved release. Select `Darwin` for macOS or `Windows` for Windows.
 
 Add `$HOME/.local/bin` to your shell profile to keep the command available in new terminals.
 
-Select `arm64` for ARM systems. Windows archives use `.zip` and contain `continuous.exe`.
+Keep the extracted license and notices with the binary. Checksums verify file integrity but are not signed.
 
-Verify SHA-256 checksums before extraction. Checksum files are not signed.
+### Windows
 
-Do not use unauthenticated download scripts for this private repository.
+Select `x86_64` for amd64 or `arm64` for ARM64. Run these commands in PowerShell with a published version.
+
+```powershell
+$ErrorActionPreference = "Stop"
+$version = "v0.1.0"
+$architecture = "x86_64"
+$archive = "continuous_Windows_$architecture.zip"
+$releaseUrl = "https://github.com/continuous-labs-ai/cli/releases/download/$version"
+$downloadDir = New-Item -ItemType Directory -Path (Join-Path ([IO.Path]::GetTempPath()) ([guid]::NewGuid()))
+Set-Location $downloadDir
+curl.exe -fL "$releaseUrl/$archive" -o $archive
+if ($LASTEXITCODE -ne 0) { throw "Archive download failed." }
+curl.exe -fL "$releaseUrl/checksums.txt" -o checksums.txt
+if ($LASTEXITCODE -ne 0) { throw "Checksum download failed." }
+$entries = @(Get-Content checksums.txt | Where-Object { ($_ -split '\s+', 2)[1] -eq $archive })
+if ($entries.Count -ne 1) { throw "Missing or duplicate checksum." }
+$expected = ($entries[0] -split '\s+', 2)[0]
+if ((Get-FileHash $archive -Algorithm SHA256).Hash -ne $expected) { throw "Checksum mismatch." }
+Expand-Archive $archive -DestinationPath continuous
+$env:PATH = "$((Resolve-Path continuous).Path);$env:PATH"
+continuous version
+```
+
+Move the extracted directory to a permanent location. Add that location to your user `PATH`.
+
+### Initial v0.1.0 notices
+
+The original `v0.1.0` archives predate license packaging. They are not rebuilt or replaced.
+
+Download `LICENSE`, `third-party-notices.tar.gz`, and `legal-assets.sha256` from the same release before redistributing those binaries.
+
+Verify both supplemental files against `legal-assets.sha256`. Keep them alongside the original archive and `checksums.txt`.
 
 ## Use the API
 
@@ -49,4 +103,4 @@ Use `--server-url` to select another API endpoint. Run `continuous --help` to in
 
 Read [CONTRIBUTING.md](CONTRIBUTING.md) for generation, checks, and release controls.
 
-No license grant is specified in this repository.
+The project uses the [MIT license](LICENSE). Dependencies retain their [own licenses and notices](THIRD_PARTY_NOTICES.md).
