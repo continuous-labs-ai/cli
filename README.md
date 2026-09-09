@@ -14,6 +14,25 @@ Draft releases are not available through anonymous downloads. Version `v0.1.0` i
 
 Use the manual instructions below to verify archive checksums before installation.
 
+### Homebrew
+
+Homebrew distribution starts with the next approved public release. It is not available for `v0.1.0`.
+
+After the first formula reaches the public tap, install it with:
+
+```bash
+brew install continuous-labs-ai/tap/continuous
+continuous version
+```
+
+Run `brew upgrade continuous-labs-ai/tap/continuous` to install a later published version.
+
+The formula verifies archive hashes and retains licenses and notices under `$(brew --prefix continuous)/share/continuous`.
+
+The formula also installs Bash, Zsh, and Fish completions from the generated CLI.
+
+Use the installers below until the tap has a published formula. Windows users must use the Windows installer or archive.
+
 ### Linux and macOS
 
 Run these commands in Bash. Replace `v0.1.0` with the approved, published version.

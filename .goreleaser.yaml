@@ -45,6 +45,23 @@ archives:
       - THIRD_PARTY_NOTICES.md
       - THIRD_PARTY_NOTICES/**
 
+brews:
+  - name: continuous
+    ids: [continuous]
+    directory: Formula
+    repository:
+      owner: continuous-labs-ai
+      name: homebrew-tap
+      branch: main
+    skip_upload: true
+    homepage: https://github.com/continuous-labs-ai/cli
+    description: Continuous Simulation CLI
+    license: MIT
+    install: |
+      bin.install "continuous"
+      pkgshare.install "LICENSE", "THIRD_PARTY_NOTICES.md", "THIRD_PARTY_NOTICES"
+      generate_completions_from_executable(bin/"continuous", shell_parameter_format: :cobra)
+
 release:
   github:
     owner: continuous-labs-ai
@@ -53,6 +70,7 @@ release:
   prerelease: auto
   mode: keep-existing
   extra_files:
+    - glob: dist/homebrew/Formula/continuous.rb
     - glob: LICENSE
     - glob: third-party-notices.tar.gz
     - glob: legal-assets.sha256
