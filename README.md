@@ -23,6 +23,8 @@ Run `brew upgrade continuous-labs-ai/tap/continuous` to install a later version.
 
 ### Linux and macOS
 
+These steps need `gpg`. On macOS, install it with `brew install gnupg`. Homebrew and the generated installers do not need it.
+
 Run these commands in Bash. First import the signing key. It is [`release-signing-key.asc`](release-signing-key.asc) in this repository, with fingerprint `3F97 24EA E595 A2F9 F3E8 EDA1 AF88 CF5D 4448 F191`. Check that the printed fingerprint matches.
 
 ```bash
