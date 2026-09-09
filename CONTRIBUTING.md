@@ -44,9 +44,17 @@ Release infrastructure is owned, not generated. Keep `cli.generateRelease: true`
 
 Keep `.goreleaser.yaml` and `.github/workflows/release.yaml` protected in `.genignore`. This preserves owned release controls during generation.
 
-Do not patch generated installers. The pinned generator does not add checksum verification or retain license notices during installation.
+Maintain only installer verification and notice retention in `.speakeasy/patches/scripts/install.sh.patch` and `install.ps1.patch`.
+
+Speakeasy applies these patches after generation. Keep patch files reviewable and generated installer files marked as generated.
+
+Do not add installers to `.genignore`. Regenerate twice after patch changes and confirm that the changes persist.
+
+Do not extend this exception to CLI runtime files. Keep the repository, release assets, and public download URLs fixed in the installers.
 
 Check installer archive names against published assets after generator changes. Keep manual checksum verification and license supplement guidance in the README.
+
+Installer checksums detect corruption and mismatched files. They are unsigned and do not prove publisher identity.
 
 Push an approved tag that matches `cli.version`, such as `v0.1.0`. The tag must point to the current `main` commit.
 

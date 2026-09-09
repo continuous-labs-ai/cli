@@ -83,11 +83,13 @@ Move the extracted directory to a permanent location. Add that location to your 
 
 ### Optional generated installers
 
-Speakeasy generates installers for Linux, macOS, and Windows. These scripts download through HTTPS but do not verify checksums or signatures.
+Speakeasy generates installers for Linux, macOS, and Windows. Maintained patches verify archive SHA-256 checksums before extraction or installation.
 
-The installers keep only the binary. They do not retain licenses or notices, including the separate [v0.1.0 supplements](#initial-v010-notices).
+The installers reject missing, malformed, duplicate, or mismatched checksum entries. Download or verification failures leave an existing installation unchanged.
 
-Use the manual instructions when you need checksum verification. The published checksums are unsigned.
+Checksums are unsigned. They detect corruption and mismatched files but do not prove publisher identity.
+
+The installers retain notices in `continuous-notices/<version>` under the installation directory. They also download and verify the separate [v0.1.0 supplements](#initial-v010-notices).
 
 For Linux or macOS, download the script:
 

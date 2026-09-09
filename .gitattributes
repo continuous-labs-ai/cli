@@ -8,6 +8,7 @@
 /.speakeasy/out.openapi.yaml linguist-generated=true
 /.speakeasy/gen.yaml linguist-generated=false
 /.speakeasy/workflow.yaml linguist-generated=false
+/.speakeasy/patches/** linguist-generated=false whitespace=-blank-at-eol
 /.github/** linguist-generated=false
 /scripts/** linguist-generated=false
 /scripts/install.sh linguist-generated=true

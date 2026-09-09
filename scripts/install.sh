@@ -14,7 +14,7 @@
 #   CONTINUOUS_VERSION     - Specific version to install (default: latest)
 #
 
-set -e
+set -eo pipefail
 
 # Configuration
 REPO="continuous-labs-ai/cli"
@@ -40,6 +40,38 @@ log_warn() {
 
 log_error() {
     echo -e "${RED}[ERROR]${NC} $1"
+}
+
+download_file() {
+    if command -v curl >/dev/null 2>&1; then
+        curl -fsSL "$1" -o "$2"
+    elif command -v wget >/dev/null 2>&1; then
+        wget -q "$1" -O "$2"
+    else
+        log_error "curl or wget is required"
+        return 1
+    fi
+}
+
+verify_file() {
+    local manifest="$1" filename="$2" file="$3" expected actual
+    expected=$(awk -v name="$filename" '
+        NF != 2 || length($1) != 64 || $1 ~ /[^0-9a-fA-F]/ || $2 ~ /[^a-zA-Z0-9_.-]/ { bad=1 }
+        $2 == name { count++; digest=tolower($1) }
+        END { if (bad || count != 1) exit 1; print digest }
+    ' "$manifest") || { log_error "Invalid checksum entry for $filename"; return 1; }
+    if command -v sha256sum >/dev/null 2>&1; then
+        actual=$(sha256sum "$file")
+    elif command -v shasum >/dev/null 2>&1; then
+        actual=$(shasum -a 256 "$file")
+    else
+        log_error "sha256sum or shasum is required"
+        return 1
+    fi
+    if [ "${actual%% *}" != "$expected" ]; then
+        log_error "Checksum mismatch for $filename"
+        return 1
+    fi
 }
 
 # Detect operating system
@@ -110,9 +142,10 @@ get_install_dir() {
 
 # Download and install
 install_cli() {
-    local INSTALL_DIR=$(get_install_dir)
-    local os=$(detect_os)
-    local arch=$(detect_arch)
+    local INSTALL_DIR os arch
+    INSTALL_DIR=$(get_install_dir)
+    os=$(detect_os)
+    arch=$(detect_arch)
 
     log_info "Detected OS: $os"
     log_info "Detected Architecture: $arch"
@@ -122,6 +155,10 @@ install_cli() {
     if [ "$VERSION" = "latest" ]; then
         VERSION=$(get_latest_version)
         log_info "Latest version: $VERSION"
+    fi
+    if [[ ! "$VERSION" =~ ^v[0-9]+\.[0-9]+\.[0-9]+(-[0-9A-Za-z]+([.-][0-9A-Za-z]+)*)?$ ]]; then
+        log_error "Use a release tag such as v0.1.0"
+        exit 1
     fi
 
     # Construct download URL based on OS
@@ -140,21 +177,24 @@ install_cli() {
     log_info "Downloading from: $download_url"
 
     # Create temporary directory
-    local tmp_dir=$(mktemp -d)
-    trap "rm -rf $tmp_dir" EXIT
+    local tmp_dir
+    tmp_dir=$(mktemp -d)
+    trap "rm -rf -- $(printf '%q' "$tmp_dir")" EXIT
 
     # Download archive
-    if command -v curl >/dev/null 2>&1; then
-        if ! curl -fsSL "$download_url" -o "$tmp_dir/$archive_name"; then
-            log_error "Failed to download from $download_url"
-            exit 1
-        fi
-    elif command -v wget >/dev/null 2>&1; then
-        if ! wget -q "$download_url" -O "$tmp_dir/$archive_name"; then
-            log_error "Failed to download from $download_url"
-            exit 1
-        fi
+    local release_url="https://github.com/${REPO}/releases/download/${VERSION}"
+    download_file "$download_url" "$tmp_dir/$archive_name"
+    download_file "$release_url/checksums.txt" "$tmp_dir/checksums.txt"
+    verify_file "$tmp_dir/checksums.txt" "$archive_name" "$tmp_dir/$archive_name"
+    if [ "$VERSION" = v0.1.0 ]; then
+        download_file "$release_url/legal-assets.sha256" "$tmp_dir/legal-assets.sha256"
+        download_file "$release_url/LICENSE" "$tmp_dir/LICENSE"
+        download_file "$release_url/third-party-notices.tar.gz" "$tmp_dir/third-party-notices.tar.gz"
+        verify_file "$tmp_dir/legal-assets.sha256" LICENSE "$tmp_dir/LICENSE"
+        verify_file "$tmp_dir/legal-assets.sha256" third-party-notices.tar.gz "$tmp_dir/third-party-notices.tar.gz"
     fi
+    local archive_dir="$tmp_dir/archive"
+    mkdir "$archive_dir"
 
     log_info "Download complete"
 
@@ -162,13 +202,24 @@ install_cli() {
     log_info "Extracting archive..."
     if [ "$archive_format" = "zip" ]; then
         if command -v unzip >/dev/null 2>&1; then
-            unzip -q "$tmp_dir/$archive_name" -d "$tmp_dir"
+            unzip -q "$tmp_dir/$archive_name" -d "$archive_dir"
         else
             log_error "unzip is required to extract the archive. Please install unzip and try again."
             exit 1
         fi
     else
-        tar -xzf "$tmp_dir/$archive_name" -C "$tmp_dir"
+        tar -xzf "$tmp_dir/$archive_name" -C "$archive_dir"
+    fi
+    if [ "$VERSION" = v0.1.0 ]; then
+        tar -xzf "$tmp_dir/third-party-notices.tar.gz" -C "$archive_dir"
+        cp "$tmp_dir/LICENSE" "$archive_dir/LICENSE"
+    elif [ ! -f "$archive_dir/THIRD_PARTY_NOTICES.md" ]; then
+        log_error "The archive is missing THIRD_PARTY_NOTICES.md"
+        exit 1
+    fi
+    if [ ! -f "$archive_dir/LICENSE" ] || [ ! -d "$archive_dir/THIRD_PARTY_NOTICES" ]; then
+        log_error "The archive is missing license notices"
+        exit 1
     fi
 
     # Create install directory if it doesn't exist
@@ -181,15 +232,26 @@ install_cli() {
     fi
 
     # Install binary (Windows binaries have .exe extension)
-    local source_binary="$tmp_dir/$BINARY_NAME"
+    local source_binary="$archive_dir/$BINARY_NAME"
     local target_binary="$INSTALL_DIR/$BINARY_NAME"
 
     if [ "$os" = "Windows" ]; then
-        source_binary="$tmp_dir/${BINARY_NAME}.exe"
+        source_binary="$archive_dir/${BINARY_NAME}.exe"
         target_binary="$INSTALL_DIR/${BINARY_NAME}.exe"
     fi
 
     log_info "Installing to $target_binary..."
+    if [ ! -f "$source_binary" ]; then
+        log_error "The archive is missing $BINARY_NAME"
+        exit 1
+    fi
+    local notice_dir="$INSTALL_DIR/continuous-notices/$VERSION"
+    mkdir -p "$notice_dir"
+    cp "$archive_dir/LICENSE" "$notice_dir/"
+    cp -Rf "$archive_dir/THIRD_PARTY_NOTICES" "$notice_dir/"
+    if [ -f "$archive_dir/THIRD_PARTY_NOTICES.md" ]; then
+        cp "$archive_dir/THIRD_PARTY_NOTICES.md" "$notice_dir/"
+    fi
     if ! mv "$source_binary" "$target_binary"; then
         log_error "Failed to install to $INSTALL_DIR. Try running with sudo or set CONTINUOUS_INSTALL_DIR to a writable location."
         exit 1
