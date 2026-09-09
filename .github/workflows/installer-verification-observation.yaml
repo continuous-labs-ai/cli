@@ -1,0 +1,50 @@
+name: Installer verification observation
+
+on:
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  package:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+        with:
+          persist-credentials: false
+      - uses: actions/setup-go@40f1582b2485089dde7abd97c1529aa768e1baff
+        with:
+          go-version-file: go.mod
+      - uses: goreleaser/goreleaser-action@e435ccd777264be153ace6237001ef4d979d3a7a
+        with:
+          version: v2.18.1
+          args: release --snapshot --clean --skip=publish --release-notes release-notes/v0.1.0.md
+      - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        with:
+          name: installer-fixtures
+          path: |
+            LICENSE
+            dist/*.tar.gz
+            dist/*.zip
+            dist/checksums.txt
+  observe:
+    needs: package
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, windows-latest]
+    runs-on: ${{ matrix.os }}
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+        with:
+          persist-credentials: false
+      - uses: actions/download-artifact@d3f86a106a0bac45b974a628896c90dbdf5c8093
+        with:
+          name: installer-fixtures
+          path: ${{ runner.temp }}/new-fixtures
+      - if: runner.os == 'Linux'
+        run: bash .github/observations/install-linux.sh
+      - if: runner.os == 'Windows'
+        shell: pwsh
+        run: ./.github/observations/install-windows.ps1

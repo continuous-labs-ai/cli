@@ -8,9 +8,9 @@ management:
   releaseVersion: 0.1.0
   configChecksum: 11bbd6d5ec8feb8f746049a9f62a7ce4
 persistentEdits:
-  generation_id: ecb12521-9e1e-4130-9243-523eac8c049b
-  pristine_commit_hash: fafce72b4d8603822c4d35da68ef1a9dedad62d5
-  pristine_tree_hash: 36264c8c1b1901c8a0f6f516e821ba59bdf4e186
+  generation_id: 8bc7a093-2a7b-4c0a-aad3-580396479f85
+  pristine_commit_hash: 26f4dfcde21e9bc4c03e5c1e725a039b0175132f
+  pristine_tree_hash: f89db82ae06942708f1103a2b618a19becbe3020
 features:
   cli:
     constsAndDefaults: 0.0.0
@@ -497,12 +497,12 @@ trackedFiles:
     pristine_git_object: 876e96ab8224abf8e2848c79e1e66624157c625e
   scripts/install.ps1:
     id: fee0853709e9
-    last_write_checksum: sha1:35474849c47f6c0c0a9ad6bb2e81fb9a68c2be70
-    pristine_git_object: c942004315be94525e49eb95735e5cb5d7a7934b
+    last_write_checksum: sha1:0058338abd3e8177b971ed372e2f5db98313edb0
+    pristine_git_object: 14337dd6f1c3cdbe4d1aaddddf1495906e2fbc40
   scripts/install.sh:
     id: 1f022802374d
-    last_write_checksum: sha1:05a593bdbc87f0ff0c0021905508565d1f09b1a4
-    pristine_git_object: 1a14e59e5fe6ef46676b5bc31eca7fb816b04bd6
+    last_write_checksum: sha1:a8075a32752029fc4cb9525cef593d4b6e39ab6b
+    pristine_git_object: de73ffd94817fc6e60c565b6fdb0c77281f7afa7
 examples:
   list-simulations:
     bad_request:
