@@ -2,44 +2,32 @@
 
 Use `continuous` to call the public Continuous Simulation API.
 
-Speakeasy generates the command implementation. The repository owns generation settings, build checks, release configuration, and this guide.
+Speakeasy generates the command implementation, the installers, and the release configuration. The repository owns generation settings, build checks, and this guide.
 
 Build checks cover generation, compilation, and packaging. This repository does not contain a CLI test suite.
 
-## Install an approved release
+## Install
 
-Use a published release from the [release page](https://github.com/continuous-labs-ai/cli/releases). Published downloads do not need GitHub credentials.
+Releases are published on the [release page](https://github.com/continuous-labs-ai/cli/releases) when a version tag is pushed. Downloads do not need GitHub credentials.
 
-Draft releases are not available through anonymous downloads. Version `v0.1.0` is published.
-
-Use the manual instructions below to verify archive checksums before installation.
+Each release ships archives for Linux, macOS, and Windows on amd64 and arm64, plus `checksums.txt`. Releases published by the generated workflow also ship `checksums.txt.sig`, a detached signature made with the project's GPG key. Releases `v0.1.0` and `v0.1.1` predate signing.
 
 ### Homebrew
-
-Homebrew distribution starts with the next approved public release. It is not available for `v0.1.0`.
-
-After the first formula reaches the public tap, install it with:
 
 ```bash
 brew install continuous-labs-ai/tap/continuous
 continuous version
 ```
 
-Run `brew upgrade continuous-labs-ai/tap/continuous` to install a later published version.
-
-The formula verifies archive hashes and retains licenses and notices under `$(brew --prefix continuous)/share/continuous`.
-
-The formula also installs Bash, Zsh, and Fish completions from the generated CLI.
-
-Use the installers below until the tap has a published formula. Windows users must use the Windows installer or archive.
+Run `brew upgrade continuous-labs-ai/tap/continuous` to install a later version. GoReleaser pushes the formula to the tap on each release, and Homebrew checks the archive hash recorded in the formula.
 
 ### Linux and macOS
 
-Run these commands in Bash. Replace `v0.1.0` with the approved, published version.
+Run these commands in Bash. Replace `v0.1.1` with the version you want.
 
 ```bash
 set -euo pipefail
-version=v0.1.0
+version=v0.1.1
 case "$(uname -s)" in
   Linux) platform=Linux ;;
   Darwin) platform=Darwin ;;
@@ -71,7 +59,12 @@ continuous version
 
 Add `$HOME/.local/bin` to your shell profile to keep the command available in new terminals.
 
-Keep the extracted license and notices with the binary. Checksums verify file integrity but are not signed.
+The checksum proves that the archive matches the manifest. For releases that ship `checksums.txt.sig`, import the project's public signing key and verify the manifest before you check the archive:
+
+```bash
+curl -fL "$release_url/checksums.txt.sig" -o checksums.txt.sig
+gpg --verify checksums.txt.sig checksums.txt
+```
 
 ### Windows
 
@@ -79,7 +72,7 @@ Select `x86_64` for amd64 or `arm64` for ARM64. Run these commands in PowerShell
 
 ```powershell
 $ErrorActionPreference = "Stop"
-$version = "v0.1.0"
+$version = "v0.1.1"
 $architecture = "x86_64"
 $archive = "continuous_Windows_$architecture.zip"
 $releaseUrl = "https://github.com/continuous-labs-ai/cli/releases/download/$version"
@@ -100,15 +93,9 @@ continuous version
 
 Move the extracted directory to a permanent location. Add that location to your user `PATH`.
 
-### Optional generated installers
+### Generated installers
 
-Speakeasy generates installers for Linux, macOS, and Windows. Maintained patches verify archive SHA-256 checksums before extraction or installation.
-
-The installers reject missing, malformed, duplicate, or mismatched checksum entries. Download or verification failures leave an existing installation unchanged.
-
-Checksums are unsigned. They detect corruption and mismatched files but do not prove publisher identity.
-
-The installers retain notices in `continuous-notices/<version>` under the installation directory. They also download and verify the separate [v0.1.0 supplements](#initial-v010-notices).
+Speakeasy generates installers for Linux, macOS, and Windows. They verify the archive against `checksums.txt` before extraction and reject missing, malformed, duplicate, or mismatched checksum entries. They do not check the signature.
 
 For Linux or macOS, download the script:
 
@@ -116,10 +103,10 @@ For Linux or macOS, download the script:
 curl -fL https://raw.githubusercontent.com/continuous-labs-ai/cli/main/scripts/install.sh -o install.sh
 ```
 
-Inspect `install.sh`. Then install the selected version in your user directory:
+Inspect `install.sh`. Then install the latest release in your user directory:
 
 ```bash
-CONTINUOUS_VERSION=v0.1.0 CONTINUOUS_INSTALL_DIR="$HOME/.local/bin" bash install.sh
+CONTINUOUS_INSTALL_DIR="$HOME/.local/bin" bash install.sh
 export PATH="$HOME/.local/bin:$PATH"
 continuous version
 ```
@@ -133,23 +120,13 @@ Invoke-WebRequest https://raw.githubusercontent.com/continuous-labs-ai/cli/main/
 Inspect `install.ps1`. Then run it:
 
 ```powershell
-$env:CONTINUOUS_VERSION = "v0.1.0"
-$env:CONTINUOUS_INSTALL_DIR = Join-Path $env:LOCALAPPDATA "Programs\continuous"
 & .\install.ps1
 continuous version
 ```
 
 The Windows installer can update your user `PATH`. Restart your terminal if the command is not available.
 
-Omit `CONTINUOUS_VERSION` to select the latest published release. Set `CONTINUOUS_INSTALL_DIR` to choose another installation directory.
-
-### Initial v0.1.0 notices
-
-The original `v0.1.0` archives predate license packaging. They are not rebuilt or replaced.
-
-Download `LICENSE`, `third-party-notices.tar.gz`, and `legal-assets.sha256` from the same release before redistributing those binaries.
-
-Verify both supplemental files against `legal-assets.sha256`. Keep them alongside the original archive and `checksums.txt`.
+Set `CONTINUOUS_VERSION` to install a specific release and `CONTINUOUS_INSTALL_DIR` to choose another installation directory.
 
 ## Use the API
 
@@ -194,7 +171,7 @@ Use `--server-url` to select another API endpoint. Run `continuous --help` to in
 
 ### Shell completion
 
-Homebrew installs completions with the formula. For other installation methods, inspect the generated instructions:
+Inspect the generated instructions for your shell:
 
 ```bash
 continuous completion --help
@@ -202,6 +179,6 @@ continuous completion --help
 
 ## Maintain the CLI
 
-Read [CONTRIBUTING.md](CONTRIBUTING.md) for generation, checks, and release controls.
+Read [CONTRIBUTING.md](CONTRIBUTING.md) for generation, checks, and releases.
 
-The project uses the [MIT license](LICENSE). Dependencies retain their [own licenses and notices](THIRD_PARTY_NOTICES.md).
+The project uses the [MIT license](LICENSE). Dependencies keep their own licenses.
