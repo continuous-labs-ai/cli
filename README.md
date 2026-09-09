@@ -57,6 +57,7 @@ Keep the extracted license and notices with the binary. Checksums verify file in
 Select `x86_64` for amd64 or `arm64` for ARM64. Run these commands in PowerShell with a published version.
 
 ```powershell
+$ErrorActionPreference = "Stop"
 $version = "v0.1.0"
 $architecture = "x86_64"
 $archive = "continuous_Windows_$architecture.zip"
