@@ -42,7 +42,7 @@ Never use direct generation mode. Review generated changes before merging them.
 
 Release infrastructure is owned, not generated. Keep `cli.generateRelease: false` so regeneration does not replace release controls.
 
-Push an approved tag that matches `cli.version`, such as `v0.0.1`. The tag must point to the current `main` commit.
+Push an approved tag that matches `cli.version`, such as `v0.1.0`. The tag must point to the current `main` commit.
 
 The `Release` workflow runs the same `Checks` workflow before creating a draft release. A failed check prevents release creation.
 

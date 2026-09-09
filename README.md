@@ -13,7 +13,7 @@ Authenticate GitHub CLI with access to `continuous-labs-ai/cli`.
 Download the Linux amd64 archive and its checksums:
 
 ```bash
-gh release download v0.0.1 --repo continuous-labs-ai/cli \
+gh release download v0.1.0 --repo continuous-labs-ai/cli \
   --pattern continuous_Linux_x86_64.tar.gz --pattern checksums.txt
 sha256sum --ignore-missing --check checksums.txt
 tar -xzf continuous_Linux_x86_64.tar.gz continuous
