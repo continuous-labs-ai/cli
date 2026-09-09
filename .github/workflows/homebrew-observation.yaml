@@ -1,0 +1,35 @@
+name: Homebrew observation
+
+on:
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  install:
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [macos-15, macos-15-intel]
+    runs-on: ${{ matrix.os }}
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+        with:
+          persist-credentials: false
+      - name: Install the published archive with normal Homebrew quarantine
+        env:
+          HOMEBREW_NO_AUTO_UPDATE: "1"
+          HOMEBREW_NO_ANALYTICS: "1"
+        run: |
+          uname -m
+          brew --version
+          brew tap-new observation/local
+          mkdir -p "$(brew --repository observation/local)/Casks"
+          cp .github/observations/continuous.rb "$(brew --repository observation/local)/Casks/continuous.rb"
+          brew install --cask observation/local/continuous
+          cask_binary="$(brew --caskroom)/continuous/0.1.0/continuous"
+          xattr -p com.apple.quarantine "$cask_binary"
+          codesign --display --verbose=4 "$cask_binary" 2>&1 || true
+          spctl --assess --type execute --verbose=4 "$cask_binary" 2>&1 || true
+          continuous --version
