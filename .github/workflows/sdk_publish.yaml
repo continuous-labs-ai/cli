@@ -1,3 +1,8 @@
+# Vendored from speakeasy-api/sdk-generation-action .github/workflows/sdk-publish.yaml
+# at v15 (68f3bfef): its CLI job pins a goreleaser-action commit that does not
+# exist. Deliberate differences: the corrected pin, the action called directly
+# instead of checked out into _speakeasy, no Slack steps, and the reusable
+# inputs inlined. Return to the reusable workflow call once upstream fixes the pin.
 name: Publish
 permissions:
   checks: write
@@ -13,12 +18,95 @@ permissions:
       - .speakeasy/gen.lock
   workflow_dispatch: {}
 jobs:
-  publish:
-    uses: speakeasy-api/sdk-generation-action/.github/workflows/sdk-publish.yaml@v15
-    with:
-      target: continuous-simulation-cli
-    secrets:
-      cli_gpg_passphrase: ${{ secrets.CLI_GPG_PASSPHRASE }}
-      cli_gpg_secret_key: ${{ secrets.CLI_GPG_SECRET_KEY }}
-      github_access_token: ${{ secrets.GITHUB_TOKEN }}
-      speakeasy_api_key: ${{ secrets.SPEAKEASY_API_KEY }}
+  release:
+    name: Create Github Release
+    runs-on: ubuntu-22.04
+    outputs:
+      publish_cli: ${{ steps.release.outputs.publish_cli }}
+      cli_regenerated: ${{ steps.release.outputs.cli_regenerated }}
+      cli_directory: ${{ steps.release.outputs.cli_directory }}
+      cli_goreleaser_current_tag: ${{ steps.release.outputs.cli_goreleaser_current_tag }}
+      cli_goreleaser_previous_tag: ${{ steps.release.outputs.cli_goreleaser_previous_tag }}
+    steps:
+      - id: release
+        uses: speakeasy-api/sdk-generation-action@fa50f4813201c6f919c74c25196b17c070ec4ac1
+        with:
+          github_access_token: ${{ secrets.GITHUB_TOKEN }}
+          action: "release"
+          speakeasy_api_key: ${{ secrets.SPEAKEASY_API_KEY }}
+          target: continuous-simulation-cli
+          enable_sdk_changelog: true
+      - id: log-result
+        uses: speakeasy-api/sdk-generation-action@fa50f4813201c6f919c74c25196b17c070ec4ac1
+        if: always()
+        with:
+          github_access_token: ${{ secrets.GITHUB_TOKEN }}
+          action: log-result
+          speakeasy_api_key: ${{ secrets.SPEAKEASY_API_KEY }}
+        env:
+          GH_ACTION_RESULT: ${{ job.status }}
+          GH_ACTION_VERSION: fa50f4813201c6f919c74c25196b17c070ec4ac1
+          GH_ACTION_STEP: ${{ github.job }}
+          TARGET_TYPE: "sdk"
+  publish-cli:
+    if: ${{ needs.release.outputs.cli_regenerated == 'true' && needs.release.outputs.publish_cli == 'true' }}
+    name: Publish CLI Target
+    runs-on: ubuntu-22.04
+    needs: release
+    defaults:
+      run:
+        working-directory: ${{ needs.release.outputs.cli_directory }}
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5 # v4
+        with:
+          fetch-depth: 0
+      - name: Setup Go
+        uses: actions/setup-go@44694675825211faa026b3c33043df3e48a5fa00 # v5.0.2
+        with:
+          go-version-file: ${{ needs.release.outputs.cli_directory }}/go.mod
+          cache: true
+      - name: Install GoReleaser
+        uses: goreleaser/goreleaser-action@9c156ee8a17a598857849441385a2041ef570552 # v6.3.0
+        with:
+          install-only: true
+      - name: Import GPG key
+        uses: crazy-max/ghaction-import-gpg@111c56156bcc6918c056dbef52164cfa583dc549 # v5.2.0
+        id: import_gpg
+        with:
+          gpg_private_key: ${{ secrets.CLI_GPG_SECRET_KEY }}
+          passphrase: ${{ secrets.CLI_GPG_PASSPHRASE }}
+      - name: Run GoReleaser
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GPG_FINGERPRINT: ${{ steps.import_gpg.outputs.fingerprint }}
+          GORELEASER_CURRENT_TAG: ${{ needs.release.outputs.cli_goreleaser_current_tag }}
+        run: |
+          if [ -n "${{ needs.release.outputs.cli_goreleaser_previous_tag }}" ]; then
+            export GORELEASER_PREVIOUS_TAG="${{ needs.release.outputs.cli_goreleaser_previous_tag }}"
+          fi
+          goreleaser release --clean
+      - id: publish-event
+        uses: speakeasy-api/sdk-generation-action@fa50f4813201c6f919c74c25196b17c070ec4ac1
+        if: always()
+        with:
+          github_access_token: ${{ secrets.GITHUB_TOKEN }}
+          action: publish-event
+          speakeasy_api_key: ${{ secrets.SPEAKEASY_API_KEY }}
+          target_directory: ${{ needs.release.outputs.cli_directory }}
+          registry_name: "go"
+        env:
+          GH_ACTION_RESULT: ${{ job.status }}
+          GH_ACTION_VERSION: fa50f4813201c6f919c74c25196b17c070ec4ac1
+      - id: log-result
+        uses: speakeasy-api/sdk-generation-action@fa50f4813201c6f919c74c25196b17c070ec4ac1
+        if: always()
+        with:
+          github_access_token: ${{ secrets.GITHUB_TOKEN }}
+          action: log-result
+          speakeasy_api_key: ${{ secrets.SPEAKEASY_API_KEY }}
+        env:
+          GH_ACTION_RESULT: ${{ job.status }}
+          GH_ACTION_VERSION: fa50f4813201c6f919c74c25196b17c070ec4ac1
+          GH_ACTION_STEP: ${{ github.job }}
+          TARGET_TYPE: "sdk"
