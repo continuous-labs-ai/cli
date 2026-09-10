@@ -28,7 +28,7 @@ The `Generate` workflow is the standard Speakeasy workflow that `speakeasy confi
 
 Store `SPEAKEASY_API_KEY` as a repository secret. Store `SPEAKEASY_GITHUB_TOKEN` too; the workflow passes it as `pr_creation_pat` so that checks run on generation pull requests. Use a fine-grained token limited to this repository with read and write access to contents and pull requests.
 
-The `publish` section of `.speakeasy/workflow.yaml` names the CLI signing secrets. `speakeasy configure publishing` reads it, writes the `Publish` workflow (`sdk_publish.yaml`), and passes the same secrets to the `Generate` workflow. Rerun that command after changing the section instead of editing the two workflows by hand.
+The `publish` section of `.speakeasy/workflow.yaml` names the CLI signing secrets. `speakeasy configure publishing` reads it, writes the `Publish` workflow (`sdk_publish.yaml`), and passes the same secrets to the `Generate` workflow. Rerun that command after changing the section instead of editing the two workflows by hand. The command also adds the two CLI GPG secrets to the `Generate` workflow, but `workflow-executor.yaml` does not declare them and GitHub refuses the run, so remove those two lines after each rerun.
 
 ## Releases
 
@@ -38,7 +38,9 @@ Owned release changes live in `.speakeasy/patches/`. `.goreleaser.yaml.patch` ad
 
 The `Publish` workflow runs when a `.speakeasy/gen.lock` change reaches `main`. Speakeasy's action tags `v<cli.version>` at that commit, runs GoReleaser with `CLI_GPG_SECRET_KEY` and `CLI_GPG_PASSPHRASE`, publishes the GitHub release with the archives, the signed `checksums.txt`, and the `continuous.rb` formula, and reports the release to the Speakeasy dashboard.
 
-To release, merge a pull request that sets `cli.version` in `.speakeasy/gen.yaml` and regenerates. A `gen.lock` change on `main` without a new `cli.version` fails the `Publish` workflow because the tag already exists, and that failure publishes nothing. Never push `v*` tags by hand. The `Release tags` ruleset must let the GitHub Actions app create tags.
+To release, merge a pull request that sets `cli.version` in `.speakeasy/gen.yaml` and regenerates. A `gen.lock` change on `main` without a new `cli.version` fails the `Publish` workflow because the tag already exists, and that failure publishes nothing. Never push `v*` tags by hand. The `Release tags` ruleset restricts updates and deletions of `v*` tags but not creation, because GitHub does not allow the Actions app as a bypass actor.
+
+If a `Publish` run created the tag but its publish job failed, a plain rerun fails at tag creation because the tag exists, and GoReleaser refuses to replace existing assets. An admin deletes the tag and the partial release, then reruns the `Publish` workflow.
 
 The generated `Release` workflow (`release.yaml`) stays because `generateRelease: true` also produces the installers. It runs only on a manual tag push, so it stays inert.
 
