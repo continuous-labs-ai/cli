@@ -1,8 +1,9 @@
 # Vendored from speakeasy-api/sdk-generation-action .github/workflows/sdk-publish.yaml
 # at v15 (68f3bfef): its CLI job pins a goreleaser-action commit that does not
-# exist. Deliberate differences: the corrected pin, the action called directly
-# instead of checked out into _speakeasy, no Slack steps, and the reusable
-# inputs inlined. Return to the reusable workflow call once upstream fixes the pin.
+# exist. Deliberate differences: the corrected pin, the setup-go version comment
+# corrected to the tag its SHA carries, the action called directly instead of
+# checked out into _speakeasy, no Slack steps, and the reusable inputs inlined.
+# Return to the reusable workflow call once upstream fixes the pin.
 name: Publish
 permissions:
   checks: write
@@ -62,7 +63,7 @@ jobs:
         with:
           fetch-depth: 0
       - name: Setup Go
-        uses: actions/setup-go@44694675825211faa026b3c33043df3e48a5fa00 # v5.0.2
+        uses: actions/setup-go@44694675825211faa026b3c33043df3e48a5fa00 # v6.0.0
         with:
           go-version-file: ${{ needs.release.outputs.cli_directory }}/go.mod
           cache: true
