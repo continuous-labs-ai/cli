@@ -5,13 +5,15 @@ management:
   docVersion: v1
   speakeasyVersion: 1.796.4
   generationVersion: 2.935.1
-  releaseVersion: 0.1.3
-  configChecksum: d00340bbcaa3f61ca41f09d65e9359e5
+  releaseVersion: 0.1.4
+  configChecksum: 39d5837c9a9136ee91fb90e490e0950c
+  repoURL: https://github.com/continuous-labs-ai/cli.git
+  installationURL: https://github.com/continuous-labs-ai/cli
   published: true
 persistentEdits:
-  generation_id: 716b1b1d-fc68-46e0-925b-26b59fda7327
-  pristine_commit_hash: 21bcf906a055fe2a0601a5d772d7bfa3ba8d37ec
-  pristine_tree_hash: 8c7072212be5751c340e3ec386cad195afbf6c94
+  generation_id: 959591ab-2749-4799-83af-ccbf4d451e5c
+  pristine_commit_hash: 0afe960bf93773058fdd83a042ed291cdeca33aa
+  pristine_tree_hash: 88635e4f088f7ced7838bd681fde75c9ca0479ba
 features:
   cli:
     constsAndDefaults: 0.0.0
@@ -126,8 +128,8 @@ trackedFiles:
     pristine_git_object: 776e4cffd5308c71fe067a35e09b211f31a5d018
   internal/cli/version.go:
     id: 7b0665492f72
-    last_write_checksum: sha1:37419ef4094091f94ccb21cb5e0850f427e14105
-    pristine_git_object: 8836a1a59892621e755ce6a9824767088d94d755
+    last_write_checksum: sha1:bf99a93007d710aab5a4c6d167748f2db4253bd0
+    pristine_git_object: b3cbabb8f27a7d6b3f70c2867a523a8f1309fb6f
   internal/cli/whoami.go:
     id: c1787f2298ec
     last_write_checksum: sha1:9b8e8f6830e556f749eede72d72b4f18d9881c28
@@ -230,8 +232,8 @@ trackedFiles:
     pristine_git_object: 942a964e78a81ad9d9590cc67138a0c4c3569fc9
   internal/sdk/continuoussimulation.go:
     id: af3aeba7b54c
-    last_write_checksum: sha1:0d41c608cc40d0598e6466e1ddd2fa9665d2e5ff
-    pristine_git_object: 0167742230e779633daeeefce597aa1bba73c3b9
+    last_write_checksum: sha1:3c412fd7babe6dacab3aa85e03e1aca9c6708fa3
+    pristine_git_object: 17e9b4628bd1b700cc252c37b99c558b17ee43cb
   internal/sdk/models/components/buildsimulatorrequest.go:
     id: 510b20fc8bb2
     last_write_checksum: sha1:2dee8f674dbeff7b7f4f9a5225208a3cac5ea807
@@ -502,8 +504,8 @@ trackedFiles:
     pristine_git_object: 159a87ec97aba99e4edd132f69652e123434303e
   internal/usage/schema.go:
     id: 0f40f4612437
-    last_write_checksum: sha1:3cf0685a04483a3d8f25f287a640b18200449319
-    pristine_git_object: 5259969a818f9fc9d15dba095f192f3e70d55ac8
+    last_write_checksum: sha1:87b449b747434b6a42ffb21ecd7f7c83551f5ff9
+    pristine_git_object: f72ebb768b14100f0e68bc3f01b96ae41d27ac16
   scripts/install.ps1:
     id: fee0853709e9
     last_write_checksum: sha1:2da33f25afaa301dc2a22ac12654c585cef5c572
