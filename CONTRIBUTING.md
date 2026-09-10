@@ -40,7 +40,7 @@ The `Publish` workflow runs when a `.speakeasy/gen.lock` change reaches `main`. 
 
 To release, merge a pull request that sets `cli.version` in `.speakeasy/gen.yaml` and regenerates. A `gen.lock` change on `main` without a new `cli.version` fails the `Publish` workflow because the tag already exists, and that failure publishes nothing. Never push `v*` tags by hand. The `Release tags` ruleset restricts updates and deletions of `v*` tags but not creation, because GitHub does not allow the Actions app as a bypass actor.
 
-If a `Publish` run created the tag but its publish job failed, a plain rerun fails at tag creation because the tag exists, and GoReleaser refuses to replace existing assets. An admin deletes the tag and the partial release, then reruns the `Publish` workflow.
+If a `Publish` run created the tag but its publish job failed, an admin deletes the tag and the partial release. If `main` has not moved since, rerun the failed `Publish` run; otherwise run the `Publish` workflow by hand from `main` or cut the next version.
 
 The generated `Release` workflow (`release.yaml`) stays because `generateRelease: true` also produces the installers. It runs only on a manual tag push, so it stays inert.
 
