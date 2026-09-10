@@ -15,8 +15,8 @@ import (
 )
 
 var listSimulationsCmdMeta = []flagutil.FlagMeta{
-	{FlagName: "status", FieldPath: "Status", Kind: flagutil.FlagKindEnum, Optional: true, EnumValues: []string{"running", "paused", "stopped"}, Description: "Optional lifecycle status filter. (options: running, paused, stopped)"},
-	{FlagName: "simulator-id", FieldPath: "SimulatorID", Kind: flagutil.FlagKindString, Optional: true, Description: "Optional stable Simulator ID filter."},
+	{FlagName: "status", FieldPath: "Status", Kind: flagutil.FlagKindEnum, Optional: true, EnumValues: []string{"running", "paused", "stopped"}, Description: "Optional status filter. (options: running, paused, stopped)"},
+	{FlagName: "simulator-id", FieldPath: "SimulatorID", Kind: flagutil.FlagKindString, Optional: true, Description: "Optional Simulator ID filter."},
 	{FlagName: "limit", Shorthand: "l", FieldPath: "Limit", Kind: flagutil.FlagKindInt64, Optional: true, HasDefault: true, DefaultInt: 50, Description: "Page size. Values below 1 use 50. Values above 200 use 200."},
 	{FlagName: "cursor", Shorthand: "c", FieldPath: "Cursor", Kind: flagutil.FlagKindString, Optional: true, Description: "Opaque next_cursor value from a previous page."},
 }

@@ -9,7 +9,7 @@ import (
 	"github.com/continuous-labs-ai/cli/internal/sdk/sdkinternal/utils"
 )
 
-// ListSimulationsStatus - Optional lifecycle status filter.
+// ListSimulationsStatus - Optional status filter.
 type ListSimulationsStatus string
 
 const (
@@ -40,9 +40,9 @@ func (e *ListSimulationsStatus) UnmarshalJSON(data []byte) error {
 }
 
 type ListSimulationsRequest struct {
-	// Optional lifecycle status filter.
+	// Optional status filter.
 	Status *ListSimulationsStatus `queryParam:"style=form,explode=false,name=status"`
-	// Optional stable Simulator ID filter.
+	// Optional Simulator ID filter.
 	SimulatorID *string `queryParam:"style=form,explode=false,name=simulator_id"`
 	// Page size. Values below 1 use 50. Values above 200 use 200.
 	Limit *int64 `default:"50" queryParam:"style=form,explode=false,name=limit"`

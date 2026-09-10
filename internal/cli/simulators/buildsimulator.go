@@ -16,7 +16,7 @@ import (
 
 var buildSimulatorCmdMeta = []flagutil.FlagMeta{
 	{FlagName: "request", Shorthand: "r", FieldPath: "Request", Kind: flagutil.FlagKindJSON, Required: true, Annotations: `multipartForm:"name=request,json"`, Description: "Request as JSON [required]"},
-	{FlagName: "spec", Shorthand: "s", FieldPath: "Spec", Kind: flagutil.FlagKindFile, Optional: true, Description: "OpenAPI or WSDL file. A spec build sends it. At most 67,108,864 UTF-8 bytes."},
+	{FlagName: "spec", Shorthand: "s", FieldPath: "Spec", Kind: flagutil.FlagKindFile, Optional: true, Description: "OpenAPI or WSDL document, UTF-8 encoded, at most 64 MiB. Required unless the request is an incremental build (parent_id and instructions, no spec)."},
 }
 
 // initBuildSimulatorCmd initializes the build-simulator command.
@@ -24,7 +24,7 @@ func initBuildSimulatorCmd(parent *cobra.Command) error {
 	var cmd = &cobra.Command{
 		Use:     "build",
 		Short:   "Build Simulator",
-		Long:    "Creates a Simulator from an OpenAPI or WSDL source. The build runs asynchronously. Send multipart/form-data with one JSON request part, and one spec file part for a spec build.",
+		Long:    "Starts an asynchronous Simulator build and returns the Simulator with status building. Send multipart/form-data with a JSON part named request. To build from a document, add a file part named spec with the OpenAPI or WSDL document. For an incremental build, omit spec and set parent_id and instructions.",
 		Example: "  continuous simulators build --request '{\"request\":{\"builder\":\"claude\",\"filter\":[],\"instructions\":\"Return stable example data for every operation.\",\"name\":\"billing-api\",\"spec_kind\":\"openapi\"} }'",
 		RunE:    runBuildSimulatorCmd,
 	}

@@ -15,7 +15,7 @@ import (
 )
 
 var startWorldCmdMeta = []flagutil.FlagMeta{
-	{FlagName: "id", Shorthand: "i", FieldPath: "ID", Kind: flagutil.FlagKindString, Required: true, Description: "Stable World ID. [required]"},
+	{FlagName: "id", Shorthand: "i", FieldPath: "ID", Kind: flagutil.FlagKindString, Required: true, Description: "World ID. [required]"},
 }
 
 // initStartWorldCmd initializes the start-world command.
@@ -23,7 +23,7 @@ func initStartWorldCmd(parent *cobra.Command) error {
 	var cmd = &cobra.Command{
 		Use:     "start",
 		Short:   "Start World",
-		Long:    "Creates member Simulations on first start. Later starts restore stopped Simulations from saved state.",
+		Long:    "Starts every Simulation in the World. The first start creates the Simulations; later starts restore them from saved state. The World must be ready or stopped, and the workspace must have room for all members under its active-Simulation limit. A running World is returned unchanged.",
 		Example: "  continuous worlds start --id <id>",
 		RunE:    runStartWorldCmd,
 	}

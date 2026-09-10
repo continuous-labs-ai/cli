@@ -28,7 +28,7 @@ func (s *Spec) GetContent() []byte {
 
 type BuildSimulatorRequest struct {
 	Request components.BuildSimulatorRequest `multipartForm:"name=request,json"`
-	// OpenAPI or WSDL file. A spec build sends it. At most 67,108,864 UTF-8 bytes.
+	// OpenAPI or WSDL document, UTF-8 encoded, at most 64 MiB. Required unless the request is an incremental build (parent_id and instructions, no spec).
 	Spec *Spec `multipartForm:"file,name=spec"`
 }
 

@@ -8,7 +8,7 @@ import (
 	"github.com/continuous-labs-ai/cli/internal/sdk/sdkinternal/utils"
 )
 
-// Builder provider. The default is claude.
+// Builder - Model provider that builds the Simulator. Defaults to claude.
 type Builder string
 
 const (
@@ -63,15 +63,15 @@ func (e *SpecKind) UnmarshalJSON(data []byte) error {
 }
 
 type BuildSimulatorRequest struct {
-	// Builder provider. The default is claude.
+	// Model provider that builds the Simulator. Defaults to claude.
 	Builder *Builder `default:"claude" json:"builder"`
-	// Optional operation filter regular expressions. Supply at most 64 expressions, with 1,024 characters in each expression. An empty list keeps all operations.
+	// Regular expressions (RE2 syntax) that select the operations to implement. Each is matched against the OpenAPI operationId or the WSDL operation name; an operation is kept when any expression matches, and an OpenAPI operation without an operationId is dropped. At most 64 expressions of at most 1,024 characters each. Omit or send an empty list to keep every operation. Not allowed for an incremental build.
 	Filter []string `json:"filter,omitzero"`
-	// Build guidance. At most 16,384 characters and 65,536 UTF-8 bytes. U+0000 is not permitted.
+	// Instructions for the builder. Required for an incremental build. At most 16,384 characters and 65,536 UTF-8 bytes; must not be blank or contain U+0000.
 	Instructions *string `json:"instructions,omitzero"`
 	// Optional Simulator name. Names cannot start with smr_. Omission generates a name.
 	Name *string `json:"name,omitzero"`
-	// Stable parent Simulator ID for an incremental build.
+	// Parent Simulator ID. With instructions and no spec this starts an incremental build: the parent must be ready, and the request takes no filter or spec_kind.
 	ParentID *string `json:"parent_id,omitzero"`
 	// Source specification format. Omission detects the format.
 	SpecKind *SpecKind `json:"spec_kind,omitzero"`

@@ -7,7 +7,7 @@ import (
 )
 
 type DeleteSimulatorRequest struct {
-	// Stable Simulator ID.
+	// Simulator ID.
 	ID string `pathParam:"style=simple,explode=false,name=id"`
 }
 

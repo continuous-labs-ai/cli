@@ -3,9 +3,9 @@
 package components
 
 type Step struct {
-	// Request label. It usually contains the HTTP method and path.
+	// HTTP method and path of the request that produced this step, without the query string, for example POST /v1/widgets.
 	Label string `json:"label"`
-	// Completed request number. Use this value as at_step when you fork the Simulation.
+	// Step number. Use it as at_step when you fork.
 	Step int64 `json:"step"`
 }
 

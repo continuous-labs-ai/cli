@@ -7,7 +7,7 @@ import (
 	"time"
 )
 
-// Source - Simulator source.
+// Source - workspace for a Simulator your workspace built; catalog for a read-only Simulator that Continuous publishes.
 type Source string
 
 const (
@@ -30,7 +30,7 @@ func (e *Source) IsExact() bool {
 	return false
 }
 
-// SimulatorStatus - Current build status.
+// SimulatorStatus - building while the build runs; ready when Simulations, Worlds, and incremental builds can use it; failed when the build failed; canceled when a cancel request took effect.
 type SimulatorStatus string
 
 const (
@@ -59,15 +59,15 @@ type Simulator struct {
 	// Simulator creation time.
 	CreatedAt time.Time      `json:"created_at"`
 	Error     *ResourceError `json:"error"`
-	// Stable Simulator ID.
+	// Simulator ID.
 	ID string `json:"id"`
 	// Simulator name. Names cannot start with smr_.
 	Name string `json:"name"`
-	// Stable parent Simulator ID, or null.
+	// Parent Simulator ID, or null.
 	ParentID *string `json:"parent_id"`
-	// Simulator source.
+	// workspace for a Simulator your workspace built; catalog for a read-only Simulator that Continuous publishes.
 	Source Source `json:"source"`
-	// Current build status.
+	// building while the build runs; ready when Simulations, Worlds, and incremental builds can use it; failed when the build failed; canceled when a cancel request took effect.
 	Status SimulatorStatus `json:"status"`
 }
 

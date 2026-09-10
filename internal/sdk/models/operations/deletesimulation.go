@@ -7,7 +7,7 @@ import (
 )
 
 type DeleteSimulationRequest struct {
-	// Stable resource ID.
+	// Simulation ID.
 	ID string `pathParam:"style=simple,explode=false,name=id"`
 }
 

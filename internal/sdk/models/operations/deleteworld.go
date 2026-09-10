@@ -7,7 +7,7 @@ import (
 )
 
 type DeleteWorldRequest struct {
-	// Stable World ID.
+	// World ID.
 	ID string `pathParam:"style=simple,explode=false,name=id"`
 }
 

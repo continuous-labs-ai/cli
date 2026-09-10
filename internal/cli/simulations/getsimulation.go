@@ -15,7 +15,7 @@ import (
 )
 
 var getSimulationCmdMeta = []flagutil.FlagMeta{
-	{FlagName: "id", Shorthand: "i", FieldPath: "ID", Kind: flagutil.FlagKindString, Required: true, Description: "Stable Simulation ID. [required]"},
+	{FlagName: "id", Shorthand: "i", FieldPath: "ID", Kind: flagutil.FlagKindString, Required: true, Description: "Simulation ID. [required]"},
 }
 
 // initGetSimulationCmd initializes the get-simulation command.
@@ -23,7 +23,7 @@ func initGetSimulationCmd(parent *cobra.Command) error {
 	var cmd = &cobra.Command{
 		Use:     "get",
 		Short:   "Get Simulation",
-		Long:    "Returns a Simulation and its current runtime status. The response does not include data-plane tokens.",
+		Long:    "Returns a Simulation and its current status. The response does not include tokens.",
 		Example: "  continuous simulations get --id <id>",
 		RunE:    runGetSimulationCmd,
 	}

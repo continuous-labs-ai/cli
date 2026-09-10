@@ -5,7 +5,7 @@ package components
 type CreateSimulationRequest struct {
 	// Optional Simulation name. Omission generates a name.
 	Name *string `json:"name,omitzero"`
-	// Stable ID of the ready Simulator.
+	// ID of the ready Simulator.
 	SimulatorID string `json:"simulator_id"`
 }
 

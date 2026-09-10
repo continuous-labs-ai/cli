@@ -15,7 +15,7 @@ import (
 )
 
 var listSimulationStepsCmdMeta = []flagutil.FlagMeta{
-	{FlagName: "id", Shorthand: "i", FieldPath: "ID", Kind: flagutil.FlagKindString, Required: true, Description: "Stable Simulation ID. [required]"},
+	{FlagName: "id", Shorthand: "i", FieldPath: "ID", Kind: flagutil.FlagKindString, Required: true, Description: "Simulation ID. [required]"},
 	{FlagName: "cursor", Shorthand: "c", FieldPath: "Cursor", Kind: flagutil.FlagKindString, Optional: true, Description: "Opaque next_cursor value from a previous page."},
 	{FlagName: "limit", Shorthand: "l", FieldPath: "Limit", Kind: flagutil.FlagKindInt64, Optional: true, HasDefault: true, DefaultInt: 50, Description: "Page size. Values below 1 use 50. Values above 200 use 200."},
 }
@@ -25,7 +25,7 @@ func initListSimulationStepsCmd(parent *cobra.Command) error {
 	var cmd = &cobra.Command{
 		Use:     "list-simulation-steps",
 		Short:   "List Simulation Steps",
-		Long:    "Returns recorded steps for a running or paused Simulation. Use any step to create a deterministic fork.",
+		Long:    "Lists the Simulation's steps in order. Each request that changed state is one step; a request that only reads registers none. Pass a step number as at_step when you fork to start the child from the state after that step. A stopped Simulation returns 409 simulation_stopped; start it first.",
 		Example: "  continuous simulations list-simulation-steps --id <id>",
 		RunE:    runListSimulationStepsCmd,
 		Aliases: []string{"lss"},

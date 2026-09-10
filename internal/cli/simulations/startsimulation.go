@@ -15,7 +15,7 @@ import (
 )
 
 var startSimulationCmdMeta = []flagutil.FlagMeta{
-	{FlagName: "id", Shorthand: "i", FieldPath: "ID", Kind: flagutil.FlagKindString, Required: true, Description: "Stable Simulation ID. [required]"},
+	{FlagName: "id", Shorthand: "i", FieldPath: "ID", Kind: flagutil.FlagKindString, Required: true, Description: "Simulation ID. [required]"},
 }
 
 // initStartSimulationCmd initializes the start-simulation command.
@@ -23,7 +23,7 @@ func initStartSimulationCmd(parent *cobra.Command) error {
 	var cmd = &cobra.Command{
 		Use:     "start",
 		Short:   "Start Simulation",
-		Long:    "Starts a stopped Simulation from its saved runtime state. Its endpoint becomes available after the runtime starts.",
+		Long:    "Starts a stopped Simulation from its saved state. The endpoint serves requests once the response returns. A Simulation that is already running or paused is returned unchanged.",
 		Example: "  continuous simulations start --id <id>",
 		RunE:    runStartSimulationCmd,
 	}

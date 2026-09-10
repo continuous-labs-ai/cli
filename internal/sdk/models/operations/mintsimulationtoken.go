@@ -8,7 +8,7 @@ import (
 )
 
 type MintSimulationTokenRequest struct {
-	// Stable Simulation ID.
+	// Simulation ID.
 	ID   string                                `pathParam:"style=simple,explode=false,name=id"`
 	Body components.MintSimulationTokenRequest `request:"mediaType=application/json"`
 }

@@ -1,5 +1,5 @@
 diff --git a/.goreleaser.yaml b/.goreleaser.yaml
-index 3743f02..0850b71 100644
+index 2b603a8..e226df6 100644
 --- a/.goreleaser.yaml
 +++ b/.goreleaser.yaml
 @@ -1,5 +1,6 @@
@@ -21,7 +21,7 @@ index 3743f02..0850b71 100644
        branch: main
 -    token: "{{ .Env.HOMEBREW_TAP_GITHUB_TOKEN }}"
      homepage: "https://github.com/continuous-labs-ai/cli"
-     description: "Continuous Simulation API: The Continuous Simulation API builds reusable Simulators and runs isolated Simulations and Worlds. This document describes the stable v1 public contract."
+     description: "Continuous Simulation API: Build Simulators from OpenAPI or WSDL documents, create Simulations from them, and build Worlds that run Simulations together. Authenticate every request with an API key sent as a Bearer token."
      install: |
 @@ -59,6 +61,8 @@ release:
    draft: false

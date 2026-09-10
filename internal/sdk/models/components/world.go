@@ -7,7 +7,7 @@ import (
 	"time"
 )
 
-// WorldStatus - Current World lifecycle status.
+// WorldStatus - building while the build runs; ready when the World can be started; running or stopped once its Simulations exist; failed when the first start could not create its Simulations; canceled when the build was canceled.
 type WorldStatus string
 
 const (
@@ -35,18 +35,18 @@ func (e *WorldStatus) IsExact() bool {
 }
 
 type World struct {
-	// Time when the World build started.
+	// World creation time.
 	CreatedAt time.Time      `json:"created_at"`
 	Error     *ResourceError `json:"error"`
-	// Stable World ID.
+	// World ID.
 	ID string `json:"id"`
 	// Build guidance stored with the World.
 	Instructions string `json:"instructions"`
-	// Created member Simulations. This list is empty before first start.
+	// Simulations in the World. Empty unless the World is running or stopped.
 	Simulations []WorldSimulation `json:"simulations"`
-	// Stable Simulator IDs in member order.
+	// Simulator IDs in member order.
 	Simulators []string `json:"simulators"`
-	// Current World lifecycle status.
+	// building while the build runs; ready when the World can be started; running or stopped once its Simulations exist; failed when the first start could not create its Simulations; canceled when the build was canceled.
 	Status WorldStatus `json:"status"`
 }
 

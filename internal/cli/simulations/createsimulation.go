@@ -17,7 +17,7 @@ import (
 
 var createSimulationCmdMeta = []flagutil.FlagMeta{
 	{FlagName: "name", Shorthand: "n", FieldPath: "Name", Kind: flagutil.FlagKindString, Optional: true, Description: "Optional Simulation name. Omission generates a name."},
-	{FlagName: "simulator-id", Shorthand: "s", FieldPath: "SimulatorID", Kind: flagutil.FlagKindString, Required: true, Description: "Stable ID of the ready Simulator. [required]"},
+	{FlagName: "simulator-id", Shorthand: "s", FieldPath: "SimulatorID", Kind: flagutil.FlagKindString, Required: true, Description: "ID of the ready Simulator. [required]"},
 }
 
 // initCreateSimulationCmd initializes the create-simulation command.
@@ -25,7 +25,7 @@ func initCreateSimulationCmd(parent *cobra.Command) error {
 	var cmd = &cobra.Command{
 		Use:     "create",
 		Short:   "Create Simulation",
-		Long:    "Creates an isolated runtime from a ready Simulator. The response includes its endpoint and a 1-hour token.",
+		Long:    "Creates a Simulation from a ready Simulator and starts it. The response includes the Simulation endpoint and a token that expires in 1 hour. List and get do not return the token.",
 		Example: "  continuous simulations create --simulator-id smr_01J8Z5X4K7M2N9P0Q1R2S3T4V5",
 		RunE:    runCreateSimulationCmd,
 	}

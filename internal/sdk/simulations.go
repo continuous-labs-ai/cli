@@ -16,7 +16,7 @@ import (
 	"net/url"
 )
 
-// Simulations - Create and control isolated runtime instances of ready Simulators.
+// Create Simulations from ready Simulators, then fork, stop, start, and delete them.
 type Simulations struct {
 	rootSDK          *ContinuousSimulation
 	sdkConfiguration config.SDKConfiguration
@@ -252,7 +252,7 @@ func (s *Simulations) ListSimulations(ctx context.Context, request *operations.L
 }
 
 // CreateSimulation - Create Simulation
-// Creates an isolated runtime from a ready Simulator. The response includes its endpoint and a 1-hour token.
+// Creates a Simulation from a ready Simulator and starts it. The response includes the Simulation endpoint and a token that expires in 1 hour. List and get do not return the token.
 func (s *Simulations) CreateSimulation(ctx context.Context, request components.CreateSimulationRequest, opts ...operations.Option) (*operations.CreateSimulationResponse, error) {
 	o := operations.Options{}
 	supportedOptions := []string{
@@ -676,7 +676,7 @@ func (s *Simulations) DeleteSimulation(ctx context.Context, request operations.D
 }
 
 // GetSimulation - Get Simulation
-// Returns a Simulation and its current runtime status. The response does not include data-plane tokens.
+// Returns a Simulation and its current status. The response does not include tokens.
 func (s *Simulations) GetSimulation(ctx context.Context, request operations.GetSimulationRequest, opts ...operations.Option) (*operations.GetSimulationResponse, error) {
 	o := operations.Options{}
 	supportedOptions := []string{
@@ -890,7 +890,7 @@ func (s *Simulations) GetSimulation(ctx context.Context, request operations.GetS
 }
 
 // ForkSimulation - Fork Simulation
-// Creates a Simulation with a 1-hour token. The source Simulation continues to run.
+// Creates a new Simulation from the source Simulation's current state, or from an earlier recorded step when you set at_step. The source must be running or paused; a stopped source returns 409 simulation_stopped. Forking does not change the source. The response includes the new endpoint and a token that expires in 1 hour.
 func (s *Simulations) ForkSimulation(ctx context.Context, request operations.ForkSimulationRequest, opts ...operations.Option) (*operations.ForkSimulationResponse, error) {
 	o := operations.Options{}
 	supportedOptions := []string{
@@ -1125,7 +1125,7 @@ func (s *Simulations) ForkSimulation(ctx context.Context, request operations.For
 }
 
 // StartSimulation - Start Simulation
-// Starts a stopped Simulation from its saved runtime state. Its endpoint becomes available after the runtime starts.
+// Starts a stopped Simulation from its saved state. The endpoint serves requests once the response returns. A Simulation that is already running or paused is returned unchanged.
 func (s *Simulations) StartSimulation(ctx context.Context, request operations.StartSimulationRequest, opts ...operations.Option) (*operations.StartSimulationResponse, error) {
 	o := operations.Options{}
 	supportedOptions := []string{
@@ -1345,7 +1345,7 @@ func (s *Simulations) StartSimulation(ctx context.Context, request operations.St
 }
 
 // ListSimulationSteps - List Simulation Steps
-// Returns recorded steps for a running or paused Simulation. Use any step to create a deterministic fork.
+// Lists the Simulation's steps in order. Each request that changed state is one step; a request that only reads registers none. Pass a step number as at_step when you fork to start the child from the state after that step. A stopped Simulation returns 409 simulation_stopped; start it first.
 func (s *Simulations) ListSimulationSteps(ctx context.Context, request operations.ListSimulationStepsRequest, opts ...operations.Option) (*operations.ListSimulationStepsResponse, error) {
 	o := operations.Options{}
 	supportedOptions := []string{
@@ -1567,7 +1567,7 @@ func (s *Simulations) ListSimulationSteps(ctx context.Context, request operation
 }
 
 // StopSimulation - Stop Simulation
-// Stops a Simulation and saves its runtime state. You can start it later from the saved state.
+// Stops a Simulation and saves its state. Requests to its endpoint return 409 simulation_stopped until you start it again. A stopped Simulation is returned unchanged.
 func (s *Simulations) StopSimulation(ctx context.Context, request operations.StopSimulationRequest, opts ...operations.Option) (*operations.StopSimulationResponse, error) {
 	o := operations.Options{}
 	supportedOptions := []string{
@@ -1785,7 +1785,7 @@ func (s *Simulations) StopSimulation(ctx context.Context, request operations.Sto
 }
 
 // MintSimulationToken - Mint Simulation Token
-// Mints an expiring data-plane token. Send it in X-Continuous-Simulation-Token. Other unexpired tokens remain valid.
+// Creates another token for requests to the Simulation endpoint. Send it in the X-Continuous-Simulation-Token header. Earlier tokens stay valid until they expire.
 func (s *Simulations) MintSimulationToken(ctx context.Context, request operations.MintSimulationTokenRequest, opts ...operations.Option) (*operations.MintSimulationTokenResponse, error) {
 	o := operations.Options{}
 	supportedOptions := []string{

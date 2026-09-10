@@ -10,7 +10,7 @@ import (
 type SimulationToken struct {
 	// Token expiration time.
 	ExpiresAt time.Time `json:"expires_at"`
-	// New data-plane token.
+	// New token for requests to the Simulation endpoint. Send it in the X-Continuous-Simulation-Token header.
 	Token string `json:"token"`
 }
 

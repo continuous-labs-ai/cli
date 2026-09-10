@@ -16,7 +16,7 @@ import (
 	"net/url"
 )
 
-// Simulators - Build, inspect, and delete reusable Simulator artifacts.
+// Build Simulators from OpenAPI or WSDL documents, check or cancel a build, and delete Simulators.
 type Simulators struct {
 	rootSDK          *ContinuousSimulation
 	sdkConfiguration config.SDKConfiguration
@@ -252,7 +252,7 @@ func (s *Simulators) ListSimulators(ctx context.Context, request *operations.Lis
 }
 
 // BuildSimulator - Build Simulator
-// Creates a Simulator from an OpenAPI or WSDL source. The build runs asynchronously. Send multipart/form-data with one JSON request part, and one spec file part for a spec build.
+// Starts an asynchronous Simulator build and returns the Simulator with status building. Send multipart/form-data with a JSON part named request. To build from a document, add a file part named spec with the OpenAPI or WSDL document. For an incremental build, omit spec and set parent_id and instructions.
 func (s *Simulators) BuildSimulator(ctx context.Context, request operations.BuildSimulatorRequest, opts ...operations.Option) (*operations.BuildSimulatorResponse, error) {
 	o := operations.Options{}
 	supportedOptions := []string{

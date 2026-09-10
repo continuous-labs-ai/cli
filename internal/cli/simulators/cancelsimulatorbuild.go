@@ -15,7 +15,7 @@ import (
 )
 
 var cancelSimulatorBuildCmdMeta = []flagutil.FlagMeta{
-	{FlagName: "id", Shorthand: "i", FieldPath: "ID", Kind: flagutil.FlagKindString, Required: true, Description: "Stable Simulator ID. [required]"},
+	{FlagName: "id", Shorthand: "i", FieldPath: "ID", Kind: flagutil.FlagKindString, Required: true, Description: "Simulator ID. [required]"},
 }
 
 // initCancelSimulatorBuildCmd initializes the cancel-simulator-build command.
