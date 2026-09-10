@@ -1,0 +1,44 @@
+name: Publish Homebrew
+
+on:
+  workflow_run:
+    workflows: [Publish]
+    types: [completed]
+  workflow_dispatch:
+    inputs:
+      tag:
+        description: Latest public stable release tag
+        required: true
+        type: string
+
+permissions:
+  contents: read
+
+concurrency:
+  group: homebrew-tap
+  cancel-in-progress: false
+
+jobs:
+  publish:
+    if: github.repository == 'continuous-labs-ai/cli' && (github.event_name == 'workflow_dispatch' || github.event.workflow_run.conclusion == 'success')
+    runs-on: ubuntu-latest
+    env:
+      FORMULA: ${{ runner.temp }}/homebrew/continuous.rb
+      GH_TOKEN: ${{ github.token }}
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+        with:
+          ref: main
+          persist-credentials: false
+      - name: Resolve the release tag
+        env:
+          TAG: ${{ inputs.tag }}
+        run: |
+          tag=${TAG:-$(gh api "repos/$GITHUB_REPOSITORY/releases/latest" --jq .tag_name)}
+          echo "RELEASE_TAG=$tag" >> "$GITHUB_ENV"
+      - name: Verify the published formula and archives
+        run: python3 scripts/publish_homebrew.py prepare --tag "$RELEASE_TAG" --formula "$FORMULA"
+      - name: Copy the exact formula into the tap
+        run: python3 scripts/publish_homebrew.py publish --tag "$RELEASE_TAG" --formula "$FORMULA"
+        env:
+          HOMEBREW_TAP_GITHUB_TOKEN: ${{ secrets.HOMEBREW_TAP_GITHUB_TOKEN }}

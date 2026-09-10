@@ -29,6 +29,8 @@ jobs:
       mode: pr
       set_version: ${{ github.event.inputs.set_version }}
     secrets:
+      cli_gpg_passphrase: ${{ secrets.CLI_GPG_PASSPHRASE }}
+      cli_gpg_secret_key: ${{ secrets.CLI_GPG_SECRET_KEY }}
       github_access_token: ${{ secrets.GITHUB_TOKEN }}
-      speakeasy_api_key: ${{ secrets.SPEAKEASY_API_KEY }}
       pr_creation_pat: ${{ secrets.SPEAKEASY_GITHUB_TOKEN }}
+      speakeasy_api_key: ${{ secrets.SPEAKEASY_API_KEY }}

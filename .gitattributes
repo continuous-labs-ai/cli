@@ -12,6 +12,7 @@
 /.github/** linguist-generated=false
 /.github/workflows/release.yaml linguist-generated=true
 /scripts/** linguist-generated=true
+/scripts/publish_homebrew.py linguist-generated=false
 /.gitattributes linguist-generated=false
 /.genignore linguist-generated=false
 /.goreleaser.yaml linguist-generated=true

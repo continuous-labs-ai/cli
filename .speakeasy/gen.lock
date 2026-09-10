@@ -7,10 +7,11 @@ management:
   generationVersion: 2.935.1
   releaseVersion: 0.1.2
   configChecksum: 730cfa37afd0d70cc8e40db604971e14
+  published: true
 persistentEdits:
-  generation_id: 96d899c1-d2af-42f4-aabe-62ce1bb74cb9
-  pristine_commit_hash: 72dca1880819550448d9afa0901a56de73e48391
-  pristine_tree_hash: 87050b2899bf5fed3708a61100fe8fca66a76ad0
+  generation_id: f4aba33a-5a9b-43a1-9a24-372000001980
+  pristine_commit_hash: 5bdf93b20feb3f689a130e202e61b28fc0c21f48
+  pristine_tree_hash: 50c0ff023036cddc59571fb3c55d1e0a145bb713
 features:
   cli:
     constsAndDefaults: 0.0.0
@@ -25,8 +26,8 @@ trackedFiles:
     pristine_git_object: a0f07f6424d34f5dc71b7e478fe7536dc45c88a4
   .goreleaser.yaml:
     id: 3c333d227063
-    last_write_checksum: sha1:121970c14b11cd1d8e71d04f817df223b3ae7fa6
-    pristine_git_object: 282baeec6a11fded493e5a2a434283cd4c56ebe2
+    last_write_checksum: sha1:ff32c55a1aec2ac9683a3fa93fd5439fb082204b
+    pristine_git_object: 0850b71bb882481a3bb25fdaf8ff6d333ddd9f82
   USAGE.md:
     id: 3aed33ce6e6f
     last_write_checksum: sha1:44aa06e6ee0bdc4c0f94f7c6759199ea1c0020ab

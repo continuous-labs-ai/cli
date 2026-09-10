@@ -44,11 +44,11 @@ archives:
 brews:
   - name: continuous
     directory: Formula
+    skip_upload: true
     repository:
       owner: continuous-labs-ai
       name: homebrew-tap
       branch: main
-      token: "{{ .Env.HOMEBREW_TAP_GITHUB_TOKEN }}"
     homepage: "https://github.com/continuous-labs-ai/cli"
     description: "Continuous Simulation API: The Continuous Simulation API builds reusable Simulators and runs isolated Simulations and Worlds. This document describes the stable v1 public contract."
     install: |
@@ -61,6 +61,8 @@ release:
   draft: false
   prerelease: auto
   mode: append
+  extra_files:
+    - glob: dist/homebrew/Formula/continuous.rb
 
 checksum:
   name_template: "checksums.txt"
