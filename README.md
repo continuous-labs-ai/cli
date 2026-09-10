@@ -8,9 +8,9 @@ Build checks cover generation, compilation, and packaging. This repository does 
 
 ## Install
 
-Releases are published on the [release page](https://github.com/continuous-labs-ai/cli/releases) when a version tag is pushed. Downloads do not need GitHub credentials.
+Releases are published on the [release page](https://github.com/continuous-labs-ai/cli/releases) for each new CLI version. Downloads do not need GitHub credentials.
 
-Each release ships archives for Linux, macOS, and Windows on amd64 and arm64, plus `checksums.txt`. Releases published by the generated workflow also ship `checksums.txt.sig`, a detached signature made with the project's GPG key. Releases `v0.1.0` and `v0.1.1` predate signing.
+Each release ships archives for Linux, macOS, and Windows on amd64 and arm64, plus `checksums.txt`. Releases after `v0.1.1` also ship `checksums.txt.sig`, a detached signature made with the project's GPG key.
 
 ### Homebrew
 
@@ -19,7 +19,7 @@ brew install continuous-labs-ai/tap/continuous
 continuous version
 ```
 
-Run `brew upgrade continuous-labs-ai/tap/continuous` to install a later version. GoReleaser pushes the formula to the tap on each release, and Homebrew checks the archive hash recorded in the formula.
+Run `brew upgrade continuous-labs-ai/tap/continuous` to install a later version. The Publish Homebrew workflow copies the formula to the tap after each release, and Homebrew checks the archive hash recorded in the formula.
 
 ### Linux and macOS
 
@@ -33,11 +33,11 @@ gpg --show-keys --with-fingerprint release-signing-key.asc
 gpg --import release-signing-key.asc
 ```
 
-Then install a signed release. Replace `v0.1.2` with the version you want.
+Then install a signed release. Replace `v0.1.3` with the version you want.
 
 ```bash
 set -euo pipefail
-version=v0.1.2
+version=v0.1.3
 case "$(uname -s)" in
   Linux) platform=Linux ;;
   Darwin) platform=Darwin ;;
@@ -79,7 +79,7 @@ Select `x86_64` for amd64 or `arm64` for ARM64. Run these commands in PowerShell
 
 ```powershell
 $ErrorActionPreference = "Stop"
-$version = "v0.1.2"
+$version = "v0.1.3"
 $architecture = "x86_64"
 $archive = "continuous_Windows_$architecture.zip"
 $releaseUrl = "https://github.com/continuous-labs-ai/cli/releases/download/$version"

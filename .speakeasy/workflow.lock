@@ -15,5 +15,9 @@ workflow:
         continuous-simulation-cli:
             target: cli
             source: continuous-simulation
+            publish:
+                cli:
+                    gpgPrivateKey: $cli_gpg_secret_key
+                    gpgPassPhrase: $cli_gpg_passphrase
             testing:
                 enabled: false
