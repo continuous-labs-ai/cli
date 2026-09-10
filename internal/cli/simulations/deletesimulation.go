@@ -15,7 +15,7 @@ import (
 )
 
 var deleteSimulationCmdMeta = []flagutil.FlagMeta{
-	{FlagName: "id", Shorthand: "i", FieldPath: "ID", Kind: flagutil.FlagKindString, Required: true, Description: "Stable resource ID. [required]"},
+	{FlagName: "id", Shorthand: "i", FieldPath: "ID", Kind: flagutil.FlagKindString, Required: true, Description: "Simulation ID. [required]"},
 }
 
 // initDeleteSimulationCmd initializes the delete-simulation command.

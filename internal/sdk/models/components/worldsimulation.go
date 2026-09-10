@@ -3,9 +3,9 @@
 package components
 
 type WorldSimulation struct {
-	// Stable ID of the created Simulation.
+	// ID of the created Simulation.
 	ID string `json:"id"`
-	// Stable ID of the Simulator that this Simulation runs.
+	// ID of the Simulator that this Simulation runs.
 	SimulatorID string `json:"simulator_id"`
 }
 

@@ -7,7 +7,7 @@ import (
 	"time"
 )
 
-// SimulationStatus - Current Simulation status.
+// SimulationStatus - Current status. running serves requests. paused means the Simulation was idle and the platform paused it; the next request wakes it. stopped means its state is saved and requests return 409 until you start it.
 type SimulationStatus string
 
 const (
@@ -34,17 +34,17 @@ func (e *SimulationStatus) IsExact() bool {
 type Simulation struct {
 	// Simulation creation time.
 	CreatedAt time.Time `json:"created_at"`
-	// Data-plane endpoint for the Simulation.
+	// Base URL for requests to the Simulation.
 	Endpoint string `json:"endpoint"`
-	// Stable Simulation ID.
+	// Simulation ID.
 	ID string `json:"id"`
 	// Simulation name.
 	Name string `json:"name"`
-	// Stable source Simulation ID for a fork, or null.
+	// Source Simulation ID for a fork, or null.
 	ParentID *string `json:"parent_id"`
-	// Stable ID of the Simulator.
+	// ID of the Simulator.
 	SimulatorID string `json:"simulator_id"`
-	// Current Simulation status.
+	// Current status. running serves requests. paused means the Simulation was idle and the platform paused it; the next request wakes it. stopped means its state is saved and requests return 409 until you start it.
 	Status SimulationStatus `json:"status"`
 }
 

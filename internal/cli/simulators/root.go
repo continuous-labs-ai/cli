@@ -10,8 +10,8 @@ import (
 func InitSimulatorsRoot(parent *cobra.Command) error {
 	var SimulatorsCmd = &cobra.Command{
 		Use:   "simulators",
-		Short: "Build, inspect, and delete reusable Simulator artifacts",
-		Long:  "Build, inspect, and delete reusable Simulator artifacts.",
+		Short: "Build Simulators from OpenAPI or WSDL documents, check or cancel a build, and delete Simulators",
+		Long:  "Build Simulators from OpenAPI or WSDL documents, check or cancel a build, and delete Simulators.",
 		RunE: func(cmd *cobra.Command, args []string) error {
 			if usage.UsageRequested(cmd) {
 				return usage.EmitSchema(cmd, cmd.OutOrStdout())

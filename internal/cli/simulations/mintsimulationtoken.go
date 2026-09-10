@@ -15,7 +15,7 @@ import (
 )
 
 var mintSimulationTokenCmdMeta = []flagutil.FlagMeta{
-	{FlagName: "id", Shorthand: "i", FieldPath: "ID", Kind: flagutil.FlagKindString, Required: true, Description: "Stable Simulation ID. [required]"},
+	{FlagName: "id", Shorthand: "i", FieldPath: "ID", Kind: flagutil.FlagKindString, Required: true, Description: "Simulation ID. [required]"},
 	{FlagName: "ttl-seconds", Shorthand: "t", FieldPath: "Body.TTLSeconds", Kind: flagutil.FlagKindInt64, Required: true, Description: "Token lifetime in seconds, from 60 through 86,400. [required]"},
 }
 
@@ -24,7 +24,7 @@ func initMintSimulationTokenCmd(parent *cobra.Command) error {
 	var cmd = &cobra.Command{
 		Use:     "mint-simulation-token",
 		Short:   "Mint Simulation Token",
-		Long:    "Mints an expiring data-plane token. Send it in X-Continuous-Simulation-Token. Other unexpired tokens remain valid.",
+		Long:    "Creates another token for requests to the Simulation endpoint. Send it in the X-Continuous-Simulation-Token header. Earlier tokens stay valid until they expire.",
 		Example: "  continuous simulations mint-simulation-token --id <id> --ttl-seconds 3600",
 		RunE:    runMintSimulationTokenCmd,
 		Aliases: []string{"mst"},

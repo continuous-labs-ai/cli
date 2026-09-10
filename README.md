@@ -33,11 +33,11 @@ gpg --show-keys --with-fingerprint release-signing-key.asc
 gpg --import release-signing-key.asc
 ```
 
-Then install a signed release. Replace `v0.1.3` with the version you want.
+Then install a signed release. Replace `v0.1.5` with the version you want.
 
 ```bash
 set -euo pipefail
-version=v0.1.3
+version=v0.1.5
 case "$(uname -s)" in
   Linux) platform=Linux ;;
   Darwin) platform=Darwin ;;
@@ -79,7 +79,7 @@ Select `x86_64` for amd64 or `arm64` for ARM64. Run these commands in PowerShell
 
 ```powershell
 $ErrorActionPreference = "Stop"
-$version = "v0.1.3"
+$version = "v0.1.5"
 $architecture = "x86_64"
 $archive = "continuous_Windows_$architecture.zip"
 $releaseUrl = "https://github.com/continuous-labs-ai/cli/releases/download/$version"

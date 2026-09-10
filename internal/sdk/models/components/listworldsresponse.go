@@ -3,7 +3,7 @@
 package components
 
 type ListWorldsResponse struct {
-	// Cursor for the next page, or null when this is the last page.
+	// Cursor for the next page, or null.
 	NextCursor *string `json:"next_cursor"`
 	// Worlds in this page.
 	Worlds []World `json:"worlds"`

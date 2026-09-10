@@ -15,7 +15,7 @@ import (
 )
 
 var forkSimulationCmdMeta = []flagutil.FlagMeta{
-	{FlagName: "id", Shorthand: "i", FieldPath: "ID", Kind: flagutil.FlagKindString, Required: true, Description: "Stable source Simulation ID. [required]"},
+	{FlagName: "id", Shorthand: "i", FieldPath: "ID", Kind: flagutil.FlagKindString, Required: true, Description: "Source Simulation ID. [required]"},
 	{FlagName: "at-step", Shorthand: "a", FieldPath: "Body.AtStep", Kind: flagutil.FlagKindInt64, Optional: true, Description: "Completed step to fork from. Omission forks from the latest state."},
 	{FlagName: "name", Shorthand: "n", FieldPath: "Body.Name", Kind: flagutil.FlagKindString, Optional: true, Description: "Optional child Simulation name. Omission generates a name."},
 }
@@ -25,7 +25,7 @@ func initForkSimulationCmd(parent *cobra.Command) error {
 	var cmd = &cobra.Command{
 		Use:     "fork",
 		Short:   "Fork Simulation",
-		Long:    "Creates a Simulation with a 1-hour token. The source Simulation continues to run.",
+		Long:    "Creates a new Simulation from the source Simulation's current state, or from an earlier recorded step when you set at_step. The source must be running or paused; a stopped source returns 409 simulation_stopped. Forking does not change the source. The response includes the new endpoint and a token that expires in 1 hour.",
 		Example: "  continuous simulations fork --id <id>",
 		RunE:    runForkSimulationCmd,
 	}

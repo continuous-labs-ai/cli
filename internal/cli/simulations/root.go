@@ -10,8 +10,8 @@ import (
 func InitSimulationsRoot(parent *cobra.Command) error {
 	var SimulationsCmd = &cobra.Command{
 		Use:   "simulations",
-		Short: "Create and control isolated runtime instances of ready Simulators",
-		Long:  "Create and control isolated runtime instances of ready Simulators.",
+		Short: "Create Simulations from ready Simulators, then fork, stop, start, and delete them",
+		Long:  "Create Simulations from ready Simulators, then fork, stop, start, and delete them.",
 		RunE: func(cmd *cobra.Command, args []string) error {
 			if usage.UsageRequested(cmd) {
 				return usage.EmitSchema(cmd, cmd.OutOrStdout())

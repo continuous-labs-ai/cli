@@ -16,7 +16,7 @@ import (
 	"net/url"
 )
 
-// Worlds - Build and control coordinated groups of Simulations.
+// Build Worlds from one or more Simulators and start or stop their Simulations together.
 type Worlds struct {
 	rootSDK          *ContinuousSimulation
 	sdkConfiguration config.SDKConfiguration
@@ -252,7 +252,7 @@ func (s *Worlds) ListWorlds(ctx context.Context, request *operations.ListWorldsR
 }
 
 // BuildWorld - Build World
-// Builds a World definition from stable Simulator IDs. Start the World to create its Simulations.
+// Starts an asynchronous World build from one or more ready Simulators and returns the World in the building state. Start the World once it is ready to create its Simulations.
 func (s *Worlds) BuildWorld(ctx context.Context, request components.BuildWorldRequest, opts ...operations.Option) (*operations.BuildWorldResponse, error) {
 	o := operations.Options{}
 	supportedOptions := []string{
@@ -1100,7 +1100,7 @@ func (s *Worlds) CancelWorldBuild(ctx context.Context, request operations.Cancel
 }
 
 // StartWorld - Start World
-// Creates member Simulations on first start. Later starts restore stopped Simulations from saved state.
+// Starts every Simulation in the World. The first start creates the Simulations; later starts restore them from saved state. The World must be ready or stopped, and the workspace must have room for all members under its active-Simulation limit. A running World is returned unchanged.
 func (s *Worlds) StartWorld(ctx context.Context, request operations.StartWorldRequest, opts ...operations.Option) (*operations.StartWorldResponse, error) {
 	o := operations.Options{}
 	supportedOptions := []string{

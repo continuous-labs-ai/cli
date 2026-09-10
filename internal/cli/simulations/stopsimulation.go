@@ -15,7 +15,7 @@ import (
 )
 
 var stopSimulationCmdMeta = []flagutil.FlagMeta{
-	{FlagName: "id", Shorthand: "i", FieldPath: "ID", Kind: flagutil.FlagKindString, Required: true, Description: "Stable Simulation ID. [required]"},
+	{FlagName: "id", Shorthand: "i", FieldPath: "ID", Kind: flagutil.FlagKindString, Required: true, Description: "Simulation ID. [required]"},
 }
 
 // initStopSimulationCmd initializes the stop-simulation command.
@@ -23,7 +23,7 @@ func initStopSimulationCmd(parent *cobra.Command) error {
 	var cmd = &cobra.Command{
 		Use:     "stop",
 		Short:   "Stop Simulation",
-		Long:    "Stops a Simulation and saves its runtime state. You can start it later from the saved state.",
+		Long:    "Stops a Simulation and saves its state. Requests to its endpoint return 409 simulation_stopped until you start it again. A stopped Simulation is returned unchanged.",
 		Example: "  continuous simulations stop --id <id>",
 		RunE:    runStopSimulationCmd,
 	}

@@ -10,8 +10,8 @@ import (
 func InitWorldsRoot(parent *cobra.Command) error {
 	var WorldsCmd = &cobra.Command{
 		Use:   "worlds",
-		Short: "Build and control coordinated groups of Simulations",
-		Long:  "Build and control coordinated groups of Simulations.",
+		Short: "Build Worlds from one or more Simulators and start or stop their Simulations together",
+		Long:  "Build Worlds from one or more Simulators and start or stop their Simulations together.",
 		RunE: func(cmd *cobra.Command, args []string) error {
 			if usage.UsageRequested(cmd) {
 				return usage.EmitSchema(cmd, cmd.OutOrStdout())

@@ -8,7 +8,7 @@ import (
 )
 
 type ListSimulationStepsRequest struct {
-	// Stable Simulation ID.
+	// Simulation ID.
 	ID string `pathParam:"style=simple,explode=false,name=id"`
 	// Opaque next_cursor value from a previous page.
 	Cursor *string `queryParam:"style=form,explode=false,name=cursor"`

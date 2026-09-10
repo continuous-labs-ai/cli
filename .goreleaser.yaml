@@ -50,7 +50,7 @@ brews:
       name: homebrew-tap
       branch: main
     homepage: "https://github.com/continuous-labs-ai/cli"
-    description: "Continuous Simulation API: The Continuous Simulation API builds reusable Simulators and runs isolated Simulations and Worlds. This document describes the stable v1 public contract."
+    description: "Continuous Simulation API: Build Simulators from OpenAPI or WSDL documents, create Simulations from them, and build Worlds that run Simulations together. Authenticate every request with an API key sent as a Bearer token."
     install: |
       bin.install "continuous"
 

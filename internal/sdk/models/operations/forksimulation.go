@@ -8,7 +8,7 @@ import (
 )
 
 type ForkSimulationRequest struct {
-	// Stable source Simulation ID.
+	// Source Simulation ID.
 	ID   string                           `pathParam:"style=simple,explode=false,name=id"`
 	Body components.ForkSimulationRequest `request:"mediaType=application/json"`
 }

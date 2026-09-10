@@ -3,9 +3,9 @@
 package components
 
 type BuildWorldRequest struct {
-	// Build guidance. At most 16,384 characters and 65,536 UTF-8 bytes. U+0000 is not permitted.
+	// Instructions for the builder. At most 16,384 characters and 65,536 UTF-8 bytes; must not be blank or contain U+0000.
 	Instructions *string `json:"instructions,omitzero"`
-	// Stable Simulator IDs for the World.
+	// Simulator IDs for the World.
 	Simulators []string `json:"simulators"`
 }
 

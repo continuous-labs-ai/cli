@@ -48,14 +48,14 @@ func Float64(f float64) *float64 { return &f }
 // Pointer provides a helper function to return a pointer to a type
 func Pointer[T any](v T) *T { return &v }
 
-// ContinuousSimulation - Continuous Simulation API: The Continuous Simulation API builds reusable Simulators and runs isolated Simulations and Worlds. This document describes the stable v1 public contract.
+// ContinuousSimulation - Continuous Simulation API: Build Simulators from OpenAPI or WSDL documents, create Simulations from them, and build Worlds that run Simulations together. Authenticate every request with an API key sent as a Bearer token.
 type ContinuousSimulation struct {
 	SDKVersion string
-	// Create and control isolated runtime instances of ready Simulators.
+	// Create Simulations from ready Simulators, then fork, stop, start, and delete them.
 	Simulations *Simulations
-	// Build, inspect, and delete reusable Simulator artifacts.
+	// Build Simulators from OpenAPI or WSDL documents, check or cancel a build, and delete Simulators.
 	Simulators *Simulators
-	// Build and control coordinated groups of Simulations.
+	// Build Worlds from one or more Simulators and start or stop their Simulations together.
 	Worlds *Worlds
 
 	sdkConfiguration config.SDKConfiguration
@@ -132,10 +132,10 @@ func WithTimeout(timeout time.Duration) SDKOption {
 // New creates a new instance of the SDK with the provided options
 func New(opts ...SDKOption) *ContinuousSimulation {
 	sdk := &ContinuousSimulation{
-		SDKVersion: "0.1.4",
+		SDKVersion: "0.1.5",
 		sdkConfiguration: config.SDKConfiguration{
-			UserAgent:         "speakeasy-sdk/go 0.1.4 2.935.1 v1 github.com/continuous-labs-ai/cli/internal/sdk",
-			SDKVersion:        "0.1.4",
+			UserAgent:         "speakeasy-sdk/go 0.1.5 2.935.1 v1 github.com/continuous-labs-ai/cli/internal/sdk",
+			SDKVersion:        "0.1.5",
 			GenVersion:        "2.935.1",
 			OpenAPIDocVersion: "v1",
 			ServerList:        ServerList,
