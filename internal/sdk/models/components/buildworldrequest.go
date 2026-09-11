@@ -3,7 +3,7 @@
 package components
 
 type BuildWorldRequest struct {
-	// Instructions for the builder. At most 16,384 characters and 65,536 UTF-8 bytes; must not be blank or contain U+0000.
+	// Describe the initial data, scenario, and relationships. Populated Worlds support up to 8 selected Simulators and 1,000 starting records in total. Named record types replace their default data. At most 16,384 characters and 65,536 UTF-8 bytes. U+0000 is not permitted.
 	Instructions *string `json:"instructions,omitzero"`
 	// Simulator IDs for the World.
 	Simulators []string `json:"simulators"`

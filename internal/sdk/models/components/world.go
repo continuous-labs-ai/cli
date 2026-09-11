@@ -7,7 +7,7 @@ import (
 	"time"
 )
 
-// WorldStatus - building while the build runs; ready when the World can be started; running or stopped once its Simulations exist; failed when the first start could not create its Simulations; canceled when the build was canceled.
+// WorldStatus - building while the build runs; ready when it can be started; running or stopped once its Simulations exist; failed when building or first start fails; canceled when the build was canceled.
 type WorldStatus string
 
 const (
@@ -35,18 +35,19 @@ func (e *WorldStatus) IsExact() bool {
 }
 
 type World struct {
-	// World creation time.
+	Build *WorldBuild `json:"build,omitzero"`
+	// Time when the World build started.
 	CreatedAt time.Time      `json:"created_at"`
 	Error     *ResourceError `json:"error"`
 	// World ID.
 	ID string `json:"id"`
-	// Build guidance stored with the World.
+	// Instructions for the initial synthetic data and relationships.
 	Instructions string `json:"instructions"`
-	// Simulations in the World. Empty unless the World is running or stopped.
+	// Created member Simulations. This list is empty before first start.
 	Simulations []WorldSimulation `json:"simulations"`
 	// Simulator IDs in member order.
 	Simulators []string `json:"simulators"`
-	// building while the build runs; ready when the World can be started; running or stopped once its Simulations exist; failed when the first start could not create its Simulations; canceled when the build was canceled.
+	// building while the build runs; ready when it can be started; running or stopped once its Simulations exist; failed when building or first start fails; canceled when the build was canceled.
 	Status WorldStatus `json:"status"`
 }
 
@@ -59,6 +60,13 @@ func (w *World) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	return nil
+}
+
+func (w *World) GetBuild() *WorldBuild {
+	if w == nil {
+		return nil
+	}
+	return w.Build
 }
 
 func (w *World) GetCreatedAt() time.Time {

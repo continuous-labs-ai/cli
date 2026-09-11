@@ -252,7 +252,7 @@ func (s *Worlds) ListWorlds(ctx context.Context, request *operations.ListWorldsR
 }
 
 // BuildWorld - Build World
-// Starts an asynchronous World build from one or more ready Simulators and returns the World in the building state. Start the World once it is ready to create its Simulations.
+// Starts an asynchronous World build from ready Simulators and returns it in the building state. Instructions generate and validate initial synthetic data. Start the World once it is ready to create its Simulations.
 func (s *Worlds) BuildWorld(ctx context.Context, request components.BuildWorldRequest, opts ...operations.Option) (*operations.BuildWorldResponse, error) {
 	o := operations.Options{}
 	supportedOptions := []string{

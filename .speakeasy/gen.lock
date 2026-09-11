@@ -1,19 +1,19 @@
 lockVersion: 2.0.0
 id: ad7b08dc-357d-414c-9f26-16cfbc099767
 management:
-  docChecksum: e40197e81fa7e96e9cedd79936df0513
+  docChecksum: c133d6193f0c7878b87ee403fc1e2e19
   docVersion: v1
   speakeasyVersion: 1.796.4
   generationVersion: 2.935.1
-  releaseVersion: 0.1.5
-  configChecksum: da5dc789ce6ee9f717a9975011e377ae
+  releaseVersion: 0.1.6
+  configChecksum: 342b7217efe2d80ee860c43e4db7405e
   repoURL: https://github.com/continuous-labs-ai/cli.git
   installationURL: https://github.com/continuous-labs-ai/cli
   published: true
 persistentEdits:
-  generation_id: 07fb56b6-196e-4d19-9c28-889d2586cff0
-  pristine_commit_hash: 6c4d925d984c1d7c30e8f03b19cd9b9d451307d5
-  pristine_tree_hash: 2a7875c8bd9a190b32cdbe77562f83e1f360a7bc
+  generation_id: df53a7ec-65b9-4c52-9ca0-7fb758ce019e
+  pristine_commit_hash: 7d68b508797de28243665d790528f49e8d15d536
+  pristine_tree_hash: 5049b111636a7cca79d75ff091d6ba5bea49ccc0
 features:
   cli:
     constsAndDefaults: 0.0.0
@@ -128,16 +128,16 @@ trackedFiles:
     pristine_git_object: a792dd286b0327e5c128d63c56580940bcadf9f9
   internal/cli/version.go:
     id: 7b0665492f72
-    last_write_checksum: sha1:867fa5473f9d4cdbcdc8992f249fd4a702301645
-    pristine_git_object: df704c682c1e587dcbc18ccf768892bef5b3c455
+    last_write_checksum: sha1:975c7474dde97d3f1d1f96fa8e1b67bf8593e2a0
+    pristine_git_object: b34025d7d04e40334e2e6ef9724039a5999a5f2b
   internal/cli/whoami.go:
     id: c1787f2298ec
     last_write_checksum: sha1:9b8e8f6830e556f749eede72d72b4f18d9881c28
     pristine_git_object: 81cdc9ce2868855a48fdd61d6c13790a8b7dc35d
   internal/cli/worlds/buildworld.go:
     id: eb895422f8bd
-    last_write_checksum: sha1:c25e9a5725f5b9d4643cce1c7c3d5b35f00ae6db
-    pristine_git_object: 3f50769345fcee3964605e582890f81af8b93bda
+    last_write_checksum: sha1:b38244a04075e5d880cd74a8da9ee03b7256da16
+    pristine_git_object: 8ad5db22b4632c79dbd955ab19d2c4d451158f73
   internal/cli/worlds/cancelworldbuild.go:
     id: 68d7a9504376
     last_write_checksum: sha1:909589f5d19e2170a86b8f185ecacffd90597feb
@@ -232,16 +232,16 @@ trackedFiles:
     pristine_git_object: 942a964e78a81ad9d9590cc67138a0c4c3569fc9
   internal/sdk/continuoussimulation.go:
     id: af3aeba7b54c
-    last_write_checksum: sha1:2b29fbf98a90fec164cd63fd2b414b2642261669
-    pristine_git_object: aa3c7f97a7dd5562bfa6a31dd0adc23f93abc7b8
+    last_write_checksum: sha1:dfe404e14c49bb6ceffb7a9fe3b685710af93862
+    pristine_git_object: c2d5e710627e2c2724704d1f1fccf8e14173623e
   internal/sdk/models/components/buildsimulatorrequest.go:
     id: 510b20fc8bb2
     last_write_checksum: sha1:c20dce4acc66ce83132d178c88411202e9c5ccf4
     pristine_git_object: c64b664d4d2e5de462cf55c4ef15e4363a9d1360
   internal/sdk/models/components/buildworldrequest.go:
     id: 8827e29faed8
-    last_write_checksum: sha1:b84a80cdf71056029f818e5033fa6c58ee5483d1
-    pristine_git_object: 9cd8614eeb547efb45076d28d2959451f033bbac
+    last_write_checksum: sha1:d70a303c0fff78ea334fcf086f2de8553cf547e4
+    pristine_git_object: 734d74839c536cde22114031af62fa6f0e5bad94
   internal/sdk/models/components/createdsimulation.go:
     id: 4b3913365b48
     last_write_checksum: sha1:e364394e871aa856696608379eaae33d6d241044
@@ -304,8 +304,20 @@ trackedFiles:
     pristine_git_object: eab39726c2336dde06a7d9c01f59e884946afee9
   internal/sdk/models/components/world.go:
     id: cca25436961e
-    last_write_checksum: sha1:1d9a47d3beeb390418ec2e2cbd289846d64bb9e7
-    pristine_git_object: ad05d98499282976740872922506d537c3c70afc
+    last_write_checksum: sha1:d89b82f91c88d3202cf41550e92e508c8c79bdc2
+    pristine_git_object: e38eef41f53403cfe61f390208bc3a4c4f0f68e0
+  internal/sdk/models/components/worldbuild.go:
+    id: 1ce325d70d75
+    last_write_checksum: sha1:998a52e4d60f47498f3c71b890d3b937bc812158
+    pristine_git_object: 0d75e6cd3c839e54db964b3f032636890c65cb5e
+  internal/sdk/models/components/worlddatasummary.go:
+    id: 49ccc5691222
+    last_write_checksum: sha1:4513c48622c13ffafa2c34297122872ac26e117a
+    pristine_git_object: 26f9251f4a5a337d224c5d0e703c3508669b0445
+  internal/sdk/models/components/worldrecordcount.go:
+    id: d155cb63c059
+    last_write_checksum: sha1:28df184a3d3e4bd89046fea1c259e6b932ff9fea
+    pristine_git_object: 93a4c1edbc657b191cf3535b01776cc91e0a840c
   internal/sdk/models/components/worldsimulation.go:
     id: 1ad1eacbebff
     last_write_checksum: sha1:06e2332e9f9e54446aaac32b1a0ba129479ac764
@@ -496,16 +508,16 @@ trackedFiles:
     pristine_git_object: 35c439d2661e08fcb6a854096fd7b9a8561b3938
   internal/sdk/worlds.go:
     id: 9c366ad7982f
-    last_write_checksum: sha1:42551cf4d4e8208899a60c27253baf9cea51a005
-    pristine_git_object: 38ed9d04068461eb31fde8cdfd956fe7b902cd00
+    last_write_checksum: sha1:714ff87e818c46e974c38c57aa215b199dc2bc06
+    pristine_git_object: 00322dd24610d97a43e43389754967f96cb19444
   internal/testclient/testclient.go:
     id: 20fc511b8b00
     last_write_checksum: sha1:7107e59d336235c44af152c5a61ee3896a7841fa
     pristine_git_object: 159a87ec97aba99e4edd132f69652e123434303e
   internal/usage/schema.go:
     id: 0f40f4612437
-    last_write_checksum: sha1:cf13ee6d7869f748adf0489a430ebeee5a468e83
-    pristine_git_object: 434196452701028b448c9d2727bb35c20691f72a
+    last_write_checksum: sha1:32209b3c77e0001cf0a4a4b01fc3fbf514e3aa6e
+    pristine_git_object: 8ce8bfa58ffc660ce6038efae20d5bf434d08175
   scripts/install.ps1:
     id: fee0853709e9
     last_write_checksum: sha1:2da33f25afaa301dc2a22ac12654c585cef5c572
@@ -836,3 +848,11 @@ examples:
         "500":
           application/problem+json: {"code": "<value>", "detail": "<value>"}
 examplesVersion: 1.0.2
+releaseNotes: |
+  ## Cli SDK Changes:
+  * `ContinuousSimulation.Worlds.ListWorlds()`:  `response.Worlds[].Build` **Added**
+  * `ContinuousSimulation.Worlds.BuildWorld()`:  `response.Build` **Added**
+  * `ContinuousSimulation.Worlds.GetWorld()`:  `response.Build` **Added**
+  * `ContinuousSimulation.Worlds.CancelWorldBuild()`:  `response.Build` **Added**
+  * `ContinuousSimulation.Worlds.StartWorld()`:  `response.Build` **Added**
+  * `ContinuousSimulation.Worlds.StopWorld()`:  `response.Build` **Added**

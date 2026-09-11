@@ -16,7 +16,7 @@ import (
 )
 
 var buildWorldCmdMeta = []flagutil.FlagMeta{
-	{FlagName: "instructions", Shorthand: "i", FieldPath: "Instructions", Kind: flagutil.FlagKindString, Optional: true, Description: "Instructions for the builder. At most 16,384 characters and 65,536 UTF-8 bytes; must not be blank or contain U+0000."},
+	{FlagName: "instructions", Shorthand: "i", FieldPath: "Instructions", Kind: flagutil.FlagKindString, Optional: true, Description: "Describe the initial data, scenario, and relationships. Populated Worlds support up to 8 selected Simulators and 1,000 starting records in total. Named record types replace their default data. At most 16,384 characters and 65,536 UTF-8 bytes. U+0000 is not permitted."},
 	{FlagName: "simulators", Shorthand: "s", FieldPath: "Simulators", Kind: flagutil.FlagKindStringArray, Required: true, Description: "Simulator IDs for the World. [required]"},
 }
 
@@ -25,7 +25,7 @@ func initBuildWorldCmd(parent *cobra.Command) error {
 	var cmd = &cobra.Command{
 		Use:     "build",
 		Short:   "Build World",
-		Long:    "Starts an asynchronous World build from one or more ready Simulators and returns the World in the building state. Start the World once it is ready to create its Simulations.",
+		Long:    "Starts an asynchronous World build from ready Simulators and returns it in the building state. Instructions generate and validate initial synthetic data. Start the World once it is ready to create its Simulations.",
 		Example: "  continuous worlds build --simulators '[\"smr_01J8Z5X4K7M2N9P0Q1R2S3T4V5\"]'",
 		RunE:    runBuildWorldCmd,
 	}
