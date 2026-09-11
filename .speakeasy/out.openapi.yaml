@@ -235,7 +235,7 @@ components:
             - smr_01J8Z5X4K7M2N9P0Q1R2S3T4V5
       properties:
         instructions:
-          description: Instructions for the builder. At most 16,384 characters and 65,536 UTF-8 bytes; must not be blank or contain U+0000.
+          description: Describe the initial data, scenario, and relationships. Populated Worlds support up to 8 selected Simulators and 1,000 starting records in total. Named record types replace their default data. At most 16,384 characters and 65,536 UTF-8 bytes. U+0000 is not permitted.
           maxLength: 16384
           type: string
         simulators:
@@ -615,22 +615,25 @@ components:
             - smr_01J8Z5X4K7M2N9P0Q1R2S3T4V5
           status: building
       properties:
+        build:
+          $ref: "#/components/schemas/WorldBuild"
+          description: Current build progress and verified starting data.
         created_at:
-          description: World creation time.
+          description: Time when the World build started.
           format: date-time
           type: string
         error:
           $ref: "#/components/schemas/ResourceError"
-          description: Why the World failed or was canceled, or null.
+          description: Safe failure information, or null when no failure exists.
         id:
           description: World ID.
           pattern: ^wld_[0-9A-HJKMNP-TV-Z]{26}$
           type: string
         instructions:
-          description: Build guidance stored with the World.
+          description: Instructions for the initial synthetic data and relationships.
           type: string
         simulations:
-          description: Simulations in the World. Empty unless the World is running or stopped.
+          description: Created member Simulations. This list is empty before first start.
           items:
             $ref: "#/components/schemas/WorldSimulation"
           type: array
@@ -641,7 +644,7 @@ components:
             type: string
           type: array
         status:
-          description: building while the build runs; ready when the World can be started; running or stopped once its Simulations exist; failed when the first start could not create its Simulations; canceled when the build was canceled.
+          description: building while the build runs; ready when it can be started; running or stopped once its Simulations exist; failed when building or first start fails; canceled when the build was canceled.
           enum:
             - building
             - ready
@@ -658,6 +661,75 @@ components:
         - simulations
         - error
         - created_at
+      type: object
+    WorldBuild:
+      additionalProperties: false
+      properties:
+        stage:
+          description: Current phase of starting-data preparation.
+          enum:
+            - planning
+            - generating
+            - validating
+            - complete
+          type: string
+        summary:
+          $ref: "#/components/schemas/WorldDataSummary"
+          description: Verified starting data. Present only after a completed build.
+      required:
+        - stage
+      type: object
+    WorldDataSummary:
+      additionalProperties: false
+      properties:
+        assumptions:
+          description: Defaults and inferred choices used to prepare the starting data.
+          items:
+            type: string
+          type: array
+        conditions:
+          description: Record conditions and counts computed from a complete census of served records.
+          items:
+            type: string
+          type: array
+        records:
+          description: Observed starting record counts for each member and record type.
+          items:
+            $ref: "#/components/schemas/WorldRecordCount"
+          type: array
+        relationships:
+          description: Shared relationships checked against the data and served API values.
+          items:
+            type: string
+          type: array
+      required:
+        - records
+        - relationships
+        - conditions
+        - assumptions
+      type: object
+    WorldRecordCount:
+      additionalProperties: false
+      properties:
+        count:
+          description: Number of stored starting records of this type.
+          format: int64
+          type: integer
+        entity:
+          description: Record type reported by the Simulator.
+          type: string
+        member_index:
+          description: Position in the selected Simulator list, starting at zero.
+          format: int64
+          type: integer
+        simulator_id:
+          description: Stable ID of the Simulator for this member.
+          type: string
+      required:
+        - member_index
+        - simulator_id
+        - entity
+        - count
       type: object
     WorldSimulation:
       additionalProperties: false
@@ -1769,7 +1841,7 @@ paths:
       tags:
         - worlds
     post:
-      description: Starts an asynchronous World build from one or more ready Simulators and returns the World in the building state. Start the World once it is ready to create its Simulations.
+      description: Starts an asynchronous World build from ready Simulators and returns it in the building state. Instructions generate and validate initial synthetic data. Start the World once it is ready to create its Simulations.
       operationId: build-world
       requestBody:
         content:
