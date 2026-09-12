@@ -37,8 +37,8 @@ func (e *WorldStatus) IsExact() bool {
 type World struct {
 	Build *WorldBuild `json:"build,omitzero"`
 	// Time when the World build started.
-	CreatedAt time.Time      `json:"created_at"`
-	Error     *ResourceError `json:"error"`
+	CreatedAt time.Time   `json:"created_at"`
+	Error     *WorldError `json:"error"`
 	// World ID.
 	ID string `json:"id"`
 	// Instructions for the initial synthetic data and relationships.
@@ -76,7 +76,7 @@ func (w *World) GetCreatedAt() time.Time {
 	return w.CreatedAt
 }
 
-func (w *World) GetError() *ResourceError {
+func (w *World) GetError() *WorldError {
 	if w == nil {
 		return nil
 	}

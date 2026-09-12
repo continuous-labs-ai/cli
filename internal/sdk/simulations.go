@@ -171,10 +171,6 @@ func (s *Simulations) ListSimulations(ctx context.Context, request *operations.L
 		fallthrough
 	case httpRes.StatusCode == 401:
 		fallthrough
-	case httpRes.StatusCode == 403:
-		fallthrough
-	case httpRes.StatusCode == 404:
-		fallthrough
 	case httpRes.StatusCode == 422:
 		switch {
 		case utils.MatchContentType(httpRes.Header.Get("Content-Type"), `application/problem+json`):
@@ -394,10 +390,6 @@ func (s *Simulations) CreateSimulation(ctx context.Context, request components.C
 		fallthrough
 	case httpRes.StatusCode == 401:
 		fallthrough
-	case httpRes.StatusCode == 403:
-		fallthrough
-	case httpRes.StatusCode == 404:
-		fallthrough
 	case httpRes.StatusCode == 408:
 		fallthrough
 	case httpRes.StatusCode == 409:
@@ -589,8 +581,6 @@ func (s *Simulations) DeleteSimulation(ctx context.Context, request operations.D
 		if o.SkipDeserialization == nil || !*o.SkipDeserialization {
 			utils.DrainBody(httpRes)
 		}
-	case httpRes.StatusCode == 400:
-		fallthrough
 	case httpRes.StatusCode == 401:
 		fallthrough
 	case httpRes.StatusCode == 403:
@@ -625,8 +615,6 @@ func (s *Simulations) DeleteSimulation(ctx context.Context, request operations.D
 	case httpRes.StatusCode == 500:
 		fallthrough
 	case httpRes.StatusCode == 503:
-		fallthrough
-	case httpRes.StatusCode == 504:
 		switch {
 		case utils.MatchContentType(httpRes.Header.Get("Content-Type"), `application/problem+json`):
 			rawBody, err := utils.ConsumeRawBody(httpRes)
@@ -807,8 +795,6 @@ func (s *Simulations) GetSimulation(ctx context.Context, request operations.GetS
 			}
 			return nil, sdkerrors.NewSDKDefaultError(fmt.Sprintf("unknown content-type received: %s", httpRes.Header.Get("Content-Type")), httpRes.StatusCode, string(rawBody), httpRes)
 		}
-	case httpRes.StatusCode == 400:
-		fallthrough
 	case httpRes.StatusCode == 401:
 		fallthrough
 	case httpRes.StatusCode == 403:
@@ -1256,8 +1242,6 @@ func (s *Simulations) StartSimulation(ctx context.Context, request operations.St
 			}
 			return nil, sdkerrors.NewSDKDefaultError(fmt.Sprintf("unknown content-type received: %s", httpRes.Header.Get("Content-Type")), httpRes.StatusCode, string(rawBody), httpRes)
 		}
-	case httpRes.StatusCode == 400:
-		fallthrough
 	case httpRes.StatusCode == 401:
 		fallthrough
 	case httpRes.StatusCode == 403:
@@ -1698,8 +1682,6 @@ func (s *Simulations) StopSimulation(ctx context.Context, request operations.Sto
 			}
 			return nil, sdkerrors.NewSDKDefaultError(fmt.Sprintf("unknown content-type received: %s", httpRes.Header.Get("Content-Type")), httpRes.StatusCode, string(rawBody), httpRes)
 		}
-	case httpRes.StatusCode == 400:
-		fallthrough
 	case httpRes.StatusCode == 401:
 		fallthrough
 	case httpRes.StatusCode == 403:
@@ -1734,8 +1716,6 @@ func (s *Simulations) StopSimulation(ctx context.Context, request operations.Sto
 	case httpRes.StatusCode == 500:
 		fallthrough
 	case httpRes.StatusCode == 503:
-		fallthrough
-	case httpRes.StatusCode == 504:
 		switch {
 		case utils.MatchContentType(httpRes.Header.Get("Content-Type"), `application/problem+json`):
 			rawBody, err := utils.ConsumeRawBody(httpRes)

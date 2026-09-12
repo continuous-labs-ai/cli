@@ -6,22 +6,22 @@ import (
 	"github.com/continuous-labs-ai/cli/internal/sdk/sdkinternal/utils"
 )
 
-// Stage - Current phase of starting-data preparation.
-type Stage string
+// WorldBuildStage - Current phase of starting-data preparation.
+type WorldBuildStage string
 
 const (
-	StagePlanning   Stage = "planning"
-	StageGenerating Stage = "generating"
-	StageValidating Stage = "validating"
-	StageComplete   Stage = "complete"
+	WorldBuildStagePlanning   WorldBuildStage = "planning"
+	WorldBuildStageGenerating WorldBuildStage = "generating"
+	WorldBuildStageValidating WorldBuildStage = "validating"
+	WorldBuildStageComplete   WorldBuildStage = "complete"
 )
 
-func (e Stage) ToPointer() *Stage {
+func (e WorldBuildStage) ToPointer() *WorldBuildStage {
 	return &e
 }
 
 // IsExact returns true if the value matches a known enum value, false otherwise.
-func (e *Stage) IsExact() bool {
+func (e *WorldBuildStage) IsExact() bool {
 	if e != nil {
 		switch *e {
 		case "planning", "generating", "validating", "complete":
@@ -33,7 +33,7 @@ func (e *Stage) IsExact() bool {
 
 type WorldBuild struct {
 	// Current phase of starting-data preparation.
-	Stage   Stage             `json:"stage"`
+	Stage   WorldBuildStage   `json:"stage"`
 	Summary *WorldDataSummary `json:"summary,omitzero"`
 }
 
@@ -48,9 +48,9 @@ func (w *WorldBuild) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-func (w *WorldBuild) GetStage() Stage {
+func (w *WorldBuild) GetStage() WorldBuildStage {
 	if w == nil {
-		return Stage("")
+		return WorldBuildStage("")
 	}
 	return w.Stage
 }
