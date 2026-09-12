@@ -8,30 +8,66 @@ components:
       value:
         code: auth_forbidden
         detail: Only the workspace that owns the Simulator with ID "smr_01J8Z5X4K7M2N9P0Q1R2S3T4V5" can cancel its build.
+    auth_forbidden_simulation:
+      value:
+        code: auth_forbidden
+        detail: The Simulation with ID "sim_01J8Z5X4K7M2N9P0Q1R2S3T4V6" belongs to another workspace.
+    auth_forbidden_simulator:
+      value:
+        code: auth_forbidden
+        detail: The Simulator with ID "smr_01J8Z5X4K7M2N9P0Q1R2S3T4V5" belongs to another workspace.
+    auth_forbidden_world:
+      value:
+        code: auth_forbidden
+        detail: The World with ID "wld_01J8Z5X4K7M2N9P0Q1R2S3T4V7" belongs to another workspace.
     auth_invalid:
       value:
         code: auth_invalid
-        detail: The API key is missing or invalid.
+        detail: The authentication credential is invalid.
+    auth_missing:
+      value:
+        code: auth_invalid
+        detail: Authentication credentials are required.
+    auth_provider_unavailable:
+      value:
+        code: auth_provider_unavailable
+        detail: The authentication provider is unavailable. Retry the request after a short delay.
     bad_request:
       value:
         code: bad_request
         detail: The cursor is invalid.
+    bad_request_body:
+      value:
+        code: bad_request
+        detail: request body is invalid
     build_quota_exceeded:
       value:
         code: build_quota_exceeded
-        detail: The workspace has 2 active Simulator builds, which is its limit. Wait for a build to finish or ask an operator to increase the limit.
+        detail: The workspace has 2 active Simulator builds and a limit of 2. Wait for a build to finish or ask an operator to increase the limit.
     build_rate_exceeded:
       value:
         code: build_rate_exceeded
-        detail: The workspace has used its limit of 10 Simulator builds for the current UTC day. The limit resets at 2026-09-02T00:00:00Z.
+        detail: The workspace has used 10 of its limit of 10 Simulator builds for the current UTC day. The limit resets at the next UTC midnight.
+    build_storage_unavailable:
+      value:
+        code: internal_unavailable
+        detail: simulator spec storage is unavailable
     internal:
       value:
         code: internal
         detail: The server encountered an unexpected error.
+    internal_unavailable:
+      value:
+        code: internal_unavailable
+        detail: The service is temporarily unavailable. Retry the request after a short delay.
     payload_too_large:
       value:
         code: payload_too_large
-        detail: The API description exceeds the maximum allowed size.
+        detail: The request body exceeds the maximum allowed size.
+    request_timeout:
+      value:
+        code: request_timeout
+        detail: The request body was not received before the timeout. Retry the request.
     simulation_capacity:
       value:
         code: simulation_capacity
@@ -40,6 +76,10 @@ components:
       value:
         code: simulation_not_found
         detail: No Simulation was found with ID "sim_01J8Z5X4K7M2N9P0Q1R2S3T4V6".
+    simulation_platform_owned:
+      value:
+        code: simulation_world_owned
+        detail: The Simulation with ID "sim_01J8Z5X4K7M2N9P0Q1R2S3T4V6" is in use by the platform and cannot be changed.
     simulation_provider_unavailable:
       value:
         code: simulation_provider_unavailable
@@ -47,7 +87,7 @@ components:
     simulation_quota_exceeded:
       value:
         code: simulation_quota_exceeded
-        detail: The workspace has 5 active Simulations, which is its limit. Stop a Simulation or wait for one to be deleted.
+        detail: The workspace has 5 active Simulations and a limit of 5. Stop a Simulation or wait for one to be deleted.
     simulation_quota_exceeded_world:
       value:
         code: simulation_quota_exceeded
@@ -79,23 +119,47 @@ components:
     simulator_not_ready:
       value:
         code: simulator_not_ready
-        detail: The Simulator with ID "smr_01J8Z5X4K7M2N9P0Q1R2S3T4V5" is not ready. Wait for its build to finish before you retry.
+        detail: The Simulator with ID "smr_01J8Z5X4K7M2N9P0Q1R2S3T4V5" is not ready. Use a ready Simulator before you retry.
     simulator_not_ready_base:
       value:
         code: simulator_not_ready
-        detail: The base Simulator with ID "smr_01J8Z5X4K7M2N9P0Q1R2S3T4V5" is not ready. Wait for its build to finish before you retry.
+        detail: The base Simulator with ID "smr_01J8Z5X4K7M2N9P0Q1R2S3T4V5" is not ready. Use a ready Simulator before you retry.
     simulator_unknown:
       value:
         code: simulator_unknown
-        detail: No Simulator was found with ID "smr_01J8Z5X4K7M2N9P0Q1R2S3T4V5".
+        detail: The Simulator with ID "smr_01J8Z5X4K7M2N9P0Q1R2S3T4V5" is unknown or belongs to another workspace.
     simulator_unknown_parent:
       value:
         code: simulator_unknown
-        detail: No Simulator was found with ID "smr_01J8Z5X4K7M2N9P0Q1R2S3T4V5".
-    validation:
+        detail: The parent Simulator with ID "smr_01J8Z5X4K7M2N9P0Q1R2S3T4V5" is unknown or belongs to another workspace.
+    unsupported_media_type:
+      value:
+        code: unsupported_media_type
+        detail: The request Content-Type is not supported.
+    validation_build_simulator:
       value:
         code: validation
-        detail: The request does not satisfy the API contract.
+        detail: a build requires a spec, or parent_id + instructions for an incremental build
+    validation_build_world:
+      value:
+        code: validation
+        detail: instructions must not be blank
+    validation_fork_simulation:
+      value:
+        code: validation
+        detail: at_step does not identify a recorded step
+    validation_list_limit:
+      value:
+        code: validation
+        detail: "validation failed: invalid integer at query.limit"
+    validation_mint_simulation_token:
+      value:
+        code: validation
+        detail: "validation failed: expected number >= 60 at body.ttl_seconds"
+    validation_simulator_id:
+      value:
+        code: validation
+        detail: The Simulator ID must be a stable smr_ ID.
     world_conflict:
       value:
         code: world_conflict
@@ -109,30 +173,6 @@ components:
         code: world_not_found
         detail: No World was found with ID "wld_01J8Z5X4K7M2N9P0Q1R2S3T4V7".
   responses:
-    BadRequest:
-      content:
-        application/problem+json:
-          schema:
-            $ref: "#/components/schemas/Error"
-      description: Bad Request
-    Conflict:
-      content:
-        application/problem+json:
-          schema:
-            $ref: "#/components/schemas/Error"
-      description: Conflict
-    Forbidden:
-      content:
-        application/problem+json:
-          schema:
-            $ref: "#/components/schemas/Error"
-      description: Forbidden
-    GatewayTimeout:
-      content:
-        application/problem+json:
-          schema:
-            $ref: "#/components/schemas/Error"
-      description: Gateway Timeout
     InternalServerError:
       content:
         application/problem+json:
@@ -142,42 +182,41 @@ components:
           schema:
             $ref: "#/components/schemas/Error"
       description: Internal Server Error
-    NotFound:
-      content:
-        application/problem+json:
-          schema:
-            $ref: "#/components/schemas/Error"
-      description: Not Found
     PayloadTooLarge:
       content:
         application/problem+json:
+          examples:
+            payload_too_large:
+              $ref: "#/components/examples/payload_too_large"
           schema:
             $ref: "#/components/schemas/Error"
       description: Request Entity Too Large
     RequestTimeout:
       content:
         application/problem+json:
+          examples:
+            request_timeout:
+              $ref: "#/components/examples/request_timeout"
           schema:
             $ref: "#/components/schemas/Error"
       description: Request Timeout
-    ServiceUnavailable:
-      content:
-        application/problem+json:
-          schema:
-            $ref: "#/components/schemas/Error"
-      description: Service Unavailable
     Unauthorized:
       content:
         application/problem+json:
           examples:
             auth_invalid:
               $ref: "#/components/examples/auth_invalid"
+            auth_missing:
+              $ref: "#/components/examples/auth_missing"
           schema:
             $ref: "#/components/schemas/Error"
       description: Unauthorized
     UnsupportedMediaType:
       content:
         application/problem+json:
+          examples:
+            unsupported_media_type:
+              $ref: "#/components/examples/unsupported_media_type"
           schema:
             $ref: "#/components/schemas/Error"
       description: Unsupported Media Type
@@ -447,21 +486,6 @@ components:
       required:
         - ttl_seconds
       type: object
-    ResourceError:
-      additionalProperties: false
-      properties:
-        code:
-          description: Stable machine-readable error code.
-          type: string
-        detail:
-          description: Safe human-readable error detail.
-          type: string
-      required:
-        - code
-        - detail
-      type:
-        - object
-        - "null"
     Simulation:
       additionalProperties: false
       examples:
@@ -536,7 +560,15 @@ components:
     Simulator:
       additionalProperties: false
       examples:
-        - created_at: "2026-01-15T12:00:00Z"
+        - build:
+            builder: claude
+            last_submission: rejected
+            last_tool: test
+            stage: build
+            submissions: 1
+            tool_calls: 7
+            updated_at: "2026-01-15T12:05:00Z"
+          created_at: "2026-01-15T12:00:00Z"
           error: null
           id: smr_01J8Z5X4K7M2N9P0Q1R2S3T4V5
           name: billing-api
@@ -544,12 +576,17 @@ components:
           source: workspace
           status: building
       properties:
+        build:
+          description: The build's latest progress report, or null before the first report. A terminal Simulator keeps its last report.
+          oneOf:
+            - $ref: "#/components/schemas/SimulatorBuildProgress"
+            - type: "null"
         created_at:
           description: Simulator creation time.
           format: date-time
           type: string
         error:
-          $ref: "#/components/schemas/ResourceError"
+          $ref: "#/components/schemas/SimulatorError"
           description: Why the build failed or was canceled, or null.
         id:
           description: Simulator ID.
@@ -588,7 +625,77 @@ components:
         - status
         - error
         - created_at
+        - build
       type: object
+    SimulatorBuildProgress:
+      additionalProperties: false
+      properties:
+        builder:
+          description: The coding-loop provider.
+          enum:
+            - claude
+            - openai
+          type: string
+        last_submission:
+          description: Outcome of the most recent submit attempt, or null.
+          enum:
+            - accepted
+            - rejected
+            - null
+          type:
+            - string
+            - "null"
+        last_tool:
+          description: Name of the most recent tool call, or null.
+          type:
+            - string
+            - "null"
+        stage:
+          description: derive while the effective spec, build skeleton, and sandbox are prepared; build while the coding loop runs; assemble while an accepted artifact publishes.
+          enum:
+            - derive
+            - build
+            - assemble
+          type: string
+        submissions:
+          description: Submit attempts.
+          format: int64
+          type: integer
+        tool_calls:
+          description: Tool calls the coding loop executed.
+          format: int64
+          type: integer
+        updated_at:
+          description: Time of the last progress report.
+          format: date-time
+          type: string
+      required:
+        - builder
+        - stage
+        - tool_calls
+        - submissions
+        - last_tool
+        - last_submission
+        - updated_at
+      type: object
+    SimulatorError:
+      additionalProperties: false
+      properties:
+        code:
+          description: Stable Simulator build error code.
+          enum:
+            - build_failed
+            - build_cancelled
+          type: string
+        detail:
+          description: Safe human-readable error detail.
+          type: string
+      required:
+        - code
+        - detail
+      type:
+        - object
+        - "null"
     Step:
       additionalProperties: false
       properties:
@@ -623,7 +730,7 @@ components:
           format: date-time
           type: string
         error:
-          $ref: "#/components/schemas/ResourceError"
+          $ref: "#/components/schemas/WorldError"
           description: Safe failure information, or null when no failure exists.
         id:
           description: World ID.
@@ -708,6 +815,30 @@ components:
         - conditions
         - assumptions
       type: object
+    WorldError:
+      additionalProperties: false
+      properties:
+        code:
+          description: Stable World error code.
+          enum:
+            - world_build_canceled
+            - world_start_failed
+            - world_create_failed
+            - world_failed
+            - world_population_failed
+            - world_population_unsupported
+            - world_population_invalid
+            - world_population_unavailable
+          type: string
+        detail:
+          description: Safe human-readable error detail.
+          type: string
+      required:
+        - code
+        - detail
+      type:
+        - object
+        - "null"
     WorldRecordCount:
       additionalProperties: false
       properties:
@@ -814,23 +945,30 @@ paths:
           description: Bad Request
         "401":
           $ref: "#/components/responses/Unauthorized"
-        "403":
-          $ref: "#/components/responses/Forbidden"
-        "404":
-          $ref: "#/components/responses/NotFound"
         "422":
           content:
             application/problem+json:
               examples:
-                validation:
-                  $ref: "#/components/examples/validation"
+                validation_list_limit:
+                  $ref: "#/components/examples/validation_list_limit"
+                validation_simulator_id:
+                  $ref: "#/components/examples/validation_simulator_id"
               schema:
                 $ref: "#/components/schemas/Error"
           description: Unprocessable Entity
         "500":
           $ref: "#/components/responses/InternalServerError"
         "503":
-          $ref: "#/components/responses/ServiceUnavailable"
+          content:
+            application/problem+json:
+              examples:
+                auth_provider_unavailable:
+                  $ref: "#/components/examples/auth_provider_unavailable"
+                internal_unavailable:
+                  $ref: "#/components/examples/internal_unavailable"
+              schema:
+                $ref: "#/components/schemas/Error"
+          description: Service Unavailable
       security:
         - apiKeyAuth: []
       summary: List Simulations
@@ -856,6 +994,8 @@ paths:
           content:
             application/problem+json:
               examples:
+                bad_request_body:
+                  $ref: "#/components/examples/bad_request_body"
                 simulator_unknown:
                   $ref: "#/components/examples/simulator_unknown"
               schema:
@@ -863,10 +1003,6 @@ paths:
           description: Bad Request
         "401":
           $ref: "#/components/responses/Unauthorized"
-        "403":
-          $ref: "#/components/responses/Forbidden"
-        "404":
-          $ref: "#/components/responses/NotFound"
         "408":
           $ref: "#/components/responses/RequestTimeout"
         "409":
@@ -886,8 +1022,8 @@ paths:
           content:
             application/problem+json:
               examples:
-                validation:
-                  $ref: "#/components/examples/validation"
+                validation_simulator_id:
+                  $ref: "#/components/examples/validation_simulator_id"
               schema:
                 $ref: "#/components/schemas/Error"
           description: Unprocessable Entity
@@ -917,6 +1053,10 @@ paths:
           content:
             application/problem+json:
               examples:
+                auth_provider_unavailable:
+                  $ref: "#/components/examples/auth_provider_unavailable"
+                internal_unavailable:
+                  $ref: "#/components/examples/internal_unavailable"
                 simulation_provider_unavailable:
                   $ref: "#/components/examples/simulation_provider_unavailable"
               schema:
@@ -951,12 +1091,17 @@ paths:
       responses:
         "204":
           description: No Content
-        "400":
-          $ref: "#/components/responses/BadRequest"
         "401":
           $ref: "#/components/responses/Unauthorized"
         "403":
-          $ref: "#/components/responses/Forbidden"
+          content:
+            application/problem+json:
+              examples:
+                auth_forbidden_simulation:
+                  $ref: "#/components/examples/auth_forbidden_simulation"
+              schema:
+                $ref: "#/components/schemas/Error"
+          description: Forbidden
         "404":
           content:
             application/problem+json:
@@ -970,6 +1115,8 @@ paths:
           content:
             application/problem+json:
               examples:
+                simulation_platform_owned:
+                  $ref: "#/components/examples/simulation_platform_owned"
                 simulation_world_owned:
                   $ref: "#/components/examples/simulation_world_owned"
               schema:
@@ -978,9 +1125,16 @@ paths:
         "500":
           $ref: "#/components/responses/InternalServerError"
         "503":
-          $ref: "#/components/responses/ServiceUnavailable"
-        "504":
-          $ref: "#/components/responses/GatewayTimeout"
+          content:
+            application/problem+json:
+              examples:
+                auth_provider_unavailable:
+                  $ref: "#/components/examples/auth_provider_unavailable"
+                internal_unavailable:
+                  $ref: "#/components/examples/internal_unavailable"
+              schema:
+                $ref: "#/components/schemas/Error"
+          description: Service Unavailable
       security:
         - apiKeyAuth: []
       summary: Delete Simulation
@@ -1004,12 +1158,17 @@ paths:
               schema:
                 $ref: "#/components/schemas/Simulation"
           description: OK
-        "400":
-          $ref: "#/components/responses/BadRequest"
         "401":
           $ref: "#/components/responses/Unauthorized"
         "403":
-          $ref: "#/components/responses/Forbidden"
+          content:
+            application/problem+json:
+              examples:
+                auth_forbidden_simulation:
+                  $ref: "#/components/examples/auth_forbidden_simulation"
+              schema:
+                $ref: "#/components/schemas/Error"
+          description: Forbidden
         "404":
           content:
             application/problem+json:
@@ -1022,7 +1181,16 @@ paths:
         "500":
           $ref: "#/components/responses/InternalServerError"
         "503":
-          $ref: "#/components/responses/ServiceUnavailable"
+          content:
+            application/problem+json:
+              examples:
+                auth_provider_unavailable:
+                  $ref: "#/components/examples/auth_provider_unavailable"
+                internal_unavailable:
+                  $ref: "#/components/examples/internal_unavailable"
+              schema:
+                $ref: "#/components/schemas/Error"
+          description: Service Unavailable
       security:
         - apiKeyAuth: []
       summary: Get Simulation
@@ -1054,11 +1222,25 @@ paths:
                 $ref: "#/components/schemas/CreatedSimulation"
           description: Created
         "400":
-          $ref: "#/components/responses/BadRequest"
+          content:
+            application/problem+json:
+              examples:
+                bad_request_body:
+                  $ref: "#/components/examples/bad_request_body"
+              schema:
+                $ref: "#/components/schemas/Error"
+          description: Bad Request
         "401":
           $ref: "#/components/responses/Unauthorized"
         "403":
-          $ref: "#/components/responses/Forbidden"
+          content:
+            application/problem+json:
+              examples:
+                auth_forbidden_simulation:
+                  $ref: "#/components/examples/auth_forbidden_simulation"
+              schema:
+                $ref: "#/components/schemas/Error"
+          description: Forbidden
         "404":
           content:
             application/problem+json:
@@ -1087,8 +1269,8 @@ paths:
           content:
             application/problem+json:
               examples:
-                validation:
-                  $ref: "#/components/examples/validation"
+                validation_fork_simulation:
+                  $ref: "#/components/examples/validation_fork_simulation"
               schema:
                 $ref: "#/components/schemas/Error"
           description: Unprocessable Entity
@@ -1118,6 +1300,10 @@ paths:
           content:
             application/problem+json:
               examples:
+                auth_provider_unavailable:
+                  $ref: "#/components/examples/auth_provider_unavailable"
+                internal_unavailable:
+                  $ref: "#/components/examples/internal_unavailable"
                 simulation_provider_unavailable:
                   $ref: "#/components/examples/simulation_provider_unavailable"
               schema:
@@ -1156,12 +1342,17 @@ paths:
               schema:
                 $ref: "#/components/schemas/Simulation"
           description: OK
-        "400":
-          $ref: "#/components/responses/BadRequest"
         "401":
           $ref: "#/components/responses/Unauthorized"
         "403":
-          $ref: "#/components/responses/Forbidden"
+          content:
+            application/problem+json:
+              examples:
+                auth_forbidden_simulation:
+                  $ref: "#/components/examples/auth_forbidden_simulation"
+              schema:
+                $ref: "#/components/schemas/Error"
+          description: Forbidden
         "404":
           content:
             application/problem+json:
@@ -1175,6 +1366,8 @@ paths:
           content:
             application/problem+json:
               examples:
+                simulation_platform_owned:
+                  $ref: "#/components/examples/simulation_platform_owned"
                 simulation_world_owned:
                   $ref: "#/components/examples/simulation_world_owned"
               schema:
@@ -1206,6 +1399,10 @@ paths:
           content:
             application/problem+json:
               examples:
+                auth_provider_unavailable:
+                  $ref: "#/components/examples/auth_provider_unavailable"
+                internal_unavailable:
+                  $ref: "#/components/examples/internal_unavailable"
                 simulation_provider_unavailable:
                   $ref: "#/components/examples/simulation_provider_unavailable"
               schema:
@@ -1270,7 +1467,14 @@ paths:
         "401":
           $ref: "#/components/responses/Unauthorized"
         "403":
-          $ref: "#/components/responses/Forbidden"
+          content:
+            application/problem+json:
+              examples:
+                auth_forbidden_simulation:
+                  $ref: "#/components/examples/auth_forbidden_simulation"
+              schema:
+                $ref: "#/components/schemas/Error"
+          description: Forbidden
         "404":
           content:
             application/problem+json:
@@ -1293,15 +1497,24 @@ paths:
           content:
             application/problem+json:
               examples:
-                validation:
-                  $ref: "#/components/examples/validation"
+                validation_list_limit:
+                  $ref: "#/components/examples/validation_list_limit"
               schema:
                 $ref: "#/components/schemas/Error"
           description: Unprocessable Entity
         "500":
           $ref: "#/components/responses/InternalServerError"
         "503":
-          $ref: "#/components/responses/ServiceUnavailable"
+          content:
+            application/problem+json:
+              examples:
+                auth_provider_unavailable:
+                  $ref: "#/components/examples/auth_provider_unavailable"
+                internal_unavailable:
+                  $ref: "#/components/examples/internal_unavailable"
+              schema:
+                $ref: "#/components/schemas/Error"
+          description: Service Unavailable
       security:
         - apiKeyAuth: []
       summary: List Simulation Steps
@@ -1326,12 +1539,17 @@ paths:
               schema:
                 $ref: "#/components/schemas/Simulation"
           description: OK
-        "400":
-          $ref: "#/components/responses/BadRequest"
         "401":
           $ref: "#/components/responses/Unauthorized"
         "403":
-          $ref: "#/components/responses/Forbidden"
+          content:
+            application/problem+json:
+              examples:
+                auth_forbidden_simulation:
+                  $ref: "#/components/examples/auth_forbidden_simulation"
+              schema:
+                $ref: "#/components/schemas/Error"
+          description: Forbidden
         "404":
           content:
             application/problem+json:
@@ -1345,6 +1563,8 @@ paths:
           content:
             application/problem+json:
               examples:
+                simulation_platform_owned:
+                  $ref: "#/components/examples/simulation_platform_owned"
                 simulation_world_owned:
                   $ref: "#/components/examples/simulation_world_owned"
               schema:
@@ -1353,9 +1573,16 @@ paths:
         "500":
           $ref: "#/components/responses/InternalServerError"
         "503":
-          $ref: "#/components/responses/ServiceUnavailable"
-        "504":
-          $ref: "#/components/responses/GatewayTimeout"
+          content:
+            application/problem+json:
+              examples:
+                auth_provider_unavailable:
+                  $ref: "#/components/examples/auth_provider_unavailable"
+                internal_unavailable:
+                  $ref: "#/components/examples/internal_unavailable"
+              schema:
+                $ref: "#/components/schemas/Error"
+          description: Service Unavailable
       security:
         - apiKeyAuth: []
       summary: Stop Simulation
@@ -1387,11 +1614,25 @@ paths:
                 $ref: "#/components/schemas/SimulationToken"
           description: OK
         "400":
-          $ref: "#/components/responses/BadRequest"
+          content:
+            application/problem+json:
+              examples:
+                bad_request_body:
+                  $ref: "#/components/examples/bad_request_body"
+              schema:
+                $ref: "#/components/schemas/Error"
+          description: Bad Request
         "401":
           $ref: "#/components/responses/Unauthorized"
         "403":
-          $ref: "#/components/responses/Forbidden"
+          content:
+            application/problem+json:
+              examples:
+                auth_forbidden_simulation:
+                  $ref: "#/components/examples/auth_forbidden_simulation"
+              schema:
+                $ref: "#/components/schemas/Error"
+          description: Forbidden
         "404":
           content:
             application/problem+json:
@@ -1404,7 +1645,14 @@ paths:
         "408":
           $ref: "#/components/responses/RequestTimeout"
         "409":
-          $ref: "#/components/responses/Conflict"
+          content:
+            application/problem+json:
+              examples:
+                simulation_platform_owned:
+                  $ref: "#/components/examples/simulation_platform_owned"
+              schema:
+                $ref: "#/components/schemas/Error"
+          description: Conflict
         "413":
           $ref: "#/components/responses/PayloadTooLarge"
         "415":
@@ -1413,15 +1661,24 @@ paths:
           content:
             application/problem+json:
               examples:
-                validation:
-                  $ref: "#/components/examples/validation"
+                validation_mint_simulation_token:
+                  $ref: "#/components/examples/validation_mint_simulation_token"
               schema:
                 $ref: "#/components/schemas/Error"
           description: Unprocessable Entity
         "500":
           $ref: "#/components/responses/InternalServerError"
         "503":
-          $ref: "#/components/responses/ServiceUnavailable"
+          content:
+            application/problem+json:
+              examples:
+                auth_provider_unavailable:
+                  $ref: "#/components/examples/auth_provider_unavailable"
+                internal_unavailable:
+                  $ref: "#/components/examples/internal_unavailable"
+              schema:
+                $ref: "#/components/schemas/Error"
+          description: Service Unavailable
       security:
         - apiKeyAuth: []
       summary: Mint Simulation Token
@@ -1483,23 +1740,28 @@ paths:
           description: Bad Request
         "401":
           $ref: "#/components/responses/Unauthorized"
-        "403":
-          $ref: "#/components/responses/Forbidden"
-        "404":
-          $ref: "#/components/responses/NotFound"
         "422":
           content:
             application/problem+json:
               examples:
-                validation:
-                  $ref: "#/components/examples/validation"
+                validation_list_limit:
+                  $ref: "#/components/examples/validation_list_limit"
               schema:
                 $ref: "#/components/schemas/Error"
           description: Unprocessable Entity
         "500":
           $ref: "#/components/responses/InternalServerError"
         "503":
-          $ref: "#/components/responses/ServiceUnavailable"
+          content:
+            application/problem+json:
+              examples:
+                auth_provider_unavailable:
+                  $ref: "#/components/examples/auth_provider_unavailable"
+                internal_unavailable:
+                  $ref: "#/components/examples/internal_unavailable"
+              schema:
+                $ref: "#/components/schemas/Error"
+          description: Service Unavailable
       security:
         - apiKeyAuth: []
       summary: List Simulators
@@ -1543,6 +1805,8 @@ paths:
           content:
             application/problem+json:
               examples:
+                bad_request_body:
+                  $ref: "#/components/examples/bad_request_body"
                 simulator_unknown_parent:
                   $ref: "#/components/examples/simulator_unknown_parent"
               schema:
@@ -1550,10 +1814,6 @@ paths:
           description: Bad Request
         "401":
           $ref: "#/components/responses/Unauthorized"
-        "403":
-          $ref: "#/components/responses/Forbidden"
-        "404":
-          $ref: "#/components/responses/NotFound"
         "408":
           $ref: "#/components/responses/RequestTimeout"
         "409":
@@ -1566,22 +1826,17 @@ paths:
                 $ref: "#/components/schemas/Error"
           description: Conflict
         "413":
-          content:
-            application/problem+json:
-              examples:
-                payload_too_large:
-                  $ref: "#/components/examples/payload_too_large"
-              schema:
-                $ref: "#/components/schemas/Error"
-          description: Request Entity Too Large
+          $ref: "#/components/responses/PayloadTooLarge"
         "415":
           $ref: "#/components/responses/UnsupportedMediaType"
         "422":
           content:
             application/problem+json:
               examples:
-                validation:
-                  $ref: "#/components/examples/validation"
+                validation_build_simulator:
+                  $ref: "#/components/examples/validation_build_simulator"
+                validation_simulator_id:
+                  $ref: "#/components/examples/validation_simulator_id"
               schema:
                 $ref: "#/components/schemas/Error"
           description: Unprocessable Entity
@@ -1596,10 +1851,33 @@ paths:
               schema:
                 $ref: "#/components/schemas/Error"
           description: Too Many Requests
+          headers:
+            Retry-After:
+              description: Seconds until the daily UTC build allowance resets. Present for build_rate_exceeded; concurrent build refusals omit this header.
+              schema:
+                minimum: 1
+                type: integer
         "500":
           $ref: "#/components/responses/InternalServerError"
         "503":
-          $ref: "#/components/responses/ServiceUnavailable"
+          content:
+            application/problem+json:
+              examples:
+                auth_provider_unavailable:
+                  $ref: "#/components/examples/auth_provider_unavailable"
+                build_storage_unavailable:
+                  $ref: "#/components/examples/build_storage_unavailable"
+                internal_unavailable:
+                  $ref: "#/components/examples/internal_unavailable"
+              schema:
+                $ref: "#/components/schemas/Error"
+          description: Service Unavailable
+          headers:
+            Retry-After:
+              description: Seconds to wait before retrying a build after a storage failure or operation timeout. Other service and authentication failures can omit this header.
+              schema:
+                minimum: 1
+                type: integer
       security:
         - apiKeyAuth: []
       summary: Build Simulator
@@ -1620,8 +1898,6 @@ paths:
       responses:
         "204":
           description: No Content
-        "400":
-          $ref: "#/components/responses/BadRequest"
         "401":
           $ref: "#/components/responses/Unauthorized"
         "403":
@@ -1630,6 +1906,8 @@ paths:
               examples:
                 auth_forbidden_catalog:
                   $ref: "#/components/examples/auth_forbidden_catalog"
+                auth_forbidden_simulator:
+                  $ref: "#/components/examples/auth_forbidden_simulator"
               schema:
                 $ref: "#/components/schemas/Error"
           description: Forbidden
@@ -1655,15 +1933,24 @@ paths:
           content:
             application/problem+json:
               examples:
-                validation:
-                  $ref: "#/components/examples/validation"
+                validation_simulator_id:
+                  $ref: "#/components/examples/validation_simulator_id"
               schema:
                 $ref: "#/components/schemas/Error"
           description: Unprocessable Entity
         "500":
           $ref: "#/components/responses/InternalServerError"
         "503":
-          $ref: "#/components/responses/ServiceUnavailable"
+          content:
+            application/problem+json:
+              examples:
+                auth_provider_unavailable:
+                  $ref: "#/components/examples/auth_provider_unavailable"
+                internal_unavailable:
+                  $ref: "#/components/examples/internal_unavailable"
+              schema:
+                $ref: "#/components/schemas/Error"
+          description: Service Unavailable
       security:
         - apiKeyAuth: []
       summary: Delete Simulator
@@ -1687,12 +1974,17 @@ paths:
               schema:
                 $ref: "#/components/schemas/Simulator"
           description: OK
-        "400":
-          $ref: "#/components/responses/BadRequest"
         "401":
           $ref: "#/components/responses/Unauthorized"
         "403":
-          $ref: "#/components/responses/Forbidden"
+          content:
+            application/problem+json:
+              examples:
+                auth_forbidden_simulator:
+                  $ref: "#/components/examples/auth_forbidden_simulator"
+              schema:
+                $ref: "#/components/schemas/Error"
+          description: Forbidden
         "404":
           content:
             application/problem+json:
@@ -1706,15 +1998,24 @@ paths:
           content:
             application/problem+json:
               examples:
-                validation:
-                  $ref: "#/components/examples/validation"
+                validation_simulator_id:
+                  $ref: "#/components/examples/validation_simulator_id"
               schema:
                 $ref: "#/components/schemas/Error"
           description: Unprocessable Entity
         "500":
           $ref: "#/components/responses/InternalServerError"
         "503":
-          $ref: "#/components/responses/ServiceUnavailable"
+          content:
+            application/problem+json:
+              examples:
+                auth_provider_unavailable:
+                  $ref: "#/components/examples/auth_provider_unavailable"
+                internal_unavailable:
+                  $ref: "#/components/examples/internal_unavailable"
+              schema:
+                $ref: "#/components/schemas/Error"
+          description: Service Unavailable
       security:
         - apiKeyAuth: []
       summary: Get Simulator
@@ -1739,8 +2040,6 @@ paths:
               schema:
                 $ref: "#/components/schemas/Simulator"
           description: OK
-        "400":
-          $ref: "#/components/responses/BadRequest"
         "401":
           $ref: "#/components/responses/Unauthorized"
         "403":
@@ -1749,6 +2048,8 @@ paths:
               examples:
                 auth_forbidden_owner:
                   $ref: "#/components/examples/auth_forbidden_owner"
+                auth_forbidden_simulator:
+                  $ref: "#/components/examples/auth_forbidden_simulator"
               schema:
                 $ref: "#/components/schemas/Error"
           description: Forbidden
@@ -1761,21 +2062,28 @@ paths:
               schema:
                 $ref: "#/components/schemas/Error"
           description: Not Found
-        "409":
-          $ref: "#/components/responses/Conflict"
         "422":
           content:
             application/problem+json:
               examples:
-                validation:
-                  $ref: "#/components/examples/validation"
+                validation_simulator_id:
+                  $ref: "#/components/examples/validation_simulator_id"
               schema:
                 $ref: "#/components/schemas/Error"
           description: Unprocessable Entity
         "500":
           $ref: "#/components/responses/InternalServerError"
         "503":
-          $ref: "#/components/responses/ServiceUnavailable"
+          content:
+            application/problem+json:
+              examples:
+                auth_provider_unavailable:
+                  $ref: "#/components/examples/auth_provider_unavailable"
+                internal_unavailable:
+                  $ref: "#/components/examples/internal_unavailable"
+              schema:
+                $ref: "#/components/schemas/Error"
+          description: Service Unavailable
       security:
         - apiKeyAuth: []
       summary: Cancel Simulator Build
@@ -1818,23 +2126,28 @@ paths:
           description: Bad Request
         "401":
           $ref: "#/components/responses/Unauthorized"
-        "403":
-          $ref: "#/components/responses/Forbidden"
-        "404":
-          $ref: "#/components/responses/NotFound"
         "422":
           content:
             application/problem+json:
               examples:
-                validation:
-                  $ref: "#/components/examples/validation"
+                validation_list_limit:
+                  $ref: "#/components/examples/validation_list_limit"
               schema:
                 $ref: "#/components/schemas/Error"
           description: Unprocessable Entity
         "500":
           $ref: "#/components/responses/InternalServerError"
         "503":
-          $ref: "#/components/responses/ServiceUnavailable"
+          content:
+            application/problem+json:
+              examples:
+                auth_provider_unavailable:
+                  $ref: "#/components/examples/auth_provider_unavailable"
+                internal_unavailable:
+                  $ref: "#/components/examples/internal_unavailable"
+              schema:
+                $ref: "#/components/schemas/Error"
+          description: Service Unavailable
       security:
         - apiKeyAuth: []
       summary: List Worlds
@@ -1860,6 +2173,8 @@ paths:
           content:
             application/problem+json:
               examples:
+                bad_request_body:
+                  $ref: "#/components/examples/bad_request_body"
                 simulator_unknown:
                   $ref: "#/components/examples/simulator_unknown"
               schema:
@@ -1867,10 +2182,6 @@ paths:
           description: Bad Request
         "401":
           $ref: "#/components/responses/Unauthorized"
-        "403":
-          $ref: "#/components/responses/Forbidden"
-        "404":
-          $ref: "#/components/responses/NotFound"
         "408":
           $ref: "#/components/responses/RequestTimeout"
         "409":
@@ -1890,15 +2201,26 @@ paths:
           content:
             application/problem+json:
               examples:
-                validation:
-                  $ref: "#/components/examples/validation"
+                validation_build_world:
+                  $ref: "#/components/examples/validation_build_world"
+                validation_simulator_id:
+                  $ref: "#/components/examples/validation_simulator_id"
               schema:
                 $ref: "#/components/schemas/Error"
           description: Unprocessable Entity
         "500":
           $ref: "#/components/responses/InternalServerError"
         "503":
-          $ref: "#/components/responses/ServiceUnavailable"
+          content:
+            application/problem+json:
+              examples:
+                auth_provider_unavailable:
+                  $ref: "#/components/examples/auth_provider_unavailable"
+                internal_unavailable:
+                  $ref: "#/components/examples/internal_unavailable"
+              schema:
+                $ref: "#/components/schemas/Error"
+          description: Service Unavailable
       security:
         - apiKeyAuth: []
       summary: Build World
@@ -1919,12 +2241,17 @@ paths:
       responses:
         "204":
           description: No Content
-        "400":
-          $ref: "#/components/responses/BadRequest"
         "401":
           $ref: "#/components/responses/Unauthorized"
         "403":
-          $ref: "#/components/responses/Forbidden"
+          content:
+            application/problem+json:
+              examples:
+                auth_forbidden_world:
+                  $ref: "#/components/examples/auth_forbidden_world"
+              schema:
+                $ref: "#/components/schemas/Error"
+          description: Forbidden
         "404":
           content:
             application/problem+json:
@@ -1934,12 +2261,19 @@ paths:
               schema:
                 $ref: "#/components/schemas/Error"
           description: Not Found
-        "409":
-          $ref: "#/components/responses/Conflict"
         "500":
           $ref: "#/components/responses/InternalServerError"
         "503":
-          $ref: "#/components/responses/ServiceUnavailable"
+          content:
+            application/problem+json:
+              examples:
+                auth_provider_unavailable:
+                  $ref: "#/components/examples/auth_provider_unavailable"
+                internal_unavailable:
+                  $ref: "#/components/examples/internal_unavailable"
+              schema:
+                $ref: "#/components/schemas/Error"
+          description: Service Unavailable
       security:
         - apiKeyAuth: []
       summary: Delete World
@@ -1963,12 +2297,17 @@ paths:
               schema:
                 $ref: "#/components/schemas/World"
           description: OK
-        "400":
-          $ref: "#/components/responses/BadRequest"
         "401":
           $ref: "#/components/responses/Unauthorized"
         "403":
-          $ref: "#/components/responses/Forbidden"
+          content:
+            application/problem+json:
+              examples:
+                auth_forbidden_world:
+                  $ref: "#/components/examples/auth_forbidden_world"
+              schema:
+                $ref: "#/components/schemas/Error"
+          description: Forbidden
         "404":
           content:
             application/problem+json:
@@ -1981,7 +2320,16 @@ paths:
         "500":
           $ref: "#/components/responses/InternalServerError"
         "503":
-          $ref: "#/components/responses/ServiceUnavailable"
+          content:
+            application/problem+json:
+              examples:
+                auth_provider_unavailable:
+                  $ref: "#/components/examples/auth_provider_unavailable"
+                internal_unavailable:
+                  $ref: "#/components/examples/internal_unavailable"
+              schema:
+                $ref: "#/components/schemas/Error"
+          description: Service Unavailable
       security:
         - apiKeyAuth: []
       summary: Get World
@@ -2006,12 +2354,17 @@ paths:
               schema:
                 $ref: "#/components/schemas/World"
           description: OK
-        "400":
-          $ref: "#/components/responses/BadRequest"
         "401":
           $ref: "#/components/responses/Unauthorized"
         "403":
-          $ref: "#/components/responses/Forbidden"
+          content:
+            application/problem+json:
+              examples:
+                auth_forbidden_world:
+                  $ref: "#/components/examples/auth_forbidden_world"
+              schema:
+                $ref: "#/components/schemas/Error"
+          description: Forbidden
         "404":
           content:
             application/problem+json:
@@ -2021,12 +2374,19 @@ paths:
               schema:
                 $ref: "#/components/schemas/Error"
           description: Not Found
-        "409":
-          $ref: "#/components/responses/Conflict"
         "500":
           $ref: "#/components/responses/InternalServerError"
         "503":
-          $ref: "#/components/responses/ServiceUnavailable"
+          content:
+            application/problem+json:
+              examples:
+                auth_provider_unavailable:
+                  $ref: "#/components/examples/auth_provider_unavailable"
+                internal_unavailable:
+                  $ref: "#/components/examples/internal_unavailable"
+              schema:
+                $ref: "#/components/schemas/Error"
+          description: Service Unavailable
       security:
         - apiKeyAuth: []
       summary: Cancel World Build
@@ -2051,12 +2411,17 @@ paths:
               schema:
                 $ref: "#/components/schemas/World"
           description: OK
-        "400":
-          $ref: "#/components/responses/BadRequest"
         "401":
           $ref: "#/components/responses/Unauthorized"
         "403":
-          $ref: "#/components/responses/Forbidden"
+          content:
+            application/problem+json:
+              examples:
+                auth_forbidden_world:
+                  $ref: "#/components/examples/auth_forbidden_world"
+              schema:
+                $ref: "#/components/schemas/Error"
+          description: Forbidden
         "404":
           content:
             application/problem+json:
@@ -2087,7 +2452,16 @@ paths:
         "500":
           $ref: "#/components/responses/InternalServerError"
         "503":
-          $ref: "#/components/responses/ServiceUnavailable"
+          content:
+            application/problem+json:
+              examples:
+                auth_provider_unavailable:
+                  $ref: "#/components/examples/auth_provider_unavailable"
+                internal_unavailable:
+                  $ref: "#/components/examples/internal_unavailable"
+              schema:
+                $ref: "#/components/schemas/Error"
+          description: Service Unavailable
       security:
         - apiKeyAuth: []
       summary: Start World
@@ -2112,12 +2486,17 @@ paths:
               schema:
                 $ref: "#/components/schemas/World"
           description: OK
-        "400":
-          $ref: "#/components/responses/BadRequest"
         "401":
           $ref: "#/components/responses/Unauthorized"
         "403":
-          $ref: "#/components/responses/Forbidden"
+          content:
+            application/problem+json:
+              examples:
+                auth_forbidden_world:
+                  $ref: "#/components/examples/auth_forbidden_world"
+              schema:
+                $ref: "#/components/schemas/Error"
+          description: Forbidden
         "404":
           content:
             application/problem+json:
@@ -2139,7 +2518,16 @@ paths:
         "500":
           $ref: "#/components/responses/InternalServerError"
         "503":
-          $ref: "#/components/responses/ServiceUnavailable"
+          content:
+            application/problem+json:
+              examples:
+                auth_provider_unavailable:
+                  $ref: "#/components/examples/auth_provider_unavailable"
+                internal_unavailable:
+                  $ref: "#/components/examples/internal_unavailable"
+              schema:
+                $ref: "#/components/schemas/Error"
+          description: Service Unavailable
       security:
         - apiKeyAuth: []
       summary: Stop World

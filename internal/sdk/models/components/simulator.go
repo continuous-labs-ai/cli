@@ -56,9 +56,11 @@ func (e *SimulatorStatus) IsExact() bool {
 }
 
 type Simulator struct {
+	// The build's latest progress report, or null before the first report. A terminal Simulator keeps its last report.
+	Build *SimulatorBuildProgress `json:"build"`
 	// Simulator creation time.
-	CreatedAt time.Time      `json:"created_at"`
-	Error     *ResourceError `json:"error"`
+	CreatedAt time.Time       `json:"created_at"`
+	Error     *SimulatorError `json:"error"`
 	// Simulator ID.
 	ID string `json:"id"`
 	// Simulator name. Names cannot start with smr_.
@@ -82,6 +84,13 @@ func (s *Simulator) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
+func (s *Simulator) GetBuild() *SimulatorBuildProgress {
+	if s == nil {
+		return nil
+	}
+	return s.Build
+}
+
 func (s *Simulator) GetCreatedAt() time.Time {
 	if s == nil {
 		return time.Time{}
@@ -89,7 +98,7 @@ func (s *Simulator) GetCreatedAt() time.Time {
 	return s.CreatedAt
 }
 
-func (s *Simulator) GetError() *ResourceError {
+func (s *Simulator) GetError() *SimulatorError {
 	if s == nil {
 		return nil
 	}

@@ -61,6 +61,7 @@ type BuildSimulatorResponse struct {
 	HTTPMeta components.HTTPMetadata `json:"-"`
 	// Accepted
 	Simulator *components.Simulator
+	Headers   map[string][]string
 }
 
 func (b BuildSimulatorResponse) MarshalJSON() ([]byte, error) {
@@ -86,4 +87,11 @@ func (b *BuildSimulatorResponse) GetSimulator() *components.Simulator {
 		return nil
 	}
 	return b.Simulator
+}
+
+func (b *BuildSimulatorResponse) GetHeaders() map[string][]string {
+	if b == nil {
+		return map[string][]string{}
+	}
+	return b.Headers
 }
