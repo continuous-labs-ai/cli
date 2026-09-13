@@ -2,11 +2,64 @@
 
 package components
 
+import (
+	"encoding/json"
+	"fmt"
+	"github.com/continuous-labs-ai/cli/internal/sdk/sdkinternal/utils"
+)
+
+// BuildWorldRequestBuilder - Model provider that builds starting data. Defaults to claude.
+type BuildWorldRequestBuilder string
+
+const (
+	BuildWorldRequestBuilderOpenai BuildWorldRequestBuilder = "openai"
+	BuildWorldRequestBuilderClaude BuildWorldRequestBuilder = "claude"
+)
+
+func (e BuildWorldRequestBuilder) ToPointer() *BuildWorldRequestBuilder {
+	return &e
+}
+func (e *BuildWorldRequestBuilder) UnmarshalJSON(data []byte) error {
+	var v string
+	if err := json.Unmarshal(data, &v); err != nil {
+		return err
+	}
+	switch v {
+	case "openai":
+		fallthrough
+	case "claude":
+		*e = BuildWorldRequestBuilder(v)
+		return nil
+	default:
+		return fmt.Errorf("invalid value for BuildWorldRequestBuilder: %v", v)
+	}
+}
+
 type BuildWorldRequest struct {
+	// Model provider that builds starting data. Defaults to claude.
+	Builder *BuildWorldRequestBuilder `default:"claude" json:"builder"`
 	// Describe the initial data, scenario, and relationships. Populated Worlds support up to 8 selected Simulators and 1,000 starting records in total. Named record types replace their default data. At most 16,384 characters and 65,536 UTF-8 bytes. U+0000 is not permitted.
 	Instructions *string `json:"instructions,omitzero"`
 	// Simulator IDs for the World.
 	Simulators []string `json:"simulators"`
+}
+
+func (b BuildWorldRequest) MarshalJSON() ([]byte, error) {
+	return utils.MarshalJSON(b, "", false)
+}
+
+func (b *BuildWorldRequest) UnmarshalJSON(data []byte) error {
+	if err := utils.UnmarshalJSON(data, &b, "", false, nil); err != nil {
+		return err
+	}
+	return nil
+}
+
+func (b *BuildWorldRequest) GetBuilder() *BuildWorldRequestBuilder {
+	if b == nil {
+		return nil
+	}
+	return b.Builder
 }
 
 func (b *BuildWorldRequest) GetInstructions() *string {

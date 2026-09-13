@@ -2,11 +2,72 @@
 
 package components
 
+import (
+	"github.com/continuous-labs-ai/cli/internal/sdk/sdkinternal/utils"
+	"time"
+)
+
+// Kind - api for an API write or advance for a clock advance.
+type Kind string
+
+const (
+	KindAPI     Kind = "api"
+	KindAdvance Kind = "advance"
+)
+
+func (e Kind) ToPointer() *Kind {
+	return &e
+}
+
+// IsExact returns true if the value matches a known enum value, false otherwise.
+func (e *Kind) IsExact() bool {
+	if e != nil {
+		switch *e {
+		case "api", "advance":
+			return true
+		}
+	}
+	return false
+}
+
 type Step struct {
+	// Advance that produced this step, if any.
+	AdvanceID *string `json:"advance_id"`
+	// api for an API write or advance for a clock advance.
+	Kind Kind `json:"kind"`
 	// HTTP method and path of the request that produced this step, without the query string, for example POST /v1/widgets.
 	Label string `json:"label"`
 	// Step number. Use it as at_step when you fork.
 	Step int64 `json:"step"`
+	// Clock after the step.
+	TimeAfter *time.Time `json:"time_after"`
+	// Clock before the step.
+	TimeBefore *time.Time `json:"time_before"`
+}
+
+func (s Step) MarshalJSON() ([]byte, error) {
+	return utils.MarshalJSON(s, "", false)
+}
+
+func (s *Step) UnmarshalJSON(data []byte) error {
+	if err := utils.UnmarshalJSON(data, &s, "", false, nil); err != nil {
+		return err
+	}
+	return nil
+}
+
+func (s *Step) GetAdvanceID() *string {
+	if s == nil {
+		return nil
+	}
+	return s.AdvanceID
+}
+
+func (s *Step) GetKind() Kind {
+	if s == nil {
+		return Kind("")
+	}
+	return s.Kind
 }
 
 func (s *Step) GetLabel() string {
@@ -21,4 +82,18 @@ func (s *Step) GetStep() int64 {
 		return 0
 	}
 	return s.Step
+}
+
+func (s *Step) GetTimeAfter() *time.Time {
+	if s == nil {
+		return nil
+	}
+	return s.TimeAfter
+}
+
+func (s *Step) GetTimeBefore() *time.Time {
+	if s == nil {
+		return nil
+	}
+	return s.TimeBefore
 }

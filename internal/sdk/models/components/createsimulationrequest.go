@@ -2,11 +2,29 @@
 
 package components
 
+import (
+	"github.com/continuous-labs-ai/cli/internal/sdk/sdkinternal/utils"
+	"time"
+)
+
 type CreateSimulationRequest struct {
 	// Optional Simulation name. Omission generates a name.
 	Name *string `json:"name,omitzero"`
 	// ID of the ready Simulator.
 	SimulatorID string `json:"simulator_id"`
+	// Initial simulated time in RFC 3339 format. Omission uses 2024-01-01T00:00:00Z. Precision is milliseconds.
+	StartTime *time.Time `json:"start_time,omitzero"`
+}
+
+func (c CreateSimulationRequest) MarshalJSON() ([]byte, error) {
+	return utils.MarshalJSON(c, "", false)
+}
+
+func (c *CreateSimulationRequest) UnmarshalJSON(data []byte) error {
+	if err := utils.UnmarshalJSON(data, &c, "", false, nil); err != nil {
+		return err
+	}
+	return nil
 }
 
 func (c *CreateSimulationRequest) GetName() *string {
@@ -21,4 +39,11 @@ func (c *CreateSimulationRequest) GetSimulatorID() string {
 		return ""
 	}
 	return c.SimulatorID
+}
+
+func (c *CreateSimulationRequest) GetStartTime() *time.Time {
+	if c == nil {
+		return nil
+	}
+	return c.StartTime
 }

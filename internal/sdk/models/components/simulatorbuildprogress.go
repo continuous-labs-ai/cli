@@ -30,20 +30,20 @@ func (e *SimulatorBuildProgressBuilder) IsExact() bool {
 	return false
 }
 
-// LastSubmission - Outcome of the most recent submit attempt, or null.
-type LastSubmission string
+// SimulatorBuildProgressLastSubmission - Outcome of the most recent submit attempt, or null.
+type SimulatorBuildProgressLastSubmission string
 
 const (
-	LastSubmissionAccepted LastSubmission = "accepted"
-	LastSubmissionRejected LastSubmission = "rejected"
+	SimulatorBuildProgressLastSubmissionAccepted SimulatorBuildProgressLastSubmission = "accepted"
+	SimulatorBuildProgressLastSubmissionRejected SimulatorBuildProgressLastSubmission = "rejected"
 )
 
-func (e LastSubmission) ToPointer() *LastSubmission {
+func (e SimulatorBuildProgressLastSubmission) ToPointer() *SimulatorBuildProgressLastSubmission {
 	return &e
 }
 
 // IsExact returns true if the value matches a known enum value, false otherwise.
-func (e *LastSubmission) IsExact() bool {
+func (e *SimulatorBuildProgressLastSubmission) IsExact() bool {
 	if e != nil {
 		switch *e {
 		case "accepted", "rejected":
@@ -81,7 +81,7 @@ type SimulatorBuildProgress struct {
 	// The coding-loop provider.
 	Builder SimulatorBuildProgressBuilder `json:"builder"`
 	// Outcome of the most recent submit attempt, or null.
-	LastSubmission *LastSubmission `json:"last_submission"`
+	LastSubmission *SimulatorBuildProgressLastSubmission `json:"last_submission"`
 	// Name of the most recent tool call, or null.
 	LastTool *string `json:"last_tool"`
 	// derive while the effective spec, build skeleton, and sandbox are prepared; build while the coding loop runs; assemble while an accepted artifact publishes.
@@ -112,7 +112,7 @@ func (s *SimulatorBuildProgress) GetBuilder() SimulatorBuildProgressBuilder {
 	return s.Builder
 }
 
-func (s *SimulatorBuildProgress) GetLastSubmission() *LastSubmission {
+func (s *SimulatorBuildProgress) GetLastSubmission() *SimulatorBuildProgressLastSubmission {
 	if s == nil {
 		return nil
 	}

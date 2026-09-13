@@ -16,6 +16,7 @@ import (
 
 var startWorldCmdMeta = []flagutil.FlagMeta{
 	{FlagName: "id", Shorthand: "i", FieldPath: "ID", Kind: flagutil.FlagKindString, Required: true, Description: "World ID. [required]"},
+	{FlagName: "start-time", Shorthand: "s", FieldPath: "Body.StartTime", Kind: flagutil.FlagKindDateTime, Optional: true, Description: "Initial simulated time for the first Start, in RFC 3339 format. Omission uses 2024-01-01T00:00:00Z. Saved business dates remain unchanged. Later starts preserve the clock."},
 }
 
 // initStartWorldCmd initializes the start-world command.
@@ -31,6 +32,7 @@ func initStartWorldCmd(parent *cobra.Command) error {
 	if err := flagutil.ValidateMeta[operations.StartWorldRequest](startWorldCmdMeta); err != nil {
 		return fmt.Errorf("invalid metadata for start-world: %w", err)
 	}
+	cmd.Flags().String("body", "", "Request body as JSON (alternative to individual flags). Can also be provided via stdin.")
 	parent.AddCommand(cmd)
 	return nil
 }
@@ -45,7 +47,7 @@ func runStartWorldCmd(cmd *cobra.Command, args []string) error {
 			return err
 		}
 	}
-	req, err := flagutil.BuildRequest[operations.StartWorldRequest](cmd, startWorldCmdMeta, "", "")
+	req, err := flagutil.BuildRequest[operations.StartWorldRequest](cmd, startWorldCmdMeta, "Body", "body")
 	if err != nil {
 		return err
 	}

@@ -9,7 +9,19 @@ import (
 
 type StartWorldRequest struct {
 	// World ID.
-	ID string `pathParam:"style=simple,explode=false,name=id"`
+	ID   string                        `pathParam:"style=simple,explode=false,name=id"`
+	Body *components.StartWorldRequest `request:"mediaType=application/json"`
+}
+
+func (s StartWorldRequest) MarshalJSON() ([]byte, error) {
+	return utils.MarshalJSON(s, "", false)
+}
+
+func (s *StartWorldRequest) UnmarshalJSON(data []byte) error {
+	if err := utils.UnmarshalJSON(data, &s, "", false, nil); err != nil {
+		return err
+	}
+	return nil
 }
 
 func (s *StartWorldRequest) GetID() string {
@@ -17,6 +29,13 @@ func (s *StartWorldRequest) GetID() string {
 		return ""
 	}
 	return s.ID
+}
+
+func (s *StartWorldRequest) GetBody() *components.StartWorldRequest {
+	if s == nil {
+		return nil
+	}
+	return s.Body
 }
 
 type StartWorldResponse struct {

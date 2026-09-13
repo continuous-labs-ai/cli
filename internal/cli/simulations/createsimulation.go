@@ -17,7 +17,8 @@ import (
 
 var createSimulationCmdMeta = []flagutil.FlagMeta{
 	{FlagName: "name", Shorthand: "n", FieldPath: "Name", Kind: flagutil.FlagKindString, Optional: true, Description: "Optional Simulation name. Omission generates a name."},
-	{FlagName: "simulator-id", Shorthand: "s", FieldPath: "SimulatorID", Kind: flagutil.FlagKindString, Required: true, Description: "ID of the ready Simulator. [required]"},
+	{FlagName: "simulator-id", FieldPath: "SimulatorID", Kind: flagutil.FlagKindString, Required: true, Description: "ID of the ready Simulator. [required]"},
+	{FlagName: "start-time", FieldPath: "StartTime", Kind: flagutil.FlagKindDateTime, Optional: true, Description: "Initial simulated time in RFC 3339 format. Omission uses 2024-01-01T00:00:00Z. Precision is milliseconds."},
 }
 
 // initCreateSimulationCmd initializes the create-simulation command.
