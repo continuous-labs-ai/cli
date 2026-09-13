@@ -52,6 +52,14 @@ components:
       value:
         code: internal_unavailable
         detail: simulator spec storage is unavailable
+    clock_advance_not_found:
+      value:
+        code: clock_advance_not_found
+        detail: The clock advance was not found.
+    clock_conflict:
+      value:
+        code: clock_conflict
+        detail: A clock advance is active.
     internal:
       value:
         code: internal
@@ -144,6 +152,10 @@ components:
       value:
         code: validation
         detail: instructions must not be blank
+    validation_clock_time:
+      value:
+        code: validation
+        detail: time must be after 0001-01-01T00:00:00Z and before year 10000, with at most millisecond precision
     validation_fork_simulation:
       value:
         code: validation
@@ -221,6 +233,16 @@ components:
             $ref: "#/components/schemas/Error"
       description: Unsupported Media Type
   schemas:
+    AdvanceTimeInputBody:
+      additionalProperties: false
+      properties:
+        to:
+          description: Absolute target time in RFC 3339, with at most millisecond precision.
+          format: date-time
+          type: string
+      required:
+        - to
+      type: object
     BuildSimulatorRequest:
       additionalProperties: false
       examples:
@@ -273,6 +295,13 @@ components:
           simulators:
             - smr_01J8Z5X4K7M2N9P0Q1R2S3T4V5
       properties:
+        builder:
+          default: claude
+          description: Model provider that builds starting data. Defaults to claude.
+          enum:
+            - openai
+            - claude
+          type: string
         instructions:
           description: Describe the initial data, scenario, and relationships. Populated Worlds support up to 8 selected Simulators and 1,000 starting records in total. Named record types replace their default data. At most 16,384 characters and 65,536 UTF-8 bytes. U+0000 is not permitted.
           maxLength: 16384
@@ -286,6 +315,116 @@ components:
           type: array
       required:
         - simulators
+      type: object
+    ClockAdvance:
+      additionalProperties: false
+      properties:
+        error:
+          $ref: "#/components/schemas/ResourceError"
+          description: Safe execution failure, or null when no failure is recorded.
+        event_count:
+          description: Number of committed event executions.
+          format: int64
+          minimum: 0
+          type: integer
+        from:
+          description: Clock before the requested advance.
+          format: date-time
+          type: string
+        id:
+          description: Stable clock advance operation ID.
+          pattern: ^adv_[0-9A-HJKMNP-TV-Z]{26}$
+          type: string
+        members:
+          description: Progress for each participating Simulation.
+          items:
+            $ref: "#/components/schemas/ClockAdvanceMember"
+          type: array
+        status:
+          description: Durable operation state. Poll while pending or running.
+          enum:
+            - pending
+            - running
+            - completed
+            - failed
+          type: string
+        step:
+          description: Committed local step, or null for no change or a World operation.
+          format: int64
+          type:
+            - integer
+            - "null"
+        to:
+          description: Requested absolute target time.
+          format: date-time
+          type: string
+      required:
+        - id
+        - status
+        - from
+        - to
+        - event_count
+        - step
+        - members
+        - error
+      type: object
+    ClockAdvanceMember:
+      additionalProperties: false
+      properties:
+        error:
+          $ref: "#/components/schemas/ResourceError"
+          description: Safe execution failure, or null when no failure is recorded.
+        event_count:
+          description: Number of committed event executions.
+          format: int64
+          minimum: 0
+          type: integer
+        simulation_id:
+          description: Member Simulation ID.
+          pattern: ^sim_[0-9A-HJKMNP-TV-Z]{26}$
+          type: string
+        status:
+          description: Whether this member is pending, committed, or rolled back after a deterministic failure.
+          enum:
+            - pending
+            - completed
+            - failed
+          type: string
+        step:
+          description: Committed local step, or null for no change or a failed advance.
+          format: int64
+          type:
+            - integer
+            - "null"
+      required:
+        - simulation_id
+        - status
+        - event_count
+        - step
+        - error
+      type: object
+    ClockEvent:
+      additionalProperties: false
+      properties:
+        at:
+          description: Simulated time observed by this event handler.
+          format: date-time
+          type: string
+        event_id:
+          description: Scheduled event ID.
+          type: string
+        sequence:
+          description: Persisted insertion order for events due at the same time.
+          format: int64
+          type: integer
+        type:
+          description: Declared event type.
+          type: string
+      required:
+        - event_id
+        - type
+        - at
+        - sequence
       type: object
     CreateSimulationRequest:
       additionalProperties: false
@@ -303,24 +442,40 @@ components:
           minLength: 1
           pattern: ^smr_[0-9A-HJKMNP-TV-Z]{26}$
           type: string
+        start_time:
+          description: Initial simulated time in RFC 3339 format. Omission uses 2024-01-01T00:00:00Z. Precision is milliseconds.
+          format: date-time
+          type: string
       required:
         - simulator_id
       type: object
     CreatedSimulation:
       additionalProperties: false
       examples:
-        - created_at: "2026-01-15T12:00:00Z"
+        - active_advance_id: null
+          created_at: "2026-01-15T12:00:00Z"
+          current_time: "2024-01-01T00:00:00Z"
           endpoint: https://api.continuouslabs.ai/sim/sim_01J8Z5X4K7M2N9P0Q1R2S3T4V6
           expires_at: "2026-01-15T13:00:00Z"
           id: sim_01J8Z5X4K7M2N9P0Q1R2S3T4V6
           name: billing-sandbox
           parent_id: sim_01J8Z5X4K7M2N9P0Q1R2S3T4V8
           simulator_id: smr_01J8Z5X4K7M2N9P0Q1R2S3T4V5
+          start_time: "2024-01-01T00:00:00Z"
           status: running
           token: <redacted>
       properties:
+        active_advance_id:
+          description: Current clock advance operation ID, or null.
+          type:
+            - string
+            - "null"
         created_at:
           description: Simulation creation time.
+          format: date-time
+          type: string
+        current_time:
+          description: Current simulated time.
           format: date-time
           type: string
         endpoint:
@@ -350,6 +505,10 @@ components:
           description: ID of the Simulator.
           pattern: ^smr_[0-9A-HJKMNP-TV-Z]{26}$
           type: string
+        start_time:
+          description: Initial simulated time.
+          format: date-time
+          type: string
         status:
           description: Current status. running serves requests. paused means the Simulation was idle and the platform paused it; the next request wakes it. stopped means its state is saved and requests return 409 until you start it.
           enum:
@@ -361,6 +520,9 @@ components:
           description: Token for requests to the Simulation endpoint. Send it in the X-Continuous-Simulation-Token header. It is returned only here; list and get omit it. Create more with POST /v1/simulations/{id}/tokens.
           type: string
       required:
+        - start_time
+        - current_time
+        - active_advance_id
         - id
         - name
         - simulator_id
@@ -403,6 +565,23 @@ components:
           maxLength: 64
           pattern: ^$|^[a-z][a-z0-9-]*$
           type: string
+      type: object
+    ListAdvanceEventsOutputBody:
+      additionalProperties: false
+      properties:
+        events:
+          description: Committed events in execution order.
+          items:
+            $ref: "#/components/schemas/ClockEvent"
+          type: array
+        next_cursor:
+          description: Cursor for the next page, or null.
+          type:
+            - string
+            - "null"
+      required:
+        - events
+        - next_cursor
       type: object
     ListSimulationStepsResponse:
       additionalProperties: false
@@ -486,19 +665,46 @@ components:
       required:
         - ttl_seconds
       type: object
+    ResourceError:
+      additionalProperties: false
+      properties:
+        code:
+          description: Stable machine-readable error code.
+          type: string
+        detail:
+          description: Safe human-readable error detail.
+          type: string
+      required:
+        - code
+        - detail
+      type:
+        - object
+        - "null"
     Simulation:
       additionalProperties: false
       examples:
-        - created_at: "2026-01-15T12:00:00Z"
+        - active_advance_id: null
+          created_at: "2026-01-15T12:00:00Z"
+          current_time: "2024-01-01T00:00:00Z"
           endpoint: https://api.continuouslabs.ai/sim/sim_01J8Z5X4K7M2N9P0Q1R2S3T4V6
           id: sim_01J8Z5X4K7M2N9P0Q1R2S3T4V6
           name: billing-sandbox
           parent_id: sim_01J8Z5X4K7M2N9P0Q1R2S3T4V8
           simulator_id: smr_01J8Z5X4K7M2N9P0Q1R2S3T4V5
+          start_time: "2024-01-01T00:00:00Z"
           status: running
       properties:
+        active_advance_id:
+          description: Current clock advance operation ID, or null.
+          type:
+            - string
+            - "null"
         created_at:
           description: Simulation creation time.
+          format: date-time
+          type: string
+        current_time:
+          description: Current simulated time.
           format: date-time
           type: string
         endpoint:
@@ -524,6 +730,10 @@ components:
           description: ID of the Simulator.
           pattern: ^smr_[0-9A-HJKMNP-TV-Z]{26}$
           type: string
+        start_time:
+          description: Initial simulated time.
+          format: date-time
+          type: string
         status:
           description: Current status. running serves requests. paused means the Simulation was idle and the platform paused it; the next request wakes it. stopped means its state is saved and requests return 409 until you start it.
           enum:
@@ -532,6 +742,9 @@ components:
             - stopped
           type: string
       required:
+        - start_time
+        - current_time
+        - active_advance_id
         - id
         - name
         - simulator_id
@@ -696,9 +909,28 @@ components:
       type:
         - object
         - "null"
+    StartWorldRequest:
+      additionalProperties: false
+      properties:
+        start_time:
+          description: Initial simulated time for the first Start, in RFC 3339 format. Omission uses 2024-01-01T00:00:00Z. Saved business dates remain unchanged. Later starts preserve the clock.
+          format: date-time
+          type: string
+      type: object
     Step:
       additionalProperties: false
       properties:
+        advance_id:
+          description: Advance that produced this step, if any.
+          type:
+            - string
+            - "null"
+        kind:
+          description: api for an API write or advance for a clock advance.
+          enum:
+            - api
+            - advance
+          type: string
         label:
           description: HTTP method and path of the request that produced this step, without the query string, for example POST /v1/widgets.
           type: string
@@ -706,27 +938,55 @@ components:
           description: Step number. Use it as at_step when you fork.
           format: int64
           type: integer
+        time_after:
+          description: Clock after the step.
+          format: date-time
+          type:
+            - string
+            - "null"
+        time_before:
+          description: Clock before the step.
+          format: date-time
+          type:
+            - string
+            - "null"
       required:
+        - kind
+        - time_before
+        - time_after
+        - advance_id
         - step
         - label
       type: object
     World:
       additionalProperties: false
       examples:
-        - created_at: "2026-01-15T12:00:00Z"
+        - active_advance_id: null
+          created_at: "2026-01-15T12:00:00Z"
+          current_time: "2024-01-01T00:00:00Z"
           error: null
           id: wld_01J8Z5X4K7M2N9P0Q1R2S3T4V7
           instructions: Use stable example data for each Simulator.
           simulations: []
           simulators:
             - smr_01J8Z5X4K7M2N9P0Q1R2S3T4V5
+          start_time: "2024-01-01T00:00:00Z"
           status: building
       properties:
+        active_advance_id:
+          description: Current clock advance operation ID, or null.
+          type:
+            - string
+            - "null"
         build:
           $ref: "#/components/schemas/WorldBuild"
           description: Current build progress and verified starting data.
         created_at:
           description: Time when the World build started.
+          format: date-time
+          type: string
+        current_time:
+          description: Current shared simulated time.
           format: date-time
           type: string
         error:
@@ -750,6 +1010,10 @@ components:
             pattern: ^smr_[0-9A-HJKMNP-TV-Z]{26}$
             type: string
           type: array
+        start_time:
+          description: Initial simulated time. Before first Start this is the default time.
+          format: date-time
+          type: string
         status:
           description: building while the build runs; ready when it can be started; running or stopped once its Simulations exist; failed when building or first start fails; canceled when the build was canceled.
           enum:
@@ -761,6 +1025,9 @@ components:
             - canceled
           type: string
       required:
+        - start_time
+        - current_time
+        - active_advance_id
         - id
         - status
         - simulators
@@ -772,6 +1039,21 @@ components:
     WorldBuild:
       additionalProperties: false
       properties:
+        builder:
+          description: Selected model provider. Absent for builds created before provider selection.
+          enum:
+            - openai
+            - claude
+          type: string
+        last_submission:
+          description: Outcome of the most recent plan submission.
+          enum:
+            - accepted
+            - rejected
+          type: string
+        last_tool:
+          description: Name of the most recent tool. Tool arguments and output are private.
+          type: string
         stage:
           description: Current phase of starting-data preparation.
           enum:
@@ -780,9 +1062,19 @@ components:
             - validating
             - complete
           type: string
+        submissions:
+          description: Number of submitted starting-data plans.
+          format: int64
+          minimum: 0
+          type: integer
         summary:
           $ref: "#/components/schemas/WorldDataSummary"
           description: Verified starting data. Present only after a completed build.
+        tool_calls:
+          description: Number of agent tool calls.
+          format: int64
+          minimum: 0
+          type: integer
       required:
         - stage
       type: object
@@ -1115,6 +1407,8 @@ paths:
           content:
             application/problem+json:
               examples:
+                clock_conflict:
+                  $ref: "#/components/examples/clock_conflict"
                 simulation_platform_owned:
                   $ref: "#/components/examples/simulation_platform_owned"
                 simulation_world_owned:
@@ -1196,6 +1490,296 @@ paths:
       summary: Get Simulation
       tags:
         - simulations
+  /v1/simulations/{id}/advance-time:
+    post:
+      description: Schedules an absolute clock advance. Each successful advance commits all due local events in one step. World members advance through their World. Poll the returned operation until it completes.
+      operationId: advance-simulation-time
+      parameters:
+        - description: Simulation or World ID.
+          in: path
+          name: id
+          required: true
+          schema:
+            pattern: ^sim_[0-9A-HJKMNP-TV-Z]{26}$
+            type: string
+        - description: Stable key for this request. Reuse with the same target returns the same operation.
+          in: header
+          name: Idempotency-Key
+          required: true
+          schema:
+            maxLength: 256
+            minLength: 1
+            type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/AdvanceTimeInputBody"
+        required: true
+      responses:
+        "202":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ClockAdvance"
+          description: Accepted
+        "400":
+          content:
+            application/problem+json:
+              examples:
+                bad_request_body:
+                  $ref: "#/components/examples/bad_request_body"
+              schema:
+                $ref: "#/components/schemas/Error"
+          description: Bad Request
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+        "403":
+          content:
+            application/problem+json:
+              examples:
+                auth_forbidden_simulation:
+                  $ref: "#/components/examples/auth_forbidden_simulation"
+              schema:
+                $ref: "#/components/schemas/Error"
+          description: Forbidden
+        "404":
+          content:
+            application/problem+json:
+              examples:
+                simulation_not_found:
+                  $ref: "#/components/examples/simulation_not_found"
+              schema:
+                $ref: "#/components/schemas/Error"
+          description: Not Found
+        "408":
+          $ref: "#/components/responses/RequestTimeout"
+        "409":
+          content:
+            application/problem+json:
+              examples:
+                clock_conflict:
+                  $ref: "#/components/examples/clock_conflict"
+                simulation_platform_owned:
+                  $ref: "#/components/examples/simulation_platform_owned"
+                simulation_stopped:
+                  $ref: "#/components/examples/simulation_stopped"
+                simulation_world_owned:
+                  $ref: "#/components/examples/simulation_world_owned"
+              schema:
+                $ref: "#/components/schemas/Error"
+          description: Conflict
+        "413":
+          $ref: "#/components/responses/PayloadTooLarge"
+        "415":
+          $ref: "#/components/responses/UnsupportedMediaType"
+        "422":
+          content:
+            application/problem+json:
+              examples:
+                validation_clock_time:
+                  $ref: "#/components/examples/validation_clock_time"
+              schema:
+                $ref: "#/components/schemas/Error"
+          description: Unprocessable Entity
+        "500":
+          $ref: "#/components/responses/InternalServerError"
+        "503":
+          content:
+            application/problem+json:
+              examples:
+                auth_provider_unavailable:
+                  $ref: "#/components/examples/auth_provider_unavailable"
+                internal_unavailable:
+                  $ref: "#/components/examples/internal_unavailable"
+              schema:
+                $ref: "#/components/schemas/Error"
+          description: Service Unavailable
+      security:
+        - apiKeyAuth: []
+      summary: Advance Simulation Time
+      tags:
+        - simulations
+  /v1/simulations/{id}/advances/{advance_id}:
+    get:
+      description: Returns durable clock progress, the event count, and the committed step or failure.
+      operationId: get-simulation-advance
+      parameters:
+        - description: Simulation or World ID.
+          in: path
+          name: id
+          required: true
+          schema:
+            pattern: ^sim_[0-9A-HJKMNP-TV-Z]{26}$
+            type: string
+        - description: Clock advance operation ID.
+          in: path
+          name: advance_id
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ClockAdvance"
+          description: OK
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+        "403":
+          content:
+            application/problem+json:
+              examples:
+                auth_forbidden_simulation:
+                  $ref: "#/components/examples/auth_forbidden_simulation"
+              schema:
+                $ref: "#/components/schemas/Error"
+          description: Forbidden
+        "404":
+          content:
+            application/problem+json:
+              examples:
+                clock_advance_not_found:
+                  $ref: "#/components/examples/clock_advance_not_found"
+                simulation_not_found:
+                  $ref: "#/components/examples/simulation_not_found"
+              schema:
+                $ref: "#/components/schemas/Error"
+          description: Not Found
+        "409":
+          content:
+            application/problem+json:
+              examples:
+                simulation_stopped:
+                  $ref: "#/components/examples/simulation_stopped"
+              schema:
+                $ref: "#/components/schemas/Error"
+          description: Conflict
+        "500":
+          $ref: "#/components/responses/InternalServerError"
+        "503":
+          content:
+            application/problem+json:
+              examples:
+                auth_provider_unavailable:
+                  $ref: "#/components/examples/auth_provider_unavailable"
+                internal_unavailable:
+                  $ref: "#/components/examples/internal_unavailable"
+              schema:
+                $ref: "#/components/schemas/Error"
+          description: Service Unavailable
+      security:
+        - apiKeyAuth: []
+      summary: Get Simulation Clock Advance
+      tags:
+        - simulations
+  /v1/simulations/{id}/advances/{advance_id}/events:
+    get:
+      description: Returns the ordered event trace for a committed advance. The Simulation must be running or paused. Forks retain traces in their inherited state.
+      operationId: list-simulation-advance-events
+      parameters:
+        - description: Simulation ID.
+          in: path
+          name: id
+          required: true
+          schema:
+            pattern: ^sim_[0-9A-HJKMNP-TV-Z]{26}$
+            type: string
+        - description: Advance ID. A historical fork can read inherited runtime receipts.
+          in: path
+          name: advance_id
+          required: true
+          schema:
+            type: string
+        - description: Cursor from the previous page.
+          explode: false
+          in: query
+          name: cursor
+          schema:
+            type: string
+        - description: Page size, up to 200.
+          explode: false
+          in: query
+          name: limit
+          schema:
+            default: 50
+            format: int64
+            type: integer
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ListAdvanceEventsOutputBody"
+          description: OK
+        "400":
+          content:
+            application/problem+json:
+              examples:
+                bad_request:
+                  $ref: "#/components/examples/bad_request"
+              schema:
+                $ref: "#/components/schemas/Error"
+          description: Bad Request
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+        "403":
+          content:
+            application/problem+json:
+              examples:
+                auth_forbidden_simulation:
+                  $ref: "#/components/examples/auth_forbidden_simulation"
+              schema:
+                $ref: "#/components/schemas/Error"
+          description: Forbidden
+        "404":
+          content:
+            application/problem+json:
+              examples:
+                clock_advance_not_found:
+                  $ref: "#/components/examples/clock_advance_not_found"
+                simulation_not_found:
+                  $ref: "#/components/examples/simulation_not_found"
+              schema:
+                $ref: "#/components/schemas/Error"
+          description: Not Found
+        "409":
+          content:
+            application/problem+json:
+              examples:
+                simulation_stopped:
+                  $ref: "#/components/examples/simulation_stopped"
+              schema:
+                $ref: "#/components/schemas/Error"
+          description: Conflict
+        "422":
+          content:
+            application/problem+json:
+              examples:
+                validation_list_limit:
+                  $ref: "#/components/examples/validation_list_limit"
+              schema:
+                $ref: "#/components/schemas/Error"
+          description: Unprocessable Entity
+        "500":
+          $ref: "#/components/responses/InternalServerError"
+        "503":
+          content:
+            application/problem+json:
+              examples:
+                auth_provider_unavailable:
+                  $ref: "#/components/examples/auth_provider_unavailable"
+                internal_unavailable:
+                  $ref: "#/components/examples/internal_unavailable"
+              schema:
+                $ref: "#/components/schemas/Error"
+          description: Service Unavailable
+      security:
+        - apiKeyAuth: []
+      summary: List Clock Advance Events
+      tags:
+        - simulations
   /v1/simulations/{id}/fork:
     post:
       description: Creates a new Simulation from the source Simulation's current state, or from an earlier recorded step when you set at_step. The source must be running or paused; a stopped source returns 409 simulation_stopped. Forking does not change the source. The response includes the new endpoint and a token that expires in 1 hour.
@@ -1256,6 +1840,8 @@ paths:
           content:
             application/problem+json:
               examples:
+                clock_conflict:
+                  $ref: "#/components/examples/clock_conflict"
                 simulation_stopped:
                   $ref: "#/components/examples/simulation_stopped"
               schema:
@@ -1366,6 +1952,8 @@ paths:
           content:
             application/problem+json:
               examples:
+                clock_conflict:
+                  $ref: "#/components/examples/clock_conflict"
                 simulation_platform_owned:
                   $ref: "#/components/examples/simulation_platform_owned"
                 simulation_world_owned:
@@ -1563,6 +2151,8 @@ paths:
           content:
             application/problem+json:
               examples:
+                clock_conflict:
+                  $ref: "#/components/examples/clock_conflict"
                 simulation_platform_owned:
                   $ref: "#/components/examples/simulation_platform_owned"
                 simulation_world_owned:
@@ -2335,6 +2925,175 @@ paths:
       summary: Get World
       tags:
         - worlds
+  /v1/worlds/{id}/advance-time:
+    post:
+      description: Fences all members, advances each local clock, and returns a durable operation. A partial failure keeps members fenced while the operation retries. The World clock changes after all members commit.
+      operationId: advance-world-time
+      parameters:
+        - description: Simulation or World ID.
+          in: path
+          name: id
+          required: true
+          schema:
+            pattern: ^wld_[0-9A-HJKMNP-TV-Z]{26}$
+            type: string
+        - description: Stable key for this request. Reuse with the same target returns the same operation.
+          in: header
+          name: Idempotency-Key
+          required: true
+          schema:
+            maxLength: 256
+            minLength: 1
+            type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/AdvanceTimeInputBody"
+        required: true
+      responses:
+        "202":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ClockAdvance"
+          description: Accepted
+        "400":
+          content:
+            application/problem+json:
+              examples:
+                bad_request_body:
+                  $ref: "#/components/examples/bad_request_body"
+              schema:
+                $ref: "#/components/schemas/Error"
+          description: Bad Request
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+        "403":
+          content:
+            application/problem+json:
+              examples:
+                auth_forbidden_world:
+                  $ref: "#/components/examples/auth_forbidden_world"
+              schema:
+                $ref: "#/components/schemas/Error"
+          description: Forbidden
+        "404":
+          content:
+            application/problem+json:
+              examples:
+                world_not_found:
+                  $ref: "#/components/examples/world_not_found"
+              schema:
+                $ref: "#/components/schemas/Error"
+          description: Not Found
+        "408":
+          $ref: "#/components/responses/RequestTimeout"
+        "409":
+          content:
+            application/problem+json:
+              examples:
+                clock_conflict:
+                  $ref: "#/components/examples/clock_conflict"
+              schema:
+                $ref: "#/components/schemas/Error"
+          description: Conflict
+        "413":
+          $ref: "#/components/responses/PayloadTooLarge"
+        "415":
+          $ref: "#/components/responses/UnsupportedMediaType"
+        "422":
+          content:
+            application/problem+json:
+              examples:
+                validation_clock_time:
+                  $ref: "#/components/examples/validation_clock_time"
+              schema:
+                $ref: "#/components/schemas/Error"
+          description: Unprocessable Entity
+        "500":
+          $ref: "#/components/responses/InternalServerError"
+        "503":
+          content:
+            application/problem+json:
+              examples:
+                auth_provider_unavailable:
+                  $ref: "#/components/examples/auth_provider_unavailable"
+                internal_unavailable:
+                  $ref: "#/components/examples/internal_unavailable"
+              schema:
+                $ref: "#/components/schemas/Error"
+          description: Service Unavailable
+      security:
+        - apiKeyAuth: []
+      summary: Advance World Time
+      tags:
+        - worlds
+  /v1/worlds/{id}/advances/{advance_id}:
+    get:
+      description: Returns durable progress for each member. Members remain fenced until the whole advance can finish.
+      operationId: get-world-advance
+      parameters:
+        - description: Simulation or World ID.
+          in: path
+          name: id
+          required: true
+          schema:
+            pattern: ^wld_[0-9A-HJKMNP-TV-Z]{26}$
+            type: string
+        - description: Clock advance operation ID.
+          in: path
+          name: advance_id
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ClockAdvance"
+          description: OK
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+        "403":
+          content:
+            application/problem+json:
+              examples:
+                auth_forbidden_world:
+                  $ref: "#/components/examples/auth_forbidden_world"
+              schema:
+                $ref: "#/components/schemas/Error"
+          description: Forbidden
+        "404":
+          content:
+            application/problem+json:
+              examples:
+                clock_advance_not_found:
+                  $ref: "#/components/examples/clock_advance_not_found"
+                world_not_found:
+                  $ref: "#/components/examples/world_not_found"
+              schema:
+                $ref: "#/components/schemas/Error"
+          description: Not Found
+        "500":
+          $ref: "#/components/responses/InternalServerError"
+        "503":
+          content:
+            application/problem+json:
+              examples:
+                auth_provider_unavailable:
+                  $ref: "#/components/examples/auth_provider_unavailable"
+                internal_unavailable:
+                  $ref: "#/components/examples/internal_unavailable"
+              schema:
+                $ref: "#/components/schemas/Error"
+          description: Service Unavailable
+      security:
+        - apiKeyAuth: []
+      summary: Get World Clock Advance
+      tags:
+        - worlds
   /v1/worlds/{id}/cancel:
     post:
       description: Cancels an active World build. Repeated cancellation returns the current World.
@@ -2404,6 +3163,11 @@ paths:
           schema:
             pattern: ^wld_[0-9A-HJKMNP-TV-Z]{26}$
             type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/StartWorldRequest"
       responses:
         "200":
           content:
@@ -2411,6 +3175,15 @@ paths:
               schema:
                 $ref: "#/components/schemas/World"
           description: OK
+        "400":
+          content:
+            application/problem+json:
+              examples:
+                bad_request_body:
+                  $ref: "#/components/examples/bad_request_body"
+              schema:
+                $ref: "#/components/schemas/Error"
+          description: Bad Request
         "401":
           $ref: "#/components/responses/Unauthorized"
         "403":
@@ -2431,15 +3204,23 @@ paths:
               schema:
                 $ref: "#/components/schemas/Error"
           description: Not Found
+        "408":
+          $ref: "#/components/responses/RequestTimeout"
         "409":
           content:
             application/problem+json:
               examples:
+                clock_conflict:
+                  $ref: "#/components/examples/clock_conflict"
                 world_conflict:
                   $ref: "#/components/examples/world_conflict"
               schema:
                 $ref: "#/components/schemas/Error"
           description: Conflict
+        "413":
+          $ref: "#/components/responses/PayloadTooLarge"
+        "415":
+          $ref: "#/components/responses/UnsupportedMediaType"
         "429":
           content:
             application/problem+json:
@@ -2510,6 +3291,8 @@ paths:
           content:
             application/problem+json:
               examples:
+                clock_conflict:
+                  $ref: "#/components/examples/clock_conflict"
                 world_conflict_stop:
                   $ref: "#/components/examples/world_conflict_stop"
               schema:

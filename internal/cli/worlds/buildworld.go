@@ -16,6 +16,7 @@ import (
 )
 
 var buildWorldCmdMeta = []flagutil.FlagMeta{
+	{FlagName: "builder", Shorthand: "b", FieldPath: "Builder", Kind: flagutil.FlagKindEnum, Optional: true, HasDefault: true, DefaultStr: "claude", EnumValues: []string{"openai", "claude"}, Description: "Model provider that builds starting data. Defaults to claude. (options: openai, claude)"},
 	{FlagName: "instructions", Shorthand: "i", FieldPath: "Instructions", Kind: flagutil.FlagKindString, Optional: true, Description: "Describe the initial data, scenario, and relationships. Populated Worlds support up to 8 selected Simulators and 1,000 starting records in total. Named record types replace their default data. At most 16,384 characters and 65,536 UTF-8 bytes. U+0000 is not permitted."},
 	{FlagName: "simulators", Shorthand: "s", FieldPath: "Simulators", Kind: flagutil.FlagKindStringArray, Required: true, Description: "Simulator IDs for the World. [required]"},
 }

@@ -32,8 +32,12 @@ func (e *SimulationStatus) IsExact() bool {
 }
 
 type Simulation struct {
+	// Current clock advance operation ID, or null.
+	ActiveAdvanceID *string `json:"active_advance_id"`
 	// Simulation creation time.
 	CreatedAt time.Time `json:"created_at"`
+	// Current simulated time.
+	CurrentTime time.Time `json:"current_time"`
 	// Base URL for requests to the Simulation.
 	Endpoint string `json:"endpoint"`
 	// Simulation ID.
@@ -44,6 +48,8 @@ type Simulation struct {
 	ParentID *string `json:"parent_id"`
 	// ID of the Simulator.
 	SimulatorID string `json:"simulator_id"`
+	// Initial simulated time.
+	StartTime time.Time `json:"start_time"`
 	// Current status. running serves requests. paused means the Simulation was idle and the platform paused it; the next request wakes it. stopped means its state is saved and requests return 409 until you start it.
 	Status SimulationStatus `json:"status"`
 }
@@ -59,11 +65,25 @@ func (s *Simulation) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
+func (s *Simulation) GetActiveAdvanceID() *string {
+	if s == nil {
+		return nil
+	}
+	return s.ActiveAdvanceID
+}
+
 func (s *Simulation) GetCreatedAt() time.Time {
 	if s == nil {
 		return time.Time{}
 	}
 	return s.CreatedAt
+}
+
+func (s *Simulation) GetCurrentTime() time.Time {
+	if s == nil {
+		return time.Time{}
+	}
+	return s.CurrentTime
 }
 
 func (s *Simulation) GetEndpoint() string {
@@ -99,6 +119,13 @@ func (s *Simulation) GetSimulatorID() string {
 		return ""
 	}
 	return s.SimulatorID
+}
+
+func (s *Simulation) GetStartTime() time.Time {
+	if s == nil {
+		return time.Time{}
+	}
+	return s.StartTime
 }
 
 func (s *Simulation) GetStatus() SimulationStatus {

@@ -35,10 +35,14 @@ func (e *WorldStatus) IsExact() bool {
 }
 
 type World struct {
-	Build *WorldBuild `json:"build,omitzero"`
+	// Current clock advance operation ID, or null.
+	ActiveAdvanceID *string     `json:"active_advance_id"`
+	Build           *WorldBuild `json:"build,omitzero"`
 	// Time when the World build started.
-	CreatedAt time.Time   `json:"created_at"`
-	Error     *WorldError `json:"error"`
+	CreatedAt time.Time `json:"created_at"`
+	// Current shared simulated time.
+	CurrentTime time.Time   `json:"current_time"`
+	Error       *WorldError `json:"error"`
 	// World ID.
 	ID string `json:"id"`
 	// Instructions for the initial synthetic data and relationships.
@@ -47,6 +51,8 @@ type World struct {
 	Simulations []WorldSimulation `json:"simulations"`
 	// Simulator IDs in member order.
 	Simulators []string `json:"simulators"`
+	// Initial simulated time. Before first Start this is the default time.
+	StartTime time.Time `json:"start_time"`
 	// building while the build runs; ready when it can be started; running or stopped once its Simulations exist; failed when building or first start fails; canceled when the build was canceled.
 	Status WorldStatus `json:"status"`
 }
@@ -62,6 +68,13 @@ func (w *World) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
+func (w *World) GetActiveAdvanceID() *string {
+	if w == nil {
+		return nil
+	}
+	return w.ActiveAdvanceID
+}
+
 func (w *World) GetBuild() *WorldBuild {
 	if w == nil {
 		return nil
@@ -74,6 +87,13 @@ func (w *World) GetCreatedAt() time.Time {
 		return time.Time{}
 	}
 	return w.CreatedAt
+}
+
+func (w *World) GetCurrentTime() time.Time {
+	if w == nil {
+		return time.Time{}
+	}
+	return w.CurrentTime
 }
 
 func (w *World) GetError() *WorldError {
@@ -109,6 +129,13 @@ func (w *World) GetSimulators() []string {
 		return []string{}
 	}
 	return w.Simulators
+}
+
+func (w *World) GetStartTime() time.Time {
+	if w == nil {
+		return time.Time{}
+	}
+	return w.StartTime
 }
 
 func (w *World) GetStatus() WorldStatus {

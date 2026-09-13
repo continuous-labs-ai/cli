@@ -6,6 +6,52 @@ import (
 	"github.com/continuous-labs-ai/cli/internal/sdk/sdkinternal/utils"
 )
 
+// WorldBuildBuilder - Selected model provider. Absent for builds created before provider selection.
+type WorldBuildBuilder string
+
+const (
+	WorldBuildBuilderOpenai WorldBuildBuilder = "openai"
+	WorldBuildBuilderClaude WorldBuildBuilder = "claude"
+)
+
+func (e WorldBuildBuilder) ToPointer() *WorldBuildBuilder {
+	return &e
+}
+
+// IsExact returns true if the value matches a known enum value, false otherwise.
+func (e *WorldBuildBuilder) IsExact() bool {
+	if e != nil {
+		switch *e {
+		case "openai", "claude":
+			return true
+		}
+	}
+	return false
+}
+
+// WorldBuildLastSubmission - Outcome of the most recent plan submission.
+type WorldBuildLastSubmission string
+
+const (
+	WorldBuildLastSubmissionAccepted WorldBuildLastSubmission = "accepted"
+	WorldBuildLastSubmissionRejected WorldBuildLastSubmission = "rejected"
+)
+
+func (e WorldBuildLastSubmission) ToPointer() *WorldBuildLastSubmission {
+	return &e
+}
+
+// IsExact returns true if the value matches a known enum value, false otherwise.
+func (e *WorldBuildLastSubmission) IsExact() bool {
+	if e != nil {
+		switch *e {
+		case "accepted", "rejected":
+			return true
+		}
+	}
+	return false
+}
+
 // WorldBuildStage - Current phase of starting-data preparation.
 type WorldBuildStage string
 
@@ -32,9 +78,19 @@ func (e *WorldBuildStage) IsExact() bool {
 }
 
 type WorldBuild struct {
+	// Selected model provider. Absent for builds created before provider selection.
+	Builder *WorldBuildBuilder `json:"builder,omitzero"`
+	// Outcome of the most recent plan submission.
+	LastSubmission *WorldBuildLastSubmission `json:"last_submission,omitzero"`
+	// Name of the most recent tool. Tool arguments and output are private.
+	LastTool *string `json:"last_tool,omitzero"`
 	// Current phase of starting-data preparation.
-	Stage   WorldBuildStage   `json:"stage"`
-	Summary *WorldDataSummary `json:"summary,omitzero"`
+	Stage WorldBuildStage `json:"stage"`
+	// Number of submitted starting-data plans.
+	Submissions *int64            `json:"submissions,omitzero"`
+	Summary     *WorldDataSummary `json:"summary,omitzero"`
+	// Number of agent tool calls.
+	ToolCalls *int64 `json:"tool_calls,omitzero"`
 }
 
 func (w WorldBuild) MarshalJSON() ([]byte, error) {
@@ -48,6 +104,27 @@ func (w *WorldBuild) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
+func (w *WorldBuild) GetBuilder() *WorldBuildBuilder {
+	if w == nil {
+		return nil
+	}
+	return w.Builder
+}
+
+func (w *WorldBuild) GetLastSubmission() *WorldBuildLastSubmission {
+	if w == nil {
+		return nil
+	}
+	return w.LastSubmission
+}
+
+func (w *WorldBuild) GetLastTool() *string {
+	if w == nil {
+		return nil
+	}
+	return w.LastTool
+}
+
 func (w *WorldBuild) GetStage() WorldBuildStage {
 	if w == nil {
 		return WorldBuildStage("")
@@ -55,9 +132,23 @@ func (w *WorldBuild) GetStage() WorldBuildStage {
 	return w.Stage
 }
 
+func (w *WorldBuild) GetSubmissions() *int64 {
+	if w == nil {
+		return nil
+	}
+	return w.Submissions
+}
+
 func (w *WorldBuild) GetSummary() *WorldDataSummary {
 	if w == nil {
 		return nil
 	}
 	return w.Summary
+}
+
+func (w *WorldBuild) GetToolCalls() *int64 {
+	if w == nil {
+		return nil
+	}
+	return w.ToolCalls
 }

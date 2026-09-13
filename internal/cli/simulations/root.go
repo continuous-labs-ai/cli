@@ -36,6 +36,18 @@ func InitSimulationsRoot(parent *cobra.Command) error {
 		return err
 	}
 
+	if err := initAdvanceSimulationTimeCmd(SimulationsCmd); err != nil {
+		return err
+	}
+
+	if err := initGetSimulationAdvanceCmd(SimulationsCmd); err != nil {
+		return err
+	}
+
+	if err := initListSimulationAdvanceEventsCmd(SimulationsCmd); err != nil {
+		return err
+	}
+
 	if err := initForkSimulationCmd(SimulationsCmd); err != nil {
 		return err
 	}
