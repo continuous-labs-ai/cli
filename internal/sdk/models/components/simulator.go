@@ -30,10 +30,34 @@ func (e *Source) IsExact() bool {
 	return false
 }
 
-// SimulatorStatus - building while the build runs; ready when Simulations, Worlds, and incremental builds can use it; failed when the build failed; canceled when a cancel request took effect.
+// SimulatorSpecKind - The specification the Simulator was built from, or null until a build has read it.
+type SimulatorSpecKind string
+
+const (
+	SimulatorSpecKindOpenapi SimulatorSpecKind = "openapi"
+	SimulatorSpecKindWsdl    SimulatorSpecKind = "wsdl"
+)
+
+func (e SimulatorSpecKind) ToPointer() *SimulatorSpecKind {
+	return &e
+}
+
+// IsExact returns true if the value matches a known enum value, false otherwise.
+func (e *SimulatorSpecKind) IsExact() bool {
+	if e != nil {
+		switch *e {
+		case "openapi", "wsdl":
+			return true
+		}
+	}
+	return false
+}
+
+// SimulatorStatus - pending while waiting for capacity; building while the build runs; ready when Simulations, Worlds, and incremental builds can use it; failed when the build failed; canceled when a cancel request took effect.
 type SimulatorStatus string
 
 const (
+	SimulatorStatusPending  SimulatorStatus = "pending"
 	SimulatorStatusBuilding SimulatorStatus = "building"
 	SimulatorStatusReady    SimulatorStatus = "ready"
 	SimulatorStatusFailed   SimulatorStatus = "failed"
@@ -48,7 +72,7 @@ func (e SimulatorStatus) ToPointer() *SimulatorStatus {
 func (e *SimulatorStatus) IsExact() bool {
 	if e != nil {
 		switch *e {
-		case "building", "ready", "failed", "canceled":
+		case "pending", "building", "ready", "failed", "canceled":
 			return true
 		}
 	}
@@ -63,13 +87,17 @@ type Simulator struct {
 	Error     *SimulatorError `json:"error"`
 	// Simulator ID.
 	ID string `json:"id"`
+	// The instructions the build followed, or empty when none were given.
+	Instructions string `json:"instructions"`
 	// Simulator name. Names cannot start with smr_.
 	Name string `json:"name"`
 	// Parent Simulator ID, or null.
 	ParentID *string `json:"parent_id"`
 	// workspace for a Simulator your workspace built; catalog for a read-only Simulator that Continuous publishes.
 	Source Source `json:"source"`
-	// building while the build runs; ready when Simulations, Worlds, and incremental builds can use it; failed when the build failed; canceled when a cancel request took effect.
+	// The specification the Simulator was built from, or null until a build has read it.
+	SpecKind *SimulatorSpecKind `json:"spec_kind"`
+	// pending while waiting for capacity; building while the build runs; ready when Simulations, Worlds, and incremental builds can use it; failed when the build failed; canceled when a cancel request took effect.
 	Status SimulatorStatus `json:"status"`
 }
 
@@ -112,6 +140,13 @@ func (s *Simulator) GetID() string {
 	return s.ID
 }
 
+func (s *Simulator) GetInstructions() string {
+	if s == nil {
+		return ""
+	}
+	return s.Instructions
+}
+
 func (s *Simulator) GetName() string {
 	if s == nil {
 		return ""
@@ -131,6 +166,13 @@ func (s *Simulator) GetSource() Source {
 		return Source("")
 	}
 	return s.Source
+}
+
+func (s *Simulator) GetSpecKind() *SimulatorSpecKind {
+	if s == nil {
+		return nil
+	}
+	return s.SpecKind
 }
 
 func (s *Simulator) GetStatus() SimulatorStatus {

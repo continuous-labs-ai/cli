@@ -40,10 +40,6 @@ components:
       value:
         code: bad_request
         detail: request body is invalid
-    build_quota_exceeded:
-      value:
-        code: build_quota_exceeded
-        detail: The workspace has 2 active Simulator builds and a limit of 2. Wait for a build to finish or ask an operator to increase the limit.
     build_rate_exceeded:
       value:
         code: build_rate_exceeded
@@ -288,6 +284,20 @@ components:
             - wsdl
           type: string
       type: object
+    BuildToolCall:
+      additionalProperties: false
+      properties:
+        at:
+          description: Time the call ran.
+          format: date-time
+          type: string
+        tool:
+          description: Name of the tool. Arguments and output are private.
+          type: string
+      required:
+        - tool
+        - at
+      type: object
     BuildWorldRequest:
       additionalProperties: false
       examples:
@@ -306,6 +316,10 @@ components:
           description: Describe the initial data, scenario, and relationships. Populated Worlds support up to 8 selected Simulators and 1,000 starting records in total. Named record types replace their default data. At most 16,384 characters and 65,536 UTF-8 bytes. U+0000 is not permitted.
           maxLength: 16384
           type: string
+        name:
+          description: Name for the World. Omission generates a name. The ID stays its identity, and names need not be unique.
+          maxLength: 128
+          type: string
         simulators:
           description: Simulator IDs for the World.
           items:
@@ -313,6 +327,10 @@ components:
             type: string
           minItems: 1
           type: array
+        start_time:
+          description: Simulated time the World starts at, in RFC 3339 format. Omission uses 2024-01-01T00:00:00Z. Saved starting data keeps its build dates.
+          format: date-time
+          type: string
       required:
         - simulators
       type: object
@@ -777,6 +795,11 @@ components:
             builder: claude
             last_submission: rejected
             last_tool: test
+            recent_tools:
+              - at: "2026-01-15T12:04:00Z"
+                tool: test
+              - at: "2026-01-15T12:05:00Z"
+                tool: submit
             stage: build
             submissions: 1
             tool_calls: 7
@@ -784,9 +807,11 @@ components:
           created_at: "2026-01-15T12:00:00Z"
           error: null
           id: smr_01J8Z5X4K7M2N9P0Q1R2S3T4V5
+          instructions: Return stable example data for every operation.
           name: billing-api
           parent_id: smr_01J8Z5X4K7M2N9P0Q1R2S3T4V9
           source: workspace
+          spec_kind: openapi
           status: building
       properties:
         build:
@@ -805,6 +830,9 @@ components:
           description: Simulator ID.
           pattern: ^smr_[0-9A-HJKMNP-TV-Z]{26}$
           type: string
+        instructions:
+          description: The instructions the build followed, or empty when none were given.
+          type: string
         name:
           description: Simulator name. Names cannot start with smr_.
           maxLength: 128
@@ -822,9 +850,19 @@ components:
             - workspace
             - catalog
           type: string
-        status:
-          description: building while the build runs; ready when Simulations, Worlds, and incremental builds can use it; failed when the build failed; canceled when a cancel request took effect.
+        spec_kind:
+          description: The specification the Simulator was built from, or null until a build has read it.
           enum:
+            - openapi
+            - wsdl
+            - null
+          type:
+            - string
+            - "null"
+        status:
+          description: pending while waiting for capacity; building while the build runs; ready when Simulations, Worlds, and incremental builds can use it; failed when the build failed; canceled when a cancel request took effect.
+          enum:
+            - pending
             - building
             - ready
             - failed
@@ -834,7 +872,9 @@ components:
         - id
         - name
         - source
+        - spec_kind
         - parent_id
+        - instructions
         - status
         - error
         - created_at
@@ -863,6 +903,11 @@ components:
           type:
             - string
             - "null"
+        recent_tools:
+          description: The most recent tool calls, oldest first, at most 20.
+          items:
+            $ref: "#/components/schemas/BuildToolCall"
+          type: array
         stage:
           description: derive while the effective spec, build skeleton, and sandbox are prepared; build while the coding loop runs; assemble while an accepted artifact publishes.
           enum:
@@ -890,6 +935,7 @@ components:
         - last_tool
         - last_submission
         - updated_at
+        - recent_tools
       type: object
     SimulatorError:
       additionalProperties: false
@@ -913,7 +959,7 @@ components:
       additionalProperties: false
       properties:
         start_time:
-          description: Initial simulated time for the first Start, in RFC 3339 format. Omission uses 2024-01-01T00:00:00Z. Saved business dates remain unchanged. Later starts preserve the clock.
+          description: Simulated time for the first Start, in RFC 3339 format. Omission keeps the clock chosen at build. Saved business dates remain unchanged. Later starts preserve the clock.
           format: date-time
           type: string
       type: object
@@ -962,11 +1008,25 @@ components:
       additionalProperties: false
       examples:
         - active_advance_id: null
+          build:
+            builder: claude
+            last_submission: rejected
+            last_tool: test
+            recent_tools:
+              - at: "2026-01-15T12:04:00Z"
+                tool: test
+              - at: "2026-01-15T12:05:00Z"
+                tool: submit
+            stage: generating
+            submissions: 1
+            summary: null
+            tool_calls: 7
           created_at: "2026-01-15T12:00:00Z"
           current_time: "2024-01-01T00:00:00Z"
           error: null
           id: wld_01J8Z5X4K7M2N9P0Q1R2S3T4V7
           instructions: Use stable example data for each Simulator.
+          name: open-orders
           simulations: []
           simulators:
             - smr_01J8Z5X4K7M2N9P0Q1R2S3T4V5
@@ -979,10 +1039,12 @@ components:
             - string
             - "null"
         build:
-          $ref: "#/components/schemas/WorldBuild"
-          description: Current build progress and verified starting data.
+          description: The build's latest progress report and verified starting data, or null before the first report.
+          oneOf:
+            - $ref: "#/components/schemas/WorldBuildProgress"
+            - type: "null"
         created_at:
-          description: Time when the World build started.
+          description: Time when the World was created.
           format: date-time
           type: string
         current_time:
@@ -999,6 +1061,9 @@ components:
         instructions:
           description: Instructions for the initial synthetic data and relationships.
           type: string
+        name:
+          description: Name for the World.
+          type: string
         simulations:
           description: Created member Simulations. This list is empty before first start.
           items:
@@ -1011,12 +1076,13 @@ components:
             type: string
           type: array
         start_time:
-          description: Initial simulated time. Before first Start this is the default time.
+          description: "Simulated time the World starts at: chosen at build, and changeable on the first Start."
           format: date-time
           type: string
         status:
-          description: building while the build runs; ready when it can be started; running or stopped once its Simulations exist; failed when building or first start fails; canceled when the build was canceled.
+          description: pending while waiting for capacity; building while the build runs; ready when it can be started; running or stopped once its Simulations exist; failed when building or first start fails; canceled when the build was canceled.
           enum:
+            - pending
             - building
             - ready
             - running
@@ -1029,31 +1095,46 @@ components:
         - current_time
         - active_advance_id
         - id
+        - name
         - status
         - simulators
         - instructions
+        - build
         - simulations
         - error
         - created_at
       type: object
-    WorldBuild:
+    WorldBuildProgress:
       additionalProperties: false
       properties:
         builder:
-          description: Selected model provider. Absent for builds created before provider selection.
+          description: Selected model provider, or null for a build created before provider selection.
           enum:
             - openai
             - claude
-          type: string
+            - null
+          type:
+            - string
+            - "null"
         last_submission:
-          description: Outcome of the most recent plan submission.
+          description: Outcome of the most recent plan submission, or null.
           enum:
             - accepted
             - rejected
-          type: string
+            - null
+          type:
+            - string
+            - "null"
         last_tool:
-          description: Name of the most recent tool. Tool arguments and output are private.
-          type: string
+          description: Name of the most recent tool, or null. Tool arguments and output are private.
+          type:
+            - string
+            - "null"
+        recent_tools:
+          description: The most recent tool calls, oldest first, at most 20.
+          items:
+            $ref: "#/components/schemas/BuildToolCall"
+          type: array
         stage:
           description: Current phase of starting-data preparation.
           enum:
@@ -1068,15 +1149,24 @@ components:
           minimum: 0
           type: integer
         summary:
-          $ref: "#/components/schemas/WorldDataSummary"
-          description: Verified starting data. Present only after a completed build.
+          description: Verified starting data, or null before a completed build.
+          oneOf:
+            - $ref: "#/components/schemas/WorldDataSummary"
+            - type: "null"
         tool_calls:
           description: Number of agent tool calls.
           format: int64
           minimum: 0
           type: integer
       required:
+        - builder
         - stage
+        - tool_calls
+        - submissions
+        - last_tool
+        - last_submission
+        - summary
+        - recent_tools
       type: object
     WorldDataSummary:
       additionalProperties: false
@@ -2285,6 +2375,7 @@ paths:
           name: status
           schema:
             enum:
+              - pending
               - building
               - ready
               - failed
@@ -2358,7 +2449,7 @@ paths:
       tags:
         - simulators
     post:
-      description: Starts an asynchronous Simulator build and returns the Simulator with status building. Send multipart/form-data with a JSON part named request. To build from a document, add a file part named spec with the OpenAPI or WSDL document. For an incremental build, omit spec and set parent_id and instructions.
+      description: Starts an asynchronous Simulator build and returns the Simulator with status pending. Builds start in queue order when workspace capacity is available. Send multipart/form-data with a JSON part named request. To build from a document, add a file part named spec with the OpenAPI or WSDL document. For an incremental build, omit spec and set parent_id and instructions.
       operationId: build-simulator
       requestBody:
         content:
@@ -2434,8 +2525,6 @@ paths:
           content:
             application/problem+json:
               examples:
-                build_quota_exceeded:
-                  $ref: "#/components/examples/build_quota_exceeded"
                 build_rate_exceeded:
                   $ref: "#/components/examples/build_rate_exceeded"
               schema:
@@ -2443,7 +2532,7 @@ paths:
           description: Too Many Requests
           headers:
             Retry-After:
-              description: Seconds until the daily UTC build allowance resets. Present for build_rate_exceeded; concurrent build refusals omit this header.
+              description: Seconds until the daily UTC build allowance resets.
               schema:
                 minimum: 1
                 type: integer
@@ -2744,7 +2833,7 @@ paths:
       tags:
         - worlds
     post:
-      description: Starts an asynchronous World build from ready Simulators and returns it in the building state. Instructions generate and validate initial synthetic data. Start the World once it is ready to create its Simulations.
+      description: Starts an asynchronous World build from ready Simulators and returns it in the pending state. Builds start in queue order when workspace capacity is available. Instructions generate and validate initial synthetic data. Start the World once it is ready to create its Simulations.
       operationId: build-world
       requestBody:
         content:

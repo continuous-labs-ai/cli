@@ -8,7 +8,7 @@ import (
 )
 
 type StartWorldRequest struct {
-	// Initial simulated time for the first Start, in RFC 3339 format. Omission uses 2024-01-01T00:00:00Z. Saved business dates remain unchanged. Later starts preserve the clock.
+	// Simulated time for the first Start, in RFC 3339 format. Omission keeps the clock chosen at build. Saved business dates remain unchanged. Later starts preserve the clock.
 	StartTime *time.Time `json:"start_time,omitzero"`
 }
 
