@@ -13,6 +13,7 @@ import (
 type ListSimulatorsStatus string
 
 const (
+	ListSimulatorsStatusPending  ListSimulatorsStatus = "pending"
 	ListSimulatorsStatusBuilding ListSimulatorsStatus = "building"
 	ListSimulatorsStatusReady    ListSimulatorsStatus = "ready"
 	ListSimulatorsStatusFailed   ListSimulatorsStatus = "failed"
@@ -28,6 +29,8 @@ func (e *ListSimulatorsStatus) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	switch v {
+	case "pending":
+		fallthrough
 	case "building":
 		fallthrough
 	case "ready":

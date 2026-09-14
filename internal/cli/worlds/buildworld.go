@@ -18,7 +18,9 @@ import (
 var buildWorldCmdMeta = []flagutil.FlagMeta{
 	{FlagName: "builder", Shorthand: "b", FieldPath: "Builder", Kind: flagutil.FlagKindEnum, Optional: true, HasDefault: true, DefaultStr: "claude", EnumValues: []string{"openai", "claude"}, Description: "Model provider that builds starting data. Defaults to claude. (options: openai, claude)"},
 	{FlagName: "instructions", Shorthand: "i", FieldPath: "Instructions", Kind: flagutil.FlagKindString, Optional: true, Description: "Describe the initial data, scenario, and relationships. Populated Worlds support up to 8 selected Simulators and 1,000 starting records in total. Named record types replace their default data. At most 16,384 characters and 65,536 UTF-8 bytes. U+0000 is not permitted."},
-	{FlagName: "simulators", Shorthand: "s", FieldPath: "Simulators", Kind: flagutil.FlagKindStringArray, Required: true, Description: "Simulator IDs for the World. [required]"},
+	{FlagName: "name", Shorthand: "n", FieldPath: "Name", Kind: flagutil.FlagKindString, Optional: true, Description: "Name for the World. Omission generates a name. The ID stays its identity, and names need not be unique."},
+	{FlagName: "simulators", FieldPath: "Simulators", Kind: flagutil.FlagKindStringArray, Required: true, Description: "Simulator IDs for the World. [required]"},
+	{FlagName: "start-time", FieldPath: "StartTime", Kind: flagutil.FlagKindDateTime, Optional: true, Description: "Simulated time the World starts at, in RFC 3339 format. Omission uses 2024-01-01T00:00:00Z. Saved starting data keeps its build dates."},
 }
 
 // initBuildWorldCmd initializes the build-world command.
@@ -26,7 +28,7 @@ func initBuildWorldCmd(parent *cobra.Command) error {
 	var cmd = &cobra.Command{
 		Use:     "build",
 		Short:   "Build World",
-		Long:    "Starts an asynchronous World build from ready Simulators and returns it in the building state. Instructions generate and validate initial synthetic data. Start the World once it is ready to create its Simulations.",
+		Long:    "Starts an asynchronous World build from ready Simulators and returns it in the pending state. Builds start in queue order when workspace capacity is available. Instructions generate and validate initial synthetic data. Start the World once it is ready to create its Simulations.",
 		Example: "  continuous worlds build --simulators '[\"smr_01J8Z5X4K7M2N9P0Q1R2S3T4V5\"]'",
 		RunE:    runBuildWorldCmd,
 	}

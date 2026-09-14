@@ -6,6 +6,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"github.com/continuous-labs-ai/cli/internal/sdk/sdkinternal/utils"
+	"time"
 )
 
 // BuildWorldRequestBuilder - Model provider that builds starting data. Defaults to claude.
@@ -40,8 +41,12 @@ type BuildWorldRequest struct {
 	Builder *BuildWorldRequestBuilder `default:"claude" json:"builder"`
 	// Describe the initial data, scenario, and relationships. Populated Worlds support up to 8 selected Simulators and 1,000 starting records in total. Named record types replace their default data. At most 16,384 characters and 65,536 UTF-8 bytes. U+0000 is not permitted.
 	Instructions *string `json:"instructions,omitzero"`
+	// Name for the World. Omission generates a name. The ID stays its identity, and names need not be unique.
+	Name *string `json:"name,omitzero"`
 	// Simulator IDs for the World.
 	Simulators []string `json:"simulators"`
+	// Simulated time the World starts at, in RFC 3339 format. Omission uses 2024-01-01T00:00:00Z. Saved starting data keeps its build dates.
+	StartTime *time.Time `json:"start_time,omitzero"`
 }
 
 func (b BuildWorldRequest) MarshalJSON() ([]byte, error) {
@@ -69,9 +74,23 @@ func (b *BuildWorldRequest) GetInstructions() *string {
 	return b.Instructions
 }
 
+func (b *BuildWorldRequest) GetName() *string {
+	if b == nil {
+		return nil
+	}
+	return b.Name
+}
+
 func (b *BuildWorldRequest) GetSimulators() []string {
 	if b == nil {
 		return []string{}
 	}
 	return b.Simulators
+}
+
+func (b *BuildWorldRequest) GetStartTime() *time.Time {
+	if b == nil {
+		return nil
+	}
+	return b.StartTime
 }

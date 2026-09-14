@@ -84,6 +84,8 @@ type SimulatorBuildProgress struct {
 	LastSubmission *SimulatorBuildProgressLastSubmission `json:"last_submission"`
 	// Name of the most recent tool call, or null.
 	LastTool *string `json:"last_tool"`
+	// The most recent tool calls, oldest first, at most 20.
+	RecentTools []BuildToolCall `json:"recent_tools"`
 	// derive while the effective spec, build skeleton, and sandbox are prepared; build while the coding loop runs; assemble while an accepted artifact publishes.
 	Stage SimulatorBuildProgressStage `json:"stage"`
 	// Submit attempts.
@@ -124,6 +126,13 @@ func (s *SimulatorBuildProgress) GetLastTool() *string {
 		return nil
 	}
 	return s.LastTool
+}
+
+func (s *SimulatorBuildProgress) GetRecentTools() []BuildToolCall {
+	if s == nil {
+		return []BuildToolCall{}
+	}
+	return s.RecentTools
 }
 
 func (s *SimulatorBuildProgress) GetStage() SimulatorBuildProgressStage {

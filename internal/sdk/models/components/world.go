@@ -7,10 +7,11 @@ import (
 	"time"
 )
 
-// WorldStatus - building while the build runs; ready when it can be started; running or stopped once its Simulations exist; failed when building or first start fails; canceled when the build was canceled.
+// WorldStatus - pending while waiting for capacity; building while the build runs; ready when it can be started; running or stopped once its Simulations exist; failed when building or first start fails; canceled when the build was canceled.
 type WorldStatus string
 
 const (
+	WorldStatusPending  WorldStatus = "pending"
 	WorldStatusBuilding WorldStatus = "building"
 	WorldStatusReady    WorldStatus = "ready"
 	WorldStatusRunning  WorldStatus = "running"
@@ -27,7 +28,7 @@ func (e WorldStatus) ToPointer() *WorldStatus {
 func (e *WorldStatus) IsExact() bool {
 	if e != nil {
 		switch *e {
-		case "building", "ready", "running", "stopped", "failed", "canceled":
+		case "pending", "building", "ready", "running", "stopped", "failed", "canceled":
 			return true
 		}
 	}
@@ -36,9 +37,10 @@ func (e *WorldStatus) IsExact() bool {
 
 type World struct {
 	// Current clock advance operation ID, or null.
-	ActiveAdvanceID *string     `json:"active_advance_id"`
-	Build           *WorldBuild `json:"build,omitzero"`
-	// Time when the World build started.
+	ActiveAdvanceID *string `json:"active_advance_id"`
+	// The build's latest progress report and verified starting data, or null before the first report.
+	Build *WorldBuildProgress `json:"build"`
+	// Time when the World was created.
 	CreatedAt time.Time `json:"created_at"`
 	// Current shared simulated time.
 	CurrentTime time.Time   `json:"current_time"`
@@ -47,13 +49,15 @@ type World struct {
 	ID string `json:"id"`
 	// Instructions for the initial synthetic data and relationships.
 	Instructions string `json:"instructions"`
+	// Name for the World.
+	Name string `json:"name"`
 	// Created member Simulations. This list is empty before first start.
 	Simulations []WorldSimulation `json:"simulations"`
 	// Simulator IDs in member order.
 	Simulators []string `json:"simulators"`
-	// Initial simulated time. Before first Start this is the default time.
+	// Simulated time the World starts at: chosen at build, and changeable on the first Start.
 	StartTime time.Time `json:"start_time"`
-	// building while the build runs; ready when it can be started; running or stopped once its Simulations exist; failed when building or first start fails; canceled when the build was canceled.
+	// pending while waiting for capacity; building while the build runs; ready when it can be started; running or stopped once its Simulations exist; failed when building or first start fails; canceled when the build was canceled.
 	Status WorldStatus `json:"status"`
 }
 
@@ -75,7 +79,7 @@ func (w *World) GetActiveAdvanceID() *string {
 	return w.ActiveAdvanceID
 }
 
-func (w *World) GetBuild() *WorldBuild {
+func (w *World) GetBuild() *WorldBuildProgress {
 	if w == nil {
 		return nil
 	}
@@ -115,6 +119,13 @@ func (w *World) GetInstructions() string {
 		return ""
 	}
 	return w.Instructions
+}
+
+func (w *World) GetName() string {
+	if w == nil {
+		return ""
+	}
+	return w.Name
 }
 
 func (w *World) GetSimulations() []WorldSimulation {

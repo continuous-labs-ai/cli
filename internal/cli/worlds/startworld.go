@@ -16,7 +16,7 @@ import (
 
 var startWorldCmdMeta = []flagutil.FlagMeta{
 	{FlagName: "id", Shorthand: "i", FieldPath: "ID", Kind: flagutil.FlagKindString, Required: true, Description: "World ID. [required]"},
-	{FlagName: "start-time", Shorthand: "s", FieldPath: "Body.StartTime", Kind: flagutil.FlagKindDateTime, Optional: true, Description: "Initial simulated time for the first Start, in RFC 3339 format. Omission uses 2024-01-01T00:00:00Z. Saved business dates remain unchanged. Later starts preserve the clock."},
+	{FlagName: "start-time", Shorthand: "s", FieldPath: "Body.StartTime", Kind: flagutil.FlagKindDateTime, Optional: true, Description: "Simulated time for the first Start, in RFC 3339 format. Omission keeps the clock chosen at build. Saved business dates remain unchanged. Later starts preserve the clock."},
 }
 
 // initStartWorldCmd initializes the start-world command.

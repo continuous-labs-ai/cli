@@ -35,18 +35,18 @@ func (e *BuildSimulatorRequestBuilder) UnmarshalJSON(data []byte) error {
 	}
 }
 
-// SpecKind - Source specification format. Omission detects the format.
-type SpecKind string
+// BuildSimulatorRequestSpecKind - Source specification format. Omission detects the format.
+type BuildSimulatorRequestSpecKind string
 
 const (
-	SpecKindOpenapi SpecKind = "openapi"
-	SpecKindWsdl    SpecKind = "wsdl"
+	BuildSimulatorRequestSpecKindOpenapi BuildSimulatorRequestSpecKind = "openapi"
+	BuildSimulatorRequestSpecKindWsdl    BuildSimulatorRequestSpecKind = "wsdl"
 )
 
-func (e SpecKind) ToPointer() *SpecKind {
+func (e BuildSimulatorRequestSpecKind) ToPointer() *BuildSimulatorRequestSpecKind {
 	return &e
 }
-func (e *SpecKind) UnmarshalJSON(data []byte) error {
+func (e *BuildSimulatorRequestSpecKind) UnmarshalJSON(data []byte) error {
 	var v string
 	if err := json.Unmarshal(data, &v); err != nil {
 		return err
@@ -55,10 +55,10 @@ func (e *SpecKind) UnmarshalJSON(data []byte) error {
 	case "openapi":
 		fallthrough
 	case "wsdl":
-		*e = SpecKind(v)
+		*e = BuildSimulatorRequestSpecKind(v)
 		return nil
 	default:
-		return fmt.Errorf("invalid value for SpecKind: %v", v)
+		return fmt.Errorf("invalid value for BuildSimulatorRequestSpecKind: %v", v)
 	}
 }
 
@@ -74,7 +74,7 @@ type BuildSimulatorRequest struct {
 	// Parent Simulator ID. With instructions and no spec this starts an incremental build: the parent must be ready, and the request takes no filter or spec_kind.
 	ParentID *string `json:"parent_id,omitzero"`
 	// Source specification format. Omission detects the format.
-	SpecKind *SpecKind `json:"spec_kind,omitzero"`
+	SpecKind *BuildSimulatorRequestSpecKind `json:"spec_kind,omitzero"`
 }
 
 func (b BuildSimulatorRequest) MarshalJSON() ([]byte, error) {
@@ -123,7 +123,7 @@ func (b *BuildSimulatorRequest) GetParentID() *string {
 	return b.ParentID
 }
 
-func (b *BuildSimulatorRequest) GetSpecKind() *SpecKind {
+func (b *BuildSimulatorRequest) GetSpecKind() *BuildSimulatorRequestSpecKind {
 	if b == nil {
 		return nil
 	}
