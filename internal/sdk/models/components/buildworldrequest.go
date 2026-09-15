@@ -47,6 +47,8 @@ type BuildWorldRequest struct {
 	Simulators []string `json:"simulators"`
 	// Simulated time the World starts at, in RFC 3339 format. Omission uses 2024-01-01T00:00:00Z. Saved starting data keeps its build dates.
 	StartTime *time.Time `json:"start_time,omitzero"`
+	// Time limit for generation and validation in seconds, from 1 to 43200. Defaults to 3600 (one hour). Excludes queue wait and finalization. Retries share the same deadline.
+	TimeoutSeconds *int64 `default:"3600" json:"timeout_seconds"`
 }
 
 func (b BuildWorldRequest) MarshalJSON() ([]byte, error) {
@@ -93,4 +95,11 @@ func (b *BuildWorldRequest) GetStartTime() *time.Time {
 		return nil
 	}
 	return b.StartTime
+}
+
+func (b *BuildWorldRequest) GetTimeoutSeconds() *int64 {
+	if b == nil {
+		return nil
+	}
+	return b.TimeoutSeconds
 }

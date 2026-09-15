@@ -268,9 +268,8 @@ components:
           maxLength: 16384
           type: string
         name:
-          description: Optional Simulator name. Names cannot start with smr_. Omission generates a name.
+          description: Name for the Simulator. Omission generates a name. The ID stays its identity, and names need not be unique.
           maxLength: 128
-          pattern: ^$|^(?!smr_)[a-z0-9]+(?:[._-][a-z0-9]+)*$
           type: string
         parent_id:
           description: "Parent Simulator ID. With instructions and no spec this starts an incremental build: the parent must be ready, and the request takes no filter or spec_kind."
@@ -283,6 +282,13 @@ components:
             - openapi
             - wsdl
           type: string
+        timeout_seconds:
+          default: 3600
+          description: Time limit for generation and validation in seconds, from 1 to 43200. Defaults to 3600 (one hour). Excludes queue wait and finalization. Retries share the same deadline.
+          format: int64
+          maximum: 43200
+          minimum: 1
+          type: integer
       type: object
     BuildToolCall:
       additionalProperties: false
@@ -331,6 +337,13 @@ components:
           description: Simulated time the World starts at, in RFC 3339 format. Omission uses 2024-01-01T00:00:00Z. Saved starting data keeps its build dates.
           format: date-time
           type: string
+        timeout_seconds:
+          default: 3600
+          description: Time limit for generation and validation in seconds, from 1 to 43200. Defaults to 3600 (one hour). Excludes queue wait and finalization. Retries share the same deadline.
+          format: int64
+          maximum: 43200
+          minimum: 1
+          type: integer
       required:
         - simulators
       type: object
@@ -451,9 +464,8 @@ components:
           simulator_id: smr_01J8Z5X4K7M2N9P0Q1R2S3T4V5
       properties:
         name:
-          description: Optional Simulation name. Omission generates a name.
-          maxLength: 64
-          pattern: ^$|^[a-z][a-z0-9-]*$
+          description: Name for the Simulation. Omission generates a name. The ID stays its identity, and names need not be unique.
+          maxLength: 128
           type: string
         simulator_id:
           description: ID of the ready Simulator.
@@ -509,9 +521,8 @@ components:
           pattern: ^sim_[0-9A-HJKMNP-TV-Z]{26}$
           type: string
         name:
-          description: Simulation name.
-          maxLength: 64
-          pattern: ^[a-z][a-z0-9-]*$
+          description: Simulation name. The ID is its identity, and names need not be unique.
+          maxLength: 128
           type: string
         parent_id:
           description: Source Simulation ID for a fork, or null.
@@ -579,9 +590,8 @@ components:
           minimum: 0
           type: integer
         name:
-          description: Optional child Simulation name. Omission generates a name.
-          maxLength: 64
-          pattern: ^$|^[a-z][a-z0-9-]*$
+          description: Name for the child Simulation. Omission generates a name. The ID stays its identity, and names need not be unique.
+          maxLength: 128
           type: string
       type: object
     ListAdvanceEventsOutputBody:
@@ -734,9 +744,8 @@ components:
           pattern: ^sim_[0-9A-HJKMNP-TV-Z]{26}$
           type: string
         name:
-          description: Simulation name.
-          maxLength: 64
-          pattern: ^[a-z][a-z0-9-]*$
+          description: Simulation name. The ID is its identity, and names need not be unique.
+          maxLength: 128
           type: string
         parent_id:
           description: Source Simulation ID for a fork, or null.
@@ -834,9 +843,8 @@ components:
           description: The instructions the build followed, or empty when none were given.
           type: string
         name:
-          description: Simulator name. Names cannot start with smr_.
+          description: Simulator name. The ID is its identity, and names need not be unique.
           maxLength: 128
-          pattern: ^(?!smr_)[a-z0-9]+(?:[._-][a-z0-9]+)*$
           type: string
         parent_id:
           description: Parent Simulator ID, or null.
@@ -2366,7 +2374,7 @@ paths:
         - simulations
   /v1/simulators:
     get:
-      description: Returns all Simulators that the API key can access. Results can be filtered by status or name.
+      description: Returns all Simulators that the API key can access. Results can be filtered by status.
       operationId: list-simulators
       parameters:
         - description: Optional build status filter.
@@ -2380,14 +2388,6 @@ paths:
               - ready
               - failed
               - canceled
-            type: string
-        - description: Return only the Simulator with this exact name. For a Simulator from the Continuous catalog, prefix the name with continuous/. Names cannot start with smr_.
-          explode: false
-          in: query
-          name: name
-          schema:
-            maxLength: 139
-            pattern: ^$|^(?:continuous/)?(?!smr_)[a-z0-9]+(?:[._-][a-z0-9]+)*$
             type: string
         - description: Page size. Values below 1 use 50. Values above 200 use 200.
           explode: false

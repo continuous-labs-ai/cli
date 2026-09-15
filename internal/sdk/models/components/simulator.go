@@ -89,7 +89,7 @@ type Simulator struct {
 	ID string `json:"id"`
 	// The instructions the build followed, or empty when none were given.
 	Instructions string `json:"instructions"`
-	// Simulator name. Names cannot start with smr_.
+	// Simulator name. The ID is its identity, and names need not be unique.
 	Name string `json:"name"`
 	// Parent Simulator ID, or null.
 	ParentID *string `json:"parent_id"`

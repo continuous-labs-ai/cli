@@ -48,8 +48,6 @@ func (e *ListSimulatorsStatus) UnmarshalJSON(data []byte) error {
 type ListSimulatorsRequest struct {
 	// Optional build status filter.
 	Status *ListSimulatorsStatus `queryParam:"style=form,explode=false,name=status"`
-	// Return only the Simulator with this exact name. For a Simulator from the Continuous catalog, prefix the name with continuous/. Names cannot start with smr_.
-	Name *string `queryParam:"style=form,explode=false,name=name"`
 	// Page size. Values below 1 use 50. Values above 200 use 200.
 	Limit *int64 `default:"50" queryParam:"style=form,explode=false,name=limit"`
 	// Opaque next_cursor value from a previous page.
@@ -72,13 +70,6 @@ func (l *ListSimulatorsRequest) GetStatus() *ListSimulatorsStatus {
 		return nil
 	}
 	return l.Status
-}
-
-func (l *ListSimulatorsRequest) GetName() *string {
-	if l == nil {
-		return nil
-	}
-	return l.Name
 }
 
 func (l *ListSimulatorsRequest) GetLimit() *int64 {

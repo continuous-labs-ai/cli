@@ -69,12 +69,14 @@ type BuildSimulatorRequest struct {
 	Filter []string `json:"filter,omitzero"`
 	// Instructions for the builder. Required for an incremental build. At most 16,384 characters and 65,536 UTF-8 bytes; must not be blank or contain U+0000.
 	Instructions *string `json:"instructions,omitzero"`
-	// Optional Simulator name. Names cannot start with smr_. Omission generates a name.
+	// Name for the Simulator. Omission generates a name. The ID stays its identity, and names need not be unique.
 	Name *string `json:"name,omitzero"`
 	// Parent Simulator ID. With instructions and no spec this starts an incremental build: the parent must be ready, and the request takes no filter or spec_kind.
 	ParentID *string `json:"parent_id,omitzero"`
 	// Source specification format. Omission detects the format.
 	SpecKind *BuildSimulatorRequestSpecKind `json:"spec_kind,omitzero"`
+	// Time limit for generation and validation in seconds, from 1 to 43200. Defaults to 3600 (one hour). Excludes queue wait and finalization. Retries share the same deadline.
+	TimeoutSeconds *int64 `default:"3600" json:"timeout_seconds"`
 }
 
 func (b BuildSimulatorRequest) MarshalJSON() ([]byte, error) {
@@ -128,4 +130,11 @@ func (b *BuildSimulatorRequest) GetSpecKind() *BuildSimulatorRequestSpecKind {
 		return nil
 	}
 	return b.SpecKind
+}
+
+func (b *BuildSimulatorRequest) GetTimeoutSeconds() *int64 {
+	if b == nil {
+		return nil
+	}
+	return b.TimeoutSeconds
 }

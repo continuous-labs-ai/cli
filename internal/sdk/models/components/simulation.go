@@ -42,7 +42,7 @@ type Simulation struct {
 	Endpoint string `json:"endpoint"`
 	// Simulation ID.
 	ID string `json:"id"`
-	// Simulation name.
+	// Simulation name. The ID is its identity, and names need not be unique.
 	Name string `json:"name"`
 	// Source Simulation ID for a fork, or null.
 	ParentID *string `json:"parent_id"`

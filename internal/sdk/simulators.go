@@ -32,7 +32,7 @@ func newSimulators(rootSDK *ContinuousSimulation, sdkConfig config.SDKConfigurat
 }
 
 // ListSimulators - List Simulators
-// Returns all Simulators that the API key can access. Results can be filtered by status or name.
+// Returns all Simulators that the API key can access. Results can be filtered by status.
 func (s *Simulators) ListSimulators(ctx context.Context, request *operations.ListSimulatorsRequest, opts ...operations.Option) (*operations.ListSimulatorsResponse, error) {
 	o := operations.Options{}
 	supportedOptions := []string{
