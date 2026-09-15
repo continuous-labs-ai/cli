@@ -17,7 +17,7 @@ import (
 var forkSimulationCmdMeta = []flagutil.FlagMeta{
 	{FlagName: "id", Shorthand: "i", FieldPath: "ID", Kind: flagutil.FlagKindString, Required: true, Description: "Source Simulation ID. [required]"},
 	{FlagName: "at-step", Shorthand: "a", FieldPath: "Body.AtStep", Kind: flagutil.FlagKindInt64, Optional: true, Description: "Completed step to fork from. Omission forks from the latest state."},
-	{FlagName: "name", Shorthand: "n", FieldPath: "Body.Name", Kind: flagutil.FlagKindString, Optional: true, Description: "Optional child Simulation name. Omission generates a name."},
+	{FlagName: "name", Shorthand: "n", FieldPath: "Body.Name", Kind: flagutil.FlagKindString, Optional: true, Description: "Name for the child Simulation. Omission generates a name. The ID stays its identity, and names need not be unique."},
 }
 
 // initForkSimulationCmd initializes the fork-simulation command.

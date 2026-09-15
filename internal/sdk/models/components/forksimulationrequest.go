@@ -5,7 +5,7 @@ package components
 type ForkSimulationRequest struct {
 	// Completed step to fork from. Omission forks from the latest state.
 	AtStep *int64 `json:"at_step,omitzero"`
-	// Optional child Simulation name. Omission generates a name.
+	// Name for the child Simulation. Omission generates a name. The ID stays its identity, and names need not be unique.
 	Name *string `json:"name,omitzero"`
 }
 

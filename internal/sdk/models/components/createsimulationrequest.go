@@ -8,7 +8,7 @@ import (
 )
 
 type CreateSimulationRequest struct {
-	// Optional Simulation name. Omission generates a name.
+	// Name for the Simulation. Omission generates a name. The ID stays its identity, and names need not be unique.
 	Name *string `json:"name,omitzero"`
 	// ID of the ready Simulator.
 	SimulatorID string `json:"simulator_id"`

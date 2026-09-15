@@ -21,6 +21,7 @@ var buildWorldCmdMeta = []flagutil.FlagMeta{
 	{FlagName: "name", Shorthand: "n", FieldPath: "Name", Kind: flagutil.FlagKindString, Optional: true, Description: "Name for the World. Omission generates a name. The ID stays its identity, and names need not be unique."},
 	{FlagName: "simulators", FieldPath: "Simulators", Kind: flagutil.FlagKindStringArray, Required: true, Description: "Simulator IDs for the World. [required]"},
 	{FlagName: "start-time", FieldPath: "StartTime", Kind: flagutil.FlagKindDateTime, Optional: true, Description: "Simulated time the World starts at, in RFC 3339 format. Omission uses 2024-01-01T00:00:00Z. Saved starting data keeps its build dates."},
+	{FlagName: "timeout-seconds", Shorthand: "t", FieldPath: "TimeoutSeconds", Kind: flagutil.FlagKindInt64, Optional: true, HasDefault: true, DefaultInt: 3600, Description: "Time limit for generation and validation in seconds, from 1 to 43200. Defaults to 3600 (one hour). Excludes queue wait and finalization. Retries share the same deadline."},
 }
 
 // initBuildWorldCmd initializes the build-world command.
