@@ -283,10 +283,10 @@ components:
             - wsdl
           type: string
         timeout_seconds:
-          default: 3600
-          description: Time limit for generation and validation in seconds, from 1 to 43200. Defaults to 3600 (one hour). Excludes queue wait and finalization. Retries share the same deadline.
+          default: 7200
+          description: Time limit for generation and validation in seconds, from 1 to 72000. Defaults to 7200 (two hours). Excludes queue wait and finalization. Retries share the same deadline.
           format: int64
-          maximum: 43200
+          maximum: 72000
           minimum: 1
           type: integer
       type: object
@@ -338,10 +338,10 @@ components:
           format: date-time
           type: string
         timeout_seconds:
-          default: 3600
-          description: Time limit for generation and validation in seconds, from 1 to 43200. Defaults to 3600 (one hour). Excludes queue wait and finalization. Retries share the same deadline.
+          default: 7200
+          description: Time limit for generation and validation in seconds, from 1 to 72000. Defaults to 7200 (two hours). Excludes queue wait and finalization. Retries share the same deadline.
           format: int64
-          maximum: 43200
+          maximum: 72000
           minimum: 1
           type: integer
       required:

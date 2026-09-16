@@ -25,7 +25,7 @@ func initBuildSimulatorCmd(parent *cobra.Command) error {
 		Use:     "build",
 		Short:   "Build Simulator",
 		Long:    "Starts an asynchronous Simulator build and returns the Simulator with status pending. Builds start in queue order when workspace capacity is available. Send multipart/form-data with a JSON part named request. To build from a document, add a file part named spec with the OpenAPI or WSDL document. For an incremental build, omit spec and set parent_id and instructions.",
-		Example: "  continuous simulators build --request '{\"request\":{\"builder\":\"claude\",\"filter\":[],\"instructions\":\"Return stable example data for every operation.\",\"name\":\"billing-api\",\"spec_kind\":\"openapi\",\"timeout_seconds\":3600} }'",
+		Example: "  continuous simulators build --request '{\"request\":{\"builder\":\"claude\",\"filter\":[],\"instructions\":\"Return stable example data for every operation.\",\"name\":\"billing-api\",\"spec_kind\":\"openapi\",\"timeout_seconds\":7200} }'",
 		RunE:    runBuildSimulatorCmd,
 	}
 	flagutil.RegisterFlags(cmd, buildSimulatorCmdMeta)
