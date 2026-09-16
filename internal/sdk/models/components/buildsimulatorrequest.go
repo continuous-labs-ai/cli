@@ -75,8 +75,8 @@ type BuildSimulatorRequest struct {
 	ParentID *string `json:"parent_id,omitzero"`
 	// Source specification format. Omission detects the format.
 	SpecKind *BuildSimulatorRequestSpecKind `json:"spec_kind,omitzero"`
-	// Time limit for generation and validation in seconds, from 1 to 43200. Defaults to 3600 (one hour). Excludes queue wait and finalization. Retries share the same deadline.
-	TimeoutSeconds *int64 `default:"3600" json:"timeout_seconds"`
+	// Time limit for generation and validation in seconds, from 1 to 72000. Defaults to 7200 (two hours). Excludes queue wait and finalization. Retries share the same deadline.
+	TimeoutSeconds *int64 `default:"7200" json:"timeout_seconds"`
 }
 
 func (b BuildSimulatorRequest) MarshalJSON() ([]byte, error) {
