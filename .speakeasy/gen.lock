@@ -1,19 +1,19 @@
 lockVersion: 2.0.0
 id: ad7b08dc-357d-414c-9f26-16cfbc099767
 management:
-  docChecksum: 8901349a3499789e6bccc8fd90f41c79
+  docChecksum: 9fc4641c741d914e36031ac2e73e34d6
   docVersion: v1
   speakeasyVersion: 1.796.4
   generationVersion: 2.935.1
-  releaseVersion: 0.1.11
-  configChecksum: 9e7a0ef63ed849695da0d7abe316a558
+  releaseVersion: 0.1.12
+  configChecksum: 13a769d8f78bd8a353906e4478c74a1e
   repoURL: https://github.com/continuous-labs-ai/cli.git
   installationURL: https://github.com/continuous-labs-ai/cli
   published: true
 persistentEdits:
-  generation_id: ca4eceda-64cf-4012-a3e7-ab1bdf086fd4
-  pristine_commit_hash: 1a8fdaff4c6bdb40290a6fbb4d6a8e38239fc046
-  pristine_tree_hash: ddfbc305bc96d52ca883bf6f7fc2ed07ae5c8e01
+  generation_id: e62d57d2-6f9f-476a-a210-6990d8aae93d
+  pristine_commit_hash: 34c8f98b7c667c2f28339c5a5bc7f9b8d4dbaa0b
+  pristine_tree_hash: bde988cd179dd207666f1cc0f5b6b4b4cd787f8f
 features:
   cli:
     constsAndDefaults: 0.0.0
@@ -116,8 +116,8 @@ trackedFiles:
     pristine_git_object: ccddbe39924f51800c8b2a8f4e8596e026ec91e8
   internal/cli/simulators/buildsimulator.go:
     id: 8588410bc4ea
-    last_write_checksum: sha1:f89e325100cdd6b3b42ccca7992baf19efc54c87
-    pristine_git_object: 8bed840162058b36a080a442c91dcd2b47c344f1
+    last_write_checksum: sha1:1326e1ac69f3302b5dfa6bbcce267bbbae65a565
+    pristine_git_object: fc655ecbed67b634cf7a9edfbae4a270b0f8ba25
   internal/cli/simulators/cancelsimulatorbuild.go:
     id: c44fc1f9b425
     last_write_checksum: sha1:37511d6e4428cd3f506367c796e3f7732dcc10a9
@@ -140,8 +140,8 @@ trackedFiles:
     pristine_git_object: a792dd286b0327e5c128d63c56580940bcadf9f9
   internal/cli/version.go:
     id: 7b0665492f72
-    last_write_checksum: sha1:f52716c6359f4d61d388f03abe13c7113fa33e02
-    pristine_git_object: ff7e89f22f98f475950a2ceb7b88b653265131ad
+    last_write_checksum: sha1:04eaab2d5c8e574df756fc158566cdbee1594377
+    pristine_git_object: b316caea9f6b996eaec490d688e22ba008a069ba
   internal/cli/whoami.go:
     id: c1787f2298ec
     last_write_checksum: sha1:9b8e8f6830e556f749eede72d72b4f18d9881c28
@@ -152,8 +152,8 @@ trackedFiles:
     pristine_git_object: 49ed8359dc66386d0cf7c2eb266ad37edb55494f
   internal/cli/worlds/buildworld.go:
     id: eb895422f8bd
-    last_write_checksum: sha1:8bcb60a648f89595f2cc4e17726933c9199b35b7
-    pristine_git_object: 6592d1b52021b29df18f8b24c0668e4b8f14cb17
+    last_write_checksum: sha1:262d58a14946762f3571ca2fe1c8cdf1889eaba2
+    pristine_git_object: 6719c791869999da87204a89e04129f3f295659a
   internal/cli/worlds/cancelworldbuild.go:
     id: 68d7a9504376
     last_write_checksum: sha1:909589f5d19e2170a86b8f185ecacffd90597feb
@@ -252,24 +252,24 @@ trackedFiles:
     pristine_git_object: 942a964e78a81ad9d9590cc67138a0c4c3569fc9
   internal/sdk/continuoussimulation.go:
     id: af3aeba7b54c
-    last_write_checksum: sha1:6af3dc518fd7a14e6b33557952873bfd6f4752cf
-    pristine_git_object: 9e6ebbf3d0947e1f2058044b9fa34403fc473f09
+    last_write_checksum: sha1:e8be6ce4fa5361b421e442dfd6204dd85e596ba6
+    pristine_git_object: 4d36fded8e3b7b37274b6c24dadf3b436620ad70
   internal/sdk/models/components/advancetimeinputbody.go:
     id: 773c85c178c2
     last_write_checksum: sha1:04265c61f29cf8afacf5689ff27372c39920b497
     pristine_git_object: 64cadf2e06b40e1bc2a215034ddbf2d1a3a3d3ae
   internal/sdk/models/components/buildsimulatorrequest.go:
     id: 510b20fc8bb2
-    last_write_checksum: sha1:1e4ccfca27c8bcc76ba383c411541049c581bca3
-    pristine_git_object: 3796034c5c9c94dc994f3ed75c024bbbab2408ce
+    last_write_checksum: sha1:d45f658171983d1c870f47b4db8dfd35cb23233d
+    pristine_git_object: 464cae24cf05eb1e338e5639840351b63737cbc8
   internal/sdk/models/components/buildtoolcall.go:
     id: 3f7a0189a83b
     last_write_checksum: sha1:8eeb13436aa50e6da3a92da379c5523ce7367809
     pristine_git_object: a92599cb3ab2ea70dd58164f852bb136807666fb
   internal/sdk/models/components/buildworldrequest.go:
     id: 8827e29faed8
-    last_write_checksum: sha1:f5515d29caebcdd91732dc53a05b963a8521e7a5
-    pristine_git_object: 99b0f978a24f6ebbe95f89444e4fc0a83e179b53
+    last_write_checksum: sha1:a438ace7a7d358a8a62236aaa2676418305c9605
+    pristine_git_object: 76edbf957ffb155dc454e20096771518847ec169
   internal/sdk/models/components/clockadvance.go:
     id: dc688562ec2d
     last_write_checksum: sha1:ccb43fe46ef508e964ae2b22b2a7c7606c04c85e
@@ -596,8 +596,8 @@ trackedFiles:
     pristine_git_object: 159a87ec97aba99e4edd132f69652e123434303e
   internal/usage/schema.go:
     id: 0f40f4612437
-    last_write_checksum: sha1:93008da231fd269304266ccd1658c78aa37aded1
-    pristine_git_object: 0895c4b4f3c3cd0dc21cc4e05516296049898545
+    last_write_checksum: sha1:355262c799cedda9ba98d4fa057b26ed1f64c88b
+    pristine_git_object: e97dfcfb37667d6fbc37a4995e544016679bb847
   scripts/install.ps1:
     id: fee0853709e9
     last_write_checksum: sha1:2da33f25afaa301dc2a22ac12654c585cef5c572
@@ -889,7 +889,7 @@ examples:
   build-simulator:
     simulator_unknown_parent:
       requestBody:
-        multipart/form-data: {"request": {"builder": "claude", "filter": [], "instructions": "Return stable example data for every operation.", "name": "billing-api", "spec_kind": "openapi", "timeout_seconds": 7200}}
+        multipart/form-data: {"request": {"builder": "claude", "filter": [], "instructions": "Return stable example data for every operation.", "name": "billing-api", "spec_kind": "openapi", "timeout_seconds": 14400}}
       responses:
         "400":
           application/problem+json: {"code": "simulator_unknown", "detail": "The parent Simulator with ID \"smr_01J8Z5X4K7M2N9P0Q1R2S3T4V5\" is unknown or belongs to another workspace."}
@@ -901,7 +901,7 @@ examples:
           application/problem+json: {"code": "simulator_unknown", "detail": "The parent Simulator with ID \"smr_01J8Z5X4K7M2N9P0Q1R2S3T4V5\" is unknown or belongs to another workspace."}
     speakeasy-default-build-simulator:
       requestBody:
-        multipart/form-data: {"request": {"builder": "claude", "filter": [], "instructions": "Return stable example data for every operation.", "name": "billing-api", "spec_kind": "openapi", "timeout_seconds": 7200}}
+        multipart/form-data: {"request": {"builder": "claude", "filter": [], "instructions": "Return stable example data for every operation.", "name": "billing-api", "spec_kind": "openapi", "timeout_seconds": 14400}}
       responses:
         "202":
           application/json: {"build": {"builder": "claude", "last_submission": "rejected", "last_tool": "test", "recent_tools": [{"at": "2026-01-15T12:04:00Z", "tool": "test"}, {"at": "2026-01-15T12:05:00Z", "tool": "submit"}], "stage": "build", "submissions": 1, "tool_calls": 7, "updated_at": "2026-01-15T12:05:00Z"}, "created_at": "2026-01-15T12:00:00Z", "error": null, "id": "smr_01J8Z5X4K7M2N9P0Q1R2S3T4V5", "instructions": "Return stable example data for every operation.", "name": "billing-api", "parent_id": "smr_01J8Z5X4K7M2N9P0Q1R2S3T4V9", "source": "workspace", "spec_kind": "openapi", "status": "building"}
@@ -915,7 +915,7 @@ examples:
           application/problem+json: {"code": "<value>", "detail": "<value>"}
     bad_request_body:
       requestBody:
-        multipart/form-data: {"request": {"builder": "claude", "filter": [], "instructions": "Return stable example data for every operation.", "name": "billing-api", "spec_kind": "openapi", "timeout_seconds": 7200}}
+        multipart/form-data: {"request": {"builder": "claude", "filter": [], "instructions": "Return stable example data for every operation.", "name": "billing-api", "spec_kind": "openapi", "timeout_seconds": 14400}}
       responses:
         "400":
           application/problem+json: {"code": "bad_request", "detail": "request body is invalid"}
@@ -1043,7 +1043,7 @@ examples:
   build-world:
     simulator_unknown:
       requestBody:
-        application/json: {"builder": "claude", "instructions": "Use stable example data for each Simulator.", "simulators": ["smr_01J8Z5X4K7M2N9P0Q1R2S3T4V5"], "timeout_seconds": 7200}
+        application/json: {"builder": "claude", "instructions": "Use stable example data for each Simulator.", "simulators": ["smr_01J8Z5X4K7M2N9P0Q1R2S3T4V5"], "timeout_seconds": 14400}
       responses:
         "400":
           application/problem+json: {"code": "simulator_unknown", "detail": "The Simulator with ID \"smr_01J8Z5X4K7M2N9P0Q1R2S3T4V5\" is unknown or belongs to another workspace."}
@@ -1051,7 +1051,7 @@ examples:
           application/problem+json: {"code": "simulator_unknown", "detail": "The Simulator with ID \"smr_01J8Z5X4K7M2N9P0Q1R2S3T4V5\" is unknown or belongs to another workspace."}
     speakeasy-default-build-world:
       requestBody:
-        application/json: {"builder": "claude", "instructions": "Use stable example data for each Simulator.", "simulators": ["smr_01J8Z5X4K7M2N9P0Q1R2S3T4V5"], "timeout_seconds": 7200}
+        application/json: {"builder": "claude", "instructions": "Use stable example data for each Simulator.", "simulators": ["smr_01J8Z5X4K7M2N9P0Q1R2S3T4V5"], "timeout_seconds": 14400}
       responses:
         "202":
           application/json: {"active_advance_id": null, "build": {"builder": "claude", "last_submission": "rejected", "last_tool": "test", "recent_tools": [{"at": "2026-01-15T12:04:00Z", "tool": "test"}, {"at": "2026-01-15T12:05:00Z", "tool": "submit"}], "stage": "generating", "submissions": 1, "summary": null, "tool_calls": 7}, "created_at": "2026-01-15T12:00:00Z", "current_time": "2024-01-01T00:00:00Z", "error": null, "id": "wld_01J8Z5X4K7M2N9P0Q1R2S3T4V7", "instructions": "Use stable example data for each Simulator.", "name": "open-orders", "simulations": [], "simulators": ["smr_01J8Z5X4K7M2N9P0Q1R2S3T4V5"], "start_time": "2024-01-01T00:00:00Z", "status": "building"}
@@ -1061,7 +1061,7 @@ examples:
           application/problem+json: {"code": "<value>", "detail": "<value>"}
     bad_request_body:
       requestBody:
-        application/json: {"builder": "claude", "instructions": "Use stable example data for each Simulator.", "simulators": ["smr_01J8Z5X4K7M2N9P0Q1R2S3T4V5"], "timeout_seconds": 7200}
+        application/json: {"builder": "claude", "instructions": "Use stable example data for each Simulator.", "simulators": ["smr_01J8Z5X4K7M2N9P0Q1R2S3T4V5"], "timeout_seconds": 14400}
       responses:
         "400":
           application/problem+json: {"code": "bad_request", "detail": "request body is invalid"}
