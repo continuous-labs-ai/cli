@@ -268,7 +268,7 @@ components:
           maxLength: 16384
           type: string
         name:
-          description: Name for the Simulator. Omission generates a name. The ID stays its identity, and names need not be unique.
+          description: Name for the Simulator. Omission generates a name. Names must not contain U+0000. The ID stays its identity, and names need not be unique.
           maxLength: 128
           type: string
         parent_id:
