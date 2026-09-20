@@ -7,20 +7,20 @@ import (
 	"time"
 )
 
-// Kind - api for an API write or advance for a clock advance.
-type Kind string
+// StepKind - api for an API write or advance for a clock advance.
+type StepKind string
 
 const (
-	KindAPI     Kind = "api"
-	KindAdvance Kind = "advance"
+	StepKindAPI     StepKind = "api"
+	StepKindAdvance StepKind = "advance"
 )
 
-func (e Kind) ToPointer() *Kind {
+func (e StepKind) ToPointer() *StepKind {
 	return &e
 }
 
 // IsExact returns true if the value matches a known enum value, false otherwise.
-func (e *Kind) IsExact() bool {
+func (e *StepKind) IsExact() bool {
 	if e != nil {
 		switch *e {
 		case "api", "advance":
@@ -34,7 +34,7 @@ type Step struct {
 	// Advance that produced this step, if any.
 	AdvanceID *string `json:"advance_id"`
 	// api for an API write or advance for a clock advance.
-	Kind Kind `json:"kind"`
+	Kind StepKind `json:"kind"`
 	// HTTP method and path of the request that produced this step, without the query string, for example POST /v1/widgets.
 	Label string `json:"label"`
 	// Step number. Use it as at_step when you fork.
@@ -63,9 +63,9 @@ func (s *Step) GetAdvanceID() *string {
 	return s.AdvanceID
 }
 
-func (s *Step) GetKind() Kind {
+func (s *Step) GetKind() StepKind {
 	if s == nil {
-		return Kind("")
+		return StepKind("")
 	}
 	return s.Kind
 }

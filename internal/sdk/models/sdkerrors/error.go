@@ -11,8 +11,9 @@ type Error struct {
 	// Stable machine-readable error code.
 	Code string `json:"code"`
 	// Safe human-readable error detail.
-	Detail   string                  `json:"detail"`
-	HTTPMeta components.HTTPMetadata `json:"-"`
+	Detail     string                              `json:"detail"`
+	Validation *components.SpecificationValidation `json:"validation"`
+	HTTPMeta   components.HTTPMetadata             `json:"-"`
 }
 
 var _ error = &Error{}
