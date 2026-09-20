@@ -6,8 +6,9 @@ package components
 type SimulatorErrorCode string
 
 const (
-	SimulatorErrorCodeBuildFailed    SimulatorErrorCode = "build_failed"
-	SimulatorErrorCodeBuildCancelled SimulatorErrorCode = "build_cancelled"
+	SimulatorErrorCodeBuildFailed                   SimulatorErrorCode = "build_failed"
+	SimulatorErrorCodeBuildCancelled                SimulatorErrorCode = "build_cancelled"
+	SimulatorErrorCodeSpecificationValidationFailed SimulatorErrorCode = "specification_validation_failed"
 )
 
 func (e SimulatorErrorCode) ToPointer() *SimulatorErrorCode {
@@ -18,7 +19,36 @@ func (e SimulatorErrorCode) ToPointer() *SimulatorErrorCode {
 func (e *SimulatorErrorCode) IsExact() bool {
 	if e != nil {
 		switch *e {
-		case "build_failed", "build_cancelled":
+		case "build_failed", "build_cancelled", "specification_validation_failed":
+			return true
+		}
+	}
+	return false
+}
+
+// SimulatorErrorReason - Bounded failure reason for selecting recovery guidance, or null when unavailable. Older servers can omit this field.
+type SimulatorErrorReason string
+
+const (
+	SimulatorErrorReasonCanceled              SimulatorErrorReason = "canceled"
+	SimulatorErrorReasonSpecificationInvalid  SimulatorErrorReason = "specification_invalid"
+	SimulatorErrorReasonTimeLimit             SimulatorErrorReason = "time_limit"
+	SimulatorErrorReasonServiceUnavailable    SimulatorErrorReason = "service_unavailable"
+	SimulatorErrorReasonBuildFailed           SimulatorErrorReason = "build_failed"
+	SimulatorErrorReasonPopulationUnsupported SimulatorErrorReason = "population_unsupported"
+	SimulatorErrorReasonWorldStartFailed      SimulatorErrorReason = "world_start_failed"
+	SimulatorErrorReasonWorldOperationFailed  SimulatorErrorReason = "world_operation_failed"
+)
+
+func (e SimulatorErrorReason) ToPointer() *SimulatorErrorReason {
+	return &e
+}
+
+// IsExact returns true if the value matches a known enum value, false otherwise.
+func (e *SimulatorErrorReason) IsExact() bool {
+	if e != nil {
+		switch *e {
+		case "canceled", "specification_invalid", "time_limit", "service_unavailable", "build_failed", "population_unsupported", "world_start_failed", "world_operation_failed":
 			return true
 		}
 	}
@@ -26,10 +56,22 @@ func (e *SimulatorErrorCode) IsExact() bool {
 }
 
 type SimulatorError struct {
+	// Plain-text explanation from the build agent, when it could not continue. At most 4096 UTF-8 bytes.
+	AgentMessage *string `json:"agent_message"`
 	// Stable Simulator build error code.
 	Code SimulatorErrorCode `json:"code"`
 	// Safe human-readable error detail.
 	Detail string `json:"detail"`
+	// Bounded failure reason for selecting recovery guidance, or null when unavailable. Older servers can omit this field.
+	Reason     *SimulatorErrorReason    `json:"reason"`
+	Validation *SpecificationValidation `json:"validation"`
+}
+
+func (s *SimulatorError) GetAgentMessage() *string {
+	if s == nil {
+		return nil
+	}
+	return s.AgentMessage
 }
 
 func (s *SimulatorError) GetCode() SimulatorErrorCode {
@@ -44,4 +86,18 @@ func (s *SimulatorError) GetDetail() string {
 		return ""
 	}
 	return s.Detail
+}
+
+func (s *SimulatorError) GetReason() *SimulatorErrorReason {
+	if s == nil {
+		return nil
+	}
+	return s.Reason
+}
+
+func (s *SimulatorError) GetValidation() *SpecificationValidation {
+	if s == nil {
+		return nil
+	}
+	return s.Validation
 }

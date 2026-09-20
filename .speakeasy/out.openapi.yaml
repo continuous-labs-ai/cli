@@ -4,182 +4,227 @@ components:
       value:
         code: auth_forbidden
         detail: The Simulator with ID "smr_01J8Z5X4K7M2N9P0Q1R2S3T4V5" belongs to the Continuous catalog and cannot be changed.
+        validation: null
     auth_forbidden_owner:
       value:
         code: auth_forbidden
         detail: Only the workspace that owns the Simulator with ID "smr_01J8Z5X4K7M2N9P0Q1R2S3T4V5" can cancel its build.
+        validation: null
     auth_forbidden_simulation:
       value:
         code: auth_forbidden
         detail: The Simulation with ID "sim_01J8Z5X4K7M2N9P0Q1R2S3T4V6" belongs to another workspace.
+        validation: null
     auth_forbidden_simulator:
       value:
         code: auth_forbidden
         detail: The Simulator with ID "smr_01J8Z5X4K7M2N9P0Q1R2S3T4V5" belongs to another workspace.
+        validation: null
     auth_forbidden_world:
       value:
         code: auth_forbidden
         detail: The World with ID "wld_01J8Z5X4K7M2N9P0Q1R2S3T4V7" belongs to another workspace.
+        validation: null
     auth_invalid:
       value:
         code: auth_invalid
         detail: The authentication credential is invalid.
+        validation: null
     auth_missing:
       value:
         code: auth_invalid
         detail: Authentication credentials are required.
+        validation: null
     auth_provider_unavailable:
       value:
         code: auth_provider_unavailable
         detail: The authentication provider is unavailable. Retry the request after a short delay.
+        validation: null
     bad_request:
       value:
         code: bad_request
         detail: The cursor is invalid.
+        validation: null
     bad_request_body:
       value:
         code: bad_request
         detail: request body is invalid
+        validation: null
     build_rate_exceeded:
       value:
         code: build_rate_exceeded
         detail: The workspace has used 10 of its limit of 10 Simulator builds for the current UTC day. The limit resets at the next UTC midnight.
+        validation: null
     build_storage_unavailable:
       value:
         code: internal_unavailable
         detail: simulator spec storage is unavailable
+        validation: null
     clock_advance_not_found:
       value:
         code: clock_advance_not_found
         detail: The clock advance was not found.
+        validation: null
     clock_conflict:
       value:
         code: clock_conflict
         detail: A clock advance is active.
+        validation: null
     internal:
       value:
         code: internal
         detail: The server encountered an unexpected error.
+        validation: null
     internal_unavailable:
       value:
         code: internal_unavailable
         detail: The service is temporarily unavailable. Retry the request after a short delay.
+        validation: null
     payload_too_large:
       value:
         code: payload_too_large
         detail: The request body exceeds the maximum allowed size.
+        validation: null
     request_timeout:
       value:
         code: request_timeout
         detail: The request body was not received before the timeout. Retry the request.
+        validation: null
     simulation_capacity:
       value:
         code: simulation_capacity
         detail: Continuous has no available Simulation capacity. Retry after a short delay.
+        validation: null
     simulation_not_found:
       value:
         code: simulation_not_found
         detail: No Simulation was found with ID "sim_01J8Z5X4K7M2N9P0Q1R2S3T4V6".
+        validation: null
     simulation_platform_owned:
       value:
         code: simulation_world_owned
         detail: The Simulation with ID "sim_01J8Z5X4K7M2N9P0Q1R2S3T4V6" is in use by the platform and cannot be changed.
+        validation: null
     simulation_provider_unavailable:
       value:
         code: simulation_provider_unavailable
         detail: The Simulation runtime provider is unavailable. Retry the request after a short delay.
+        validation: null
     simulation_quota_exceeded:
       value:
         code: simulation_quota_exceeded
         detail: The workspace has 5 active Simulations and a limit of 5. Stop a Simulation or wait for one to be deleted.
+        validation: null
     simulation_quota_exceeded_world:
       value:
         code: simulation_quota_exceeded
         detail: The workspace has 4 of its 5 Simulation slots in use and cannot start all 3 World Simulations. Stop other Simulations or wait for one to be deleted.
+        validation: null
     simulation_stopped:
       value:
         code: simulation_stopped
         detail: The Simulation with ID "sim_01J8Z5X4K7M2N9P0Q1R2S3T4V6" is stopped. Start it before you retry this request.
+        validation: null
     simulation_template_missing:
       value:
         code: simulation_template_missing
         detail: The Simulation runtime template is unavailable. Contact Continuous support before you retry the request.
+        validation: null
     simulation_timeout:
       value:
         code: simulation_timeout
         detail: The Simulation runtime did not start before the timeout. Retry the request.
+        validation: null
     simulation_world_owned:
       value:
         code: simulation_world_owned
         detail: The Simulation with ID "sim_01J8Z5X4K7M2N9P0Q1R2S3T4V6" belongs to the World with ID "wld_01J8Z5X4K7M2N9P0Q1R2S3T4V7". Manage it through the World.
+        validation: null
     simulator_in_use:
       value:
         code: simulator_in_use
         detail: The Simulator with ID "smr_01J8Z5X4K7M2N9P0Q1R2S3T4V5" has dependent Worlds, Simulations, or child Simulators. Delete those resources before you delete this Simulator.
+        validation: null
     simulator_not_found:
       value:
         code: simulator_not_found
         detail: No Simulator was found with ID "smr_01J8Z5X4K7M2N9P0Q1R2S3T4V5".
+        validation: null
     simulator_not_ready:
       value:
         code: simulator_not_ready
         detail: The Simulator with ID "smr_01J8Z5X4K7M2N9P0Q1R2S3T4V5" is not ready. Use a ready Simulator before you retry.
+        validation: null
     simulator_not_ready_base:
       value:
         code: simulator_not_ready
         detail: The base Simulator with ID "smr_01J8Z5X4K7M2N9P0Q1R2S3T4V5" is not ready. Use a ready Simulator before you retry.
+        validation: null
     simulator_unknown:
       value:
         code: simulator_unknown
         detail: The Simulator with ID "smr_01J8Z5X4K7M2N9P0Q1R2S3T4V5" is unknown or belongs to another workspace.
+        validation: null
     simulator_unknown_parent:
       value:
         code: simulator_unknown
         detail: The parent Simulator with ID "smr_01J8Z5X4K7M2N9P0Q1R2S3T4V5" is unknown or belongs to another workspace.
+        validation: null
     unsupported_media_type:
       value:
         code: unsupported_media_type
         detail: The request Content-Type is not supported.
+        validation: null
     validation_build_simulator:
       value:
         code: validation
         detail: a build requires a spec, or parent_id + instructions for an incremental build
+        validation: null
     validation_build_world:
       value:
         code: validation
         detail: instructions must not be blank
+        validation: null
     validation_clock_time:
       value:
         code: validation
         detail: time must be after 0001-01-01T00:00:00Z and before year 10000, with at most millisecond precision
+        validation: null
     validation_fork_simulation:
       value:
         code: validation
         detail: at_step does not identify a recorded step
+        validation: null
     validation_list_limit:
       value:
         code: validation
         detail: "validation failed: invalid integer at query.limit"
+        validation: null
     validation_mint_simulation_token:
       value:
         code: validation
         detail: "validation failed: expected number >= 60 at body.ttl_seconds"
+        validation: null
     validation_simulator_id:
       value:
         code: validation
         detail: The Simulator ID must be a stable smr_ ID.
+        validation: null
     world_conflict:
       value:
         code: world_conflict
         detail: The World with ID "wld_01J8Z5X4K7M2N9P0Q1R2S3T4V7" is in the failed state and cannot be started.
+        validation: null
     world_conflict_stop:
       value:
         code: world_conflict
         detail: The World with ID "wld_01J8Z5X4K7M2N9P0Q1R2S3T4V7" is in the failed state and cannot be stopped.
+        validation: null
     world_not_found:
       value:
         code: world_not_found
         detail: No World was found with ID "wld_01J8Z5X4K7M2N9P0Q1R2S3T4V7".
+        validation: null
   responses:
     InternalServerError:
       content:
@@ -573,7 +618,11 @@ components:
           description: Safe human-readable error detail.
           minLength: 1
           type: string
+        validation:
+          $ref: "#/components/schemas/SpecificationValidation"
+          description: Safe specification diagnostics for a rejected build request, when available.
       required:
+        - validation
         - code
         - detail
       type: object
@@ -948,18 +997,96 @@ components:
     SimulatorError:
       additionalProperties: false
       properties:
+        agent_message:
+          description: Plain-text explanation from the build agent, when it could not continue. At most 4096 UTF-8 bytes.
+          maxLength: 4096
+          type:
+            - string
+            - "null"
         code:
           description: Stable Simulator build error code.
           enum:
             - build_failed
             - build_cancelled
+            - specification_validation_failed
           type: string
         detail:
           description: Safe human-readable error detail.
           type: string
+        reason:
+          description: Bounded failure reason for selecting recovery guidance, or null when unavailable. Older servers can omit this field.
+          enum:
+            - canceled
+            - specification_invalid
+            - time_limit
+            - service_unavailable
+            - build_failed
+            - population_unsupported
+            - world_start_failed
+            - world_operation_failed
+            - null
+          type:
+            - string
+            - "null"
+        validation:
+          $ref: "#/components/schemas/SpecificationValidation"
+          description: Specification validation details. Address these issues before building again.
       required:
+        - agent_message
+        - reason
+        - validation
         - code
         - detail
+      type:
+        - object
+        - "null"
+    SpecificationIssue:
+      additionalProperties: false
+      properties:
+        code:
+          description: Stable validation rule code.
+          type: string
+        kind:
+          description: Whether the input is invalid, unsupported, incomplete, or has no specific diagnosis.
+          enum:
+            - invalid
+            - unsupported
+            - incomplete
+            - unknown
+          type: string
+        message:
+          description: What needs attention at this location.
+          type: string
+        operation:
+          description: Affected operation ID or method and path, when available. Empty for document-level issues.
+          maxLength: 243
+          type: string
+        path:
+          description: Location in the submitted specification, as a JSON pointer or XML path.
+          maxLength: 243
+          type: string
+        suggestion:
+          description: How to correct or address the problem.
+          type: string
+      required:
+        - code
+        - operation
+        - path
+        - kind
+        - message
+        - suggestion
+      type: object
+    SpecificationValidation:
+      additionalProperties: false
+      properties:
+        issues:
+          description: Specification validation problems. At most 20 are returned.
+          items:
+            $ref: "#/components/schemas/SpecificationIssue"
+          maxItems: 20
+          type: array
+      required:
+        - issues
       type:
         - object
         - "null"
@@ -1223,7 +1350,23 @@ components:
         detail:
           description: Safe human-readable error detail.
           type: string
+        reason:
+          description: Bounded failure reason for selecting recovery guidance, or null when unavailable. Older servers can omit this field.
+          enum:
+            - canceled
+            - specification_invalid
+            - time_limit
+            - service_unavailable
+            - build_failed
+            - population_unsupported
+            - world_start_failed
+            - world_operation_failed
+            - null
+          type:
+            - string
+            - "null"
       required:
+        - reason
         - code
         - detail
       type:
