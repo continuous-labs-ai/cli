@@ -53,6 +53,30 @@ func (e *SimulatorBuildProgressLastSubmission) IsExact() bool {
 	return false
 }
 
+// SimulatorBuildProgressPhase - Agent phase: build for generation, review for the separate reviewer, finalize for author repair after review. Null when not recorded.
+type SimulatorBuildProgressPhase string
+
+const (
+	SimulatorBuildProgressPhaseBuild    SimulatorBuildProgressPhase = "build"
+	SimulatorBuildProgressPhaseReview   SimulatorBuildProgressPhase = "review"
+	SimulatorBuildProgressPhaseFinalize SimulatorBuildProgressPhase = "finalize"
+)
+
+func (e SimulatorBuildProgressPhase) ToPointer() *SimulatorBuildProgressPhase {
+	return &e
+}
+
+// IsExact returns true if the value matches a known enum value, false otherwise.
+func (e *SimulatorBuildProgressPhase) IsExact() bool {
+	if e != nil {
+		switch *e {
+		case "build", "review", "finalize":
+			return true
+		}
+	}
+	return false
+}
+
 // SimulatorBuildProgressStage - derive while the effective spec, build skeleton, and sandbox are prepared; build while the coding loop runs; assemble while an accepted artifact publishes.
 type SimulatorBuildProgressStage string
 
@@ -84,6 +108,8 @@ type SimulatorBuildProgress struct {
 	LastSubmission *SimulatorBuildProgressLastSubmission `json:"last_submission"`
 	// Name of the most recent tool call, or null.
 	LastTool *string `json:"last_tool"`
+	// Agent phase: build for generation, review for the separate reviewer, finalize for author repair after review. Null when not recorded.
+	Phase *SimulatorBuildProgressPhase `json:"phase"`
 	// The most recent tool calls, oldest first, at most 20.
 	RecentTools []BuildToolCall `json:"recent_tools"`
 	// derive while the effective spec, build skeleton, and sandbox are prepared; build while the coding loop runs; assemble while an accepted artifact publishes.
@@ -126,6 +152,13 @@ func (s *SimulatorBuildProgress) GetLastTool() *string {
 		return nil
 	}
 	return s.LastTool
+}
+
+func (s *SimulatorBuildProgress) GetPhase() *SimulatorBuildProgressPhase {
+	if s == nil {
+		return nil
+	}
+	return s.Phase
 }
 
 func (s *SimulatorBuildProgress) GetRecentTools() []BuildToolCall {

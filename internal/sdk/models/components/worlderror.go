@@ -6,14 +6,15 @@ package components
 type WorldErrorCode string
 
 const (
-	WorldErrorCodeWorldBuildCanceled         WorldErrorCode = "world_build_canceled"
-	WorldErrorCodeWorldStartFailed           WorldErrorCode = "world_start_failed"
-	WorldErrorCodeWorldCreateFailed          WorldErrorCode = "world_create_failed"
-	WorldErrorCodeWorldFailed                WorldErrorCode = "world_failed"
-	WorldErrorCodeWorldPopulationFailed      WorldErrorCode = "world_population_failed"
-	WorldErrorCodeWorldPopulationUnsupported WorldErrorCode = "world_population_unsupported"
-	WorldErrorCodeWorldPopulationInvalid     WorldErrorCode = "world_population_invalid"
-	WorldErrorCodeWorldPopulationUnavailable WorldErrorCode = "world_population_unavailable"
+	WorldErrorCodeWorldBuildCanceled          WorldErrorCode = "world_build_canceled"
+	WorldErrorCodeWorldStartFailed            WorldErrorCode = "world_start_failed"
+	WorldErrorCodeWorldCreateFailed           WorldErrorCode = "world_create_failed"
+	WorldErrorCodeWorldFailed                 WorldErrorCode = "world_failed"
+	WorldErrorCodeWorldPopulationFailed       WorldErrorCode = "world_population_failed"
+	WorldErrorCodeWorldPopulationUnsupported  WorldErrorCode = "world_population_unsupported"
+	WorldErrorCodeWorldPopulationInvalid      WorldErrorCode = "world_population_invalid"
+	WorldErrorCodeWorldPopulationUnavailable  WorldErrorCode = "world_population_unavailable"
+	WorldErrorCodeWorldPopulationIncompatible WorldErrorCode = "world_population_incompatible"
 )
 
 func (e WorldErrorCode) ToPointer() *WorldErrorCode {
@@ -24,7 +25,7 @@ func (e WorldErrorCode) ToPointer() *WorldErrorCode {
 func (e *WorldErrorCode) IsExact() bool {
 	if e != nil {
 		switch *e {
-		case "world_build_canceled", "world_start_failed", "world_create_failed", "world_failed", "world_population_failed", "world_population_unsupported", "world_population_invalid", "world_population_unavailable":
+		case "world_build_canceled", "world_start_failed", "world_create_failed", "world_failed", "world_population_failed", "world_population_unsupported", "world_population_invalid", "world_population_unavailable", "world_population_incompatible":
 			return true
 		}
 	}

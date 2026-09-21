@@ -48,13 +48,89 @@ func (e *WorldBuildProgressLastSubmission) IsExact() bool {
 	return false
 }
 
-// WorldBuildProgressStage - Current phase of starting-data preparation.
+// LastValidationCode - Fixed code for the latest validation finding. Null when no finding is available. Authored details stay private.
+type LastValidationCode string
+
+const (
+	LastValidationCodeInvalidPlan             LastValidationCode = "invalid_plan"
+	LastValidationCodeUnsupportedClaim        LastValidationCode = "unsupported_claim"
+	LastValidationCodeInvalidRequirement      LastValidationCode = "invalid_requirement"
+	LastValidationCodeNestedProof             LastValidationCode = "nested_proof"
+	LastValidationCodeRequestNotSatisfied     LastValidationCode = "request_not_satisfied"
+	LastValidationCodeVerificationUnavailable LastValidationCode = "verification_unavailable"
+)
+
+func (e LastValidationCode) ToPointer() *LastValidationCode {
+	return &e
+}
+
+// IsExact returns true if the value matches a known enum value, false otherwise.
+func (e *LastValidationCode) IsExact() bool {
+	if e != nil {
+		switch *e {
+		case "invalid_plan", "unsupported_claim", "invalid_requirement", "nested_proof", "request_not_satisfied", "verification_unavailable":
+			return true
+		}
+	}
+	return false
+}
+
+// WorldBuildProgressPhase - Agent phase: build for generation, review for the separate reviewer, finalize for author repair after review. Null when not recorded.
+type WorldBuildProgressPhase string
+
+const (
+	WorldBuildProgressPhaseBuild    WorldBuildProgressPhase = "build"
+	WorldBuildProgressPhaseReview   WorldBuildProgressPhase = "review"
+	WorldBuildProgressPhaseFinalize WorldBuildProgressPhase = "finalize"
+)
+
+func (e WorldBuildProgressPhase) ToPointer() *WorldBuildProgressPhase {
+	return &e
+}
+
+// IsExact returns true if the value matches a known enum value, false otherwise.
+func (e *WorldBuildProgressPhase) IsExact() bool {
+	if e != nil {
+		switch *e {
+		case "build", "review", "finalize":
+			return true
+		}
+	}
+	return false
+}
+
+// ReviewStatus - Status of the original independent review, not approval of later edits. Null before review.
+type ReviewStatus string
+
+const (
+	ReviewStatusPending  ReviewStatus = "pending"
+	ReviewStatusAccepted ReviewStatus = "accepted"
+	ReviewStatusRejected ReviewStatus = "rejected"
+)
+
+func (e ReviewStatus) ToPointer() *ReviewStatus {
+	return &e
+}
+
+// IsExact returns true if the value matches a known enum value, false otherwise.
+func (e *ReviewStatus) IsExact() bool {
+	if e != nil {
+		switch *e {
+		case "pending", "accepted", "rejected":
+			return true
+		}
+	}
+	return false
+}
+
+// WorldBuildProgressStage - Internal step of starting-data preparation.
 type WorldBuildProgressStage string
 
 const (
 	WorldBuildProgressStagePlanning   WorldBuildProgressStage = "planning"
 	WorldBuildProgressStageGenerating WorldBuildProgressStage = "generating"
 	WorldBuildProgressStageValidating WorldBuildProgressStage = "validating"
+	WorldBuildProgressStageReviewing  WorldBuildProgressStage = "reviewing"
 	WorldBuildProgressStageComplete   WorldBuildProgressStage = "complete"
 )
 
@@ -66,7 +142,7 @@ func (e WorldBuildProgressStage) ToPointer() *WorldBuildProgressStage {
 func (e *WorldBuildProgressStage) IsExact() bool {
 	if e != nil {
 		switch *e {
-		case "planning", "generating", "validating", "complete":
+		case "planning", "generating", "validating", "reviewing", "complete":
 			return true
 		}
 	}
@@ -80,14 +156,22 @@ type WorldBuildProgress struct {
 	LastSubmission *WorldBuildProgressLastSubmission `json:"last_submission"`
 	// Name of the most recent tool, or null. Tool arguments and output are private.
 	LastTool *string `json:"last_tool"`
+	// Fixed code for the latest validation finding. Null when no finding is available. Authored details stay private.
+	LastValidationCode *LastValidationCode `json:"last_validation_code"`
+	// Agent phase: build for generation, review for the separate reviewer, finalize for author repair after review. Null when not recorded.
+	Phase *WorldBuildProgressPhase `json:"phase"`
 	// The most recent tool calls, oldest first, at most 20.
 	RecentTools []BuildToolCall `json:"recent_tools"`
-	// Current phase of starting-data preparation.
+	// Status of the original independent review, not approval of later edits. Null before review.
+	ReviewStatus *ReviewStatus `json:"review_status"`
+	// Internal step of starting-data preparation.
 	Stage WorldBuildProgressStage `json:"stage"`
-	// Number of submitted starting-data plans.
+	// Number of distinct candidate plans submitted.
 	Submissions int64 `json:"submissions"`
 	// Verified starting data, or null before a completed build.
 	Summary *WorldDataSummary `json:"summary"`
+	// Number of distinct candidate plans tested. Zero when not recorded.
+	Tests int64 `json:"tests"`
 	// Number of agent tool calls.
 	ToolCalls int64 `json:"tool_calls"`
 }
@@ -113,11 +197,32 @@ func (w *WorldBuildProgress) GetLastTool() *string {
 	return w.LastTool
 }
 
+func (w *WorldBuildProgress) GetLastValidationCode() *LastValidationCode {
+	if w == nil {
+		return nil
+	}
+	return w.LastValidationCode
+}
+
+func (w *WorldBuildProgress) GetPhase() *WorldBuildProgressPhase {
+	if w == nil {
+		return nil
+	}
+	return w.Phase
+}
+
 func (w *WorldBuildProgress) GetRecentTools() []BuildToolCall {
 	if w == nil {
 		return []BuildToolCall{}
 	}
 	return w.RecentTools
+}
+
+func (w *WorldBuildProgress) GetReviewStatus() *ReviewStatus {
+	if w == nil {
+		return nil
+	}
+	return w.ReviewStatus
 }
 
 func (w *WorldBuildProgress) GetStage() WorldBuildProgressStage {
@@ -139,6 +244,13 @@ func (w *WorldBuildProgress) GetSummary() *WorldDataSummary {
 		return nil
 	}
 	return w.Summary
+}
+
+func (w *WorldBuildProgress) GetTests() int64 {
+	if w == nil {
+		return 0
+	}
+	return w.Tests
 }
 
 func (w *WorldBuildProgress) GetToolCalls() int64 {
