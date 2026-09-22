@@ -576,9 +576,11 @@ components:
             - string
             - "null"
         simulator_id:
-          description: ID of the Simulator.
+          description: ID of the Simulator, or null for a digest-addressed Simulation.
           pattern: ^smr_[0-9A-HJKMNP-TV-Z]{26}$
-          type: string
+          type:
+            - string
+            - "null"
         start_time:
           description: Initial simulated time.
           format: date-time
@@ -803,9 +805,11 @@ components:
             - string
             - "null"
         simulator_id:
-          description: ID of the Simulator.
+          description: ID of the Simulator, or null for a digest-addressed Simulation.
           pattern: ^smr_[0-9A-HJKMNP-TV-Z]{26}$
-          type: string
+          type:
+            - string
+            - "null"
         start_time:
           description: Initial simulated time.
           format: date-time
