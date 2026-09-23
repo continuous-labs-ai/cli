@@ -17,6 +17,7 @@ import (
 var listSimulationsCmdMeta = []flagutil.FlagMeta{
 	{FlagName: "status", FieldPath: "Status", Kind: flagutil.FlagKindEnum, Optional: true, EnumValues: []string{"running", "paused", "stopped"}, Description: "Optional status filter. (options: running, paused, stopped)"},
 	{FlagName: "simulator-id", FieldPath: "SimulatorID", Kind: flagutil.FlagKindString, Optional: true, Description: "Optional Simulator ID filter."},
+	{FlagName: "simulator-digest", FieldPath: "SimulatorDigest", Kind: flagutil.FlagKindString, Optional: true, Description: "Optional exact pinned OCI manifest digest filter."},
 	{FlagName: "limit", Shorthand: "l", FieldPath: "Limit", Kind: flagutil.FlagKindInt64, Optional: true, HasDefault: true, DefaultInt: 50, Description: "Page size. Values below 1 use 50. Values above 200 use 200."},
 	{FlagName: "cursor", Shorthand: "c", FieldPath: "Cursor", Kind: flagutil.FlagKindString, Optional: true, Description: "Opaque next_cursor value from a previous page."},
 }
@@ -26,7 +27,7 @@ func initListSimulationsCmd(parent *cobra.Command) error {
 	var cmd = &cobra.Command{
 		Use:     "list",
 		Short:   "List Simulations",
-		Long:    "Returns all Simulations that the API key can access. Results can be filtered by status or Simulator.",
+		Long:    "Returns all Simulations that the API key can access. Results can be filtered by status, Simulator ID, or pinned Simulator digest.",
 		Example: "  continuous simulations list",
 		RunE:    runListSimulationsCmd,
 	}
