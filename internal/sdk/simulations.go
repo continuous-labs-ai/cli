@@ -32,7 +32,7 @@ func newSimulations(rootSDK *ContinuousSimulation, sdkConfig config.SDKConfigura
 }
 
 // ListSimulations - List Simulations
-// Returns all Simulations that the API key can access. Results can be filtered by status or Simulator.
+// Returns all Simulations that the API key can access. Results can be filtered by status, Simulator ID, or pinned Simulator digest.
 func (s *Simulations) ListSimulations(ctx context.Context, request *operations.ListSimulationsRequest, opts ...operations.Option) (*operations.ListSimulationsResponse, error) {
 	o := operations.Options{}
 	supportedOptions := []string{

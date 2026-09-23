@@ -205,6 +205,11 @@ components:
         code: validation
         detail: "validation failed: expected number >= 60 at body.ttl_seconds"
         validation: null
+    validation_simulator_digest:
+      value:
+        code: validation
+        detail: "validation failed: expected string to match pattern ^sha256:[0-9a-f]{64}$ at query.simulator_digest"
+        validation: null
     validation_simulator_id:
       value:
         code: validation
@@ -535,6 +540,7 @@ components:
           id: sim_01J8Z5X4K7M2N9P0Q1R2S3T4V6
           name: billing-sandbox
           parent_id: sim_01J8Z5X4K7M2N9P0Q1R2S3T4V8
+          simulator_digest: sha256:aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
           simulator_id: smr_01J8Z5X4K7M2N9P0Q1R2S3T4V5
           start_time: "2024-01-01T00:00:00Z"
           status: running
@@ -575,12 +581,14 @@ components:
           type:
             - string
             - "null"
+        simulator_digest:
+          description: OCI manifest digest pinned when the Simulation was created.
+          pattern: ^sha256:[0-9a-f]{64}$
+          type: string
         simulator_id:
-          description: ID of the Simulator, or null for a digest-addressed Simulation.
+          description: ID of the Simulator bound to this Simulation.
           pattern: ^smr_[0-9A-HJKMNP-TV-Z]{26}$
-          type:
-            - string
-            - "null"
+          type: string
         start_time:
           description: Initial simulated time.
           format: date-time
@@ -602,6 +610,7 @@ components:
         - id
         - name
         - simulator_id
+        - simulator_digest
         - parent_id
         - status
         - endpoint
@@ -769,6 +778,7 @@ components:
           id: sim_01J8Z5X4K7M2N9P0Q1R2S3T4V6
           name: billing-sandbox
           parent_id: sim_01J8Z5X4K7M2N9P0Q1R2S3T4V8
+          simulator_digest: sha256:aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
           simulator_id: smr_01J8Z5X4K7M2N9P0Q1R2S3T4V5
           start_time: "2024-01-01T00:00:00Z"
           status: running
@@ -804,12 +814,14 @@ components:
           type:
             - string
             - "null"
+        simulator_digest:
+          description: OCI manifest digest pinned when the Simulation was created.
+          pattern: ^sha256:[0-9a-f]{64}$
+          type: string
         simulator_id:
-          description: ID of the Simulator, or null for a digest-addressed Simulation.
+          description: ID of the Simulator bound to this Simulation.
           pattern: ^smr_[0-9A-HJKMNP-TV-Z]{26}$
-          type:
-            - string
-            - "null"
+          type: string
         start_time:
           description: Initial simulated time.
           format: date-time
@@ -828,6 +840,7 @@ components:
         - id
         - name
         - simulator_id
+        - simulator_digest
         - parent_id
         - status
         - endpoint
@@ -1488,7 +1501,7 @@ openapi: 3.1.0
 paths:
   /v1/simulations:
     get:
-      description: Returns all Simulations that the API key can access. Results can be filtered by status or Simulator.
+      description: Returns all Simulations that the API key can access. Results can be filtered by status, Simulator ID, or pinned Simulator digest.
       operationId: list-simulations
       parameters:
         - description: Optional status filter.
@@ -1507,6 +1520,13 @@ paths:
           name: simulator_id
           schema:
             pattern: ^smr_[0-9A-HJKMNP-TV-Z]{26}$
+            type: string
+        - description: Optional exact pinned OCI manifest digest filter.
+          explode: false
+          in: query
+          name: simulator_digest
+          schema:
+            pattern: ^sha256:[0-9a-f]{64}$
             type: string
         - description: Page size. Values below 1 use 50. Values above 200 use 200.
           explode: false
@@ -1548,6 +1568,8 @@ paths:
               examples:
                 validation_list_limit:
                   $ref: "#/components/examples/validation_list_limit"
+                validation_simulator_digest:
+                  $ref: "#/components/examples/validation_simulator_digest"
                 validation_simulator_id:
                   $ref: "#/components/examples/validation_simulator_id"
               schema:

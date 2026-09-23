@@ -46,8 +46,10 @@ type Simulation struct {
 	Name string `json:"name"`
 	// Source Simulation ID for a fork, or null.
 	ParentID *string `json:"parent_id"`
-	// ID of the Simulator, or null for a digest-addressed Simulation.
-	SimulatorID *string `json:"simulator_id"`
+	// OCI manifest digest pinned when the Simulation was created.
+	SimulatorDigest string `json:"simulator_digest"`
+	// ID of the Simulator bound to this Simulation.
+	SimulatorID string `json:"simulator_id"`
 	// Initial simulated time.
 	StartTime time.Time `json:"start_time"`
 	// Current status. running serves requests. paused means the Simulation was idle and the platform paused it; the next request wakes it. stopped means its state is saved and requests return 409 until you start it.
@@ -114,9 +116,16 @@ func (s *Simulation) GetParentID() *string {
 	return s.ParentID
 }
 
-func (s *Simulation) GetSimulatorID() *string {
+func (s *Simulation) GetSimulatorDigest() string {
 	if s == nil {
-		return nil
+		return ""
+	}
+	return s.SimulatorDigest
+}
+
+func (s *Simulation) GetSimulatorID() string {
+	if s == nil {
+		return ""
 	}
 	return s.SimulatorID
 }
