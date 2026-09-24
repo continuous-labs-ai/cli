@@ -75,6 +75,31 @@ func (e *LastValidationCode) IsExact() bool {
 	return false
 }
 
+// WorldBuildProgressModel - The model the builder and reviewer run on, or null for a build created before provider selection. A build recorded before model selection reports its provider's default.
+type WorldBuildProgressModel string
+
+const (
+	WorldBuildProgressModelGpt6Astra     WorldBuildProgressModel = "gpt-6-astra"
+	WorldBuildProgressModelGpt6Sol       WorldBuildProgressModel = "gpt-6-sol"
+	WorldBuildProgressModelClaudeOpus55  WorldBuildProgressModel = "claude-opus-5-5"
+	WorldBuildProgressModelClaudeFable51 WorldBuildProgressModel = "claude-fable-5-1"
+)
+
+func (e WorldBuildProgressModel) ToPointer() *WorldBuildProgressModel {
+	return &e
+}
+
+// IsExact returns true if the value matches a known enum value, false otherwise.
+func (e *WorldBuildProgressModel) IsExact() bool {
+	if e != nil {
+		switch *e {
+		case "gpt-6-astra", "gpt-6-sol", "claude-opus-5-5", "claude-fable-5-1":
+			return true
+		}
+	}
+	return false
+}
+
 // WorldBuildProgressPhase - Agent phase: build for generation, review for the separate reviewer, finalize for author repair after review. Null when not recorded.
 type WorldBuildProgressPhase string
 
@@ -158,6 +183,8 @@ type WorldBuildProgress struct {
 	LastTool *string `json:"last_tool"`
 	// Fixed code for the latest validation finding. Null when no finding is available. Authored details stay private.
 	LastValidationCode *LastValidationCode `json:"last_validation_code"`
+	// The model the builder and reviewer run on, or null for a build created before provider selection. A build recorded before model selection reports its provider's default.
+	Model *WorldBuildProgressModel `json:"model"`
 	// Agent phase: build for generation, review for the separate reviewer, finalize for author repair after review. Null when not recorded.
 	Phase *WorldBuildProgressPhase `json:"phase"`
 	// The most recent tool calls, oldest first, at most 20.
@@ -202,6 +229,13 @@ func (w *WorldBuildProgress) GetLastValidationCode() *LastValidationCode {
 		return nil
 	}
 	return w.LastValidationCode
+}
+
+func (w *WorldBuildProgress) GetModel() *WorldBuildProgressModel {
+	if w == nil {
+		return nil
+	}
+	return w.Model
 }
 
 func (w *WorldBuildProgress) GetPhase() *WorldBuildProgressPhase {

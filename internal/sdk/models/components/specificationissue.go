@@ -32,12 +32,12 @@ type SpecificationIssue struct {
 	Code string `json:"code"`
 	// Whether the input is invalid, unsupported, incomplete, or has no specific diagnosis.
 	Kind SpecificationIssueKind `json:"kind"`
+	// Readable endpoint or field affected by this issue.
+	Location string `json:"location"`
 	// What needs attention at this location.
 	Message string `json:"message"`
 	// Affected operation ID or method and path, when available. Empty for document-level issues.
 	Operation string `json:"operation"`
-	// Location in the submitted specification, as a JSON pointer or XML path.
-	Path string `json:"path"`
 	// How to correct or address the problem.
 	Suggestion string `json:"suggestion"`
 }
@@ -56,6 +56,13 @@ func (s *SpecificationIssue) GetKind() SpecificationIssueKind {
 	return s.Kind
 }
 
+func (s *SpecificationIssue) GetLocation() string {
+	if s == nil {
+		return ""
+	}
+	return s.Location
+}
+
 func (s *SpecificationIssue) GetMessage() string {
 	if s == nil {
 		return ""
@@ -68,13 +75,6 @@ func (s *SpecificationIssue) GetOperation() string {
 		return ""
 	}
 	return s.Operation
-}
-
-func (s *SpecificationIssue) GetPath() string {
-	if s == nil {
-		return ""
-	}
-	return s.Path
 }
 
 func (s *SpecificationIssue) GetSuggestion() string {

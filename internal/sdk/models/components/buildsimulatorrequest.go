@@ -8,7 +8,7 @@ import (
 	"github.com/continuous-labs-ai/cli/internal/sdk/sdkinternal/utils"
 )
 
-// BuildSimulatorRequestBuilder - Model provider that builds the Simulator. Defaults to claude.
+// BuildSimulatorRequestBuilder - Legacy provider selection. Alone it selects the provider's default model (openai is gpt-6-astra, claude is claude-fable-5-1); with model it must name the model's provider.
 type BuildSimulatorRequestBuilder string
 
 const (
@@ -32,6 +32,39 @@ func (e *BuildSimulatorRequestBuilder) UnmarshalJSON(data []byte) error {
 		return nil
 	default:
 		return fmt.Errorf("invalid value for BuildSimulatorRequestBuilder: %v", v)
+	}
+}
+
+// BuildSimulatorRequestModel - Model that builds and reviews the Simulator. Defaults to gpt-6-astra. Its provider is derived from the model.
+type BuildSimulatorRequestModel string
+
+const (
+	BuildSimulatorRequestModelGpt6Astra     BuildSimulatorRequestModel = "gpt-6-astra"
+	BuildSimulatorRequestModelGpt6Sol       BuildSimulatorRequestModel = "gpt-6-sol"
+	BuildSimulatorRequestModelClaudeOpus55  BuildSimulatorRequestModel = "claude-opus-5-5"
+	BuildSimulatorRequestModelClaudeFable51 BuildSimulatorRequestModel = "claude-fable-5-1"
+)
+
+func (e BuildSimulatorRequestModel) ToPointer() *BuildSimulatorRequestModel {
+	return &e
+}
+func (e *BuildSimulatorRequestModel) UnmarshalJSON(data []byte) error {
+	var v string
+	if err := json.Unmarshal(data, &v); err != nil {
+		return err
+	}
+	switch v {
+	case "gpt-6-astra":
+		fallthrough
+	case "gpt-6-sol":
+		fallthrough
+	case "claude-opus-5-5":
+		fallthrough
+	case "claude-fable-5-1":
+		*e = BuildSimulatorRequestModel(v)
+		return nil
+	default:
+		return fmt.Errorf("invalid value for BuildSimulatorRequestModel: %v", v)
 	}
 }
 
@@ -63,12 +96,14 @@ func (e *BuildSimulatorRequestSpecKind) UnmarshalJSON(data []byte) error {
 }
 
 type BuildSimulatorRequest struct {
-	// Model provider that builds the Simulator. Defaults to claude.
-	Builder *BuildSimulatorRequestBuilder `default:"claude" json:"builder"`
+	// Legacy provider selection. Alone it selects the provider's default model (openai is gpt-6-astra, claude is claude-fable-5-1); with model it must name the model's provider.
+	Builder *BuildSimulatorRequestBuilder `json:"builder,omitzero"`
 	// Regular expressions (RE2 syntax) that select the operations to implement. Each is matched against the OpenAPI operationId or the WSDL operation name; an operation is kept when any expression matches, and an OpenAPI operation without an operationId is dropped. At most 64 expressions of at most 1,024 characters each. Omit or send an empty list to keep every operation. Not allowed for an incremental build.
 	Filter []string `json:"filter,omitzero"`
 	// Instructions for the builder. Required for an incremental build. At most 16,384 characters and 65,536 UTF-8 bytes; must not be blank or contain U+0000.
 	Instructions *string `json:"instructions,omitzero"`
+	// Model that builds and reviews the Simulator. Defaults to gpt-6-astra. Its provider is derived from the model.
+	Model *BuildSimulatorRequestModel `default:"gpt-6-astra" json:"model"`
 	// Name for the Simulator. Omission generates a name. Names must not contain U+0000. The ID stays its identity, and names need not be unique.
 	Name *string `json:"name,omitzero"`
 	// Parent Simulator ID. With instructions and no spec this starts an incremental build: the parent must be ready, and the request takes no filter or spec_kind.
@@ -109,6 +144,13 @@ func (b *BuildSimulatorRequest) GetInstructions() *string {
 		return nil
 	}
 	return b.Instructions
+}
+
+func (b *BuildSimulatorRequest) GetModel() *BuildSimulatorRequestModel {
+	if b == nil {
+		return nil
+	}
+	return b.Model
 }
 
 func (b *BuildSimulatorRequest) GetName() *string {

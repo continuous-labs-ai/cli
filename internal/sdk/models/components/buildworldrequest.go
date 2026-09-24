@@ -9,7 +9,7 @@ import (
 	"time"
 )
 
-// BuildWorldRequestBuilder - Model provider that builds starting data. Defaults to claude.
+// BuildWorldRequestBuilder - Legacy provider selection. Alone it selects the provider's default model (openai is gpt-6-astra, claude is claude-fable-5-1); with model it must name the model's provider.
 type BuildWorldRequestBuilder string
 
 const (
@@ -36,11 +36,46 @@ func (e *BuildWorldRequestBuilder) UnmarshalJSON(data []byte) error {
 	}
 }
 
+// BuildWorldRequestModel - Model that builds and reviews starting data. Defaults to gpt-6-astra. Its provider is derived from the model.
+type BuildWorldRequestModel string
+
+const (
+	BuildWorldRequestModelGpt6Astra     BuildWorldRequestModel = "gpt-6-astra"
+	BuildWorldRequestModelGpt6Sol       BuildWorldRequestModel = "gpt-6-sol"
+	BuildWorldRequestModelClaudeOpus55  BuildWorldRequestModel = "claude-opus-5-5"
+	BuildWorldRequestModelClaudeFable51 BuildWorldRequestModel = "claude-fable-5-1"
+)
+
+func (e BuildWorldRequestModel) ToPointer() *BuildWorldRequestModel {
+	return &e
+}
+func (e *BuildWorldRequestModel) UnmarshalJSON(data []byte) error {
+	var v string
+	if err := json.Unmarshal(data, &v); err != nil {
+		return err
+	}
+	switch v {
+	case "gpt-6-astra":
+		fallthrough
+	case "gpt-6-sol":
+		fallthrough
+	case "claude-opus-5-5":
+		fallthrough
+	case "claude-fable-5-1":
+		*e = BuildWorldRequestModel(v)
+		return nil
+	default:
+		return fmt.Errorf("invalid value for BuildWorldRequestModel: %v", v)
+	}
+}
+
 type BuildWorldRequest struct {
-	// Model provider that builds starting data. Defaults to claude.
-	Builder *BuildWorldRequestBuilder `default:"claude" json:"builder"`
+	// Legacy provider selection. Alone it selects the provider's default model (openai is gpt-6-astra, claude is claude-fable-5-1); with model it must name the model's provider.
+	Builder *BuildWorldRequestBuilder `json:"builder,omitzero"`
 	// Describe the initial data, scenario, and relationships. Populated Worlds support up to 8 selected Simulators and 1,000 starting records in total. Named record types replace their default data. At most 16,384 characters and 65,536 UTF-8 bytes. U+0000 is not permitted.
 	Instructions *string `json:"instructions,omitzero"`
+	// Model that builds and reviews starting data. Defaults to gpt-6-astra. Its provider is derived from the model.
+	Model *BuildWorldRequestModel `default:"gpt-6-astra" json:"model"`
 	// Name for the World. Omission generates a name. The ID stays its identity, and names need not be unique.
 	Name *string `json:"name,omitzero"`
 	// Simulator IDs for the World.
@@ -74,6 +109,13 @@ func (b *BuildWorldRequest) GetInstructions() *string {
 		return nil
 	}
 	return b.Instructions
+}
+
+func (b *BuildWorldRequest) GetModel() *BuildWorldRequestModel {
+	if b == nil {
+		return nil
+	}
+	return b.Model
 }
 
 func (b *BuildWorldRequest) GetName() *string {
