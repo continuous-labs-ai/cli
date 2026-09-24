@@ -57,7 +57,7 @@ type CreatedSimulation struct {
 	StartTime time.Time `json:"start_time"`
 	// Current status. running serves requests. paused means the Simulation was idle and the platform paused it; the next request wakes it. stopped means its state is saved and requests return 409 until you start it.
 	Status CreatedSimulationStatus `json:"status"`
-	// Token for requests to the Simulation endpoint. Send it in the X-Continuous-Simulation-Token header. It is returned only here; list and get omit it. Create more with POST /v1/simulations/{id}/tokens.
+	// Current token for requests to the Simulation endpoint. Send it in the X-Continuous-Simulation-Token header. Retrieve it later with GET /v1/simulations/{id}/token.
 	Token string `json:"token"`
 }
 

@@ -1,7 +1,7 @@
 lockVersion: 2.0.0
 id: ad7b08dc-357d-414c-9f26-16cfbc099767
 management:
-  docChecksum: 4ea5aee3124fc484563df635031bb71b
+  docChecksum: 1b8026d7e13fc8e36a7f0595b8305c2b
   docVersion: v1
   speakeasyVersion: 1.796.4
   generationVersion: 2.935.1
@@ -11,9 +11,9 @@ management:
   installationURL: https://github.com/continuous-labs-ai/cli
   published: true
 persistentEdits:
-  generation_id: aa8f2559-e339-4bfb-8dd4-806b8e49ff40
-  pristine_commit_hash: 746008ea7859f715c1428583a94dcd197f940a72
-  pristine_tree_hash: d8018e7b54f784b22fa024aa5b2892fd80e192bd
+  generation_id: eacd75e1-a147-4b2f-81ab-8471feac89b9
+  pristine_commit_hash: 16386f25a04820fcfdd4e9407ddc69fa878d2738
+  pristine_tree_hash: 00450899e8422203bf957c923fb7e8d7c040589d
 features:
   cli:
     constsAndDefaults: 0.0.0
@@ -68,16 +68,16 @@ trackedFiles:
     pristine_git_object: d210e05daf47de45fbeb0023ed3e0cb59025002c
   internal/cli/simulations/createsimulation.go:
     id: 21bbb066ec37
-    last_write_checksum: sha1:d5d01fee0f3c85b9f689b8599294ad93b3f5dcbc
-    pristine_git_object: 7c302ba35bbeb1f438c87ed089816c6b1f57ae30
+    last_write_checksum: sha1:dfdefbc38ef1c6e57c835bd83e57ed8f9a782085
+    pristine_git_object: b7e500395af8eb9082d5a806d74cd71e7bec9887
   internal/cli/simulations/deletesimulation.go:
     id: 0f87ec7a53c2
     last_write_checksum: sha1:12fc992fad72248352c5a802b0cd014b7ea49898
     pristine_git_object: 6b11df56c115aaed0ef8c7ceedb765adb7af5bc4
   internal/cli/simulations/forksimulation.go:
     id: 36947b39e528
-    last_write_checksum: sha1:554d3802a4c8cb9f89f17dba476d8e37e08e27bc
-    pristine_git_object: 978f2534f3d6c808dcac0f268b40e1471c2646c3
+    last_write_checksum: sha1:dc192d2dbb11f4fe78bdeeb56f9c5841e3a86429
+    pristine_git_object: b01edca5dd53ee3413e3fb2d83d1d23a45b15d22
   internal/cli/simulations/getsimulation.go:
     id: 6c0a3643e748
     last_write_checksum: sha1:59d401e55f9cb902e4c5233dc702e6216ba635b3
@@ -104,16 +104,20 @@ trackedFiles:
     pristine_git_object: e6eec134bb0d75ccbf34dd0a48aeeb97061357a3
   internal/cli/simulations/mintsimulationtoken.go:
     id: 9ec41342408d
-    last_write_checksum: sha1:f016d1a1cac3bacddcc38b560898829d578f7a93
-    pristine_git_object: f00e1b5c1e8b9b4d30f9672914a7ee63cdf45a9a
+    last_write_checksum: sha1:1dd3ca69de4d96e68f11a7c387433c1c9387d21d
+    pristine_git_object: 12d5dc7a2151a22894b8251c7c49749dd943a426
+  internal/cli/simulations/regeneratesimulationtoken.go:
+    id: cf1927319f4f
+    last_write_checksum: sha1:095e28122f54405a4a65c954df9f7c770878f351
+    pristine_git_object: 087a2f7f6e512a00828189ee133cb097cecd58eb
   internal/cli/simulations/root.go:
     id: 53da55474864
-    last_write_checksum: sha1:f72b1dd70b0bae57a8ddeedd9149ebee5d057a5c
-    pristine_git_object: d7b9617624b7fade1786d29393e268c8c810f71a
+    last_write_checksum: sha1:d4bd1f020bcfce95ab4ab11f2cc00f9707a2d4a5
+    pristine_git_object: b66744a1a46c3a3b1e4babad16394c8e0afb55a3
   internal/cli/simulations/startsimulation.go:
     id: 958554851b56
-    last_write_checksum: sha1:e666552af9f1f14f358571c7ec5762aa41a4905a
-    pristine_git_object: c2a1e2d0c093779b0b60c192a028542efacb5d9d
+    last_write_checksum: sha1:d8663bcb86cc77c00e797b5531eb41b696c53905
+    pristine_git_object: 6144bedfd8c32b2284b77abc158f6ccbfe7836ed
   internal/cli/simulations/stopsimulation.go:
     id: c58a618f9a5b
     last_write_checksum: sha1:d493b0bc0ffccbb9ec8358c08955f69edd61e04f
@@ -288,8 +292,8 @@ trackedFiles:
     pristine_git_object: dbd5bd59b49b46660453cfc8a3cc7f9e1055d1a7
   internal/sdk/models/components/createdsimulation.go:
     id: 4b3913365b48
-    last_write_checksum: sha1:0c6887acd09ee09d7b1b52524421209912ea9183
-    pristine_git_object: 840b8aebe6b601b105c97f48596ebb619ee203d1
+    last_write_checksum: sha1:582aba30ae5d41816b7057eb5af819c4123b98ab
+    pristine_git_object: eb92dd105edf454af4cbe79d489827eecf944cbd
   internal/sdk/models/components/createsimulationrequest.go:
     id: 6748442be31e
     last_write_checksum: sha1:c67bb5e112a017fce4e6f20905723f262264d25a
@@ -490,6 +494,10 @@ trackedFiles:
     id: 6d0d29414e00
     last_write_checksum: sha1:f98673acbcdee553bde18771b2246f33c5a897d4
     pristine_git_object: f45ea3837fc09da6ff9eea106aa86e63b9e13e4e
+  internal/sdk/models/operations/regeneratesimulationtoken.go:
+    id: 4b32bc30ecb1
+    last_write_checksum: sha1:8b21ec7afe5dcbfea0a2f5c89c3e6eb58b0a8cb8
+    pristine_git_object: 7437ea8a1a95488ab62e8807fe6185e2ca241cd7
   internal/sdk/models/operations/startsimulation.go:
     id: 73ecedbae067
     last_write_checksum: sha1:46c7569639b72be67fb935c7ca4bccfe8c1384b0
@@ -580,8 +588,8 @@ trackedFiles:
     pristine_git_object: 9106bda3d5505a23fb667b7cadcd91bf5aebef54
   internal/sdk/simulations.go:
     id: b61054fc5892
-    last_write_checksum: sha1:405d541ca323f2d5488c620e314ff3fe6c6cc0e7
-    pristine_git_object: 939e4402dcaa4ba32f6fa6ae5d07b9c44c827616
+    last_write_checksum: sha1:5c83c227f86fc627d89abc0bb16a11c73d3024f7
+    pristine_git_object: 13001bbe6e7ea97fa08fff6fade3472bf8133707
   internal/sdk/simulators.go:
     id: 847405821e0b
     last_write_checksum: sha1:e60d96c4eafbec008d9e788f0e2e27b11dd2f02b
@@ -612,8 +620,8 @@ trackedFiles:
     pristine_git_object: 159a87ec97aba99e4edd132f69652e123434303e
   internal/usage/schema.go:
     id: 0f40f4612437
-    last_write_checksum: sha1:2b341aff40afb9b4165662ccfbffa36122e6ed49
-    pristine_git_object: e1ae867e9977f703c2918ec7773539798e4a0f62
+    last_write_checksum: sha1:8d3beeb865d4bbfc96ef19363d4faa12de86ac47
+    pristine_git_object: d6adc2c85a41826143368a3d406cabe5a896ca98
   scripts/install.ps1:
     id: fee0853709e9
     last_write_checksum: sha1:2da33f25afaa301dc2a22ac12654c585cef5c572
@@ -1431,4 +1439,40 @@ examples:
           application/problem+json: {"code": "<value>", "detail": "<value>", "validation": {"issues": [{"code": "<value>", "kind": "invalid", "location": "<value>", "message": "<value>", "operation": "<value>", "suggestion": "<value>"}]}}
         "500":
           application/problem+json: {"code": "<value>", "detail": "<value>", "validation": {"issues": [{"code": "<value>", "kind": "invalid", "location": "<value>", "message": "<value>", "operation": "<value>", "suggestion": "<value>"}]}}
+  regenerate-simulation-token:
+    auth_invalid:
+      parameters:
+        path:
+          id: "<id>"
+        header:
+          Idempotency-Key: "<value>"
+      responses:
+        "401":
+          application/problem+json: {"code": "auth_invalid", "detail": "The authentication credential is invalid.", "validation": null}
+        "500":
+          application/problem+json: {"code": "auth_invalid", "detail": "The authentication credential is invalid.", "validation": null}
+    auth_missing:
+      parameters:
+        path:
+          id: "<id>"
+        header:
+          Idempotency-Key: "<value>"
+      responses:
+        "401":
+          application/problem+json: {"code": "auth_invalid", "detail": "Authentication credentials are required.", "validation": null}
+        "500":
+          application/problem+json: {"code": "auth_invalid", "detail": "Authentication credentials are required.", "validation": null}
+    speakeasy-default-regenerate-simulation-token:
+      parameters:
+        path:
+          id: "<id>"
+        header:
+          Idempotency-Key: "<value>"
+      responses:
+        "200":
+          application/json: {"expires_at": null, "token": "<redacted>"}
+        "401":
+          application/problem+json: {"code": "<value>", "detail": "<value>", "validation": {"issues": []}}
+        "500":
+          application/problem+json: {"code": "<value>", "detail": "<value>", "validation": {"issues": []}}
 examplesVersion: 1.0.2
