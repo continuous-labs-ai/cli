@@ -14,38 +14,39 @@ import (
 	"github.com/spf13/cobra"
 )
 
-var startSimulationCmdMeta = []flagutil.FlagMeta{
+var getSimulationTokenCmdMeta = []flagutil.FlagMeta{
 	{FlagName: "id", Shorthand: "i", FieldPath: "ID", Kind: flagutil.FlagKindString, Required: true, Description: "Simulation ID. [required]"},
 }
 
-// initStartSimulationCmd initializes the start-simulation command.
-func initStartSimulationCmd(parent *cobra.Command) error {
+// initGetSimulationTokenCmd initializes the get-simulation-token command.
+func initGetSimulationTokenCmd(parent *cobra.Command) error {
 	var cmd = &cobra.Command{
-		Use:     "start",
-		Short:   "Start Simulation",
-		Long:    "Starts a stopped Simulation from saved state. Compatible servers return a usable endpoint token; older servers return Simulation metadata without a token.",
-		Example: "  continuous simulations start --id <id>",
-		RunE:    runStartSimulationCmd,
+		Use:     "get-simulation-token",
+		Short:   "Get Current Simulation Token",
+		Long:    "Returns the current lifetime credential without rotating it. Legacy sessions require the deprecated token-mint endpoint.",
+		Example: "  continuous simulations get-simulation-token --id <id>",
+		RunE:    runGetSimulationTokenCmd,
+		Aliases: []string{"gst"},
 	}
-	flagutil.RegisterFlags(cmd, startSimulationCmdMeta)
-	if err := flagutil.ValidateMeta[operations.StartSimulationRequest](startSimulationCmdMeta); err != nil {
-		return fmt.Errorf("invalid metadata for start-simulation: %w", err)
+	flagutil.RegisterFlags(cmd, getSimulationTokenCmdMeta)
+	if err := flagutil.ValidateMeta[operations.GetSimulationTokenRequest](getSimulationTokenCmdMeta); err != nil {
+		return fmt.Errorf("invalid metadata for get-simulation-token: %w", err)
 	}
 	parent.AddCommand(cmd)
 	return nil
 }
 
-// runStartSimulationCmd executes the start-simulation command.
-func runStartSimulationCmd(cmd *cobra.Command, args []string) error {
+// runGetSimulationTokenCmd executes the get-simulation-token command.
+func runGetSimulationTokenCmd(cmd *cobra.Command, args []string) error {
 	if usage.UsageRequested(cmd) {
 		return usage.EmitSchema(cmd, cmd.OutOrStdout())
 	}
-	if interactive.ShouldPrompt(cmd, startSimulationCmdMeta) {
-		if err := interactive.PromptAndSetFlags(cmd, startSimulationCmdMeta); err != nil {
+	if interactive.ShouldPrompt(cmd, getSimulationTokenCmdMeta) {
+		if err := interactive.PromptAndSetFlags(cmd, getSimulationTokenCmdMeta); err != nil {
 			return err
 		}
 	}
-	req, err := flagutil.BuildRequest[operations.StartSimulationRequest](cmd, startSimulationCmdMeta, "", "")
+	req, err := flagutil.BuildRequest[operations.GetSimulationTokenRequest](cmd, getSimulationTokenCmdMeta, "", "")
 	if err != nil {
 		return err
 	}
@@ -68,7 +69,7 @@ func runStartSimulationCmd(cmd *cobra.Command, args []string) error {
 	if output.WantsRawJSON(cmd) {
 		sdkOpts = append(sdkOpts, operations.WithSkipDeserialization())
 	}
-	res, err := s.Simulations.StartSimulation(cmd.Context(), *req, sdkOpts...)
+	res, err := s.Simulations.GetSimulationToken(cmd.Context(), *req, sdkOpts...)
 	if err != nil {
 		return output.Error(cmd, err)
 	}

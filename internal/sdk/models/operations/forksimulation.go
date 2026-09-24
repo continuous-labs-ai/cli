@@ -31,6 +31,7 @@ type ForkSimulationResponse struct {
 	HTTPMeta components.HTTPMetadata `json:"-"`
 	// Created
 	CreatedSimulation *components.CreatedSimulation
+	Headers           map[string][]string
 }
 
 func (f ForkSimulationResponse) MarshalJSON() ([]byte, error) {
@@ -56,4 +57,11 @@ func (f *ForkSimulationResponse) GetCreatedSimulation() *components.CreatedSimul
 		return nil
 	}
 	return f.CreatedSimulation
+}
+
+func (f *ForkSimulationResponse) GetHeaders() map[string][]string {
+	if f == nil {
+		return map[string][]string{}
+	}
+	return f.Headers
 }

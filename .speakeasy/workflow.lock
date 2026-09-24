@@ -18,7 +18,9 @@ workflow:
     sources:
         continuous-simulation:
             inputs:
-                - location: registry.speakeasyapi.dev/continuous/continuous/continuous-simulation@main
+                - location: ./.speakeasy/compat/simulation.openapi.yaml
+            overlays:
+                - location: ./.speakeasy/compat/simulation-token-compat.overlay.yaml
             output: .speakeasy/out.openapi.yaml
     targets:
         continuous-simulation-cli:

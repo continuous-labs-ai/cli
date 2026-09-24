@@ -30,6 +30,7 @@ jobs:
           SPEAKEASY_API_KEY: ${{ secrets.SPEAKEASY_API_KEY }}
         run: |
           speakeasy run --target continuous-simulation-cli --skip-upload-spec --skip-versioning --skip-testing --skip-compile
+          go mod tidy
           tar --exclude=.git -czf "$RUNNER_TEMP/generated.tar.gz" .
       - name: Upload generated candidate
         uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
