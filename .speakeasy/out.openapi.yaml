@@ -292,15 +292,14 @@ components:
     BuildSimulatorRequest:
       additionalProperties: false
       examples:
-        - builder: claude
-          filter: []
+        - filter: []
           instructions: Return stable example data for every operation.
+          model: claude-fable-5-1
           name: billing-api
           spec_kind: openapi
       properties:
         builder:
-          default: claude
-          description: Model provider that builds the Simulator. Defaults to claude.
+          description: Legacy provider selection. Alone it selects the provider's default model (openai is gpt-6-astra, claude is claude-fable-5-1); with model it must name the model's provider.
           enum:
             - openai
             - claude
@@ -316,6 +315,15 @@ components:
         instructions:
           description: Instructions for the builder. Required for an incremental build. At most 16,384 characters and 65,536 UTF-8 bytes; must not be blank or contain U+0000.
           maxLength: 16384
+          type: string
+        model:
+          default: gpt-6-astra
+          description: Model that builds and reviews the Simulator. Defaults to gpt-6-astra. Its provider is derived from the model.
+          enum:
+            - gpt-6-astra
+            - gpt-6-sol
+            - claude-opus-5-5
+            - claude-fable-5-1
           type: string
         name:
           description: Name for the Simulator. Omission generates a name. Names must not contain U+0000. The ID stays its identity, and names need not be unique.
@@ -362,8 +370,7 @@ components:
             - smr_01J8Z5X4K7M2N9P0Q1R2S3T4V5
       properties:
         builder:
-          default: claude
-          description: Model provider that builds starting data. Defaults to claude.
+          description: Legacy provider selection. Alone it selects the provider's default model (openai is gpt-6-astra, claude is claude-fable-5-1); with model it must name the model's provider.
           enum:
             - openai
             - claude
@@ -371,6 +378,15 @@ components:
         instructions:
           description: Describe the initial data, scenario, and relationships. Populated Worlds support up to 8 selected Simulators and 1,000 starting records in total. Named record types replace their default data. At most 16,384 characters and 65,536 UTF-8 bytes. U+0000 is not permitted.
           maxLength: 16384
+          type: string
+        model:
+          default: gpt-6-astra
+          description: Model that builds and reviews starting data. Defaults to gpt-6-astra. Its provider is derived from the model.
+          enum:
+            - gpt-6-astra
+            - gpt-6-sol
+            - claude-opus-5-5
+            - claude-fable-5-1
           type: string
         name:
           description: Name for the World. Omission generates a name. The ID stays its identity, and names need not be unique.
@@ -870,6 +886,7 @@ components:
             builder: claude
             last_submission: rejected
             last_tool: test
+            model: claude-fable-5-1
             phase: build
             recent_tools:
               - at: "2026-01-15T12:04:00Z"
@@ -978,6 +995,14 @@ components:
           type:
             - string
             - "null"
+        model:
+          description: The model the builder and reviewer run on. A build recorded before model selection reports its provider's default.
+          enum:
+            - gpt-6-astra
+            - gpt-6-sol
+            - claude-opus-5-5
+            - claude-fable-5-1
+          type: string
         phase:
           description: "Agent phase: build for generation, review for the separate reviewer, finalize for author repair after review. Null when not recorded."
           enum:
@@ -1014,6 +1039,7 @@ components:
           type: string
       required:
         - builder
+        - model
         - phase
         - stage
         - tool_calls
@@ -1083,15 +1109,15 @@ components:
             - incomplete
             - unknown
           type: string
+        location:
+          description: Readable endpoint or field affected by this issue.
+          maxLength: 512
+          type: string
         message:
           description: What needs attention at this location.
           type: string
         operation:
           description: Affected operation ID or method and path, when available. Empty for document-level issues.
-          maxLength: 243
-          type: string
-        path:
-          description: Location in the submitted specification, as a JSON pointer or XML path.
           maxLength: 243
           type: string
         suggestion:
@@ -1100,7 +1126,7 @@ components:
       required:
         - code
         - operation
-        - path
+        - location
         - kind
         - message
         - suggestion
@@ -1177,6 +1203,7 @@ components:
             last_submission: rejected
             last_tool: test
             last_validation_code: request_not_satisfied
+            model: claude-fable-5-1
             phase: finalize
             recent_tools:
               - at: "2026-01-15T12:04:00Z"
@@ -1311,6 +1338,17 @@ components:
           type:
             - string
             - "null"
+        model:
+          description: The model the builder and reviewer run on, or null for a build created before provider selection. A build recorded before model selection reports its provider's default.
+          enum:
+            - gpt-6-astra
+            - gpt-6-sol
+            - claude-opus-5-5
+            - claude-fable-5-1
+            - null
+          type:
+            - string
+            - "null"
         phase:
           description: "Agent phase: build for generation, review for the separate reviewer, finalize for author repair after review. Null when not recorded."
           enum:
@@ -1367,6 +1405,7 @@ components:
           type: integer
       required:
         - builder
+        - model
         - phase
         - stage
         - tool_calls

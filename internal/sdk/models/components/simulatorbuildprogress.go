@@ -53,6 +53,31 @@ func (e *SimulatorBuildProgressLastSubmission) IsExact() bool {
 	return false
 }
 
+// SimulatorBuildProgressModel - The model the builder and reviewer run on. A build recorded before model selection reports its provider's default.
+type SimulatorBuildProgressModel string
+
+const (
+	SimulatorBuildProgressModelGpt6Astra     SimulatorBuildProgressModel = "gpt-6-astra"
+	SimulatorBuildProgressModelGpt6Sol       SimulatorBuildProgressModel = "gpt-6-sol"
+	SimulatorBuildProgressModelClaudeOpus55  SimulatorBuildProgressModel = "claude-opus-5-5"
+	SimulatorBuildProgressModelClaudeFable51 SimulatorBuildProgressModel = "claude-fable-5-1"
+)
+
+func (e SimulatorBuildProgressModel) ToPointer() *SimulatorBuildProgressModel {
+	return &e
+}
+
+// IsExact returns true if the value matches a known enum value, false otherwise.
+func (e *SimulatorBuildProgressModel) IsExact() bool {
+	if e != nil {
+		switch *e {
+		case "gpt-6-astra", "gpt-6-sol", "claude-opus-5-5", "claude-fable-5-1":
+			return true
+		}
+	}
+	return false
+}
+
 // SimulatorBuildProgressPhase - Agent phase: build for generation, review for the separate reviewer, finalize for author repair after review. Null when not recorded.
 type SimulatorBuildProgressPhase string
 
@@ -108,6 +133,8 @@ type SimulatorBuildProgress struct {
 	LastSubmission *SimulatorBuildProgressLastSubmission `json:"last_submission"`
 	// Name of the most recent tool call, or null.
 	LastTool *string `json:"last_tool"`
+	// The model the builder and reviewer run on. A build recorded before model selection reports its provider's default.
+	Model SimulatorBuildProgressModel `json:"model"`
 	// Agent phase: build for generation, review for the separate reviewer, finalize for author repair after review. Null when not recorded.
 	Phase *SimulatorBuildProgressPhase `json:"phase"`
 	// The most recent tool calls, oldest first, at most 20.
@@ -152,6 +179,13 @@ func (s *SimulatorBuildProgress) GetLastTool() *string {
 		return nil
 	}
 	return s.LastTool
+}
+
+func (s *SimulatorBuildProgress) GetModel() SimulatorBuildProgressModel {
+	if s == nil {
+		return SimulatorBuildProgressModel("")
+	}
+	return s.Model
 }
 
 func (s *SimulatorBuildProgress) GetPhase() *SimulatorBuildProgressPhase {
