@@ -1,0 +1,17 @@
+overlay: 1.0.0
+x-speakeasy-jsonpath: rfc9535
+info:
+  title: Simulation token rollout client compatibility
+  version: 1.0.0
+actions:
+  - target: "$.components.schemas.CreatedSimulation.required[?(@ == 'expires_at')]"
+    description: Older servers return a timestamp; PR 2 returns null for lifecycle sessions; PR 4 removes the field.
+    remove: true
+  - target: "$.paths['/v1/simulations/{id}/tokens'].post"
+    description: Explain legacy and lifecycle behavior during the transition.
+    update:
+      description: Deprecated compatibility route. Legacy sessions receive a new finite token; lifecycle sessions receive their one current token with null expiry. The ttl_seconds request field does not shorten a lifecycle token.
+  - target: "$.paths['/v1/simulations/{id}/start'].post"
+    description: Preserve old-server command compatibility.
+    update:
+      description: Starts a stopped Simulation from saved state. Compatible servers return a usable endpoint token; older servers return Simulation metadata without a token.

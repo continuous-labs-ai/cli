@@ -1,0 +1,5 @@
+# Simulation token consumer projection
+
+`simulation.openapi.yaml` is the public `openapi/simulation.yaml` projection from `continuous-labs-ai/continuous` commit `715298ef2` (SHA-256 `75b87dcdf9c9b89c327cb71cd38f3c9b968ee059f6abc5177a59b9803c470de8`). The Go API schema source in that repository remains authoritative. This local copy lets the CLI generate the new retrieval command before the API contract is published to the live Speakeasy registry.
+
+`simulation-token-compat.overlay.yaml` widens create/fork expiry to optional while retaining its nullable property, so one CLI accepts old timestamps, PR 2/3 null, and PR 4 absence. It also clarifies the old and new mint/start semantics in command help. The overlay does not add the retrieval route: that route comes from the pinned public projection. `Checks` regenerates from this input with `--skip-upload-spec`, so draft validation never changes the live registry. Once the registry publishes an equivalent compatible schema, restore the registry source and remove this temporary projection and overlay in a separate reviewed change.

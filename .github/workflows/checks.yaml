@@ -13,16 +13,34 @@ permissions:
 jobs:
   generation:
     if: github.event_name != 'pull_request' || github.event.pull_request.head.repo.full_name == github.repository
-    uses: speakeasy-api/sdk-generation-action/.github/workflows/workflow-executor.yaml@68f3bfefb79354d39358bf4699863dabd2cea0f6
-    with:
-      mode: test
-      target: continuous-simulation-cli
-      force: "true"
-      skip_versioning: "true"
-      skip_testing: true
-    secrets:
-      github_access_token: ${{ secrets.GITHUB_TOKEN }}
-      speakeasy_api_key: ${{ secrets.SPEAKEASY_API_KEY }}
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+      - uses: actions/setup-go@40f1582b2485089dde7abd97c1529aa768e1baff
+        with:
+          go-version-file: go.mod
+      - name: Install pinned Speakeasy CLI
+        run: |
+          curl -fsSL -o "$RUNNER_TEMP/speakeasy.zip" https://github.com/speakeasy-api/speakeasy/releases/download/v1.796.4/speakeasy_linux_amd64.zip
+          echo "fc67f38e215eba0d00a78dc187fc82b8402f6e6585500ea0445541084150b2f4  $RUNNER_TEMP/speakeasy.zip" | sha256sum -c -
+          unzip -q "$RUNNER_TEMP/speakeasy.zip" speakeasy -d "$RUNNER_TEMP"
+          echo "$RUNNER_TEMP" >> "$GITHUB_PATH"
+      - name: Regenerate from pinned local source without registry upload
+        env:
+          SPEAKEASY_API_KEY: ${{ secrets.SPEAKEASY_API_KEY }}
+        run: |
+          speakeasy run --target continuous-simulation-cli --skip-upload-spec --skip-versioning --skip-testing --skip-compile
+          tar --exclude=.git -czf "$RUNNER_TEMP/generated.tar.gz" .
+      - name: Upload generated candidate
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        with:
+          name: generated-candidate
+          path: ${{ runner.temp }}/generated.tar.gz
+          if-no-files-found: error
+      - name: Check generated source drift
+        run: |
+          git diff --exit-code
+          test -z "$(git ls-files --others --exclude-standard)"
 
   build-package:
     name: Build and package
