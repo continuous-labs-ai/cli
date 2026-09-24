@@ -5,13 +5,13 @@ info:
   version: 1.0.0
 actions:
   - target: "$.components.schemas.CreatedSimulation.required[?(@ == 'expires_at')]"
-    description: Older servers return a timestamp; PR 2 returns null for lifecycle sessions; PR 4 removes the field.
+    description: Older servers return a timestamp; PR 2 returns null for persistent tokens; PR 4 removes the field.
     remove: true
   - target: "$.paths['/v1/simulations/{id}/tokens'].post"
-    description: Explain legacy and lifecycle behavior during the transition.
+    description: Explain legacy and persistent behavior during the transition.
     update:
-      description: Deprecated compatibility route. Legacy sessions receive a new finite token; lifecycle sessions receive their one current token with null expiry. The ttl_seconds request field does not shorten a lifecycle token.
+      description: Deprecated compatibility route. Legacy sessions receive a new finite token; persistent Simulations receive their one current token with null expiry, including while stopped. The ttl_seconds request field does not shorten a persistent token.
   - target: "$.paths['/v1/simulations/{id}/start'].post"
     description: Preserve old-server command compatibility.
     update:
-      description: Starts a stopped Simulation from saved state. Compatible servers return a usable endpoint token; older servers return Simulation metadata without a token.
+      description: Starts a stopped Simulation from saved state. Compatible servers return the current persistent endpoint token without rotation; older servers return Simulation metadata without a token.

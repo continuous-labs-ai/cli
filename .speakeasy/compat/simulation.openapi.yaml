@@ -138,7 +138,12 @@ components:
     simulation_token_legacy:
       value:
         code: simulation_token_legacy
-        detail: This legacy Simulation has expiring tokens. Use POST /v1/simulations/{id}/tokens until its next stop and start.
+        detail: This legacy Simulation has expiring tokens. Use POST /v1/simulations/{id}/tokens while active, or explicitly regenerate its token.
+        validation: null
+    simulation_token_regeneration_superseded:
+      value:
+        code: simulation_token_regeneration_superseded
+        detail: A later regeneration replaced this token. Use a new Idempotency-Key to regenerate again.
         validation: null
     simulation_unreachable:
       value:
@@ -629,7 +634,8 @@ components:
             - stopped
           type: string
         token:
-          description: Token for requests to the Simulation endpoint. Send it in the X-Continuous-Simulation-Token header. It is returned only here; list and get omit it. Create more with POST /v1/simulations/{id}/tokens.
+          description: Current token for requests to the Simulation endpoint. Send it in the X-Continuous-Simulation-Token header. Retrieve it later with GET /v1/simulations/{id}/token.
+          minLength: 1
           type: string
       required:
         - start_time
@@ -1648,7 +1654,7 @@ paths:
       tags:
         - simulations
     post:
-      description: Creates a Simulation from a ready Simulator and starts it. The response includes the Simulation endpoint and a token that expires in 1 hour. List and get do not return the token.
+      description: Creates a Simulation from a ready Simulator and starts it. The response includes the endpoint and a token. New lifecycle sessions keep the token until stop or delete; legacy sessions receive an expiring token.
       operationId: create-simulation
       requestBody:
         content:
@@ -2167,7 +2173,7 @@ paths:
         - simulations
   /v1/simulations/{id}/fork:
     post:
-      description: Creates a new Simulation from the source Simulation's current state, or from an earlier recorded step when you set at_step. The source must be running or paused; a stopped source returns 409 simulation_stopped. Forking does not change the source. The response includes the new endpoint and a token that expires in 1 hour.
+      description: Creates a new Simulation from the source Simulation's current state, or from an earlier recorded step when you set at_step. The source must be running or paused; a stopped source returns 409 simulation_stopped. Forking does not change the source. The response includes the new endpoint and a token; new lifecycle sessions keep the token until stop or delete.
       operationId: fork-simulation
       parameters:
         - description: Source Simulation ID.
@@ -2620,8 +2626,6 @@ paths:
               examples:
                 simulation_platform_owned:
                   $ref: "#/components/examples/simulation_platform_owned"
-                simulation_stopped:
-                  $ref: "#/components/examples/simulation_stopped"
                 simulation_token_legacy:
                   $ref: "#/components/examples/simulation_token_legacy"
               schema:
@@ -2654,9 +2658,91 @@ paths:
       summary: Get Current Simulation Token
       tags:
         - simulations
+  /v1/simulations/{id}/token/regenerate:
+    post:
+      description: Explicitly replaces the current Simulation credential. The previous token stops authenticating when the transaction commits. Reuse the Idempotency-Key to retry safely.
+      operationId: regenerate-simulation-token
+      parameters:
+        - description: Simulation ID.
+          in: path
+          name: id
+          required: true
+          schema:
+            pattern: ^sim_[0-9A-HJKMNP-TV-Z]{26}$
+            type: string
+        - description: Stable key for this regeneration request.
+          in: header
+          name: Idempotency-Key
+          required: true
+          schema:
+            maxLength: 256
+            minLength: 1
+            type: string
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/CurrentSimulationToken"
+          description: OK
+          headers:
+            Cache-Control:
+              schema:
+                type: string
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+        "403":
+          content:
+            application/problem+json:
+              examples:
+                auth_forbidden_simulation:
+                  $ref: "#/components/examples/auth_forbidden_simulation"
+              schema:
+                $ref: "#/components/schemas/Error"
+          description: Forbidden
+        "404":
+          content:
+            application/problem+json:
+              examples:
+                simulation_not_found:
+                  $ref: "#/components/examples/simulation_not_found"
+              schema:
+                $ref: "#/components/schemas/Error"
+          description: Not Found
+        "409":
+          content:
+            application/problem+json:
+              examples:
+                simulation_platform_owned:
+                  $ref: "#/components/examples/simulation_platform_owned"
+                simulation_token_legacy:
+                  $ref: "#/components/examples/simulation_token_legacy"
+                simulation_token_regeneration_superseded:
+                  $ref: "#/components/examples/simulation_token_regeneration_superseded"
+              schema:
+                $ref: "#/components/schemas/Error"
+          description: Conflict
+        "500":
+          $ref: "#/components/responses/InternalServerError"
+        "503":
+          content:
+            application/problem+json:
+              examples:
+                auth_provider_unavailable:
+                  $ref: "#/components/examples/auth_provider_unavailable"
+                internal_unavailable:
+                  $ref: "#/components/examples/internal_unavailable"
+              schema:
+                $ref: "#/components/schemas/Error"
+          description: Service Unavailable
+      security:
+        - apiKeyAuth: []
+      summary: Regenerate Simulation Token
+      tags:
+        - simulations
   /v1/simulations/{id}/tokens:
     post:
-      description: Creates another token for requests to the Simulation endpoint. Send it in the X-Continuous-Simulation-Token header. Earlier tokens stay valid until they expire.
+      description: For a legacy session, creates another expiring token. For a lifecycle session, returns its current token without rotating it. Send the token in the X-Continuous-Simulation-Token header.
       operationId: mint-simulation-token
       parameters:
         - description: Simulation ID.
