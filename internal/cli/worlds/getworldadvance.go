@@ -24,7 +24,7 @@ func initGetWorldAdvanceCmd(parent *cobra.Command) error {
 	var cmd = &cobra.Command{
 		Use:     "get-world-advance",
 		Short:   "Get World Clock Advance",
-		Long:    "Returns durable progress for each member. Members remain fenced until the whole advance can finish.",
+		Long:    "Returns completed, failed, or skipped outcomes for each member. A failed call can have an unconfirmed runtime outcome. Reusing the request key returns the same result.",
 		Example: "  continuous worlds get-world-advance --id <id> --advance-id <id>",
 		RunE:    runGetWorldAdvanceCmd,
 		Aliases: []string{"gwa"},

@@ -40,8 +40,6 @@ type CreatedSimulation struct {
 	CurrentTime time.Time `json:"current_time"`
 	// Base URL for requests to the Simulation.
 	Endpoint string `json:"endpoint"`
-	// Token expiration time.
-	ExpiresAt time.Time `json:"expires_at"`
 	// Simulation ID.
 	ID string `json:"id"`
 	// Customer JSON metadata, or null.
@@ -58,7 +56,7 @@ type CreatedSimulation struct {
 	StartTime time.Time `json:"start_time"`
 	// Current status. running serves requests. paused means the Simulation was idle and the platform paused it; the next request wakes it. stopped means its state is saved and requests return 409 until you start it.
 	Status CreatedSimulationStatus `json:"status"`
-	// Token for requests to the Simulation endpoint. Send it in the X-Continuous-Simulation-Token header. It is returned only here; list and get omit it. Create more with POST /v1/simulations/{id}/tokens.
+	// Current token for requests to the Simulation endpoint. Send it in the X-Continuous-Simulation-Token header. Retrieve it later with GET /v1/simulations/{id}/token.
 	Token string `json:"token"`
 }
 
@@ -99,13 +97,6 @@ func (c *CreatedSimulation) GetEndpoint() string {
 		return ""
 	}
 	return c.Endpoint
-}
-
-func (c *CreatedSimulation) GetExpiresAt() time.Time {
-	if c == nil {
-		return time.Time{}
-	}
-	return c.ExpiresAt
 }
 
 func (c *CreatedSimulation) GetID() string {

@@ -30,7 +30,8 @@ func (m *MintSimulationTokenRequest) GetBody() components.MintSimulationTokenReq
 type MintSimulationTokenResponse struct {
 	HTTPMeta components.HTTPMetadata `json:"-"`
 	// OK
-	SimulationToken *components.SimulationToken
+	CurrentSimulationToken *components.CurrentSimulationToken
+	Headers                map[string][]string
 }
 
 func (m MintSimulationTokenResponse) MarshalJSON() ([]byte, error) {
@@ -51,9 +52,16 @@ func (m *MintSimulationTokenResponse) GetHTTPMeta() components.HTTPMetadata {
 	return m.HTTPMeta
 }
 
-func (m *MintSimulationTokenResponse) GetSimulationToken() *components.SimulationToken {
+func (m *MintSimulationTokenResponse) GetCurrentSimulationToken() *components.CurrentSimulationToken {
 	if m == nil {
 		return nil
 	}
-	return m.SimulationToken
+	return m.CurrentSimulationToken
+}
+
+func (m *MintSimulationTokenResponse) GetHeaders() map[string][]string {
+	if m == nil {
+		return map[string][]string{}
+	}
+	return m.Headers
 }

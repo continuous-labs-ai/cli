@@ -1,0 +1,5 @@
+# Simulation token consumer projection
+
+`simulation.openapi.yaml` is the public Simulation projection from the compatible backend draft. `simulation-token-compat.overlay.yaml` makes create and fork expiry optional while retaining its nullable property, so one CLI accepts old timestamps, compatibility null, and later field absence. The projection adds explicit regeneration with a required `Idempotency-Key`; the generated command never regenerates automatically. Start and token retrieval accept persistent credentials without assuming a stop rotates them. Legacy responses retain finite expiry.
+
+`Checks` regenerates from this input with `--skip-upload-spec`, so draft validation never changes the live registry. The generated SDK and command source must be committed from that check's candidate artifact. Once the registry publishes an equivalent compatible schema, restore the registry source and remove this temporary projection and overlay in a separate reviewed change. Release and version bump require operator authorization before merging this draft.

@@ -2387,7 +2387,7 @@ paths:
         - simulations
   /v1/simulations/{id}/start:
     post:
-      description: Starts a stopped Simulation from saved state. Compatible servers return the current persistent endpoint token without rotation; older servers return Simulation metadata without a token.
+      description: Starts a stopped Simulation from its saved state and returns a usable endpoint token. An already running or paused Simulation returns its current token and status.
       operationId: start-simulation
       parameters:
         - description: Simulation ID.
@@ -2823,7 +2823,7 @@ paths:
         - simulations
   /v1/simulations/{id}/tokens:
     post:
-      description: Deprecated compatibility route. Legacy sessions receive a new finite token; persistent Simulations receive their one current token with null expiry, including while stopped. The ttl_seconds request field does not shorten a persistent token.
+      description: For an active legacy Simulation, creates another expiring token. For a persistent Simulation, returns its current token without rotating it, including while stopped. Send the token in the X-Continuous-Simulation-Token header.
       operationId: mint-simulation-token
       parameters:
         - description: Simulation ID.

@@ -25,7 +25,7 @@ func initAdvanceWorldTimeCmd(parent *cobra.Command) error {
 	var cmd = &cobra.Command{
 		Use:     "advance-world-time",
 		Short:   "Advance World Time",
-		Long:    "Fences all members, advances each local clock, and returns a durable operation. A partial failure keeps members fenced while the operation retries. The World clock changes after all members commit.",
+		Long:    "Advances each running member independently and skips paused or stopped members without waking them. Successful advances remain committed when another member fails. The World current_time records the last settled request target; member clocks can differ.",
 		Example: "  continuous worlds advance-world-time --id <id> --idempotency-key <value> --to 2026-11-05T04:15:58.628Z",
 		RunE:    runAdvanceWorldTimeCmd,
 		Aliases: []string{"awt"},

@@ -2,7 +2,7 @@
 
 Generate this CLI from the public Continuous Simulation API. Keep credentials and private API contracts out of this repository.
 
-Change the API contract in `continuous-labs-ai/continuous`. Keep Eval and Internal APIs out of this repository.
+Change the API contract in `continuous-labs-ai/continuous`. Keep Eval and Internal APIs out of this repository. During the Simulation token migration, `.speakeasy/compat/simulation.openapi.yaml` is a checked-in public projection from an immutable Continuous commit; `.speakeasy/compat/simulation-token-compat.overlay.yaml` widens only consumer decoding and command wording for mixed server versions. The server's Go source remains authoritative. Restore the registry input after the published API schema covers the same compatible contract and regenerate before removing these temporary files.
 
 Set command names and generator options in `.speakeasy/gen.yaml`. Do not patch generated runtime files.
 
@@ -15,7 +15,7 @@ The `.genignore` file protects owned documentation, the license, and review attr
 Run generation with Speakeasy 1.796.4:
 
 ```bash
-speakeasy run --target continuous-simulation-cli
+speakeasy run --target continuous-simulation-cli --skip-upload-spec
 ```
 
 Run checks in GitHub Actions. The `Checks` workflow verifies generation, compiles the binary, and builds snapshot archives.

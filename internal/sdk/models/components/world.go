@@ -42,7 +42,7 @@ type World struct {
 	Build *WorldBuildProgress `json:"build"`
 	// Time when the World was created.
 	CreatedAt time.Time `json:"created_at"`
-	// Current shared simulated time.
+	// Target of the last settled World clock request. Individual member clocks can differ.
 	CurrentTime time.Time   `json:"current_time"`
 	Error       *WorldError `json:"error"`
 	// World ID.
