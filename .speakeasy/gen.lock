@@ -1,7 +1,7 @@
 lockVersion: 2.0.0
 id: ad7b08dc-357d-414c-9f26-16cfbc099767
 management:
-  docChecksum: 999a073aa025edbfb8a17748336d77f7
+  docChecksum: e8ad8fff4847faf9883d41ede41c9c5b
   docVersion: v1
   speakeasyVersion: 1.796.4
   generationVersion: 2.935.1
@@ -11,9 +11,9 @@ management:
   installationURL: https://github.com/continuous-labs-ai/cli
   published: true
 persistentEdits:
-  generation_id: 6c7dcb7f-b058-400f-9baf-d1039fdd2728
-  pristine_commit_hash: 2a59e1643dcda54d27b6f6e3e1795fc37c4d8a18
-  pristine_tree_hash: 6d3816cf7e5fbae1b876cf8448f3e8df922166f5
+  generation_id: 2f808f48-5028-45cf-bddb-da0b71e6d147
+  pristine_commit_hash: e96961bc673fc26050ffef23291d51e800b739a7
+  pristine_tree_hash: e8d28124e1de44dfdb6ce9729112968b045eec18
 features:
   cli:
     constsAndDefaults: 0.0.0
@@ -156,8 +156,8 @@ trackedFiles:
     pristine_git_object: 81cdc9ce2868855a48fdd61d6c13790a8b7dc35d
   internal/cli/worlds/advanceworldtime.go:
     id: 9ca92822c2cb
-    last_write_checksum: sha1:163c52ac7320dd0f1170fdb8bd668b77dc0784f4
-    pristine_git_object: 49ed8359dc66386d0cf7c2eb266ad37edb55494f
+    last_write_checksum: sha1:5b70b85f0465a0d23db4193943b5ab3b28cd6e4a
+    pristine_git_object: 33df7ebbb291873b85dca40b7aa327aa694a48a3
   internal/cli/worlds/buildworld.go:
     id: eb895422f8bd
     last_write_checksum: sha1:eceedc6ea9d81b0a0022241eaf23d6e4598d28e6
@@ -176,8 +176,8 @@ trackedFiles:
     pristine_git_object: 979fb5c9ac805d5a96b47a86b0ee8641d319a0f7
   internal/cli/worlds/getworldadvance.go:
     id: 2a14bc42c3b9
-    last_write_checksum: sha1:c8553cf735c846d63db034a6d4df2d8bcfee1fdd
-    pristine_git_object: 2d5db32b48a63f35637de7515196fc523727eacc
+    last_write_checksum: sha1:c64eb2fc0c041e58ccb43a2d675749c9ee570353
+    pristine_git_object: 38f7ef1e063d9dc4d93149f181e957667c10a720
   internal/cli/worlds/listworlds.go:
     id: abed3cc73571
     last_write_checksum: sha1:96e5c3cb5767e464ee14e94421d3413e9eaa5fd2
@@ -284,8 +284,8 @@ trackedFiles:
     pristine_git_object: 7fc762cf353aadf8765b90897cbc863d4125a068
   internal/sdk/models/components/clockadvancemember.go:
     id: 777e75c2d81a
-    last_write_checksum: sha1:ab48fae3f1f946a166e8b562423ce0d70c6a066d
-    pristine_git_object: 80d5b5ad0661852bba96d28bbe63d109ac1544df
+    last_write_checksum: sha1:987e5b16614ef5e12f0cd06bdddc37a0d2404c33
+    pristine_git_object: ed3003de059746fd7aa725c5aaeec741e3b9c1e1
   internal/sdk/models/components/clockevent.go:
     id: 0bf0c6252039
     last_write_checksum: sha1:0a7f05699c181de4df6c787b82aea3248346c3f9
@@ -380,8 +380,8 @@ trackedFiles:
     pristine_git_object: 56f6499da53977f765bcafd7d217a857ae6b9285
   internal/sdk/models/components/world.go:
     id: cca25436961e
-    last_write_checksum: sha1:c6cc22cba11300cf2cc3cfce09429009288adb99
-    pristine_git_object: 6057bc618915bcc8ce323c889762870944b9af0d
+    last_write_checksum: sha1:f206debfb27a84c39889456cbaca4cf2e65f0d02
+    pristine_git_object: 5bce991c0f2703e5a0ee3e586badee1fb082d2de
   internal/sdk/models/components/worldbuildprogress.go:
     id: 6e93e53a50d2
     last_write_checksum: sha1:77ba74011063cd0520c483d13e47e5d21282dd75
@@ -616,8 +616,8 @@ trackedFiles:
     pristine_git_object: 35c439d2661e08fcb6a854096fd7b9a8561b3938
   internal/sdk/worlds.go:
     id: 9c366ad7982f
-    last_write_checksum: sha1:2b1eb5c6ded1f3dd846f39aa0d2f13fb1f75a142
-    pristine_git_object: ba80b52d3cd7b2962c5ee1ef58f61d569378611f
+    last_write_checksum: sha1:f1c2b344bfb099bdba35624695937a61188c9324
+    pristine_git_object: 036a73eda8cc4521fa848d745f55cf04026c54b5
   internal/testclient/testclient.go:
     id: 20fc511b8b00
     last_write_checksum: sha1:7107e59d336235c44af152c5a61ee3896a7841fa
