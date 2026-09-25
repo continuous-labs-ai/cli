@@ -8,6 +8,8 @@ import (
 )
 
 type CreateSimulationRequest struct {
+	// Customer JSON metadata, up to 16 KiB and 64 nesting levels. Returned by create, get, and list. Omission uses null.
+	Metadata any `json:"metadata,omitzero"`
 	// Name for the Simulation. Omission generates a name. The ID stays its identity, and names need not be unique.
 	Name *string `json:"name,omitzero"`
 	// ID of the ready Simulator.
@@ -25,6 +27,13 @@ func (c *CreateSimulationRequest) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	return nil
+}
+
+func (c *CreateSimulationRequest) GetMetadata() any {
+	if c == nil {
+		return nil
+	}
+	return c.Metadata
 }
 
 func (c *CreateSimulationRequest) GetName() *string {

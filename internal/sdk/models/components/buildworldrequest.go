@@ -9,33 +9,6 @@ import (
 	"time"
 )
 
-// BuildWorldRequestBuilder - Legacy provider selection. Alone it selects the provider's default model (openai is gpt-6-astra, claude is claude-fable-5-1); with model it must name the model's provider.
-type BuildWorldRequestBuilder string
-
-const (
-	BuildWorldRequestBuilderOpenai BuildWorldRequestBuilder = "openai"
-	BuildWorldRequestBuilderClaude BuildWorldRequestBuilder = "claude"
-)
-
-func (e BuildWorldRequestBuilder) ToPointer() *BuildWorldRequestBuilder {
-	return &e
-}
-func (e *BuildWorldRequestBuilder) UnmarshalJSON(data []byte) error {
-	var v string
-	if err := json.Unmarshal(data, &v); err != nil {
-		return err
-	}
-	switch v {
-	case "openai":
-		fallthrough
-	case "claude":
-		*e = BuildWorldRequestBuilder(v)
-		return nil
-	default:
-		return fmt.Errorf("invalid value for BuildWorldRequestBuilder: %v", v)
-	}
-}
-
 // BuildWorldRequestModel - Model that builds and reviews starting data. Defaults to gpt-6-astra. Its provider is derived from the model.
 type BuildWorldRequestModel string
 
@@ -70,10 +43,10 @@ func (e *BuildWorldRequestModel) UnmarshalJSON(data []byte) error {
 }
 
 type BuildWorldRequest struct {
-	// Legacy provider selection. Alone it selects the provider's default model (openai is gpt-6-astra, claude is claude-fable-5-1); with model it must name the model's provider.
-	Builder *BuildWorldRequestBuilder `json:"builder,omitzero"`
 	// Describe the initial data, scenario, and relationships. Populated Worlds support up to 8 selected Simulators and 1,000 starting records in total. Named record types replace their default data. At most 16,384 characters and 65,536 UTF-8 bytes. U+0000 is not permitted.
 	Instructions *string `json:"instructions,omitzero"`
+	// Customer JSON metadata, up to 16 KiB and 64 nesting levels. Returned by build, get, and list. Omission uses null.
+	Metadata any `json:"metadata,omitzero"`
 	// Model that builds and reviews starting data. Defaults to gpt-6-astra. Its provider is derived from the model.
 	Model *BuildWorldRequestModel `default:"gpt-6-astra" json:"model"`
 	// Name for the World. Omission generates a name. The ID stays its identity, and names need not be unique.
@@ -97,18 +70,18 @@ func (b *BuildWorldRequest) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-func (b *BuildWorldRequest) GetBuilder() *BuildWorldRequestBuilder {
-	if b == nil {
-		return nil
-	}
-	return b.Builder
-}
-
 func (b *BuildWorldRequest) GetInstructions() *string {
 	if b == nil {
 		return nil
 	}
 	return b.Instructions
+}
+
+func (b *BuildWorldRequest) GetMetadata() any {
+	if b == nil {
+		return nil
+	}
+	return b.Metadata
 }
 
 func (b *BuildWorldRequest) GetModel() *BuildWorldRequestModel {

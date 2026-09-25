@@ -16,6 +16,7 @@ import (
 )
 
 var createSimulationCmdMeta = []flagutil.FlagMeta{
+	{FlagName: "metadata", Shorthand: "m", FieldPath: "Metadata", Kind: flagutil.FlagKindJSON, Optional: true, Annotations: `json:"metadata,omitempty"`, Description: "Customer JSON metadata, up to 16 KiB and 64 nesting levels. Returned by create, get, and list. Omission uses null."},
 	{FlagName: "name", Shorthand: "n", FieldPath: "Name", Kind: flagutil.FlagKindString, Optional: true, Description: "Name for the Simulation. Omission generates a name. The ID stays its identity, and names need not be unique."},
 	{FlagName: "simulator-id", FieldPath: "SimulatorID", Kind: flagutil.FlagKindString, Required: true, Description: "ID of the ready Simulator. [required]"},
 	{FlagName: "start-time", FieldPath: "StartTime", Kind: flagutil.FlagKindDateTime, Optional: true, Description: "Initial simulated time in RFC 3339 format. Omission uses 2024-01-01T00:00:00Z. Precision is milliseconds."},
@@ -26,7 +27,7 @@ func initCreateSimulationCmd(parent *cobra.Command) error {
 	var cmd = &cobra.Command{
 		Use:     "create",
 		Short:   "Create Simulation",
-		Long:    "Creates a Simulation from a ready Simulator and starts it. The response includes the endpoint and a token. New lifecycle sessions keep the token until stop or delete; legacy sessions receive an expiring token.",
+		Long:    "Creates a Simulation from a ready Simulator and starts it. The response includes the endpoint and a token. New persistent Simulations keep the token across stop and restart; legacy Simulations receive an expiring token.",
 		Example: "  continuous simulations create --simulator-id smr_01J8Z5X4K7M2N9P0Q1R2S3T4V5",
 		RunE:    runCreateSimulationCmd,
 	}

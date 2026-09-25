@@ -3,7 +3,6 @@
 package components
 
 import (
-	"github.com/continuous-labs-ai/cli/internal/sdk/optionalnullable"
 	"github.com/continuous-labs-ai/cli/internal/sdk/sdkinternal/utils"
 	"time"
 )
@@ -41,10 +40,10 @@ type CreatedSimulation struct {
 	CurrentTime time.Time `json:"current_time"`
 	// Base URL for requests to the Simulation.
 	Endpoint string `json:"endpoint"`
-	// Token expiration time for a legacy session, or null for a lifetime session. This field remains through the compatibility release.
-	ExpiresAt optionalnullable.OptionalNullable[time.Time] `json:"expires_at,omitzero"`
 	// Simulation ID.
 	ID string `json:"id"`
+	// Customer JSON metadata, or null.
+	Metadata any `json:"metadata"`
 	// Simulation name. The ID is its identity, and names need not be unique.
 	Name string `json:"name"`
 	// Source Simulation ID for a fork, or null.
@@ -100,18 +99,18 @@ func (c *CreatedSimulation) GetEndpoint() string {
 	return c.Endpoint
 }
 
-func (c *CreatedSimulation) GetExpiresAt() optionalnullable.OptionalNullable[time.Time] {
-	if c == nil {
-		return nil
-	}
-	return c.ExpiresAt
-}
-
 func (c *CreatedSimulation) GetID() string {
 	if c == nil {
 		return ""
 	}
 	return c.ID
+}
+
+func (c *CreatedSimulation) GetMetadata() any {
+	if c == nil {
+		return nil
+	}
+	return c.Metadata
 }
 
 func (c *CreatedSimulation) GetName() string {

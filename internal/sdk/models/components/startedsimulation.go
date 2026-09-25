@@ -7,21 +7,21 @@ import (
 	"time"
 )
 
-// SimulationStatus - Current status. running serves requests. paused means the Simulation was idle and the platform paused it; the next request wakes it. stopped means its state is saved and requests return 409 until you start it.
-type SimulationStatus string
+// StartedSimulationStatus - Current status. running serves requests. paused means the Simulation was idle and the platform paused it; the next request wakes it. stopped means its state is saved and requests return 409 until you start it.
+type StartedSimulationStatus string
 
 const (
-	SimulationStatusRunning SimulationStatus = "running"
-	SimulationStatusPaused  SimulationStatus = "paused"
-	SimulationStatusStopped SimulationStatus = "stopped"
+	StartedSimulationStatusRunning StartedSimulationStatus = "running"
+	StartedSimulationStatusPaused  StartedSimulationStatus = "paused"
+	StartedSimulationStatusStopped StartedSimulationStatus = "stopped"
 )
 
-func (e SimulationStatus) ToPointer() *SimulationStatus {
+func (e StartedSimulationStatus) ToPointer() *StartedSimulationStatus {
 	return &e
 }
 
 // IsExact returns true if the value matches a known enum value, false otherwise.
-func (e *SimulationStatus) IsExact() bool {
+func (e *StartedSimulationStatus) IsExact() bool {
 	if e != nil {
 		switch *e {
 		case "running", "paused", "stopped":
@@ -31,7 +31,7 @@ func (e *SimulationStatus) IsExact() bool {
 	return false
 }
 
-type Simulation struct {
+type StartedSimulation struct {
 	// Current clock advance operation ID, or null.
 	ActiveAdvanceID *string `json:"active_advance_id"`
 	// Simulation creation time.
@@ -40,6 +40,8 @@ type Simulation struct {
 	CurrentTime time.Time `json:"current_time"`
 	// Base URL for requests to the Simulation.
 	Endpoint string `json:"endpoint"`
+	// Token expiration time for a legacy session, or null for a lifetime session.
+	ExpiresAt *time.Time `json:"expires_at"`
 	// Simulation ID.
 	ID string `json:"id"`
 	// Customer JSON metadata, or null.
@@ -55,100 +57,116 @@ type Simulation struct {
 	// Initial simulated time.
 	StartTime time.Time `json:"start_time"`
 	// Current status. running serves requests. paused means the Simulation was idle and the platform paused it; the next request wakes it. stopped means its state is saved and requests return 409 until you start it.
-	Status SimulationStatus `json:"status"`
+	Status StartedSimulationStatus `json:"status"`
+	// Current token for requests to the Simulation endpoint. Send it in the X-Continuous-Simulation-Token header. Retrieve it later with GET /v1/simulations/{id}/token.
+	Token string `json:"token"`
 }
 
-func (s Simulation) MarshalJSON() ([]byte, error) {
+func (s StartedSimulation) MarshalJSON() ([]byte, error) {
 	return utils.MarshalJSON(s, "", false)
 }
 
-func (s *Simulation) UnmarshalJSON(data []byte) error {
+func (s *StartedSimulation) UnmarshalJSON(data []byte) error {
 	if err := utils.UnmarshalJSON(data, &s, "", false, nil); err != nil {
 		return err
 	}
 	return nil
 }
 
-func (s *Simulation) GetActiveAdvanceID() *string {
+func (s *StartedSimulation) GetActiveAdvanceID() *string {
 	if s == nil {
 		return nil
 	}
 	return s.ActiveAdvanceID
 }
 
-func (s *Simulation) GetCreatedAt() time.Time {
+func (s *StartedSimulation) GetCreatedAt() time.Time {
 	if s == nil {
 		return time.Time{}
 	}
 	return s.CreatedAt
 }
 
-func (s *Simulation) GetCurrentTime() time.Time {
+func (s *StartedSimulation) GetCurrentTime() time.Time {
 	if s == nil {
 		return time.Time{}
 	}
 	return s.CurrentTime
 }
 
-func (s *Simulation) GetEndpoint() string {
+func (s *StartedSimulation) GetEndpoint() string {
 	if s == nil {
 		return ""
 	}
 	return s.Endpoint
 }
 
-func (s *Simulation) GetID() string {
+func (s *StartedSimulation) GetExpiresAt() *time.Time {
+	if s == nil {
+		return nil
+	}
+	return s.ExpiresAt
+}
+
+func (s *StartedSimulation) GetID() string {
 	if s == nil {
 		return ""
 	}
 	return s.ID
 }
 
-func (s *Simulation) GetMetadata() any {
+func (s *StartedSimulation) GetMetadata() any {
 	if s == nil {
 		return nil
 	}
 	return s.Metadata
 }
 
-func (s *Simulation) GetName() string {
+func (s *StartedSimulation) GetName() string {
 	if s == nil {
 		return ""
 	}
 	return s.Name
 }
 
-func (s *Simulation) GetParentID() *string {
+func (s *StartedSimulation) GetParentID() *string {
 	if s == nil {
 		return nil
 	}
 	return s.ParentID
 }
 
-func (s *Simulation) GetSimulatorDigest() string {
+func (s *StartedSimulation) GetSimulatorDigest() string {
 	if s == nil {
 		return ""
 	}
 	return s.SimulatorDigest
 }
 
-func (s *Simulation) GetSimulatorID() string {
+func (s *StartedSimulation) GetSimulatorID() string {
 	if s == nil {
 		return ""
 	}
 	return s.SimulatorID
 }
 
-func (s *Simulation) GetStartTime() time.Time {
+func (s *StartedSimulation) GetStartTime() time.Time {
 	if s == nil {
 		return time.Time{}
 	}
 	return s.StartTime
 }
 
-func (s *Simulation) GetStatus() SimulationStatus {
+func (s *StartedSimulation) GetStatus() StartedSimulationStatus {
 	if s == nil {
-		return SimulationStatus("")
+		return StartedSimulationStatus("")
 	}
 	return s.Status
+}
+
+func (s *StartedSimulation) GetToken() string {
+	if s == nil {
+		return ""
+	}
+	return s.Token
 }

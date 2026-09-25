@@ -248,7 +248,7 @@ func (s *Simulations) ListSimulations(ctx context.Context, request *operations.L
 }
 
 // CreateSimulation - Create Simulation
-// Creates a Simulation from a ready Simulator and starts it. The response includes the endpoint and a token. New lifecycle sessions keep the token until stop or delete; legacy sessions receive an expiring token.
+// Creates a Simulation from a ready Simulator and starts it. The response includes the endpoint and a token. New persistent Simulations keep the token across stop and restart; legacy Simulations receive an expiring token.
 func (s *Simulations) CreateSimulation(ctx context.Context, request components.CreateSimulationRequest, opts ...operations.Option) (*operations.CreateSimulationResponse, error) {
 	o := operations.Options{}
 	supportedOptions := []string{
@@ -1547,7 +1547,7 @@ func (s *Simulations) ListSimulationAdvanceEvents(ctx context.Context, request o
 }
 
 // ForkSimulation - Fork Simulation
-// Creates a new Simulation from the source Simulation's current state, or from an earlier recorded step when you set at_step. The source must be running or paused; a stopped source returns 409 simulation_stopped. Forking does not change the source. The response includes the new endpoint and a token; new lifecycle sessions keep the token until stop or delete.
+// Creates a new Simulation from the source Simulation's current state, or from an earlier recorded step when you set at_step. The source must be running or paused; a stopped source returns 409 simulation_stopped. Forking does not change the source. The response includes the new endpoint and a persistent token that survives stop and restart.
 func (s *Simulations) ForkSimulation(ctx context.Context, request operations.ForkSimulationRequest, opts ...operations.Option) (*operations.ForkSimulationResponse, error) {
 	o := operations.Options{}
 	supportedOptions := []string{
@@ -1903,12 +1903,12 @@ func (s *Simulations) StartSimulation(ctx context.Context, request operations.St
 					return nil, err
 				}
 
-				var out components.CreatedSimulation
+				var out components.StartedSimulation
 				if err := utils.UnmarshalJsonFromResponseBody(bytes.NewBuffer(rawBody), &out, ""); err != nil {
 					return nil, err
 				}
 
-				res.CreatedSimulation = &out
+				res.StartedSimulation = &out
 			}
 		default:
 			rawBody, err := utils.ConsumeRawBody(httpRes)
@@ -2440,7 +2440,7 @@ func (s *Simulations) StopSimulation(ctx context.Context, request operations.Sto
 }
 
 // GetSimulationToken - Get Current Simulation Token
-// Returns the current lifetime credential without rotating it. Legacy sessions require the deprecated token-mint endpoint.
+// Returns the current persistent credential, including while stopped, without rotating it. Legacy Simulations require the deprecated token-mint endpoint or explicit regeneration.
 func (s *Simulations) GetSimulationToken(ctx context.Context, request operations.GetSimulationTokenRequest, opts ...operations.Option) (*operations.GetSimulationTokenResponse, error) {
 	o := operations.Options{}
 	supportedOptions := []string{

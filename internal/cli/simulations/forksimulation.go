@@ -25,7 +25,7 @@ func initForkSimulationCmd(parent *cobra.Command) error {
 	var cmd = &cobra.Command{
 		Use:     "fork",
 		Short:   "Fork Simulation",
-		Long:    "Creates a new Simulation from the source Simulation's current state, or from an earlier recorded step when you set at_step. The source must be running or paused; a stopped source returns 409 simulation_stopped. Forking does not change the source. The response includes the new endpoint and a token; new lifecycle sessions keep the token until stop or delete.",
+		Long:    "Creates a new Simulation from the source Simulation's current state, or from an earlier recorded step when you set at_step. The source must be running or paused; a stopped source returns 409 simulation_stopped. Forking does not change the source. The response includes the new endpoint and a persistent token that survives stop and restart.",
 		Example: "  continuous simulations fork --id <id>",
 		RunE:    runForkSimulationCmd,
 	}
