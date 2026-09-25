@@ -44,6 +44,8 @@ type CreatedSimulation struct {
 	ExpiresAt time.Time `json:"expires_at"`
 	// Simulation ID.
 	ID string `json:"id"`
+	// Customer JSON metadata, or null.
+	Metadata any `json:"metadata"`
 	// Simulation name. The ID is its identity, and names need not be unique.
 	Name string `json:"name"`
 	// Source Simulation ID for a fork, or null.
@@ -111,6 +113,13 @@ func (c *CreatedSimulation) GetID() string {
 		return ""
 	}
 	return c.ID
+}
+
+func (c *CreatedSimulation) GetMetadata() any {
+	if c == nil {
+		return nil
+	}
+	return c.Metadata
 }
 
 func (c *CreatedSimulation) GetName() string {

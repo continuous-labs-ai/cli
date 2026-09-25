@@ -8,33 +8,6 @@ import (
 	"github.com/continuous-labs-ai/cli/internal/sdk/sdkinternal/utils"
 )
 
-// BuildSimulatorRequestBuilder - Legacy provider selection. Alone it selects the provider's default model (openai is gpt-6-astra, claude is claude-fable-5-1); with model it must name the model's provider.
-type BuildSimulatorRequestBuilder string
-
-const (
-	BuildSimulatorRequestBuilderOpenai BuildSimulatorRequestBuilder = "openai"
-	BuildSimulatorRequestBuilderClaude BuildSimulatorRequestBuilder = "claude"
-)
-
-func (e BuildSimulatorRequestBuilder) ToPointer() *BuildSimulatorRequestBuilder {
-	return &e
-}
-func (e *BuildSimulatorRequestBuilder) UnmarshalJSON(data []byte) error {
-	var v string
-	if err := json.Unmarshal(data, &v); err != nil {
-		return err
-	}
-	switch v {
-	case "openai":
-		fallthrough
-	case "claude":
-		*e = BuildSimulatorRequestBuilder(v)
-		return nil
-	default:
-		return fmt.Errorf("invalid value for BuildSimulatorRequestBuilder: %v", v)
-	}
-}
-
 // BuildSimulatorRequestModel - Model that builds and reviews the Simulator. Defaults to gpt-6-astra. Its provider is derived from the model.
 type BuildSimulatorRequestModel string
 
@@ -96,8 +69,6 @@ func (e *BuildSimulatorRequestSpecKind) UnmarshalJSON(data []byte) error {
 }
 
 type BuildSimulatorRequest struct {
-	// Legacy provider selection. Alone it selects the provider's default model (openai is gpt-6-astra, claude is claude-fable-5-1); with model it must name the model's provider.
-	Builder *BuildSimulatorRequestBuilder `json:"builder,omitzero"`
 	// Regular expressions (RE2 syntax) that select the operations to implement. Each is matched against the OpenAPI operationId or the WSDL operation name; an operation is kept when any expression matches, and an OpenAPI operation without an operationId is dropped. At most 64 expressions of at most 1,024 characters each. Omit or send an empty list to keep every operation. Not allowed for an incremental build.
 	Filter []string `json:"filter,omitzero"`
 	// Instructions for the builder. Required for an incremental build. At most 16,384 characters and 65,536 UTF-8 bytes; must not be blank or contain U+0000.
@@ -123,13 +94,6 @@ func (b *BuildSimulatorRequest) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	return nil
-}
-
-func (b *BuildSimulatorRequest) GetBuilder() *BuildSimulatorRequestBuilder {
-	if b == nil {
-		return nil
-	}
-	return b.Builder
 }
 
 func (b *BuildSimulatorRequest) GetFilter() []string {

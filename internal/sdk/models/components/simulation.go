@@ -42,6 +42,8 @@ type Simulation struct {
 	Endpoint string `json:"endpoint"`
 	// Simulation ID.
 	ID string `json:"id"`
+	// Customer JSON metadata, or null.
+	Metadata any `json:"metadata"`
 	// Simulation name. The ID is its identity, and names need not be unique.
 	Name string `json:"name"`
 	// Source Simulation ID for a fork, or null.
@@ -100,6 +102,13 @@ func (s *Simulation) GetID() string {
 		return ""
 	}
 	return s.ID
+}
+
+func (s *Simulation) GetMetadata() any {
+	if s == nil {
+		return nil
+	}
+	return s.Metadata
 }
 
 func (s *Simulation) GetName() string {

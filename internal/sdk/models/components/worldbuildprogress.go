@@ -2,29 +2,6 @@
 
 package components
 
-// WorldBuildProgressBuilder - Selected model provider, or null for a build created before provider selection.
-type WorldBuildProgressBuilder string
-
-const (
-	WorldBuildProgressBuilderOpenai WorldBuildProgressBuilder = "openai"
-	WorldBuildProgressBuilderClaude WorldBuildProgressBuilder = "claude"
-)
-
-func (e WorldBuildProgressBuilder) ToPointer() *WorldBuildProgressBuilder {
-	return &e
-}
-
-// IsExact returns true if the value matches a known enum value, false otherwise.
-func (e *WorldBuildProgressBuilder) IsExact() bool {
-	if e != nil {
-		switch *e {
-		case "openai", "claude":
-			return true
-		}
-	}
-	return false
-}
-
 // WorldBuildProgressLastSubmission - Outcome of the most recent plan submission, or null.
 type WorldBuildProgressLastSubmission string
 
@@ -175,8 +152,6 @@ func (e *WorldBuildProgressStage) IsExact() bool {
 }
 
 type WorldBuildProgress struct {
-	// Selected model provider, or null for a build created before provider selection.
-	Builder *WorldBuildProgressBuilder `json:"builder"`
 	// Outcome of the most recent plan submission, or null.
 	LastSubmission *WorldBuildProgressLastSubmission `json:"last_submission"`
 	// Name of the most recent tool, or null. Tool arguments and output are private.
@@ -201,13 +176,6 @@ type WorldBuildProgress struct {
 	Tests int64 `json:"tests"`
 	// Number of agent tool calls.
 	ToolCalls int64 `json:"tool_calls"`
-}
-
-func (w *WorldBuildProgress) GetBuilder() *WorldBuildProgressBuilder {
-	if w == nil {
-		return nil
-	}
-	return w.Builder
 }
 
 func (w *WorldBuildProgress) GetLastSubmission() *WorldBuildProgressLastSubmission {

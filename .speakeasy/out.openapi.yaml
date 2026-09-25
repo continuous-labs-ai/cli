@@ -298,12 +298,6 @@ components:
           name: billing-api
           spec_kind: openapi
       properties:
-        builder:
-          description: Legacy provider selection. Alone it selects the provider's default model (openai is gpt-6-astra, claude is claude-fable-5-1); with model it must name the model's provider.
-          enum:
-            - openai
-            - claude
-          type: string
         filter:
           default: []
           description: Regular expressions (RE2 syntax) that select the operations to implement. Each is matched against the OpenAPI operationId or the WSDL operation name; an operation is kept when any expression matches, and an OpenAPI operation without an operationId is dropped. At most 64 expressions of at most 1,024 characters each. Omit or send an empty list to keep every operation. Not allowed for an incremental build.
@@ -366,19 +360,17 @@ components:
       additionalProperties: false
       examples:
         - instructions: Use stable example data for each Simulator.
+          metadata:
+            customer_id: cust_123
           simulators:
             - smr_01J8Z5X4K7M2N9P0Q1R2S3T4V5
       properties:
-        builder:
-          description: Legacy provider selection. Alone it selects the provider's default model (openai is gpt-6-astra, claude is claude-fable-5-1); with model it must name the model's provider.
-          enum:
-            - openai
-            - claude
-          type: string
         instructions:
           description: Describe the initial data, scenario, and relationships. Populated Worlds support up to 8 selected Simulators and 1,000 starting records in total. Named record types replace their default data. At most 16,384 characters and 65,536 UTF-8 bytes. U+0000 is not permitted.
           maxLength: 16384
           type: string
+        metadata:
+          description: Customer JSON metadata, up to 16 KiB and 64 nesting levels. Returned by build, get, and list. Omission uses null.
         model:
           default: gpt-6-astra
           description: Model that builds and reviews starting data. Defaults to gpt-6-astra. Its provider is derived from the model.
@@ -526,9 +518,13 @@ components:
     CreateSimulationRequest:
       additionalProperties: false
       examples:
-        - name: billing-sandbox
+        - metadata:
+            customer_id: cust_123
+          name: billing-sandbox
           simulator_id: smr_01J8Z5X4K7M2N9P0Q1R2S3T4V5
       properties:
+        metadata:
+          description: Customer JSON metadata, up to 16 KiB and 64 nesting levels. Returned by create, get, and list. Omission uses null.
         name:
           description: Name for the Simulation. Omission generates a name. The ID stays its identity, and names need not be unique.
           maxLength: 128
@@ -554,6 +550,8 @@ components:
           endpoint: https://api.continuouslabs.ai/sim/sim_01J8Z5X4K7M2N9P0Q1R2S3T4V6
           expires_at: "2026-01-15T13:00:00Z"
           id: sim_01J8Z5X4K7M2N9P0Q1R2S3T4V6
+          metadata:
+            customer_id: cust_123
           name: billing-sandbox
           parent_id: sim_01J8Z5X4K7M2N9P0Q1R2S3T4V8
           simulator_digest: sha256:aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
@@ -587,6 +585,8 @@ components:
           description: Simulation ID.
           pattern: ^sim_[0-9A-HJKMNP-TV-Z]{26}$
           type: string
+        metadata:
+          description: Customer JSON metadata, or null.
         name:
           description: Simulation name. The ID is its identity, and names need not be unique.
           maxLength: 128
@@ -620,6 +620,7 @@ components:
           description: Token for requests to the Simulation endpoint. Send it in the X-Continuous-Simulation-Token header. It is returned only here; list and get omit it. Create more with POST /v1/simulations/{id}/tokens.
           type: string
       required:
+        - metadata
         - start_time
         - current_time
         - active_advance_id
@@ -792,6 +793,8 @@ components:
           current_time: "2024-01-01T00:00:00Z"
           endpoint: https://api.continuouslabs.ai/sim/sim_01J8Z5X4K7M2N9P0Q1R2S3T4V6
           id: sim_01J8Z5X4K7M2N9P0Q1R2S3T4V6
+          metadata:
+            customer_id: cust_123
           name: billing-sandbox
           parent_id: sim_01J8Z5X4K7M2N9P0Q1R2S3T4V8
           simulator_digest: sha256:aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
@@ -820,6 +823,8 @@ components:
           description: Simulation ID.
           pattern: ^sim_[0-9A-HJKMNP-TV-Z]{26}$
           type: string
+        metadata:
+          description: Customer JSON metadata, or null.
         name:
           description: Simulation name. The ID is its identity, and names need not be unique.
           maxLength: 128
@@ -850,6 +855,7 @@ components:
             - stopped
           type: string
       required:
+        - metadata
         - start_time
         - current_time
         - active_advance_id
@@ -883,7 +889,6 @@ components:
       additionalProperties: false
       examples:
         - build:
-            builder: claude
             last_submission: rejected
             last_tool: test
             model: claude-fable-5-1
@@ -975,12 +980,6 @@ components:
     SimulatorBuildProgress:
       additionalProperties: false
       properties:
-        builder:
-          description: The coding-loop provider.
-          enum:
-            - claude
-            - openai
-          type: string
         last_submission:
           description: Outcome of the most recent submit attempt, or null.
           enum:
@@ -1038,7 +1037,6 @@ components:
           format: date-time
           type: string
       required:
-        - builder
         - model
         - phase
         - stage
@@ -1199,7 +1197,6 @@ components:
       examples:
         - active_advance_id: null
           build:
-            builder: claude
             last_submission: rejected
             last_tool: test
             last_validation_code: request_not_satisfied
@@ -1221,6 +1218,8 @@ components:
           error: null
           id: wld_01J8Z5X4K7M2N9P0Q1R2S3T4V7
           instructions: Use stable example data for each Simulator.
+          metadata:
+            customer_id: cust_123
           name: open-orders
           simulations: []
           simulators:
@@ -1256,6 +1255,8 @@ components:
         instructions:
           description: Instructions for the initial synthetic data and relationships.
           type: string
+        metadata:
+          description: Customer JSON metadata, or null.
         name:
           description: Name for the World.
           type: string
@@ -1286,6 +1287,7 @@ components:
             - canceled
           type: string
       required:
+        - metadata
         - start_time
         - current_time
         - active_advance_id
@@ -1302,15 +1304,6 @@ components:
     WorldBuildProgress:
       additionalProperties: false
       properties:
-        builder:
-          description: Selected model provider, or null for a build created before provider selection.
-          enum:
-            - openai
-            - claude
-            - null
-          type:
-            - string
-            - "null"
         last_submission:
           description: Outcome of the most recent plan submission, or null.
           enum:
@@ -1404,7 +1397,6 @@ components:
           minimum: 0
           type: integer
       required:
-        - builder
         - model
         - phase
         - stage

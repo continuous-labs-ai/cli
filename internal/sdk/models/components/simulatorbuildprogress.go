@@ -7,29 +7,6 @@ import (
 	"time"
 )
 
-// SimulatorBuildProgressBuilder - The coding-loop provider.
-type SimulatorBuildProgressBuilder string
-
-const (
-	SimulatorBuildProgressBuilderClaude SimulatorBuildProgressBuilder = "claude"
-	SimulatorBuildProgressBuilderOpenai SimulatorBuildProgressBuilder = "openai"
-)
-
-func (e SimulatorBuildProgressBuilder) ToPointer() *SimulatorBuildProgressBuilder {
-	return &e
-}
-
-// IsExact returns true if the value matches a known enum value, false otherwise.
-func (e *SimulatorBuildProgressBuilder) IsExact() bool {
-	if e != nil {
-		switch *e {
-		case "claude", "openai":
-			return true
-		}
-	}
-	return false
-}
-
 // SimulatorBuildProgressLastSubmission - Outcome of the most recent submit attempt, or null.
 type SimulatorBuildProgressLastSubmission string
 
@@ -127,8 +104,6 @@ func (e *SimulatorBuildProgressStage) IsExact() bool {
 }
 
 type SimulatorBuildProgress struct {
-	// The coding-loop provider.
-	Builder SimulatorBuildProgressBuilder `json:"builder"`
 	// Outcome of the most recent submit attempt, or null.
 	LastSubmission *SimulatorBuildProgressLastSubmission `json:"last_submission"`
 	// Name of the most recent tool call, or null.
@@ -158,13 +133,6 @@ func (s *SimulatorBuildProgress) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	return nil
-}
-
-func (s *SimulatorBuildProgress) GetBuilder() SimulatorBuildProgressBuilder {
-	if s == nil {
-		return SimulatorBuildProgressBuilder("")
-	}
-	return s.Builder
 }
 
 func (s *SimulatorBuildProgress) GetLastSubmission() *SimulatorBuildProgressLastSubmission {
