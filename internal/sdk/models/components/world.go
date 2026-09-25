@@ -49,6 +49,8 @@ type World struct {
 	ID string `json:"id"`
 	// Instructions for the initial synthetic data and relationships.
 	Instructions string `json:"instructions"`
+	// Customer JSON metadata, or null.
+	Metadata any `json:"metadata"`
 	// Name for the World.
 	Name string `json:"name"`
 	// Created member Simulations. This list is empty before first start.
@@ -119,6 +121,13 @@ func (w *World) GetInstructions() string {
 		return ""
 	}
 	return w.Instructions
+}
+
+func (w *World) GetMetadata() any {
+	if w == nil {
+		return nil
+	}
+	return w.Metadata
 }
 
 func (w *World) GetName() string {
