@@ -1,19 +1,19 @@
 lockVersion: 2.0.0
 id: ad7b08dc-357d-414c-9f26-16cfbc099767
 management:
-  docChecksum: 10e3e6938a095c9c364b3bd6b57366e9
+  docChecksum: 1e0ed421d29a74b5ed80460249e81974
   docVersion: v1
   speakeasyVersion: 1.796.4
   generationVersion: 2.935.1
-  releaseVersion: 0.1.19
-  configChecksum: 45d31624e10c7f4ad2d689613040402f
+  releaseVersion: 0.1.20
+  configChecksum: ac8616aa6f5c75d064efd43b38030680
   repoURL: https://github.com/continuous-labs-ai/cli.git
   installationURL: https://github.com/continuous-labs-ai/cli
   published: true
 persistentEdits:
-  generation_id: 2376d25a-d81d-4ad3-90e7-3ed469e02b7a
-  pristine_commit_hash: 8b5a3186f27db596939019109645cd7550a11ec8
-  pristine_tree_hash: 093be2f5393f0e9878c6423eb5d53293b3a938e9
+  generation_id: d8094ac6-4043-40c3-9523-841a41458755
+  pristine_commit_hash: cd5a23dad3c2c74e8056691b65f09e76fa4858c8
+  pristine_tree_hash: f00681298f27e7520418a4233e14e64716148912
 features:
   cli:
     constsAndDefaults: 0.0.0
@@ -140,16 +140,16 @@ trackedFiles:
     pristine_git_object: a792dd286b0327e5c128d63c56580940bcadf9f9
   internal/cli/version.go:
     id: 7b0665492f72
-    last_write_checksum: sha1:d2854fece73819e23b912ff3a4ac7f860dbdb843
-    pristine_git_object: 9e26abbe261ccc4cb16f16fb4f7348ca7a0f5697
+    last_write_checksum: sha1:fd495afad117618a077ab0654fb16b91b32a6019
+    pristine_git_object: 3df801e7408dd73a672894c29a14fd361e31e98e
   internal/cli/whoami.go:
     id: c1787f2298ec
     last_write_checksum: sha1:9b8e8f6830e556f749eede72d72b4f18d9881c28
     pristine_git_object: 81cdc9ce2868855a48fdd61d6c13790a8b7dc35d
   internal/cli/worlds/advanceworldtime.go:
     id: 9ca92822c2cb
-    last_write_checksum: sha1:163c52ac7320dd0f1170fdb8bd668b77dc0784f4
-    pristine_git_object: 49ed8359dc66386d0cf7c2eb266ad37edb55494f
+    last_write_checksum: sha1:5b70b85f0465a0d23db4193943b5ab3b28cd6e4a
+    pristine_git_object: 33df7ebbb291873b85dca40b7aa327aa694a48a3
   internal/cli/worlds/buildworld.go:
     id: eb895422f8bd
     last_write_checksum: sha1:eceedc6ea9d81b0a0022241eaf23d6e4598d28e6
@@ -168,8 +168,8 @@ trackedFiles:
     pristine_git_object: 979fb5c9ac805d5a96b47a86b0ee8641d319a0f7
   internal/cli/worlds/getworldadvance.go:
     id: 2a14bc42c3b9
-    last_write_checksum: sha1:c8553cf735c846d63db034a6d4df2d8bcfee1fdd
-    pristine_git_object: 2d5db32b48a63f35637de7515196fc523727eacc
+    last_write_checksum: sha1:c64eb2fc0c041e58ccb43a2d675749c9ee570353
+    pristine_git_object: 38f7ef1e063d9dc4d93149f181e957667c10a720
   internal/cli/worlds/listworlds.go:
     id: abed3cc73571
     last_write_checksum: sha1:96e5c3cb5767e464ee14e94421d3413e9eaa5fd2
@@ -252,8 +252,8 @@ trackedFiles:
     pristine_git_object: 942a964e78a81ad9d9590cc67138a0c4c3569fc9
   internal/sdk/continuoussimulation.go:
     id: af3aeba7b54c
-    last_write_checksum: sha1:7df20a94b01461a1d37266984ab71023e9c8d998
-    pristine_git_object: 622ab984ddb6386b8aba3250b04408bad1538fcb
+    last_write_checksum: sha1:a13dade479f3b97a2700cc7f4790997720cea13a
+    pristine_git_object: 864cafe524b18166eadc2562fdfb47c703ad98f4
   internal/sdk/models/components/advancetimeinputbody.go:
     id: 773c85c178c2
     last_write_checksum: sha1:04265c61f29cf8afacf5689ff27372c39920b497
@@ -276,8 +276,8 @@ trackedFiles:
     pristine_git_object: 7fc762cf353aadf8765b90897cbc863d4125a068
   internal/sdk/models/components/clockadvancemember.go:
     id: 777e75c2d81a
-    last_write_checksum: sha1:ab48fae3f1f946a166e8b562423ce0d70c6a066d
-    pristine_git_object: 80d5b5ad0661852bba96d28bbe63d109ac1544df
+    last_write_checksum: sha1:987e5b16614ef5e12f0cd06bdddc37a0d2404c33
+    pristine_git_object: ed3003de059746fd7aa725c5aaeec741e3b9c1e1
   internal/sdk/models/components/clockevent.go:
     id: 0bf0c6252039
     last_write_checksum: sha1:0a7f05699c181de4df6c787b82aea3248346c3f9
@@ -368,8 +368,8 @@ trackedFiles:
     pristine_git_object: 56f6499da53977f765bcafd7d217a857ae6b9285
   internal/sdk/models/components/world.go:
     id: cca25436961e
-    last_write_checksum: sha1:c6cc22cba11300cf2cc3cfce09429009288adb99
-    pristine_git_object: 6057bc618915bcc8ce323c889762870944b9af0d
+    last_write_checksum: sha1:f206debfb27a84c39889456cbaca4cf2e65f0d02
+    pristine_git_object: 5bce991c0f2703e5a0ee3e586badee1fb082d2de
   internal/sdk/models/components/worldbuildprogress.go:
     id: 6e93e53a50d2
     last_write_checksum: sha1:77ba74011063cd0520c483d13e47e5d21282dd75
@@ -596,16 +596,16 @@ trackedFiles:
     pristine_git_object: 35c439d2661e08fcb6a854096fd7b9a8561b3938
   internal/sdk/worlds.go:
     id: 9c366ad7982f
-    last_write_checksum: sha1:2b1eb5c6ded1f3dd846f39aa0d2f13fb1f75a142
-    pristine_git_object: ba80b52d3cd7b2962c5ee1ef58f61d569378611f
+    last_write_checksum: sha1:f1c2b344bfb099bdba35624695937a61188c9324
+    pristine_git_object: 036a73eda8cc4521fa848d745f55cf04026c54b5
   internal/testclient/testclient.go:
     id: 20fc511b8b00
     last_write_checksum: sha1:7107e59d336235c44af152c5a61ee3896a7841fa
     pristine_git_object: 159a87ec97aba99e4edd132f69652e123434303e
   internal/usage/schema.go:
     id: 0f40f4612437
-    last_write_checksum: sha1:d188bec5a3720ebd574dfbdc7820e3120840a2fe
-    pristine_git_object: c210b80d746cb402f58e68f06f0eb7200d14e5c1
+    last_write_checksum: sha1:68e0e4a9b831ba44cfd8b4ca54d5a929f37724e5
+    pristine_git_object: 54280ec64351f6e99bf65e80ac829465a2710473
   scripts/install.ps1:
     id: fee0853709e9
     last_write_checksum: sha1:2da33f25afaa301dc2a22ac12654c585cef5c572
@@ -1394,4 +1394,9 @@ examples:
         "500":
           application/problem+json: {"code": "<value>", "detail": "<value>", "validation": {"issues": [{"code": "<value>", "kind": "invalid", "location": "<value>", "message": "<value>", "operation": "<value>", "suggestion": "<value>"}]}}
 examplesVersion: 1.0.2
-releaseNotes: "## Cli SDK Changes:\n* `ContinuousSimulation.Worlds.GetWorld()`:  `response` **Changed** (Breaking ⚠️)\n* `ContinuousSimulation.Worlds.ListWorlds()`:  `response.Worlds[]` **Changed** (Breaking ⚠️)\n* `ContinuousSimulation.Worlds.StopWorld()`:  `response` **Changed** (Breaking ⚠️)\n* `ContinuousSimulation.Worlds.StartWorld()`:  `response` **Changed** (Breaking ⚠️)\n* `ContinuousSimulation.Worlds.CancelWorldBuild()`:  `response` **Changed** (Breaking ⚠️)\n* `ContinuousSimulation.Worlds.BuildWorld()`: \n  *  `request.Request` **Changed** (Breaking ⚠️)\n  *  `response` **Changed** (Breaking ⚠️)\n* `ContinuousSimulation.Simulators.ListSimulators()`:  `response.Simulators[].Build.Builder` **Removed** (Breaking ⚠️)\n* `ContinuousSimulation.Simulators.CancelSimulatorBuild()`:  `response.Build.Builder` **Removed** (Breaking ⚠️)\n* `ContinuousSimulation.Simulators.GetSimulator()`:  `response.Build.Builder` **Removed** (Breaking ⚠️)\n* `ContinuousSimulation.Simulators.BuildSimulator()`: \n  *  `request.Request.Request` **Changed** (Breaking ⚠️)\n  *  `response.Build.Builder` **Removed** (Breaking ⚠️)\n* `ContinuousSimulation.Simulations.CreateSimulation()`: \n  *  `request.Request.Metadata` **Added**\n  *  `response.Metadata` **Added**\n* `ContinuousSimulation.Simulations.StopSimulation()`:  `response.Metadata` **Added**\n* `ContinuousSimulation.Simulations.ListSimulations()`:  `response.Simulations[].Metadata` **Added**\n* `ContinuousSimulation.Simulations.StartSimulation()`:  `response.Metadata` **Added**\n* `ContinuousSimulation.Simulations.ForkSimulation()`:  `response.Metadata` **Added**\n* `ContinuousSimulation.Simulations.GetSimulation()`:  `response.Metadata` **Added**\n"
+releaseNotes: |
+  ## Cli SDK Changes:
+  * `ContinuousSimulation.Simulations.AdvanceSimulationTime()`:  `response.Members[].Status.Enum(skipped)` **Added**
+  * `ContinuousSimulation.Simulations.GetSimulationAdvance()`:  `response.Members[].Status.Enum(skipped)` **Added**
+  * `ContinuousSimulation.Worlds.AdvanceWorldTime()`:  `response.Members[].Status.Enum(skipped)` **Added**
+  * `ContinuousSimulation.Worlds.GetWorldAdvance()`:  `response.Members[].Status.Enum(skipped)` **Added**

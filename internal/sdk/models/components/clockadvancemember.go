@@ -2,13 +2,14 @@
 
 package components
 
-// ClockAdvanceMemberStatus - Whether this member is pending, committed, or rolled back after a deterministic failure.
+// ClockAdvanceMemberStatus - Whether this member is pending, committed, failed, or skipped because it is not running.
 type ClockAdvanceMemberStatus string
 
 const (
 	ClockAdvanceMemberStatusPending   ClockAdvanceMemberStatus = "pending"
 	ClockAdvanceMemberStatusCompleted ClockAdvanceMemberStatus = "completed"
 	ClockAdvanceMemberStatusFailed    ClockAdvanceMemberStatus = "failed"
+	ClockAdvanceMemberStatusSkipped   ClockAdvanceMemberStatus = "skipped"
 )
 
 func (e ClockAdvanceMemberStatus) ToPointer() *ClockAdvanceMemberStatus {
@@ -19,7 +20,7 @@ func (e ClockAdvanceMemberStatus) ToPointer() *ClockAdvanceMemberStatus {
 func (e *ClockAdvanceMemberStatus) IsExact() bool {
 	if e != nil {
 		switch *e {
-		case "pending", "completed", "failed":
+		case "pending", "completed", "failed", "skipped":
 			return true
 		}
 	}
@@ -32,7 +33,7 @@ type ClockAdvanceMember struct {
 	EventCount int64 `json:"event_count"`
 	// Member Simulation ID.
 	SimulationID string `json:"simulation_id"`
-	// Whether this member is pending, committed, or rolled back after a deterministic failure.
+	// Whether this member is pending, committed, failed, or skipped because it is not running.
 	Status ClockAdvanceMemberStatus `json:"status"`
 	// Committed local step, or null for no change or a failed advance.
 	Step *int64 `json:"step"`

@@ -870,7 +870,7 @@ func (s *Worlds) GetWorld(ctx context.Context, request operations.GetWorldReques
 }
 
 // AdvanceWorldTime - Advance World Time
-// Fences all members, advances each local clock, and returns a durable operation. A partial failure keeps members fenced while the operation retries. The World clock changes after all members commit.
+// Advances each running member independently and skips paused or stopped members without waking them. Successful advances remain committed when another member fails. The World current_time records the last settled request target; member clocks can differ.
 func (s *Worlds) AdvanceWorldTime(ctx context.Context, request operations.AdvanceWorldTimeRequest, opts ...operations.Option) (*operations.AdvanceWorldTimeResponse, error) {
 	o := operations.Options{}
 	supportedOptions := []string{
@@ -1103,7 +1103,7 @@ func (s *Worlds) AdvanceWorldTime(ctx context.Context, request operations.Advanc
 }
 
 // GetWorldAdvance - Get World Clock Advance
-// Returns durable progress for each member. Members remain fenced until the whole advance can finish.
+// Returns completed, failed, or skipped outcomes for each member. A failed call can have an unconfirmed runtime outcome. Reusing the request key returns the same result.
 func (s *Worlds) GetWorldAdvance(ctx context.Context, request operations.GetWorldAdvanceRequest, opts ...operations.Option) (*operations.GetWorldAdvanceResponse, error) {
 	o := operations.Options{}
 	supportedOptions := []string{
