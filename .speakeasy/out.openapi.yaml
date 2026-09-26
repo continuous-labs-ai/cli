@@ -473,11 +473,12 @@ components:
           pattern: ^sim_[0-9A-HJKMNP-TV-Z]{26}$
           type: string
         status:
-          description: Whether this member is pending, committed, or rolled back after a deterministic failure.
+          description: Whether this member is pending, committed, failed, or skipped because it is not running.
           enum:
             - pending
             - completed
             - failed
+            - skipped
           type: string
         step:
           description: Committed local step, or null for no change or a failed advance.
@@ -1242,7 +1243,7 @@ components:
           format: date-time
           type: string
         current_time:
-          description: Current shared simulated time.
+          description: Target of the last settled World clock request. Individual member clocks can differ.
           format: date-time
           type: string
         error:
@@ -3276,7 +3277,7 @@ paths:
         - worlds
   /v1/worlds/{id}/advance-time:
     post:
-      description: Fences all members, advances each local clock, and returns a durable operation. A partial failure keeps members fenced while the operation retries. The World clock changes after all members commit.
+      description: Advances each running member independently and skips paused or stopped members without waking them. Successful advances remain committed when another member fails. The World current_time records the last settled request target; member clocks can differ.
       operationId: advance-world-time
       parameters:
         - description: Simulation or World ID.
@@ -3380,7 +3381,7 @@ paths:
         - worlds
   /v1/worlds/{id}/advances/{advance_id}:
     get:
-      description: Returns durable progress for each member. Members remain fenced until the whole advance can finish.
+      description: Returns completed, failed, or skipped outcomes for each member. A failed call can have an unconfirmed runtime outcome. Reusing the request key returns the same result.
       operationId: get-world-advance
       parameters:
         - description: Simulation or World ID.
