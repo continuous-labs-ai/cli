@@ -44,6 +44,8 @@ type CreatedSimulation struct {
 	ExpiresAt time.Time `json:"expires_at"`
 	// Simulation ID.
 	ID string `json:"id"`
+	// Whether the Simulation started with the Simulator's sample data. A fork inherits its source's state and reports false.
+	IncludeSampleData bool `json:"include_sample_data"`
 	// Customer JSON metadata, or null.
 	Metadata any `json:"metadata"`
 	// Simulation name. The ID is its identity, and names need not be unique.
@@ -113,6 +115,13 @@ func (c *CreatedSimulation) GetID() string {
 		return ""
 	}
 	return c.ID
+}
+
+func (c *CreatedSimulation) GetIncludeSampleData() bool {
+	if c == nil {
+		return false
+	}
+	return c.IncludeSampleData
 }
 
 func (c *CreatedSimulation) GetMetadata() any {

@@ -42,6 +42,8 @@ type Simulation struct {
 	Endpoint string `json:"endpoint"`
 	// Simulation ID.
 	ID string `json:"id"`
+	// Whether the Simulation started with the Simulator's sample data. A fork inherits its source's state and reports false.
+	IncludeSampleData bool `json:"include_sample_data"`
 	// Customer JSON metadata, or null.
 	Metadata any `json:"metadata"`
 	// Simulation name. The ID is its identity, and names need not be unique.
@@ -102,6 +104,13 @@ func (s *Simulation) GetID() string {
 		return ""
 	}
 	return s.ID
+}
+
+func (s *Simulation) GetIncludeSampleData() bool {
+	if s == nil {
+		return false
+	}
+	return s.IncludeSampleData
 }
 
 func (s *Simulation) GetMetadata() any {

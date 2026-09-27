@@ -8,6 +8,8 @@ import (
 )
 
 type CreateSimulationRequest struct {
+	// Start with the Simulator's sample data: a realistic account loaded on top of its seed before the first request. Defaults to false, a brand-new workspace. Requires a Simulator that carries sample data; see its composition.
+	IncludeSampleData *bool `json:"include_sample_data,omitzero"`
 	// Customer JSON metadata, up to 16 KiB and 64 nesting levels. Returned by create, get, and list. Omission uses null.
 	Metadata any `json:"metadata,omitzero"`
 	// Name for the Simulation. Omission generates a name. The ID stays its identity, and names need not be unique.
@@ -27,6 +29,13 @@ func (c *CreateSimulationRequest) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	return nil
+}
+
+func (c *CreateSimulationRequest) GetIncludeSampleData() *bool {
+	if c == nil {
+		return nil
+	}
+	return c.IncludeSampleData
 }
 
 func (c *CreateSimulationRequest) GetMetadata() any {
