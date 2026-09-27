@@ -50,6 +50,11 @@ components:
         code: bad_request
         detail: request body is invalid
         validation: null
+    bad_request_sample_data:
+      value:
+        code: bad_request
+        detail: The Simulator with ID "smr_01J8Z5X4K7M2N9P0Q1R2S3T4V5" has no sample data. Omit include_sample_data, or use a Simulator built with sample data.
+        validation: null
     build_rate_exceeded:
       value:
         code: build_rate_exceeded
@@ -524,6 +529,9 @@ components:
           name: billing-sandbox
           simulator_id: smr_01J8Z5X4K7M2N9P0Q1R2S3T4V5
       properties:
+        include_sample_data:
+          description: "Start with the Simulator's sample data: a realistic account loaded on top of its seed before the first request. Defaults to false, a brand-new workspace. Requires a Simulator that carries sample data; see its composition."
+          type: boolean
         metadata:
           description: Customer JSON metadata, up to 16 KiB and 64 nesting levels. Returned by create, get, and list. Omission uses null.
         name:
@@ -551,6 +559,7 @@ components:
           endpoint: https://api.continuouslabs.ai/sim/sim_01J8Z5X4K7M2N9P0Q1R2S3T4V6
           expires_at: "2026-01-15T13:00:00Z"
           id: sim_01J8Z5X4K7M2N9P0Q1R2S3T4V6
+          include_sample_data: false
           metadata:
             customer_id: cust_123
           name: billing-sandbox
@@ -586,6 +595,9 @@ components:
           description: Simulation ID.
           pattern: ^sim_[0-9A-HJKMNP-TV-Z]{26}$
           type: string
+        include_sample_data:
+          description: Whether the Simulation started with the Simulator's sample data. A fork inherits its source's state and reports false.
+          type: boolean
         metadata:
           description: Customer JSON metadata, or null.
         name:
@@ -635,6 +647,7 @@ components:
         - token
         - expires_at
         - created_at
+        - include_sample_data
       type: object
     Error:
       additionalProperties: false
@@ -794,6 +807,7 @@ components:
           current_time: "2024-01-01T00:00:00Z"
           endpoint: https://api.continuouslabs.ai/sim/sim_01J8Z5X4K7M2N9P0Q1R2S3T4V6
           id: sim_01J8Z5X4K7M2N9P0Q1R2S3T4V6
+          include_sample_data: false
           metadata:
             customer_id: cust_123
           name: billing-sandbox
@@ -824,6 +838,9 @@ components:
           description: Simulation ID.
           pattern: ^sim_[0-9A-HJKMNP-TV-Z]{26}$
           type: string
+        include_sample_data:
+          description: Whether the Simulation started with the Simulator's sample data. A fork inherits its source's state and reports false.
+          type: boolean
         metadata:
           description: Customer JSON metadata, or null.
         name:
@@ -868,6 +885,7 @@ components:
         - status
         - endpoint
         - created_at
+        - include_sample_data
       type: object
     SimulationToken:
       additionalProperties: false
@@ -1647,6 +1665,8 @@ paths:
               examples:
                 bad_request_body:
                   $ref: "#/components/examples/bad_request_body"
+                bad_request_sample_data:
+                  $ref: "#/components/examples/bad_request_sample_data"
                 simulator_unknown:
                   $ref: "#/components/examples/simulator_unknown"
               schema:

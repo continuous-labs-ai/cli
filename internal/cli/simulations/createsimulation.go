@@ -16,6 +16,7 @@ import (
 )
 
 var createSimulationCmdMeta = []flagutil.FlagMeta{
+	{FlagName: "include-sample-data", Shorthand: "i", FieldPath: "IncludeSampleData", Kind: flagutil.FlagKindBool, Optional: true, Description: "Start with the Simulator's sample data: a realistic account loaded on top of its seed before the first request. Defaults to false, a brand-new workspace. Requires a Simulator that carries sample data; see its composition."},
 	{FlagName: "metadata", Shorthand: "m", FieldPath: "Metadata", Kind: flagutil.FlagKindJSON, Optional: true, Annotations: `json:"metadata,omitempty"`, Description: "Customer JSON metadata, up to 16 KiB and 64 nesting levels. Returned by create, get, and list. Omission uses null."},
 	{FlagName: "name", Shorthand: "n", FieldPath: "Name", Kind: flagutil.FlagKindString, Optional: true, Description: "Name for the Simulation. Omission generates a name. The ID stays its identity, and names need not be unique."},
 	{FlagName: "simulator-id", FieldPath: "SimulatorID", Kind: flagutil.FlagKindString, Required: true, Description: "ID of the ready Simulator. [required]"},
