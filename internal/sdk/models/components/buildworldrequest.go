@@ -9,7 +9,7 @@ import (
 	"time"
 )
 
-// BuildWorldRequestModel - Model that builds and reviews starting data. Defaults to gpt-6-astra. Its provider is derived from the model.
+// BuildWorldRequestModel - Model that builds and reviews starting data. Defaults to claude-opus-5-5. Its provider is derived from the model.
 type BuildWorldRequestModel string
 
 const (
@@ -47,8 +47,8 @@ type BuildWorldRequest struct {
 	Instructions *string `json:"instructions,omitzero"`
 	// Customer JSON metadata, up to 16 KiB and 64 nesting levels. Returned by build, get, and list. Omission uses null.
 	Metadata any `json:"metadata,omitzero"`
-	// Model that builds and reviews starting data. Defaults to gpt-6-astra. Its provider is derived from the model.
-	Model *BuildWorldRequestModel `default:"gpt-6-astra" json:"model"`
+	// Model that builds and reviews starting data. Defaults to claude-opus-5-5. Its provider is derived from the model.
+	Model *BuildWorldRequestModel `default:"claude-opus-5-5" json:"model"`
 	// Name for the World. Omission generates a name. The ID stays its identity, and names need not be unique.
 	Name *string `json:"name,omitzero"`
 	// Simulator IDs for the World.

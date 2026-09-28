@@ -316,8 +316,8 @@ components:
           maxLength: 16384
           type: string
         model:
-          default: gpt-6-astra
-          description: Model that builds and reviews the Simulator. Defaults to gpt-6-astra. Its provider is derived from the model.
+          default: claude-opus-5-5
+          description: Model that builds and reviews the Simulator. Defaults to claude-opus-5-5. Its provider is derived from the model.
           enum:
             - gpt-6-astra
             - gpt-6-sol
@@ -363,8 +363,8 @@ components:
         metadata:
           description: Customer JSON metadata, up to 16 KiB and 64 nesting levels. Returned by build, get, and list. Omission uses null.
         model:
-          default: gpt-6-astra
-          description: Model that builds and reviews starting data. Defaults to gpt-6-astra. Its provider is derived from the model.
+          default: claude-opus-5-5
+          description: Model that builds and reviews starting data. Defaults to claude-opus-5-5. Its provider is derived from the model.
           enum:
             - gpt-6-astra
             - gpt-6-sol
