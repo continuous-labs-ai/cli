@@ -14,42 +14,41 @@ import (
 	"github.com/spf13/cobra"
 )
 
-var advanceSimulationTimeCmdMeta = []flagutil.FlagMeta{
-	{FlagName: "id", FieldPath: "ID", Kind: flagutil.FlagKindString, Required: true, Description: "Simulation or World ID. [required]"},
+var advanceSimulationCmdMeta = []flagutil.FlagMeta{
+	{FlagName: "id", FieldPath: "ID", Kind: flagutil.FlagKindString, Required: true, Description: "Simulation ID. [required]"},
 	{FlagName: "idempotency-key", FieldPath: "IdempotencyKey", Kind: flagutil.FlagKindString, Required: true, Description: "Stable key for this request. Reuse with the same target returns the same operation. [required]"},
 	{FlagName: "to", Shorthand: "t", FieldPath: "Body.To", Kind: flagutil.FlagKindDateTime, Required: true, Description: "Absolute target time in RFC 3339, with at most millisecond precision. [required]"},
 }
 
-// initAdvanceSimulationTimeCmd initializes the advance-simulation-time command.
-func initAdvanceSimulationTimeCmd(parent *cobra.Command) error {
+// initAdvanceSimulationCmd initializes the advance-simulation command.
+func initAdvanceSimulationCmd(parent *cobra.Command) error {
 	var cmd = &cobra.Command{
-		Use:     "advance-simulation-time",
+		Use:     "advance",
 		Short:   "Advance Simulation Time",
 		Long:    "Schedules an absolute clock advance. Each successful advance commits all due local events in one step. World members advance through their World. Poll the returned operation until it completes.",
-		Example: "  continuous simulations advance-simulation-time --id <id> --idempotency-key <value> --to 2026-11-25T01:01:24.107Z",
-		RunE:    runAdvanceSimulationTimeCmd,
-		Aliases: []string{"ast"},
+		Example: "  continuous simulations advance --id <id> --idempotency-key <value> --to 2026-01-27T00:02:09.022Z",
+		RunE:    runAdvanceSimulationCmd,
 	}
-	flagutil.RegisterFlags(cmd, advanceSimulationTimeCmdMeta)
-	if err := flagutil.ValidateMeta[operations.AdvanceSimulationTimeRequest](advanceSimulationTimeCmdMeta); err != nil {
-		return fmt.Errorf("invalid metadata for advance-simulation-time: %w", err)
+	flagutil.RegisterFlags(cmd, advanceSimulationCmdMeta)
+	if err := flagutil.ValidateMeta[operations.AdvanceSimulationRequest](advanceSimulationCmdMeta); err != nil {
+		return fmt.Errorf("invalid metadata for advance-simulation: %w", err)
 	}
 	cmd.Flags().String("body", "", "Request body as JSON (alternative to individual flags). Can also be provided via stdin.")
 	parent.AddCommand(cmd)
 	return nil
 }
 
-// runAdvanceSimulationTimeCmd executes the advance-simulation-time command.
-func runAdvanceSimulationTimeCmd(cmd *cobra.Command, args []string) error {
+// runAdvanceSimulationCmd executes the advance-simulation command.
+func runAdvanceSimulationCmd(cmd *cobra.Command, args []string) error {
 	if usage.UsageRequested(cmd) {
 		return usage.EmitSchema(cmd, cmd.OutOrStdout())
 	}
-	if interactive.ShouldPrompt(cmd, advanceSimulationTimeCmdMeta) {
-		if err := interactive.PromptAndSetFlags(cmd, advanceSimulationTimeCmdMeta); err != nil {
+	if interactive.ShouldPrompt(cmd, advanceSimulationCmdMeta) {
+		if err := interactive.PromptAndSetFlags(cmd, advanceSimulationCmdMeta); err != nil {
 			return err
 		}
 	}
-	req, err := flagutil.BuildRequest[operations.AdvanceSimulationTimeRequest](cmd, advanceSimulationTimeCmdMeta, "Body", "body")
+	req, err := flagutil.BuildRequest[operations.AdvanceSimulationRequest](cmd, advanceSimulationCmdMeta, "Body", "body")
 	if err != nil {
 		return err
 	}
@@ -72,7 +71,7 @@ func runAdvanceSimulationTimeCmd(cmd *cobra.Command, args []string) error {
 	if output.WantsRawJSON(cmd) {
 		sdkOpts = append(sdkOpts, operations.WithSkipDeserialization())
 	}
-	res, err := s.Simulations.AdvanceSimulationTime(cmd.Context(), *req, sdkOpts...)
+	res, err := s.Simulations.AdvanceSimulation(cmd.Context(), *req, sdkOpts...)
 	if err != nil {
 		return output.Error(cmd, err)
 	}

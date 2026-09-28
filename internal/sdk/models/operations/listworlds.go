@@ -3,11 +3,57 @@
 package operations
 
 import (
+	"encoding/json"
+	"fmt"
 	"github.com/continuous-labs-ai/cli/internal/sdk/models/components"
 	"github.com/continuous-labs-ai/cli/internal/sdk/sdkinternal/utils"
 )
 
+// ListWorldsStatus - Optional status filter.
+type ListWorldsStatus string
+
+const (
+	ListWorldsStatusPending  ListWorldsStatus = "pending"
+	ListWorldsStatusBuilding ListWorldsStatus = "building"
+	ListWorldsStatusReady    ListWorldsStatus = "ready"
+	ListWorldsStatusRunning  ListWorldsStatus = "running"
+	ListWorldsStatusStopped  ListWorldsStatus = "stopped"
+	ListWorldsStatusFailed   ListWorldsStatus = "failed"
+	ListWorldsStatusCanceled ListWorldsStatus = "canceled"
+)
+
+func (e ListWorldsStatus) ToPointer() *ListWorldsStatus {
+	return &e
+}
+func (e *ListWorldsStatus) UnmarshalJSON(data []byte) error {
+	var v string
+	if err := json.Unmarshal(data, &v); err != nil {
+		return err
+	}
+	switch v {
+	case "pending":
+		fallthrough
+	case "building":
+		fallthrough
+	case "ready":
+		fallthrough
+	case "running":
+		fallthrough
+	case "stopped":
+		fallthrough
+	case "failed":
+		fallthrough
+	case "canceled":
+		*e = ListWorldsStatus(v)
+		return nil
+	default:
+		return fmt.Errorf("invalid value for ListWorldsStatus: %v", v)
+	}
+}
+
 type ListWorldsRequest struct {
+	// Optional status filter.
+	Status *ListWorldsStatus `queryParam:"style=form,explode=false,name=status"`
 	// Page size. Values below 1 use 50. Values above 200 use 200.
 	Limit *int64 `default:"50" queryParam:"style=form,explode=false,name=limit"`
 	// Opaque next_cursor value from a previous page.
@@ -23,6 +69,13 @@ func (l *ListWorldsRequest) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	return nil
+}
+
+func (l *ListWorldsRequest) GetStatus() *ListWorldsStatus {
+	if l == nil {
+		return nil
+	}
+	return l.Status
 }
 
 func (l *ListWorldsRequest) GetLimit() *int64 {

@@ -927,9 +927,9 @@ func (s *Simulators) GetSimulator(ctx context.Context, request operations.GetSim
 
 }
 
-// CancelSimulatorBuild - Cancel Simulator Build
-// Requests cancellation of an active Simulator build. The build can finish before cancellation takes effect.
-func (s *Simulators) CancelSimulatorBuild(ctx context.Context, request operations.CancelSimulatorBuildRequest, opts ...operations.Option) (*operations.CancelSimulatorBuildResponse, error) {
+// CancelSimulator - Cancel Simulator Build
+// Requests cancellation of an active Simulator build. The build can finish before cancellation takes effect. A Simulator that is not building is returned unchanged.
+func (s *Simulators) CancelSimulator(ctx context.Context, request operations.CancelSimulatorRequest, opts ...operations.Option) (*operations.CancelSimulatorResponse, error) {
 	o := operations.Options{}
 	supportedOptions := []string{
 		operations.SupportedOptionTimeout,
@@ -958,7 +958,7 @@ func (s *Simulators) CancelSimulatorBuild(ctx context.Context, request operation
 		SDKConfiguration: s.sdkConfiguration,
 		BaseURL:          baseURL,
 		Context:          ctx,
-		OperationID:      "cancel-simulator-build",
+		OperationID:      "cancel-simulator",
 		OAuth2Scopes:     nil,
 		SecuritySource:   s.sdkConfiguration.Security,
 	}
@@ -1025,7 +1025,7 @@ func (s *Simulators) CancelSimulatorBuild(ctx context.Context, request operation
 		}
 	}
 
-	res := &operations.CancelSimulatorBuildResponse{
+	res := &operations.CancelSimulatorResponse{
 		HTTPMeta: components.HTTPMetadata{
 			Request:  req,
 			Response: httpRes,

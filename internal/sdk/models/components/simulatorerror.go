@@ -7,7 +7,7 @@ type SimulatorErrorCode string
 
 const (
 	SimulatorErrorCodeBuildFailed                   SimulatorErrorCode = "build_failed"
-	SimulatorErrorCodeBuildCancelled                SimulatorErrorCode = "build_cancelled"
+	SimulatorErrorCodeBuildCanceled                 SimulatorErrorCode = "build_canceled"
 	SimulatorErrorCodeSpecificationValidationFailed SimulatorErrorCode = "specification_validation_failed"
 )
 
@@ -19,25 +19,22 @@ func (e SimulatorErrorCode) ToPointer() *SimulatorErrorCode {
 func (e *SimulatorErrorCode) IsExact() bool {
 	if e != nil {
 		switch *e {
-		case "build_failed", "build_cancelled", "specification_validation_failed":
+		case "build_failed", "build_canceled", "specification_validation_failed":
 			return true
 		}
 	}
 	return false
 }
 
-// SimulatorErrorReason - Bounded failure reason for selecting recovery guidance, or null when unavailable. Older servers can omit this field.
+// SimulatorErrorReason - Bounded failure reason for selecting recovery guidance, or null when unavailable.
 type SimulatorErrorReason string
 
 const (
-	SimulatorErrorReasonCanceled              SimulatorErrorReason = "canceled"
-	SimulatorErrorReasonSpecificationInvalid  SimulatorErrorReason = "specification_invalid"
-	SimulatorErrorReasonTimeLimit             SimulatorErrorReason = "time_limit"
-	SimulatorErrorReasonServiceUnavailable    SimulatorErrorReason = "service_unavailable"
-	SimulatorErrorReasonBuildFailed           SimulatorErrorReason = "build_failed"
-	SimulatorErrorReasonPopulationUnsupported SimulatorErrorReason = "population_unsupported"
-	SimulatorErrorReasonWorldStartFailed      SimulatorErrorReason = "world_start_failed"
-	SimulatorErrorReasonWorldOperationFailed  SimulatorErrorReason = "world_operation_failed"
+	SimulatorErrorReasonCanceled             SimulatorErrorReason = "canceled"
+	SimulatorErrorReasonSpecificationInvalid SimulatorErrorReason = "specification_invalid"
+	SimulatorErrorReasonTimeLimit            SimulatorErrorReason = "time_limit"
+	SimulatorErrorReasonServiceUnavailable   SimulatorErrorReason = "service_unavailable"
+	SimulatorErrorReasonBuildFailed          SimulatorErrorReason = "build_failed"
 )
 
 func (e SimulatorErrorReason) ToPointer() *SimulatorErrorReason {
@@ -48,7 +45,7 @@ func (e SimulatorErrorReason) ToPointer() *SimulatorErrorReason {
 func (e *SimulatorErrorReason) IsExact() bool {
 	if e != nil {
 		switch *e {
-		case "canceled", "specification_invalid", "time_limit", "service_unavailable", "build_failed", "population_unsupported", "world_start_failed", "world_operation_failed":
+		case "canceled", "specification_invalid", "time_limit", "service_unavailable", "build_failed":
 			return true
 		}
 	}
@@ -62,7 +59,7 @@ type SimulatorError struct {
 	Code SimulatorErrorCode `json:"code"`
 	// Safe human-readable error detail.
 	Detail string `json:"detail"`
-	// Bounded failure reason for selecting recovery guidance, or null when unavailable. Older servers can omit this field.
+	// Bounded failure reason for selecting recovery guidance, or null when unavailable.
 	Reason     *SimulatorErrorReason    `json:"reason"`
 	Validation *SpecificationValidation `json:"validation"`
 }

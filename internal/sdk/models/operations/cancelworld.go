@@ -7,43 +7,43 @@ import (
 	"github.com/continuous-labs-ai/cli/internal/sdk/sdkinternal/utils"
 )
 
-type CancelWorldBuildRequest struct {
+type CancelWorldRequest struct {
 	// World ID.
 	ID string `pathParam:"style=simple,explode=false,name=id"`
 }
 
-func (c *CancelWorldBuildRequest) GetID() string {
+func (c *CancelWorldRequest) GetID() string {
 	if c == nil {
 		return ""
 	}
 	return c.ID
 }
 
-type CancelWorldBuildResponse struct {
+type CancelWorldResponse struct {
 	HTTPMeta components.HTTPMetadata `json:"-"`
 	// OK
 	World *components.World
 }
 
-func (c CancelWorldBuildResponse) MarshalJSON() ([]byte, error) {
+func (c CancelWorldResponse) MarshalJSON() ([]byte, error) {
 	return utils.MarshalJSON(c, "", false)
 }
 
-func (c *CancelWorldBuildResponse) UnmarshalJSON(data []byte) error {
+func (c *CancelWorldResponse) UnmarshalJSON(data []byte) error {
 	if err := utils.UnmarshalJSON(data, &c, "", false, nil); err != nil {
 		return err
 	}
 	return nil
 }
 
-func (c *CancelWorldBuildResponse) GetHTTPMeta() components.HTTPMetadata {
+func (c *CancelWorldResponse) GetHTTPMeta() components.HTTPMetadata {
 	if c == nil {
 		return components.HTTPMetadata{}
 	}
 	return c.HTTPMeta
 }
 
-func (c *CancelWorldBuildResponse) GetWorld() *components.World {
+func (c *CancelWorldResponse) GetWorld() *components.World {
 	if c == nil {
 		return nil
 	}

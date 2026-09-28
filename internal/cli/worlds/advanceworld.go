@@ -14,42 +14,41 @@ import (
 	"github.com/spf13/cobra"
 )
 
-var advanceWorldTimeCmdMeta = []flagutil.FlagMeta{
-	{FlagName: "id", FieldPath: "ID", Kind: flagutil.FlagKindString, Required: true, Description: "Simulation or World ID. [required]"},
+var advanceWorldCmdMeta = []flagutil.FlagMeta{
+	{FlagName: "id", FieldPath: "ID", Kind: flagutil.FlagKindString, Required: true, Description: "World ID. [required]"},
 	{FlagName: "idempotency-key", FieldPath: "IdempotencyKey", Kind: flagutil.FlagKindString, Required: true, Description: "Stable key for this request. Reuse with the same target returns the same operation. [required]"},
 	{FlagName: "to", Shorthand: "t", FieldPath: "Body.To", Kind: flagutil.FlagKindDateTime, Required: true, Description: "Absolute target time in RFC 3339, with at most millisecond precision. [required]"},
 }
 
-// initAdvanceWorldTimeCmd initializes the advance-world-time command.
-func initAdvanceWorldTimeCmd(parent *cobra.Command) error {
+// initAdvanceWorldCmd initializes the advance-world command.
+func initAdvanceWorldCmd(parent *cobra.Command) error {
 	var cmd = &cobra.Command{
-		Use:     "advance-world-time",
+		Use:     "advance",
 		Short:   "Advance World Time",
 		Long:    "Advances each running member independently and skips paused or stopped members without waking them. Successful advances remain committed when another member fails. The World current_time records the last settled request target; member clocks can differ.",
-		Example: "  continuous worlds advance-world-time --id <id> --idempotency-key <value> --to 2026-11-05T04:15:58.628Z",
-		RunE:    runAdvanceWorldTimeCmd,
-		Aliases: []string{"awt"},
+		Example: "  continuous worlds advance --id <id> --idempotency-key <value> --to 2026-10-16T14:43:59.349Z",
+		RunE:    runAdvanceWorldCmd,
 	}
-	flagutil.RegisterFlags(cmd, advanceWorldTimeCmdMeta)
-	if err := flagutil.ValidateMeta[operations.AdvanceWorldTimeRequest](advanceWorldTimeCmdMeta); err != nil {
-		return fmt.Errorf("invalid metadata for advance-world-time: %w", err)
+	flagutil.RegisterFlags(cmd, advanceWorldCmdMeta)
+	if err := flagutil.ValidateMeta[operations.AdvanceWorldRequest](advanceWorldCmdMeta); err != nil {
+		return fmt.Errorf("invalid metadata for advance-world: %w", err)
 	}
 	cmd.Flags().String("body", "", "Request body as JSON (alternative to individual flags). Can also be provided via stdin.")
 	parent.AddCommand(cmd)
 	return nil
 }
 
-// runAdvanceWorldTimeCmd executes the advance-world-time command.
-func runAdvanceWorldTimeCmd(cmd *cobra.Command, args []string) error {
+// runAdvanceWorldCmd executes the advance-world command.
+func runAdvanceWorldCmd(cmd *cobra.Command, args []string) error {
 	if usage.UsageRequested(cmd) {
 		return usage.EmitSchema(cmd, cmd.OutOrStdout())
 	}
-	if interactive.ShouldPrompt(cmd, advanceWorldTimeCmdMeta) {
-		if err := interactive.PromptAndSetFlags(cmd, advanceWorldTimeCmdMeta); err != nil {
+	if interactive.ShouldPrompt(cmd, advanceWorldCmdMeta) {
+		if err := interactive.PromptAndSetFlags(cmd, advanceWorldCmdMeta); err != nil {
 			return err
 		}
 	}
-	req, err := flagutil.BuildRequest[operations.AdvanceWorldTimeRequest](cmd, advanceWorldTimeCmdMeta, "Body", "body")
+	req, err := flagutil.BuildRequest[operations.AdvanceWorldRequest](cmd, advanceWorldCmdMeta, "Body", "body")
 	if err != nil {
 		return err
 	}
@@ -72,7 +71,7 @@ func runAdvanceWorldTimeCmd(cmd *cobra.Command, args []string) error {
 	if output.WantsRawJSON(cmd) {
 		sdkOpts = append(sdkOpts, operations.WithSkipDeserialization())
 	}
-	res, err := s.Worlds.AdvanceWorldTime(cmd.Context(), *req, sdkOpts...)
+	res, err := s.Worlds.AdvanceWorld(cmd.Context(), *req, sdkOpts...)
 	if err != nil {
 		return output.Error(cmd, err)
 	}

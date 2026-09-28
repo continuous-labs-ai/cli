@@ -15,6 +15,7 @@ import (
 )
 
 var listWorldsCmdMeta = []flagutil.FlagMeta{
+	{FlagName: "status", Shorthand: "s", FieldPath: "Status", Kind: flagutil.FlagKindEnum, Optional: true, EnumValues: []string{"pending", "building", "ready", "running", "stopped", "failed", "canceled"}, Description: "Optional status filter. (options: pending, building, ready, running, stopped, failed, canceled)"},
 	{FlagName: "limit", Shorthand: "l", FieldPath: "Limit", Kind: flagutil.FlagKindInt64, Optional: true, HasDefault: true, DefaultInt: 50, Description: "Page size. Values below 1 use 50. Values above 200 use 200."},
 	{FlagName: "cursor", Shorthand: "c", FieldPath: "Cursor", Kind: flagutil.FlagKindString, Optional: true, Description: "Opaque next_cursor value from a previous page."},
 }

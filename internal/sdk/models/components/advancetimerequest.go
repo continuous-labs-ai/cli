@@ -7,23 +7,23 @@ import (
 	"time"
 )
 
-type AdvanceTimeInputBody struct {
+type AdvanceTimeRequest struct {
 	// Absolute target time in RFC 3339, with at most millisecond precision.
 	To time.Time `json:"to"`
 }
 
-func (a AdvanceTimeInputBody) MarshalJSON() ([]byte, error) {
+func (a AdvanceTimeRequest) MarshalJSON() ([]byte, error) {
 	return utils.MarshalJSON(a, "", false)
 }
 
-func (a *AdvanceTimeInputBody) UnmarshalJSON(data []byte) error {
+func (a *AdvanceTimeRequest) UnmarshalJSON(data []byte) error {
 	if err := utils.UnmarshalJSON(data, &a, "", false, nil); err != nil {
 		return err
 	}
 	return nil
 }
 
-func (a *AdvanceTimeInputBody) GetTo() time.Time {
+func (a *AdvanceTimeRequest) GetTo() time.Time {
 	if a == nil {
 		return time.Time{}
 	}

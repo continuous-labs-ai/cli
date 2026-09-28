@@ -5,8 +5,6 @@ package components
 type WorldDataSummary struct {
 	// Defaults and inferred choices used to prepare the starting data.
 	Assumptions []string `json:"assumptions"`
-	// Record conditions and counts computed from a complete census of served records.
-	Conditions []string `json:"conditions"`
 	// Observed starting record counts for each member and record type.
 	Records []WorldRecordCount `json:"records"`
 	// Shared relationships checked against the data and served API values.
@@ -18,13 +16,6 @@ func (w *WorldDataSummary) GetAssumptions() []string {
 		return []string{}
 	}
 	return w.Assumptions
-}
-
-func (w *WorldDataSummary) GetConditions() []string {
-	if w == nil {
-		return []string{}
-	}
-	return w.Conditions
 }
 
 func (w *WorldDataSummary) GetRecords() []WorldRecordCount {

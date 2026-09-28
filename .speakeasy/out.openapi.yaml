@@ -107,7 +107,7 @@ components:
         validation: null
     simulation_platform_owned:
       value:
-        code: simulation_world_owned
+        code: simulation_platform_owned
         detail: The Simulation with ID "sim_01J8Z5X4K7M2N9P0Q1R2S3T4V6" is in use by the platform and cannot be changed.
         validation: null
     simulation_provider_unavailable:
@@ -284,7 +284,7 @@ components:
             $ref: "#/components/schemas/Error"
       description: Unsupported Media Type
   schemas:
-    AdvanceTimeInputBody:
+    AdvanceTimeRequest:
       additionalProperties: false
       properties:
         to:
@@ -346,20 +346,6 @@ components:
           maximum: 72000
           minimum: 1
           type: integer
-      type: object
-    BuildToolCall:
-      additionalProperties: false
-      properties:
-        at:
-          description: Time the call ran.
-          format: date-time
-          type: string
-        tool:
-          description: Name of the tool. Arguments and output are private.
-          type: string
-      required:
-        - tool
-        - at
       type: object
     BuildWorldRequest:
       additionalProperties: false
@@ -572,6 +558,7 @@ components:
       properties:
         active_advance_id:
           description: Current clock advance operation ID, or null.
+          pattern: ^adv_[0-9A-HJKMNP-TV-Z]{26}$
           type:
             - string
             - "null"
@@ -685,7 +672,7 @@ components:
           maxLength: 128
           type: string
       type: object
-    ListAdvanceEventsOutputBody:
+    ListClockAdvanceEventsResponse:
       additionalProperties: false
       properties:
         events:
@@ -816,9 +803,11 @@ components:
           simulator_id: smr_01J8Z5X4K7M2N9P0Q1R2S3T4V5
           start_time: "2024-01-01T00:00:00Z"
           status: running
+          world_id: null
       properties:
         active_advance_id:
           description: Current clock advance operation ID, or null.
+          pattern: ^adv_[0-9A-HJKMNP-TV-Z]{26}$
           type:
             - string
             - "null"
@@ -872,6 +861,12 @@ components:
             - paused
             - stopped
           type: string
+        world_id:
+          description: ID of the World that owns this Simulation, or null.
+          pattern: ^wld_[0-9A-HJKMNP-TV-Z]{26}$
+          type:
+            - string
+            - "null"
       required:
         - metadata
         - start_time
@@ -882,6 +877,7 @@ components:
         - simulator_id
         - simulator_digest
         - parent_id
+        - world_id
         - status
         - endpoint
         - created_at
@@ -912,15 +908,9 @@ components:
             last_tool: test
             model: claude-fable-5-1
             phase: build
-            recent_tools:
-              - at: "2026-01-15T12:04:00Z"
-                tool: test
-              - at: "2026-01-15T12:05:00Z"
-                tool: submit
             stage: build
             submissions: 1
             tool_calls: 7
-            updated_at: "2026-01-15T12:05:00Z"
           created_at: "2026-01-15T12:00:00Z"
           error: null
           id: smr_01J8Z5X4K7M2N9P0Q1R2S3T4V5
@@ -1009,7 +999,7 @@ components:
             - string
             - "null"
         last_tool:
-          description: Name of the most recent tool call, or null.
+          description: Name of the most recent tool call, or null. Tool arguments and output are private.
           type:
             - string
             - "null"
@@ -1031,11 +1021,6 @@ components:
           type:
             - string
             - "null"
-        recent_tools:
-          description: The most recent tool calls, oldest first, at most 20.
-          items:
-            $ref: "#/components/schemas/BuildToolCall"
-          type: array
         stage:
           description: derive while the effective spec, build skeleton, and sandbox are prepared; build while the coding loop runs; assemble while an accepted artifact publishes.
           enum:
@@ -1046,15 +1031,13 @@ components:
         submissions:
           description: Submit attempts.
           format: int64
+          minimum: 0
           type: integer
         tool_calls:
           description: Tool calls the coding loop executed.
           format: int64
+          minimum: 0
           type: integer
-        updated_at:
-          description: Time of the last progress report.
-          format: date-time
-          type: string
       required:
         - model
         - phase
@@ -1063,8 +1046,6 @@ components:
         - submissions
         - last_tool
         - last_submission
-        - updated_at
-        - recent_tools
       type: object
     SimulatorError:
       additionalProperties: false
@@ -1079,23 +1060,20 @@ components:
           description: Stable Simulator build error code.
           enum:
             - build_failed
-            - build_cancelled
+            - build_canceled
             - specification_validation_failed
           type: string
         detail:
           description: Safe human-readable error detail.
           type: string
         reason:
-          description: Bounded failure reason for selecting recovery guidance, or null when unavailable. Older servers can omit this field.
+          description: Bounded failure reason for selecting recovery guidance, or null when unavailable.
           enum:
             - canceled
             - specification_invalid
             - time_limit
             - service_unavailable
             - build_failed
-            - population_unsupported
-            - world_start_failed
-            - world_operation_failed
             - null
           type:
             - string
@@ -1175,6 +1153,7 @@ components:
       properties:
         advance_id:
           description: Advance that produced this step, if any.
+          pattern: ^adv_[0-9A-HJKMNP-TV-Z]{26}$
           type:
             - string
             - "null"
@@ -1218,19 +1197,11 @@ components:
           build:
             last_submission: rejected
             last_tool: test
-            last_validation_code: request_not_satisfied
             model: claude-fable-5-1
             phase: finalize
-            recent_tools:
-              - at: "2026-01-15T12:04:00Z"
-                tool: test
-              - at: "2026-01-15T12:05:00Z"
-                tool: submit
-            review_status: rejected
             stage: generating
             submissions: 1
             summary: null
-            tests: 2
             tool_calls: 7
           created_at: "2026-01-15T12:00:00Z"
           current_time: "2024-01-01T00:00:00Z"
@@ -1248,6 +1219,7 @@ components:
       properties:
         active_advance_id:
           description: Current clock advance operation ID, or null.
+          pattern: ^adv_[0-9A-HJKMNP-TV-Z]{26}$
           type:
             - string
             - "null"
@@ -1257,7 +1229,7 @@ components:
             - $ref: "#/components/schemas/WorldBuildProgress"
             - type: "null"
         created_at:
-          description: Time when the World was created.
+          description: World creation time.
           format: date-time
           type: string
         current_time:
@@ -1272,12 +1244,13 @@ components:
           pattern: ^wld_[0-9A-HJKMNP-TV-Z]{26}$
           type: string
         instructions:
-          description: Instructions for the initial synthetic data and relationships.
+          description: Instructions for the initial synthetic data and relationships, or empty when none were given.
           type: string
         metadata:
           description: Customer JSON metadata, or null.
         name:
-          description: Name for the World.
+          description: World name. The ID is its identity, and names need not be unique.
+          maxLength: 128
           type: string
         simulations:
           description: Created member Simulations. This list is empty before first start.
@@ -1333,20 +1306,7 @@ components:
             - string
             - "null"
         last_tool:
-          description: Name of the most recent tool, or null. Tool arguments and output are private.
-          type:
-            - string
-            - "null"
-        last_validation_code:
-          description: Fixed code for the latest validation finding. Null when no finding is available. Authored details stay private.
-          enum:
-            - invalid_plan
-            - unsupported_claim
-            - invalid_requirement
-            - nested_proof
-            - request_not_satisfied
-            - verification_unavailable
-            - null
+          description: Name of the most recent tool call, or null. Tool arguments and output are private.
           type:
             - string
             - "null"
@@ -1371,23 +1331,8 @@ components:
           type:
             - string
             - "null"
-        recent_tools:
-          description: The most recent tool calls, oldest first, at most 20.
-          items:
-            $ref: "#/components/schemas/BuildToolCall"
-          type: array
-        review_status:
-          description: Status of the original independent review, not approval of later edits. Null before review.
-          enum:
-            - pending
-            - accepted
-            - rejected
-            - null
-          type:
-            - string
-            - "null"
         stage:
-          description: Internal step of starting-data preparation.
+          description: planning while the build prepares; generating while the builder writes starting data; validating while the data is checked through the Simulators' APIs; reviewing while the separate reviewer checks it; complete when verified starting data is saved.
           enum:
             - planning
             - generating
@@ -1405,11 +1350,6 @@ components:
           oneOf:
             - $ref: "#/components/schemas/WorldDataSummary"
             - type: "null"
-        tests:
-          description: Number of distinct candidate plans tested. Zero when not recorded.
-          format: int64
-          minimum: 0
-          type: integer
         tool_calls:
           description: Number of agent tool calls.
           format: int64
@@ -1420,25 +1360,16 @@ components:
         - phase
         - stage
         - tool_calls
-        - tests
         - submissions
-        - review_status
-        - last_validation_code
         - last_tool
         - last_submission
         - summary
-        - recent_tools
       type: object
     WorldDataSummary:
       additionalProperties: false
       properties:
         assumptions:
           description: Defaults and inferred choices used to prepare the starting data.
-          items:
-            type: string
-          type: array
-        conditions:
-          description: Record conditions and counts computed from a complete census of served records.
           items:
             type: string
           type: array
@@ -1455,7 +1386,6 @@ components:
       required:
         - records
         - relationships
-        - conditions
         - assumptions
       type: object
     WorldError:
@@ -1478,10 +1408,9 @@ components:
           description: Safe human-readable error detail.
           type: string
         reason:
-          description: Bounded failure reason for selecting recovery guidance, or null when unavailable. Older servers can omit this field.
+          description: Bounded failure reason for selecting recovery guidance, or null when unavailable.
           enum:
             - canceled
-            - specification_invalid
             - time_limit
             - service_unavailable
             - build_failed
@@ -1515,6 +1444,7 @@ components:
           type: integer
         simulator_id:
           description: Stable ID of the Simulator for this member.
+          pattern: ^smr_[0-9A-HJKMNP-TV-Z]{26}$
           type: string
       required:
         - member_index
@@ -1872,9 +1802,9 @@ paths:
   /v1/simulations/{id}/advance-time:
     post:
       description: Schedules an absolute clock advance. Each successful advance commits all due local events in one step. World members advance through their World. Poll the returned operation until it completes.
-      operationId: advance-simulation-time
+      operationId: advance-simulation
       parameters:
-        - description: Simulation or World ID.
+        - description: Simulation ID.
           in: path
           name: id
           required: true
@@ -1893,7 +1823,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: "#/components/schemas/AdvanceTimeInputBody"
+              $ref: "#/components/schemas/AdvanceTimeRequest"
         required: true
       responses:
         "202":
@@ -1984,7 +1914,7 @@ paths:
       description: Returns durable clock progress, the event count, and the committed step or failure.
       operationId: get-simulation-advance
       parameters:
-        - description: Simulation or World ID.
+        - description: Simulation ID.
           in: path
           name: id
           required: true
@@ -1996,6 +1926,7 @@ paths:
           name: advance_id
           required: true
           schema:
+            pattern: ^adv_[0-9A-HJKMNP-TV-Z]{26}$
             type: string
       responses:
         "200":
@@ -2070,14 +2001,9 @@ paths:
           name: advance_id
           required: true
           schema:
+            pattern: ^adv_[0-9A-HJKMNP-TV-Z]{26}$
             type: string
-        - description: Cursor from the previous page.
-          explode: false
-          in: query
-          name: cursor
-          schema:
-            type: string
-        - description: Page size, up to 200.
+        - description: Page size. Values below 1 use 50. Values above 200 use 200.
           explode: false
           in: query
           name: limit
@@ -2085,12 +2011,18 @@ paths:
             default: 50
             format: int64
             type: integer
+        - description: Opaque next_cursor value from a previous page.
+          explode: false
+          in: query
+          name: cursor
+          schema:
+            type: string
       responses:
         "200":
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/ListAdvanceEventsOutputBody"
+                $ref: "#/components/schemas/ListClockAdvanceEventsResponse"
           description: OK
         "400":
           content:
@@ -2983,8 +2915,8 @@ paths:
         - simulators
   /v1/simulators/{id}/cancel:
     post:
-      description: Requests cancellation of an active Simulator build. The build can finish before cancellation takes effect.
-      operationId: cancel-simulator-build
+      description: Requests cancellation of an active Simulator build. The build can finish before cancellation takes effect. A Simulator that is not building is returned unchanged.
+      operationId: cancel-simulator
       parameters:
         - description: Simulator ID.
           in: path
@@ -3054,6 +2986,20 @@ paths:
       description: Returns all Worlds that the API key can access.
       operationId: list-worlds
       parameters:
+        - description: Optional status filter.
+          explode: false
+          in: query
+          name: status
+          schema:
+            enum:
+              - pending
+              - building
+              - ready
+              - running
+              - stopped
+              - failed
+              - canceled
+            type: string
         - description: Page size. Values below 1 use 50. Values above 200 use 200.
           explode: false
           in: query
@@ -3298,9 +3244,9 @@ paths:
   /v1/worlds/{id}/advance-time:
     post:
       description: Advances each running member independently and skips paused or stopped members without waking them. Successful advances remain committed when another member fails. The World current_time records the last settled request target; member clocks can differ.
-      operationId: advance-world-time
+      operationId: advance-world
       parameters:
-        - description: Simulation or World ID.
+        - description: World ID.
           in: path
           name: id
           required: true
@@ -3319,7 +3265,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: "#/components/schemas/AdvanceTimeInputBody"
+              $ref: "#/components/schemas/AdvanceTimeRequest"
         required: true
       responses:
         "202":
@@ -3404,7 +3350,7 @@ paths:
       description: Returns completed, failed, or skipped outcomes for each member. A failed call can have an unconfirmed runtime outcome. Reusing the request key returns the same result.
       operationId: get-world-advance
       parameters:
-        - description: Simulation or World ID.
+        - description: World ID.
           in: path
           name: id
           required: true
@@ -3416,6 +3362,7 @@ paths:
           name: advance_id
           required: true
           schema:
+            pattern: ^adv_[0-9A-HJKMNP-TV-Z]{26}$
             type: string
       responses:
         "200":
@@ -3467,7 +3414,7 @@ paths:
   /v1/worlds/{id}/cancel:
     post:
       description: Cancels an active World build. Repeated cancellation returns the current World.
-      operationId: cancel-world-build
+      operationId: cancel-world
       parameters:
         - description: World ID.
           in: path

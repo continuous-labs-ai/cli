@@ -2,11 +2,6 @@
 
 package components
 
-import (
-	"github.com/continuous-labs-ai/cli/internal/sdk/sdkinternal/utils"
-	"time"
-)
-
 // SimulatorBuildProgressLastSubmission - Outcome of the most recent submit attempt, or null.
 type SimulatorBuildProgressLastSubmission string
 
@@ -106,33 +101,18 @@ func (e *SimulatorBuildProgressStage) IsExact() bool {
 type SimulatorBuildProgress struct {
 	// Outcome of the most recent submit attempt, or null.
 	LastSubmission *SimulatorBuildProgressLastSubmission `json:"last_submission"`
-	// Name of the most recent tool call, or null.
+	// Name of the most recent tool call, or null. Tool arguments and output are private.
 	LastTool *string `json:"last_tool"`
 	// The model the builder and reviewer run on. A build recorded before model selection reports its provider's default.
 	Model SimulatorBuildProgressModel `json:"model"`
 	// Agent phase: build for generation, review for the separate reviewer, finalize for author repair after review. Null when not recorded.
 	Phase *SimulatorBuildProgressPhase `json:"phase"`
-	// The most recent tool calls, oldest first, at most 20.
-	RecentTools []BuildToolCall `json:"recent_tools"`
 	// derive while the effective spec, build skeleton, and sandbox are prepared; build while the coding loop runs; assemble while an accepted artifact publishes.
 	Stage SimulatorBuildProgressStage `json:"stage"`
 	// Submit attempts.
 	Submissions int64 `json:"submissions"`
 	// Tool calls the coding loop executed.
 	ToolCalls int64 `json:"tool_calls"`
-	// Time of the last progress report.
-	UpdatedAt time.Time `json:"updated_at"`
-}
-
-func (s SimulatorBuildProgress) MarshalJSON() ([]byte, error) {
-	return utils.MarshalJSON(s, "", false)
-}
-
-func (s *SimulatorBuildProgress) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &s, "", false, nil); err != nil {
-		return err
-	}
-	return nil
 }
 
 func (s *SimulatorBuildProgress) GetLastSubmission() *SimulatorBuildProgressLastSubmission {
@@ -163,13 +143,6 @@ func (s *SimulatorBuildProgress) GetPhase() *SimulatorBuildProgressPhase {
 	return s.Phase
 }
 
-func (s *SimulatorBuildProgress) GetRecentTools() []BuildToolCall {
-	if s == nil {
-		return []BuildToolCall{}
-	}
-	return s.RecentTools
-}
-
 func (s *SimulatorBuildProgress) GetStage() SimulatorBuildProgressStage {
 	if s == nil {
 		return SimulatorBuildProgressStage("")
@@ -189,11 +162,4 @@ func (s *SimulatorBuildProgress) GetToolCalls() int64 {
 		return 0
 	}
 	return s.ToolCalls
-}
-
-func (s *SimulatorBuildProgress) GetUpdatedAt() time.Time {
-	if s == nil {
-		return time.Time{}
-	}
-	return s.UpdatedAt
 }

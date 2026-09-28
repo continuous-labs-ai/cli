@@ -7,43 +7,43 @@ import (
 	"github.com/continuous-labs-ai/cli/internal/sdk/sdkinternal/utils"
 )
 
-type CancelSimulatorBuildRequest struct {
+type CancelSimulatorRequest struct {
 	// Simulator ID.
 	ID string `pathParam:"style=simple,explode=false,name=id"`
 }
 
-func (c *CancelSimulatorBuildRequest) GetID() string {
+func (c *CancelSimulatorRequest) GetID() string {
 	if c == nil {
 		return ""
 	}
 	return c.ID
 }
 
-type CancelSimulatorBuildResponse struct {
+type CancelSimulatorResponse struct {
 	HTTPMeta components.HTTPMetadata `json:"-"`
 	// OK
 	Simulator *components.Simulator
 }
 
-func (c CancelSimulatorBuildResponse) MarshalJSON() ([]byte, error) {
+func (c CancelSimulatorResponse) MarshalJSON() ([]byte, error) {
 	return utils.MarshalJSON(c, "", false)
 }
 
-func (c *CancelSimulatorBuildResponse) UnmarshalJSON(data []byte) error {
+func (c *CancelSimulatorResponse) UnmarshalJSON(data []byte) error {
 	if err := utils.UnmarshalJSON(data, &c, "", false, nil); err != nil {
 		return err
 	}
 	return nil
 }
 
-func (c *CancelSimulatorBuildResponse) GetHTTPMeta() components.HTTPMetadata {
+func (c *CancelSimulatorResponse) GetHTTPMeta() components.HTTPMetadata {
 	if c == nil {
 		return components.HTTPMetadata{}
 	}
 	return c.HTTPMeta
 }
 
-func (c *CancelSimulatorBuildResponse) GetSimulator() *components.Simulator {
+func (c *CancelSimulatorResponse) GetSimulator() *components.Simulator {
 	if c == nil {
 		return nil
 	}

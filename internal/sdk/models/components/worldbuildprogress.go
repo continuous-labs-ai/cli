@@ -25,33 +25,6 @@ func (e *WorldBuildProgressLastSubmission) IsExact() bool {
 	return false
 }
 
-// LastValidationCode - Fixed code for the latest validation finding. Null when no finding is available. Authored details stay private.
-type LastValidationCode string
-
-const (
-	LastValidationCodeInvalidPlan             LastValidationCode = "invalid_plan"
-	LastValidationCodeUnsupportedClaim        LastValidationCode = "unsupported_claim"
-	LastValidationCodeInvalidRequirement      LastValidationCode = "invalid_requirement"
-	LastValidationCodeNestedProof             LastValidationCode = "nested_proof"
-	LastValidationCodeRequestNotSatisfied     LastValidationCode = "request_not_satisfied"
-	LastValidationCodeVerificationUnavailable LastValidationCode = "verification_unavailable"
-)
-
-func (e LastValidationCode) ToPointer() *LastValidationCode {
-	return &e
-}
-
-// IsExact returns true if the value matches a known enum value, false otherwise.
-func (e *LastValidationCode) IsExact() bool {
-	if e != nil {
-		switch *e {
-		case "invalid_plan", "unsupported_claim", "invalid_requirement", "nested_proof", "request_not_satisfied", "verification_unavailable":
-			return true
-		}
-	}
-	return false
-}
-
 // WorldBuildProgressModel - The model the builder and reviewer run on, or null for a build created before provider selection. A build recorded before model selection reports its provider's default.
 type WorldBuildProgressModel string
 
@@ -101,31 +74,7 @@ func (e *WorldBuildProgressPhase) IsExact() bool {
 	return false
 }
 
-// ReviewStatus - Status of the original independent review, not approval of later edits. Null before review.
-type ReviewStatus string
-
-const (
-	ReviewStatusPending  ReviewStatus = "pending"
-	ReviewStatusAccepted ReviewStatus = "accepted"
-	ReviewStatusRejected ReviewStatus = "rejected"
-)
-
-func (e ReviewStatus) ToPointer() *ReviewStatus {
-	return &e
-}
-
-// IsExact returns true if the value matches a known enum value, false otherwise.
-func (e *ReviewStatus) IsExact() bool {
-	if e != nil {
-		switch *e {
-		case "pending", "accepted", "rejected":
-			return true
-		}
-	}
-	return false
-}
-
-// WorldBuildProgressStage - Internal step of starting-data preparation.
+// WorldBuildProgressStage - planning while the build prepares; generating while the builder writes starting data; validating while the data is checked through the Simulators' APIs; reviewing while the separate reviewer checks it; complete when verified starting data is saved.
 type WorldBuildProgressStage string
 
 const (
@@ -154,26 +103,18 @@ func (e *WorldBuildProgressStage) IsExact() bool {
 type WorldBuildProgress struct {
 	// Outcome of the most recent plan submission, or null.
 	LastSubmission *WorldBuildProgressLastSubmission `json:"last_submission"`
-	// Name of the most recent tool, or null. Tool arguments and output are private.
+	// Name of the most recent tool call, or null. Tool arguments and output are private.
 	LastTool *string `json:"last_tool"`
-	// Fixed code for the latest validation finding. Null when no finding is available. Authored details stay private.
-	LastValidationCode *LastValidationCode `json:"last_validation_code"`
 	// The model the builder and reviewer run on, or null for a build created before provider selection. A build recorded before model selection reports its provider's default.
 	Model *WorldBuildProgressModel `json:"model"`
 	// Agent phase: build for generation, review for the separate reviewer, finalize for author repair after review. Null when not recorded.
 	Phase *WorldBuildProgressPhase `json:"phase"`
-	// The most recent tool calls, oldest first, at most 20.
-	RecentTools []BuildToolCall `json:"recent_tools"`
-	// Status of the original independent review, not approval of later edits. Null before review.
-	ReviewStatus *ReviewStatus `json:"review_status"`
-	// Internal step of starting-data preparation.
+	// planning while the build prepares; generating while the builder writes starting data; validating while the data is checked through the Simulators' APIs; reviewing while the separate reviewer checks it; complete when verified starting data is saved.
 	Stage WorldBuildProgressStage `json:"stage"`
 	// Number of distinct candidate plans submitted.
 	Submissions int64 `json:"submissions"`
 	// Verified starting data, or null before a completed build.
 	Summary *WorldDataSummary `json:"summary"`
-	// Number of distinct candidate plans tested. Zero when not recorded.
-	Tests int64 `json:"tests"`
 	// Number of agent tool calls.
 	ToolCalls int64 `json:"tool_calls"`
 }
@@ -192,13 +133,6 @@ func (w *WorldBuildProgress) GetLastTool() *string {
 	return w.LastTool
 }
 
-func (w *WorldBuildProgress) GetLastValidationCode() *LastValidationCode {
-	if w == nil {
-		return nil
-	}
-	return w.LastValidationCode
-}
-
 func (w *WorldBuildProgress) GetModel() *WorldBuildProgressModel {
 	if w == nil {
 		return nil
@@ -211,20 +145,6 @@ func (w *WorldBuildProgress) GetPhase() *WorldBuildProgressPhase {
 		return nil
 	}
 	return w.Phase
-}
-
-func (w *WorldBuildProgress) GetRecentTools() []BuildToolCall {
-	if w == nil {
-		return []BuildToolCall{}
-	}
-	return w.RecentTools
-}
-
-func (w *WorldBuildProgress) GetReviewStatus() *ReviewStatus {
-	if w == nil {
-		return nil
-	}
-	return w.ReviewStatus
 }
 
 func (w *WorldBuildProgress) GetStage() WorldBuildProgressStage {
@@ -246,13 +166,6 @@ func (w *WorldBuildProgress) GetSummary() *WorldDataSummary {
 		return nil
 	}
 	return w.Summary
-}
-
-func (w *WorldBuildProgress) GetTests() int64 {
-	if w == nil {
-		return 0
-	}
-	return w.Tests
 }
 
 func (w *WorldBuildProgress) GetToolCalls() int64 {

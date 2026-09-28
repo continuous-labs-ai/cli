@@ -875,9 +875,9 @@ func (s *Simulations) GetSimulation(ctx context.Context, request operations.GetS
 
 }
 
-// AdvanceSimulationTime - Advance Simulation Time
+// AdvanceSimulation - Advance Simulation Time
 // Schedules an absolute clock advance. Each successful advance commits all due local events in one step. World members advance through their World. Poll the returned operation until it completes.
-func (s *Simulations) AdvanceSimulationTime(ctx context.Context, request operations.AdvanceSimulationTimeRequest, opts ...operations.Option) (*operations.AdvanceSimulationTimeResponse, error) {
+func (s *Simulations) AdvanceSimulation(ctx context.Context, request operations.AdvanceSimulationRequest, opts ...operations.Option) (*operations.AdvanceSimulationResponse, error) {
 	o := operations.Options{}
 	supportedOptions := []string{
 		operations.SupportedOptionTimeout,
@@ -906,7 +906,7 @@ func (s *Simulations) AdvanceSimulationTime(ctx context.Context, request operati
 		SDKConfiguration: s.sdkConfiguration,
 		BaseURL:          baseURL,
 		Context:          ctx,
-		OperationID:      "advance-simulation-time",
+		OperationID:      "advance-simulation",
 		OAuth2Scopes:     nil,
 		SecuritySource:   s.sdkConfiguration.Security,
 	}
@@ -982,7 +982,7 @@ func (s *Simulations) AdvanceSimulationTime(ctx context.Context, request operati
 		}
 	}
 
-	res := &operations.AdvanceSimulationTimeResponse{
+	res := &operations.AdvanceSimulationResponse{
 		HTTPMeta: components.HTTPMetadata{
 			Request:  req,
 			Response: httpRes,
@@ -1444,12 +1444,12 @@ func (s *Simulations) ListSimulationAdvanceEvents(ctx context.Context, request o
 					return nil, err
 				}
 
-				var out components.ListAdvanceEventsOutputBody
+				var out components.ListClockAdvanceEventsResponse
 				if err := utils.UnmarshalJsonFromResponseBody(bytes.NewBuffer(rawBody), &out, ""); err != nil {
 					return nil, err
 				}
 
-				res.ListAdvanceEventsOutputBody = &out
+				res.ListClockAdvanceEventsResponse = &out
 			}
 		default:
 			rawBody, err := utils.ConsumeRawBody(httpRes)

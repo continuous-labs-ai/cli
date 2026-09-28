@@ -36,7 +36,7 @@ func InitWorldsRoot(parent *cobra.Command) error {
 		return err
 	}
 
-	if err := initAdvanceWorldTimeCmd(WorldsCmd); err != nil {
+	if err := initAdvanceWorldCmd(WorldsCmd); err != nil {
 		return err
 	}
 
@@ -44,7 +44,7 @@ func InitWorldsRoot(parent *cobra.Command) error {
 		return err
 	}
 
-	if err := initCancelWorldBuildCmd(WorldsCmd); err != nil {
+	if err := initCancelWorldCmd(WorldsCmd); err != nil {
 		return err
 	}
 
