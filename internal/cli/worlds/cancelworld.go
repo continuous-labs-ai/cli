@@ -14,39 +14,38 @@ import (
 	"github.com/spf13/cobra"
 )
 
-var cancelWorldBuildCmdMeta = []flagutil.FlagMeta{
+var cancelWorldCmdMeta = []flagutil.FlagMeta{
 	{FlagName: "id", Shorthand: "i", FieldPath: "ID", Kind: flagutil.FlagKindString, Required: true, Description: "World ID. [required]"},
 }
 
-// initCancelWorldBuildCmd initializes the cancel-world-build command.
-func initCancelWorldBuildCmd(parent *cobra.Command) error {
+// initCancelWorldCmd initializes the cancel-world command.
+func initCancelWorldCmd(parent *cobra.Command) error {
 	var cmd = &cobra.Command{
-		Use:     "cancel-world-build",
+		Use:     "cancel",
 		Short:   "Cancel World Build",
 		Long:    "Cancels an active World build. Repeated cancellation returns the current World.",
-		Example: "  continuous worlds cancel-world-build --id <id>",
-		RunE:    runCancelWorldBuildCmd,
-		Aliases: []string{"cwb"},
+		Example: "  continuous worlds cancel --id <id>",
+		RunE:    runCancelWorldCmd,
 	}
-	flagutil.RegisterFlags(cmd, cancelWorldBuildCmdMeta)
-	if err := flagutil.ValidateMeta[operations.CancelWorldBuildRequest](cancelWorldBuildCmdMeta); err != nil {
-		return fmt.Errorf("invalid metadata for cancel-world-build: %w", err)
+	flagutil.RegisterFlags(cmd, cancelWorldCmdMeta)
+	if err := flagutil.ValidateMeta[operations.CancelWorldRequest](cancelWorldCmdMeta); err != nil {
+		return fmt.Errorf("invalid metadata for cancel-world: %w", err)
 	}
 	parent.AddCommand(cmd)
 	return nil
 }
 
-// runCancelWorldBuildCmd executes the cancel-world-build command.
-func runCancelWorldBuildCmd(cmd *cobra.Command, args []string) error {
+// runCancelWorldCmd executes the cancel-world command.
+func runCancelWorldCmd(cmd *cobra.Command, args []string) error {
 	if usage.UsageRequested(cmd) {
 		return usage.EmitSchema(cmd, cmd.OutOrStdout())
 	}
-	if interactive.ShouldPrompt(cmd, cancelWorldBuildCmdMeta) {
-		if err := interactive.PromptAndSetFlags(cmd, cancelWorldBuildCmdMeta); err != nil {
+	if interactive.ShouldPrompt(cmd, cancelWorldCmdMeta) {
+		if err := interactive.PromptAndSetFlags(cmd, cancelWorldCmdMeta); err != nil {
 			return err
 		}
 	}
-	req, err := flagutil.BuildRequest[operations.CancelWorldBuildRequest](cmd, cancelWorldBuildCmdMeta, "", "")
+	req, err := flagutil.BuildRequest[operations.CancelWorldRequest](cmd, cancelWorldCmdMeta, "", "")
 	if err != nil {
 		return err
 	}
@@ -69,7 +68,7 @@ func runCancelWorldBuildCmd(cmd *cobra.Command, args []string) error {
 	if output.WantsRawJSON(cmd) {
 		sdkOpts = append(sdkOpts, operations.WithSkipDeserialization())
 	}
-	res, err := s.Worlds.CancelWorldBuild(cmd.Context(), *req, sdkOpts...)
+	res, err := s.Worlds.CancelWorld(cmd.Context(), *req, sdkOpts...)
 	if err != nil {
 		return output.Error(cmd, err)
 	}

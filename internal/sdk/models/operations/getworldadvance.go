@@ -8,7 +8,7 @@ import (
 )
 
 type GetWorldAdvanceRequest struct {
-	// Simulation or World ID.
+	// World ID.
 	ID string `pathParam:"style=simple,explode=false,name=id"`
 	// Clock advance operation ID.
 	AdvanceID string `pathParam:"style=simple,explode=false,name=advance_id"`

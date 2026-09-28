@@ -32,12 +32,11 @@ func (e *WorldErrorCode) IsExact() bool {
 	return false
 }
 
-// WorldErrorReason - Bounded failure reason for selecting recovery guidance, or null when unavailable. Older servers can omit this field.
+// WorldErrorReason - Bounded failure reason for selecting recovery guidance, or null when unavailable.
 type WorldErrorReason string
 
 const (
 	WorldErrorReasonCanceled              WorldErrorReason = "canceled"
-	WorldErrorReasonSpecificationInvalid  WorldErrorReason = "specification_invalid"
 	WorldErrorReasonTimeLimit             WorldErrorReason = "time_limit"
 	WorldErrorReasonServiceUnavailable    WorldErrorReason = "service_unavailable"
 	WorldErrorReasonBuildFailed           WorldErrorReason = "build_failed"
@@ -54,7 +53,7 @@ func (e WorldErrorReason) ToPointer() *WorldErrorReason {
 func (e *WorldErrorReason) IsExact() bool {
 	if e != nil {
 		switch *e {
-		case "canceled", "specification_invalid", "time_limit", "service_unavailable", "build_failed", "population_unsupported", "world_start_failed", "world_operation_failed":
+		case "canceled", "time_limit", "service_unavailable", "build_failed", "population_unsupported", "world_start_failed", "world_operation_failed":
 			return true
 		}
 	}
@@ -66,7 +65,7 @@ type WorldError struct {
 	Code WorldErrorCode `json:"code"`
 	// Safe human-readable error detail.
 	Detail string `json:"detail"`
-	// Bounded failure reason for selecting recovery guidance, or null when unavailable. Older servers can omit this field.
+	// Bounded failure reason for selecting recovery guidance, or null when unavailable.
 	Reason *WorldErrorReason `json:"reason"`
 }
 

@@ -17,8 +17,8 @@ import (
 var listSimulationAdvanceEventsCmdMeta = []flagutil.FlagMeta{
 	{FlagName: "id", Shorthand: "i", FieldPath: "ID", Kind: flagutil.FlagKindString, Required: true, Description: "Simulation ID. [required]"},
 	{FlagName: "advance-id", Shorthand: "a", FieldPath: "AdvanceID", Kind: flagutil.FlagKindString, Required: true, Description: "Advance ID. A historical fork can read inherited runtime receipts. [required]"},
-	{FlagName: "cursor", Shorthand: "c", FieldPath: "Cursor", Kind: flagutil.FlagKindString, Optional: true, Description: "Cursor from the previous page."},
-	{FlagName: "limit", Shorthand: "l", FieldPath: "Limit", Kind: flagutil.FlagKindInt64, Optional: true, HasDefault: true, DefaultInt: 50, Description: "Page size, up to 200."},
+	{FlagName: "limit", Shorthand: "l", FieldPath: "Limit", Kind: flagutil.FlagKindInt64, Optional: true, HasDefault: true, DefaultInt: 50, Description: "Page size. Values below 1 use 50. Values above 200 use 200."},
+	{FlagName: "cursor", Shorthand: "c", FieldPath: "Cursor", Kind: flagutil.FlagKindString, Optional: true, Description: "Opaque next_cursor value from a previous page."},
 }
 
 // initListSimulationAdvanceEventsCmd initializes the list-simulation-advance-events command.

@@ -7,60 +7,60 @@ import (
 	"github.com/continuous-labs-ai/cli/internal/sdk/sdkinternal/utils"
 )
 
-type AdvanceSimulationTimeRequest struct {
-	// Simulation or World ID.
+type AdvanceWorldRequest struct {
+	// World ID.
 	ID string `pathParam:"style=simple,explode=false,name=id"`
 	// Stable key for this request. Reuse with the same target returns the same operation.
-	IdempotencyKey string                          `header:"style=simple,explode=false,name=Idempotency-Key"`
-	Body           components.AdvanceTimeInputBody `request:"mediaType=application/json"`
+	IdempotencyKey string                        `header:"style=simple,explode=false,name=Idempotency-Key"`
+	Body           components.AdvanceTimeRequest `request:"mediaType=application/json"`
 }
 
-func (a *AdvanceSimulationTimeRequest) GetID() string {
+func (a *AdvanceWorldRequest) GetID() string {
 	if a == nil {
 		return ""
 	}
 	return a.ID
 }
 
-func (a *AdvanceSimulationTimeRequest) GetIdempotencyKey() string {
+func (a *AdvanceWorldRequest) GetIdempotencyKey() string {
 	if a == nil {
 		return ""
 	}
 	return a.IdempotencyKey
 }
 
-func (a *AdvanceSimulationTimeRequest) GetBody() components.AdvanceTimeInputBody {
+func (a *AdvanceWorldRequest) GetBody() components.AdvanceTimeRequest {
 	if a == nil {
-		return components.AdvanceTimeInputBody{}
+		return components.AdvanceTimeRequest{}
 	}
 	return a.Body
 }
 
-type AdvanceSimulationTimeResponse struct {
+type AdvanceWorldResponse struct {
 	HTTPMeta components.HTTPMetadata `json:"-"`
 	// Accepted
 	ClockAdvance *components.ClockAdvance
 }
 
-func (a AdvanceSimulationTimeResponse) MarshalJSON() ([]byte, error) {
+func (a AdvanceWorldResponse) MarshalJSON() ([]byte, error) {
 	return utils.MarshalJSON(a, "", false)
 }
 
-func (a *AdvanceSimulationTimeResponse) UnmarshalJSON(data []byte) error {
+func (a *AdvanceWorldResponse) UnmarshalJSON(data []byte) error {
 	if err := utils.UnmarshalJSON(data, &a, "", false, nil); err != nil {
 		return err
 	}
 	return nil
 }
 
-func (a *AdvanceSimulationTimeResponse) GetHTTPMeta() components.HTTPMetadata {
+func (a *AdvanceWorldResponse) GetHTTPMeta() components.HTTPMetadata {
 	if a == nil {
 		return components.HTTPMetadata{}
 	}
 	return a.HTTPMeta
 }
 
-func (a *AdvanceSimulationTimeResponse) GetClockAdvance() *components.ClockAdvance {
+func (a *AdvanceWorldResponse) GetClockAdvance() *components.ClockAdvance {
 	if a == nil {
 		return nil
 	}

@@ -40,18 +40,18 @@ type World struct {
 	ActiveAdvanceID *string `json:"active_advance_id"`
 	// The build's latest progress report and verified starting data, or null before the first report.
 	Build *WorldBuildProgress `json:"build"`
-	// Time when the World was created.
+	// World creation time.
 	CreatedAt time.Time `json:"created_at"`
 	// Target of the last settled World clock request. Individual member clocks can differ.
 	CurrentTime time.Time   `json:"current_time"`
 	Error       *WorldError `json:"error"`
 	// World ID.
 	ID string `json:"id"`
-	// Instructions for the initial synthetic data and relationships.
+	// Instructions for the initial synthetic data and relationships, or empty when none were given.
 	Instructions string `json:"instructions"`
 	// Customer JSON metadata, or null.
 	Metadata any `json:"metadata"`
-	// Name for the World.
+	// World name. The ID is its identity, and names need not be unique.
 	Name string `json:"name"`
 	// Created member Simulations. This list is empty before first start.
 	Simulations []WorldSimulation `json:"simulations"`

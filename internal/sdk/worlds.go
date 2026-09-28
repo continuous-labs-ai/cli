@@ -869,9 +869,9 @@ func (s *Worlds) GetWorld(ctx context.Context, request operations.GetWorldReques
 
 }
 
-// AdvanceWorldTime - Advance World Time
+// AdvanceWorld - Advance World Time
 // Advances each running member independently and skips paused or stopped members without waking them. Successful advances remain committed when another member fails. The World current_time records the last settled request target; member clocks can differ.
-func (s *Worlds) AdvanceWorldTime(ctx context.Context, request operations.AdvanceWorldTimeRequest, opts ...operations.Option) (*operations.AdvanceWorldTimeResponse, error) {
+func (s *Worlds) AdvanceWorld(ctx context.Context, request operations.AdvanceWorldRequest, opts ...operations.Option) (*operations.AdvanceWorldResponse, error) {
 	o := operations.Options{}
 	supportedOptions := []string{
 		operations.SupportedOptionTimeout,
@@ -900,7 +900,7 @@ func (s *Worlds) AdvanceWorldTime(ctx context.Context, request operations.Advanc
 		SDKConfiguration: s.sdkConfiguration,
 		BaseURL:          baseURL,
 		Context:          ctx,
-		OperationID:      "advance-world-time",
+		OperationID:      "advance-world",
 		OAuth2Scopes:     nil,
 		SecuritySource:   s.sdkConfiguration.Security,
 	}
@@ -976,7 +976,7 @@ func (s *Worlds) AdvanceWorldTime(ctx context.Context, request operations.Advanc
 		}
 	}
 
-	res := &operations.AdvanceWorldTimeResponse{
+	res := &operations.AdvanceWorldResponse{
 		HTTPMeta: components.HTTPMetadata{
 			Request:  req,
 			Response: httpRes,
@@ -1314,9 +1314,9 @@ func (s *Worlds) GetWorldAdvance(ctx context.Context, request operations.GetWorl
 
 }
 
-// CancelWorldBuild - Cancel World Build
+// CancelWorld - Cancel World Build
 // Cancels an active World build. Repeated cancellation returns the current World.
-func (s *Worlds) CancelWorldBuild(ctx context.Context, request operations.CancelWorldBuildRequest, opts ...operations.Option) (*operations.CancelWorldBuildResponse, error) {
+func (s *Worlds) CancelWorld(ctx context.Context, request operations.CancelWorldRequest, opts ...operations.Option) (*operations.CancelWorldResponse, error) {
 	o := operations.Options{}
 	supportedOptions := []string{
 		operations.SupportedOptionTimeout,
@@ -1345,7 +1345,7 @@ func (s *Worlds) CancelWorldBuild(ctx context.Context, request operations.Cancel
 		SDKConfiguration: s.sdkConfiguration,
 		BaseURL:          baseURL,
 		Context:          ctx,
-		OperationID:      "cancel-world-build",
+		OperationID:      "cancel-world",
 		OAuth2Scopes:     nil,
 		SecuritySource:   s.sdkConfiguration.Security,
 	}
@@ -1412,7 +1412,7 @@ func (s *Worlds) CancelWorldBuild(ctx context.Context, request operations.Cancel
 		}
 	}
 
-	res := &operations.CancelWorldBuildResponse{
+	res := &operations.CancelWorldResponse{
 		HTTPMeta: components.HTTPMetadata{
 			Request:  req,
 			Response: httpRes,

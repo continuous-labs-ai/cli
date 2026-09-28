@@ -36,7 +36,7 @@ func InitSimulatorsRoot(parent *cobra.Command) error {
 		return err
 	}
 
-	if err := initCancelSimulatorBuildCmd(SimulatorsCmd); err != nil {
+	if err := initCancelSimulatorCmd(SimulatorsCmd); err != nil {
 		return err
 	}
 

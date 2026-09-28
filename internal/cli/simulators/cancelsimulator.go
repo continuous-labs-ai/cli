@@ -14,39 +14,38 @@ import (
 	"github.com/spf13/cobra"
 )
 
-var cancelSimulatorBuildCmdMeta = []flagutil.FlagMeta{
+var cancelSimulatorCmdMeta = []flagutil.FlagMeta{
 	{FlagName: "id", Shorthand: "i", FieldPath: "ID", Kind: flagutil.FlagKindString, Required: true, Description: "Simulator ID. [required]"},
 }
 
-// initCancelSimulatorBuildCmd initializes the cancel-simulator-build command.
-func initCancelSimulatorBuildCmd(parent *cobra.Command) error {
+// initCancelSimulatorCmd initializes the cancel-simulator command.
+func initCancelSimulatorCmd(parent *cobra.Command) error {
 	var cmd = &cobra.Command{
-		Use:     "cancel-simulator-build",
+		Use:     "cancel",
 		Short:   "Cancel Simulator Build",
-		Long:    "Requests cancellation of an active Simulator build. The build can finish before cancellation takes effect.",
-		Example: "  continuous simulators cancel-simulator-build --id <id>",
-		RunE:    runCancelSimulatorBuildCmd,
-		Aliases: []string{"csb"},
+		Long:    "Requests cancellation of an active Simulator build. The build can finish before cancellation takes effect. A Simulator that is not building is returned unchanged.",
+		Example: "  continuous simulators cancel --id <id>",
+		RunE:    runCancelSimulatorCmd,
 	}
-	flagutil.RegisterFlags(cmd, cancelSimulatorBuildCmdMeta)
-	if err := flagutil.ValidateMeta[operations.CancelSimulatorBuildRequest](cancelSimulatorBuildCmdMeta); err != nil {
-		return fmt.Errorf("invalid metadata for cancel-simulator-build: %w", err)
+	flagutil.RegisterFlags(cmd, cancelSimulatorCmdMeta)
+	if err := flagutil.ValidateMeta[operations.CancelSimulatorRequest](cancelSimulatorCmdMeta); err != nil {
+		return fmt.Errorf("invalid metadata for cancel-simulator: %w", err)
 	}
 	parent.AddCommand(cmd)
 	return nil
 }
 
-// runCancelSimulatorBuildCmd executes the cancel-simulator-build command.
-func runCancelSimulatorBuildCmd(cmd *cobra.Command, args []string) error {
+// runCancelSimulatorCmd executes the cancel-simulator command.
+func runCancelSimulatorCmd(cmd *cobra.Command, args []string) error {
 	if usage.UsageRequested(cmd) {
 		return usage.EmitSchema(cmd, cmd.OutOrStdout())
 	}
-	if interactive.ShouldPrompt(cmd, cancelSimulatorBuildCmdMeta) {
-		if err := interactive.PromptAndSetFlags(cmd, cancelSimulatorBuildCmdMeta); err != nil {
+	if interactive.ShouldPrompt(cmd, cancelSimulatorCmdMeta) {
+		if err := interactive.PromptAndSetFlags(cmd, cancelSimulatorCmdMeta); err != nil {
 			return err
 		}
 	}
-	req, err := flagutil.BuildRequest[operations.CancelSimulatorBuildRequest](cmd, cancelSimulatorBuildCmdMeta, "", "")
+	req, err := flagutil.BuildRequest[operations.CancelSimulatorRequest](cmd, cancelSimulatorCmdMeta, "", "")
 	if err != nil {
 		return err
 	}
@@ -69,7 +68,7 @@ func runCancelSimulatorBuildCmd(cmd *cobra.Command, args []string) error {
 	if output.WantsRawJSON(cmd) {
 		sdkOpts = append(sdkOpts, operations.WithSkipDeserialization())
 	}
-	res, err := s.Simulators.CancelSimulatorBuild(cmd.Context(), *req, sdkOpts...)
+	res, err := s.Simulators.CancelSimulator(cmd.Context(), *req, sdkOpts...)
 	if err != nil {
 		return output.Error(cmd, err)
 	}

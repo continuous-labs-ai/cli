@@ -15,7 +15,7 @@ import (
 )
 
 var getSimulationAdvanceCmdMeta = []flagutil.FlagMeta{
-	{FlagName: "id", Shorthand: "i", FieldPath: "ID", Kind: flagutil.FlagKindString, Required: true, Description: "Simulation or World ID. [required]"},
+	{FlagName: "id", Shorthand: "i", FieldPath: "ID", Kind: flagutil.FlagKindString, Required: true, Description: "Simulation ID. [required]"},
 	{FlagName: "advance-id", Shorthand: "a", FieldPath: "AdvanceID", Kind: flagutil.FlagKindString, Required: true, Description: "Clock advance operation ID. [required]"},
 }
 

@@ -12,10 +12,10 @@ type ListSimulationAdvanceEventsRequest struct {
 	ID string `pathParam:"style=simple,explode=false,name=id"`
 	// Advance ID. A historical fork can read inherited runtime receipts.
 	AdvanceID string `pathParam:"style=simple,explode=false,name=advance_id"`
-	// Cursor from the previous page.
-	Cursor *string `queryParam:"style=form,explode=false,name=cursor"`
-	// Page size, up to 200.
+	// Page size. Values below 1 use 50. Values above 200 use 200.
 	Limit *int64 `default:"50" queryParam:"style=form,explode=false,name=limit"`
+	// Opaque next_cursor value from a previous page.
+	Cursor *string `queryParam:"style=form,explode=false,name=cursor"`
 }
 
 func (l ListSimulationAdvanceEventsRequest) MarshalJSON() ([]byte, error) {
@@ -43,13 +43,6 @@ func (l *ListSimulationAdvanceEventsRequest) GetAdvanceID() string {
 	return l.AdvanceID
 }
 
-func (l *ListSimulationAdvanceEventsRequest) GetCursor() *string {
-	if l == nil {
-		return nil
-	}
-	return l.Cursor
-}
-
 func (l *ListSimulationAdvanceEventsRequest) GetLimit() *int64 {
 	if l == nil {
 		return nil
@@ -57,10 +50,17 @@ func (l *ListSimulationAdvanceEventsRequest) GetLimit() *int64 {
 	return l.Limit
 }
 
+func (l *ListSimulationAdvanceEventsRequest) GetCursor() *string {
+	if l == nil {
+		return nil
+	}
+	return l.Cursor
+}
+
 type ListSimulationAdvanceEventsResponse struct {
 	HTTPMeta components.HTTPMetadata `json:"-"`
 	// OK
-	ListAdvanceEventsOutputBody *components.ListAdvanceEventsOutputBody
+	ListClockAdvanceEventsResponse *components.ListClockAdvanceEventsResponse
 }
 
 func (l ListSimulationAdvanceEventsResponse) MarshalJSON() ([]byte, error) {
@@ -81,9 +81,9 @@ func (l *ListSimulationAdvanceEventsResponse) GetHTTPMeta() components.HTTPMetad
 	return l.HTTPMeta
 }
 
-func (l *ListSimulationAdvanceEventsResponse) GetListAdvanceEventsOutputBody() *components.ListAdvanceEventsOutputBody {
+func (l *ListSimulationAdvanceEventsResponse) GetListClockAdvanceEventsResponse() *components.ListClockAdvanceEventsResponse {
 	if l == nil {
 		return nil
 	}
-	return l.ListAdvanceEventsOutputBody
+	return l.ListClockAdvanceEventsResponse
 }

@@ -2,21 +2,21 @@
 
 package components
 
-type ListAdvanceEventsOutputBody struct {
+type ListClockAdvanceEventsResponse struct {
 	// Committed events in execution order.
 	Events []ClockEvent `json:"events"`
 	// Cursor for the next page, or null.
 	NextCursor *string `json:"next_cursor"`
 }
 
-func (l *ListAdvanceEventsOutputBody) GetEvents() []ClockEvent {
+func (l *ListClockAdvanceEventsResponse) GetEvents() []ClockEvent {
 	if l == nil {
 		return []ClockEvent{}
 	}
 	return l.Events
 }
 
-func (l *ListAdvanceEventsOutputBody) GetNextCursor() *string {
+func (l *ListClockAdvanceEventsResponse) GetNextCursor() *string {
 	if l == nil {
 		return nil
 	}
