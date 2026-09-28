@@ -1,19 +1,19 @@
 lockVersion: 2.0.0
 id: ad7b08dc-357d-414c-9f26-16cfbc099767
 management:
-  docChecksum: 30071ebe39e1e4cb22e9fe1ab5c27745
+  docChecksum: 56f571739712a332f0c44cbcc9b0b9b1
   docVersion: v1
   speakeasyVersion: 1.796.4
   generationVersion: 2.935.1
-  releaseVersion: 0.1.22
-  configChecksum: 7f56ee02c825cdd4a2e4b8b377ae61b1
+  releaseVersion: 0.1.23
+  configChecksum: 3590e292d5e3d1fec676105150854304
   repoURL: https://github.com/continuous-labs-ai/cli.git
   installationURL: https://github.com/continuous-labs-ai/cli
   published: true
 persistentEdits:
-  generation_id: 2a7a63d5-f3cd-4d6f-891f-ed2d266e8d9c
-  pristine_commit_hash: 57a47673ab9f00d3f55a28dd74b236484b678010
-  pristine_tree_hash: 9f838d4ac5ad551419abd600262d7e433cc36875
+  generation_id: c5cbb9d2-14f4-4980-92f9-b5a33c9f02e3
+  pristine_commit_hash: 12d23b7f550e5866710b24d1342eb4a0e1806ac6
+  pristine_tree_hash: a93fc1e88378eb0ecf179c35a4b4f1c8f81cb62b
 features:
   cli:
     constsAndDefaults: 0.0.0
@@ -140,8 +140,8 @@ trackedFiles:
     pristine_git_object: ac41e97c224fc5cb2841be589667b31863c30494
   internal/cli/version.go:
     id: 7b0665492f72
-    last_write_checksum: sha1:4ca23affa53a67e862fc17ce0847a37d2d22107d
-    pristine_git_object: 19b3c353475166d0a3cc61b025336d77332240cf
+    last_write_checksum: sha1:0916a2b7a9daf010ff7acc984d0ec2a5f0394667
+    pristine_git_object: b8c659a8d8f70ee99ee546e5d0d2433a8a260013
   internal/cli/whoami.go:
     id: c1787f2298ec
     last_write_checksum: sha1:9b8e8f6830e556f749eede72d72b4f18d9881c28
@@ -152,8 +152,8 @@ trackedFiles:
     pristine_git_object: 708426a2b66549f914e801e88b14edc8775d45d1
   internal/cli/worlds/buildworld.go:
     id: eb895422f8bd
-    last_write_checksum: sha1:eceedc6ea9d81b0a0022241eaf23d6e4598d28e6
-    pristine_git_object: 7aec31c33560066d197d318c776fb1c20cf8a76b
+    last_write_checksum: sha1:10eb4e9762310afacdf11241211728fd1fdf7f34
+    pristine_git_object: bd2397607207c668a52fcba57cb0af6beff2bb34
   internal/cli/worlds/cancelworld.go:
     id: 22e78bac60b3
     last_write_checksum: sha1:2c39ae53d10818c564372fbfdb72e4d74858d46d
@@ -252,20 +252,20 @@ trackedFiles:
     pristine_git_object: 942a964e78a81ad9d9590cc67138a0c4c3569fc9
   internal/sdk/continuoussimulation.go:
     id: af3aeba7b54c
-    last_write_checksum: sha1:8cfab470356df6342ef73387cf81cb510f0fa9b4
-    pristine_git_object: df38cff812aac8692cb0271f2088f369ecb374f4
+    last_write_checksum: sha1:8efa9498670b004ced2d83a794c0e61fac43d062
+    pristine_git_object: c169e38e87c14c347d75bf5208aae0a4e389749d
   internal/sdk/models/components/advancetimerequest.go:
     id: 9b1d48d35e1b
     last_write_checksum: sha1:2a73952206733d4ba2e16b49d418a9a655d4f502
     pristine_git_object: 6a77d15dce5c36ee75de917155b8d26b56bfd6fd
   internal/sdk/models/components/buildsimulatorrequest.go:
     id: 510b20fc8bb2
-    last_write_checksum: sha1:e055035ae43d862608a51d4e9bf9fd194e933aa0
-    pristine_git_object: da5be06239232e1eec8d369bd7418e8dc85c0d66
+    last_write_checksum: sha1:a6209f0812ab4934ba2e03fce88d7849394c0cb5
+    pristine_git_object: dac8fa48e07c2f41d3fb19bac664fc232ec590ad
   internal/sdk/models/components/buildworldrequest.go:
     id: 8827e29faed8
-    last_write_checksum: sha1:16a6a06cdab874480ede0f8501fd363bb7b50ab3
-    pristine_git_object: 363bd97e7b9c8eeacb20db1bc88710b01c844e63
+    last_write_checksum: sha1:2c8d5011c33a37fdfd9524235d373ae57eb325f6
+    pristine_git_object: 1628e6bcf232e4a237515bcadf0a9ff4cd61517a
   internal/sdk/models/components/clockadvance.go:
     id: dc688562ec2d
     last_write_checksum: sha1:ccb43fe46ef508e964ae2b22b2a7c7606c04c85e
@@ -600,8 +600,8 @@ trackedFiles:
     pristine_git_object: 159a87ec97aba99e4edd132f69652e123434303e
   internal/usage/schema.go:
     id: 0f40f4612437
-    last_write_checksum: sha1:cfc4aaf7760e4d9459e0892860b749ce5f5efc0a
-    pristine_git_object: e113c680c4b429707dd6abf82e33e8702cab50aa
+    last_write_checksum: sha1:6f93e07b3753b2628b3a157f183e9ed109ee71d1
+    pristine_git_object: 9732689f1d1a0348d6c915e91e7362a8a77b5fa7
   scripts/install.ps1:
     id: fee0853709e9
     last_write_checksum: sha1:2da33f25afaa301dc2a22ac12654c585cef5c572
@@ -1055,7 +1055,7 @@ examples:
   build-world:
     simulator_unknown:
       requestBody:
-        application/json: {"instructions": "Use stable example data for each Simulator.", "metadata": {"customer_id": "cust_123"}, "model": "gpt-6-astra", "simulators": ["smr_01J8Z5X4K7M2N9P0Q1R2S3T4V5"], "timeout_seconds": 14400}
+        application/json: {"instructions": "Use stable example data for each Simulator.", "metadata": {"customer_id": "cust_123"}, "model": "claude-opus-5-5", "simulators": ["smr_01J8Z5X4K7M2N9P0Q1R2S3T4V5"], "timeout_seconds": 14400}
       responses:
         "400":
           application/problem+json: {"code": "simulator_unknown", "detail": "The Simulator with ID \"smr_01J8Z5X4K7M2N9P0Q1R2S3T4V5\" is unknown or belongs to another workspace.", "validation": null}
@@ -1063,7 +1063,7 @@ examples:
           application/problem+json: {"code": "simulator_unknown", "detail": "The Simulator with ID \"smr_01J8Z5X4K7M2N9P0Q1R2S3T4V5\" is unknown or belongs to another workspace.", "validation": null}
     speakeasy-default-build-world:
       requestBody:
-        application/json: {"instructions": "Use stable example data for each Simulator.", "metadata": {"customer_id": "cust_123"}, "model": "gpt-6-astra", "simulators": ["smr_01J8Z5X4K7M2N9P0Q1R2S3T4V5"], "timeout_seconds": 14400}
+        application/json: {"instructions": "Use stable example data for each Simulator.", "metadata": {"customer_id": "cust_123"}, "model": "claude-opus-5-5", "simulators": ["smr_01J8Z5X4K7M2N9P0Q1R2S3T4V5"], "timeout_seconds": 14400}
       responses:
         "202":
           application/json: {"active_advance_id": null, "build": {"last_submission": "rejected", "last_tool": "test", "model": "claude-fable-5-1", "phase": "finalize", "stage": "generating", "submissions": 1, "summary": null, "tool_calls": 7}, "created_at": "2026-01-15T12:00:00Z", "current_time": "2024-01-01T00:00:00Z", "error": null, "id": "wld_01J8Z5X4K7M2N9P0Q1R2S3T4V7", "instructions": "Use stable example data for each Simulator.", "metadata": {"customer_id": "cust_123"}, "name": "open-orders", "simulations": [], "simulators": ["smr_01J8Z5X4K7M2N9P0Q1R2S3T4V5"], "start_time": "2024-01-01T00:00:00Z", "status": "building"}
@@ -1073,7 +1073,7 @@ examples:
           application/problem+json: {"code": "<value>", "detail": "<value>", "validation": {"issues": []}}
     bad_request_body:
       requestBody:
-        application/json: {"instructions": "Use stable example data for each Simulator.", "metadata": {"customer_id": "cust_123"}, "model": "gpt-6-astra", "simulators": ["smr_01J8Z5X4K7M2N9P0Q1R2S3T4V5"], "timeout_seconds": 14400}
+        application/json: {"instructions": "Use stable example data for each Simulator.", "metadata": {"customer_id": "cust_123"}, "model": "claude-opus-5-5", "simulators": ["smr_01J8Z5X4K7M2N9P0Q1R2S3T4V5"], "timeout_seconds": 14400}
       responses:
         "400":
           application/problem+json: {"code": "bad_request", "detail": "request body is invalid", "validation": null}
@@ -1516,4 +1516,3 @@ examples:
         "500":
           application/problem+json: {"code": "<value>", "detail": "<value>", "validation": {"issues": []}}
 examplesVersion: 1.0.2
-releaseNotes: "## Cli SDK Changes:\n* `ContinuousSimulation.Simulators.ListSimulators()`:  `response.Simulators[]` **Changed** (Breaking ⚠️)\n* `ContinuousSimulation.Worlds.StopWorld()`:  `response` **Changed** (Breaking ⚠️)\n* `ContinuousSimulation.Worlds.StartWorld()`:  `response` **Changed** (Breaking ⚠️)\n* `ContinuousSimulation.Worlds.GetWorld()`:  `response` **Changed** (Breaking ⚠️)\n* `ContinuousSimulation.Worlds.BuildWorld()`:  `response` **Changed** (Breaking ⚠️)\n* `ContinuousSimulation.Worlds.ListWorlds()`: \n  *  `request.Request.Status` **Added**\n  *  `response.Worlds[]` **Changed** (Breaking ⚠️)\n* `ContinuousSimulation.Simulators.GetSimulator()`:  `response` **Changed** (Breaking ⚠️)\n* `ContinuousSimulation.Simulators.BuildSimulator()`:  `response` **Changed** (Breaking ⚠️)\n* `ContinuousSimulation.Simulators.CancelSimulatorBuild()`: **Removed** (Breaking ⚠️)\n* `ContinuousSimulation.Simulations.GetSimulation()`:  `response.WorldId` **Added**\n* `ContinuousSimulation.Simulations.StartSimulation()`:  `response.WorldId` **Added**\n* `ContinuousSimulation.Simulations.StopSimulation()`:  `response.WorldId` **Added**\n* `ContinuousSimulation.Simulations.ListSimulations()`:  `response.Simulations[].WorldId` **Added**\n* `ContinuousSimulation.Worlds.CancelWorldBuild()`: **Removed** (Breaking ⚠️)\n* `ContinuousSimulation.Worlds.AdvanceWorldTime()`: **Removed** (Breaking ⚠️)\n* `ContinuousSimulation.Simulations.AdvanceSimulation()`: **Added**\n* `ContinuousSimulation.Simulations.AdvanceSimulationTime()`: **Removed** (Breaking ⚠️)\n* `ContinuousSimulation.Worlds.CancelWorld()`: **Added**\n* `ContinuousSimulation.Worlds.AdvanceWorld()`: **Added**\n* `ContinuousSimulation.Simulators.CancelSimulator()`: **Added**\n"
