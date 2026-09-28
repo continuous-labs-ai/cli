@@ -113,6 +113,8 @@ type SimulatorBuildProgress struct {
 	Submissions int64 `json:"submissions"`
 	// Tool calls the coding loop executed.
 	ToolCalls int64 `json:"tool_calls"`
+	// Specification defects the build tolerated without changing the specification, or empty when none. Set when the build prepares its specification.
+	Warnings []SpecificationWarning `json:"warnings"`
 }
 
 func (s *SimulatorBuildProgress) GetLastSubmission() *SimulatorBuildProgressLastSubmission {
@@ -162,4 +164,11 @@ func (s *SimulatorBuildProgress) GetToolCalls() int64 {
 		return 0
 	}
 	return s.ToolCalls
+}
+
+func (s *SimulatorBuildProgress) GetWarnings() []SpecificationWarning {
+	if s == nil {
+		return []SpecificationWarning{}
+	}
+	return s.Warnings
 }

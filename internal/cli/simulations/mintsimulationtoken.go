@@ -24,7 +24,7 @@ func initMintSimulationTokenCmd(parent *cobra.Command) error {
 	var cmd = &cobra.Command{
 		Use:     "mint-simulation-token",
 		Short:   "Mint Simulation Token",
-		Long:    "Creates another token for requests to the Simulation endpoint. Send it in the X-Continuous-Simulation-Token header. Earlier tokens stay valid until they expire.",
+		Long:    "For an active legacy Simulation, creates another expiring token. For a persistent Simulation, returns its current token without rotating it, including while stopped. Send the token in the X-Continuous-Simulation-Token header.",
 		Example: "  continuous simulations mint-simulation-token --id <id> --ttl-seconds 3600",
 		RunE:    runMintSimulationTokenCmd,
 		Aliases: []string{"mst"},

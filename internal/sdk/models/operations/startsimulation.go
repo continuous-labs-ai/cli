@@ -22,7 +22,8 @@ func (s *StartSimulationRequest) GetID() string {
 type StartSimulationResponse struct {
 	HTTPMeta components.HTTPMetadata `json:"-"`
 	// OK
-	Simulation *components.Simulation
+	CreatedSimulation *components.CreatedSimulation
+	Headers           map[string][]string
 }
 
 func (s StartSimulationResponse) MarshalJSON() ([]byte, error) {
@@ -43,9 +44,16 @@ func (s *StartSimulationResponse) GetHTTPMeta() components.HTTPMetadata {
 	return s.HTTPMeta
 }
 
-func (s *StartSimulationResponse) GetSimulation() *components.Simulation {
+func (s *StartSimulationResponse) GetCreatedSimulation() *components.CreatedSimulation {
 	if s == nil {
 		return nil
 	}
-	return s.Simulation
+	return s.CreatedSimulation
+}
+
+func (s *StartSimulationResponse) GetHeaders() map[string][]string {
+	if s == nil {
+		return map[string][]string{}
+	}
+	return s.Headers
 }
