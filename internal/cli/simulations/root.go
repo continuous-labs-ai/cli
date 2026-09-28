@@ -64,6 +64,14 @@ func InitSimulationsRoot(parent *cobra.Command) error {
 		return err
 	}
 
+	if err := initGetSimulationTokenCmd(SimulationsCmd); err != nil {
+		return err
+	}
+
+	if err := initRegenerateSimulationTokenCmd(SimulationsCmd); err != nil {
+		return err
+	}
+
 	if err := initMintSimulationTokenCmd(SimulationsCmd); err != nil {
 		return err
 	}
