@@ -113,7 +113,7 @@ type SimulatorBuildProgress struct {
 	Submissions int64 `json:"submissions"`
 	// Tool calls the coding loop executed.
 	ToolCalls int64 `json:"tool_calls"`
-	// Specification defects the build tolerated without changing the specification, or empty when none. Set when the build prepares its specification.
+	// Specification defects the build tolerated without changing the specification, set when the build prepares its specification, and limitations the accepted build records, set when the build is accepted. Empty when none.
 	Warnings []SpecificationWarning `json:"warnings"`
 }
 
