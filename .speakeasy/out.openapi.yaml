@@ -644,7 +644,7 @@ components:
             - stopped
           type: string
         token:
-          description: Current token for requests to the Simulation endpoint. Send it in the X-Continuous-Simulation-Token header. Retrieve it later with GET /v1/simulations/{id}/token.
+          description: Current token for requests to the Simulation endpoint. Send it in the X-Continuous-Simulation-Token header, with an actor's id from GET /v1/simulations/{id} in X-Continuous-Actor to act as that caller. Retrieve it later with GET /v1/simulations/{id}/token.
           minLength: 1
           type: string
       required:
@@ -931,6 +931,93 @@ components:
         - created_at
         - include_sample_data
       type: object
+    SimulationDetail:
+      additionalProperties: false
+      properties:
+        active_advance_id:
+          description: Current clock advance operation ID, or null.
+          pattern: ^adv_[0-9A-HJKMNP-TV-Z]{26}$
+          type:
+            - string
+            - "null"
+        actors:
+          description: The callers a request can act as by sending an actor's id in the X-Continuous-Actor header. Without the header, a request acts as the default actor. Empty when the Simulator's build names none or its artifact cannot be read now.
+          items:
+            $ref: "#/components/schemas/SimulatorActor"
+          type: array
+        created_at:
+          description: Simulation creation time.
+          format: date-time
+          type: string
+        current_time:
+          description: Current simulated time.
+          format: date-time
+          type: string
+        endpoint:
+          description: Base URL for requests to the Simulation.
+          format: uri
+          type: string
+        id:
+          description: Simulation ID.
+          pattern: ^sim_[0-9A-HJKMNP-TV-Z]{26}$
+          type: string
+        include_sample_data:
+          description: Whether the Simulation started with the Simulator's sample data. A fork inherits its source's state and reports false.
+          type: boolean
+        metadata:
+          description: Customer JSON metadata, or null.
+        name:
+          description: Simulation name. The ID is its identity, and names need not be unique.
+          maxLength: 128
+          type: string
+        parent_id:
+          description: Source Simulation ID for a fork, or null.
+          pattern: ^sim_[0-9A-HJKMNP-TV-Z]{26}$
+          type:
+            - string
+            - "null"
+        simulator_digest:
+          description: OCI manifest digest pinned when the Simulation was created.
+          pattern: ^sha256:[0-9a-f]{64}$
+          type: string
+        simulator_id:
+          description: ID of the Simulator bound to this Simulation.
+          pattern: ^smr_[0-9A-HJKMNP-TV-Z]{26}$
+          type: string
+        start_time:
+          description: Initial simulated time.
+          format: date-time
+          type: string
+        status:
+          description: Current status. running serves requests. paused means the Simulation was idle and the platform paused it; the next request wakes it. stopped means its state is saved and requests return 409 until you start it.
+          enum:
+            - running
+            - paused
+            - stopped
+          type: string
+        world_id:
+          description: ID of the World that owns this Simulation, or null.
+          pattern: ^wld_[0-9A-HJKMNP-TV-Z]{26}$
+          type:
+            - string
+            - "null"
+      required:
+        - actors
+        - metadata
+        - start_time
+        - current_time
+        - active_advance_id
+        - id
+        - name
+        - simulator_id
+        - simulator_digest
+        - parent_id
+        - world_id
+        - status
+        - endpoint
+        - created_at
+        - include_sample_data
+      type: object
     Simulator:
       additionalProperties: false
       examples:
@@ -1018,6 +1105,31 @@ components:
         - created_at
         - build
       type: object
+    SimulatorActor:
+      additionalProperties: false
+      properties:
+        default:
+          description: Whether a request without the header acts as this caller.
+          type: boolean
+        entity:
+          description: The entity whose row the id keys.
+          type: string
+        id:
+          description: "The value to send in the X-Continuous-Actor header: the key of the identity row the caller acts as."
+          type: string
+        name:
+          description: The build's name for the caller.
+          type: string
+        role:
+          description: The caller's role in the simulated service.
+          type: string
+      required:
+        - id
+        - name
+        - role
+        - entity
+        - default
+      type: object
     SimulatorBuildProgress:
       additionalProperties: false
       properties:
@@ -1071,10 +1183,10 @@ components:
           minimum: 0
           type: integer
         warnings:
-          description: Specification defects the build tolerated without changing the specification, or empty when none. Set when the build prepares its specification.
+          description: Specification defects the build tolerated without changing the specification, set when the build prepares its specification, and limitations the accepted build records, set when the build is accepted. Empty when none.
           items:
             $ref: "#/components/schemas/SpecificationWarning"
-          maxItems: 20
+          maxItems: 40
           type: array
       required:
         - model
@@ -1183,24 +1295,33 @@ components:
       additionalProperties: false
       properties:
         code:
-          description: Stable warning code.
+          description: Stable warning code. build.limitation marks behavior the Simulator does not serve like the real system.
           enum:
             - spec.enum_duplicate
             - spec.path_parameter_optional
             - spec.default_invalid
             - spec.response_untyped
+            - spec.schema_limit
+            - build.limitation
           type: string
         location:
-          description: Readable endpoint or field affected by this warning.
+          description: Readable endpoint or field affected by this warning, or the affected operations for a limitation.
           maxLength: 512
           type: string
         message:
-          description: What the specification declares and how the build handles it.
+          description: What the specification declares and how the build handles it, or what the limitation is.
           type: string
+        operations:
+          description: Operation IDs a limitation affects, or empty when the warning names none.
+          items:
+            type: string
+          maxItems: 20
+          type: array
       required:
         - code
         - location
         - message
+        - operations
       type: object
     StartWorldRequest:
       additionalProperties: false
@@ -1810,7 +1931,7 @@ paths:
       tags:
         - simulations
     get:
-      description: Returns a Simulation and its current status. The response does not include tokens.
+      description: Returns a Simulation, its current status, and the actors a request can act as. The response does not include tokens.
       operationId: get-simulation
       parameters:
         - description: Simulation ID.
@@ -1825,7 +1946,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/Simulation"
+                $ref: "#/components/schemas/SimulationDetail"
           description: OK
         "401":
           $ref: "#/components/responses/Unauthorized"

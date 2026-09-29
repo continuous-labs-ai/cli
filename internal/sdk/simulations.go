@@ -666,7 +666,7 @@ func (s *Simulations) DeleteSimulation(ctx context.Context, request operations.D
 }
 
 // GetSimulation - Get Simulation
-// Returns a Simulation and its current status. The response does not include tokens.
+// Returns a Simulation, its current status, and the actors a request can act as. The response does not include tokens.
 func (s *Simulations) GetSimulation(ctx context.Context, request operations.GetSimulationRequest, opts ...operations.Option) (*operations.GetSimulationResponse, error) {
 	o := operations.Options{}
 	supportedOptions := []string{
@@ -783,12 +783,12 @@ func (s *Simulations) GetSimulation(ctx context.Context, request operations.GetS
 					return nil, err
 				}
 
-				var out components.Simulation
+				var out components.SimulationDetail
 				if err := utils.UnmarshalJsonFromResponseBody(bytes.NewBuffer(rawBody), &out, ""); err != nil {
 					return nil, err
 				}
 
-				res.Simulation = &out
+				res.SimulationDetail = &out
 			}
 		default:
 			rawBody, err := utils.ConsumeRawBody(httpRes)

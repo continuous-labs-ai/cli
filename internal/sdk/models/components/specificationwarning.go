@@ -2,7 +2,7 @@
 
 package components
 
-// SpecificationWarningCode - Stable warning code.
+// SpecificationWarningCode - Stable warning code. build.limitation marks behavior the Simulator does not serve like the real system.
 type SpecificationWarningCode string
 
 const (
@@ -10,6 +10,8 @@ const (
 	SpecificationWarningCodeSpecPathParameterOptional SpecificationWarningCode = "spec.path_parameter_optional"
 	SpecificationWarningCodeSpecDefaultInvalid        SpecificationWarningCode = "spec.default_invalid"
 	SpecificationWarningCodeSpecResponseUntyped       SpecificationWarningCode = "spec.response_untyped"
+	SpecificationWarningCodeSpecSchemaLimit           SpecificationWarningCode = "spec.schema_limit"
+	SpecificationWarningCodeBuildLimitation           SpecificationWarningCode = "build.limitation"
 )
 
 func (e SpecificationWarningCode) ToPointer() *SpecificationWarningCode {
@@ -20,7 +22,7 @@ func (e SpecificationWarningCode) ToPointer() *SpecificationWarningCode {
 func (e *SpecificationWarningCode) IsExact() bool {
 	if e != nil {
 		switch *e {
-		case "spec.enum_duplicate", "spec.path_parameter_optional", "spec.default_invalid", "spec.response_untyped":
+		case "spec.enum_duplicate", "spec.path_parameter_optional", "spec.default_invalid", "spec.response_untyped", "spec.schema_limit", "build.limitation":
 			return true
 		}
 	}
@@ -28,12 +30,14 @@ func (e *SpecificationWarningCode) IsExact() bool {
 }
 
 type SpecificationWarning struct {
-	// Stable warning code.
+	// Stable warning code. build.limitation marks behavior the Simulator does not serve like the real system.
 	Code SpecificationWarningCode `json:"code"`
-	// Readable endpoint or field affected by this warning.
+	// Readable endpoint or field affected by this warning, or the affected operations for a limitation.
 	Location string `json:"location"`
-	// What the specification declares and how the build handles it.
+	// What the specification declares and how the build handles it, or what the limitation is.
 	Message string `json:"message"`
+	// Operation IDs a limitation affects, or empty when the warning names none.
+	Operations []string `json:"operations"`
 }
 
 func (s *SpecificationWarning) GetCode() SpecificationWarningCode {
@@ -55,4 +59,11 @@ func (s *SpecificationWarning) GetMessage() string {
 		return ""
 	}
 	return s.Message
+}
+
+func (s *SpecificationWarning) GetOperations() []string {
+	if s == nil {
+		return []string{}
+	}
+	return s.Operations
 }

@@ -22,7 +22,7 @@ func (g *GetSimulationRequest) GetID() string {
 type GetSimulationResponse struct {
 	HTTPMeta components.HTTPMetadata `json:"-"`
 	// OK
-	Simulation *components.Simulation
+	SimulationDetail *components.SimulationDetail
 }
 
 func (g GetSimulationResponse) MarshalJSON() ([]byte, error) {
@@ -43,9 +43,9 @@ func (g *GetSimulationResponse) GetHTTPMeta() components.HTTPMetadata {
 	return g.HTTPMeta
 }
 
-func (g *GetSimulationResponse) GetSimulation() *components.Simulation {
+func (g *GetSimulationResponse) GetSimulationDetail() *components.SimulationDetail {
 	if g == nil {
 		return nil
 	}
-	return g.Simulation
+	return g.SimulationDetail
 }
