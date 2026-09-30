@@ -30,9 +30,10 @@ type SimulatorBuildProgressModel string
 
 const (
 	SimulatorBuildProgressModelGpt6Astra     SimulatorBuildProgressModel = "gpt-6-astra"
-	SimulatorBuildProgressModelGpt6Sol       SimulatorBuildProgressModel = "gpt-6-sol"
+	SimulatorBuildProgressModelGpt61Sol      SimulatorBuildProgressModel = "gpt-6.1-sol"
 	SimulatorBuildProgressModelClaudeOpus55  SimulatorBuildProgressModel = "claude-opus-5-5"
 	SimulatorBuildProgressModelClaudeFable51 SimulatorBuildProgressModel = "claude-fable-5-1"
+	SimulatorBuildProgressModelGpt6Sol       SimulatorBuildProgressModel = "gpt-6-sol"
 )
 
 func (e SimulatorBuildProgressModel) ToPointer() *SimulatorBuildProgressModel {
@@ -43,7 +44,7 @@ func (e SimulatorBuildProgressModel) ToPointer() *SimulatorBuildProgressModel {
 func (e *SimulatorBuildProgressModel) IsExact() bool {
 	if e != nil {
 		switch *e {
-		case "gpt-6-astra", "gpt-6-sol", "claude-opus-5-5", "claude-fable-5-1":
+		case "gpt-6-astra", "gpt-6.1-sol", "claude-opus-5-5", "claude-fable-5-1", "gpt-6-sol":
 			return true
 		}
 	}

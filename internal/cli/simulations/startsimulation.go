@@ -23,7 +23,7 @@ func initStartSimulationCmd(parent *cobra.Command) error {
 	var cmd = &cobra.Command{
 		Use:     "start",
 		Short:   "Start Simulation",
-		Long:    "Starts a stopped Simulation from its saved state and returns a usable endpoint token. An already running or paused Simulation returns its current token and status.",
+		Long:    "Starts a stopped Simulation from its saved state. The response includes the Simulation's token, which stop and start do not change. An already running or paused Simulation returns its current token and status.",
 		Example: "  continuous simulations start --id <id>",
 		RunE:    runStartSimulationCmd,
 	}

@@ -8,9 +8,11 @@ import (
 )
 
 type CurrentSimulationToken struct {
-	// Null for a lifetime credential.
+	// Always null; Simulation tokens do not expire. Deprecated; will be removed.
+	//
+	// Deprecated: This will be removed in a future release, please migrate away from it as soon as possible.
 	ExpiresAt *time.Time `json:"expires_at"`
-	// Current Simulation endpoint credential.
+	// The Simulation's current token for requests to its endpoint. Send it in the X-Continuous-Simulation-Token header.
 	Token string `json:"token"`
 }
 

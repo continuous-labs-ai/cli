@@ -24,7 +24,7 @@ func initRegenerateSimulationTokenCmd(parent *cobra.Command) error {
 	var cmd = &cobra.Command{
 		Use:     "regenerate-simulation-token",
 		Short:   "Regenerate Simulation Token",
-		Long:    "Explicitly replaces the current Simulation credential. The previous token stops authenticating when the transaction commits. Reuse the Idempotency-Key to retry safely.",
+		Long:    "Replaces the Simulation's token, including while the Simulation is stopped. When the replacement commits, requests with the previous token return 401 auth_invalid with X-Continuous-Simulation-Token-Rejected: true. Reuse the Idempotency-Key to retry safely.",
 		Example: "  continuous simulations regenerate-simulation-token --id <id> --idempotency-key <value>",
 		RunE:    runRegenerateSimulationTokenCmd,
 		Aliases: []string{"rst"},

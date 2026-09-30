@@ -40,7 +40,9 @@ type CreatedSimulation struct {
 	CurrentTime time.Time `json:"current_time"`
 	// Base URL for requests to the Simulation.
 	Endpoint string `json:"endpoint"`
-	// Token expiration time for a legacy token, or null for a persistent token. This field remains through the compatibility release.
+	// Always null; Simulation tokens do not expire. Deprecated; will be removed.
+	//
+	// Deprecated: This will be removed in a future release, please migrate away from it as soon as possible.
 	ExpiresAt *time.Time `json:"expires_at"`
 	// Simulation ID.
 	ID string `json:"id"`
@@ -60,7 +62,7 @@ type CreatedSimulation struct {
 	StartTime time.Time `json:"start_time"`
 	// Current status. running serves requests. paused means the Simulation was idle and the platform paused it; the next request wakes it. stopped means its state is saved and requests return 409 until you start it.
 	Status CreatedSimulationStatus `json:"status"`
-	// Current token for requests to the Simulation endpoint. Send it in the X-Continuous-Simulation-Token header, with an actor's id from GET /v1/simulations/{id} in X-Continuous-Actor to act as that caller. Retrieve it later with GET /v1/simulations/{id}/token.
+	// The Simulation's token for requests to its endpoint. It does not expire. Send it in the X-Continuous-Simulation-Token header, with an actor's id from GET /v1/simulations/{id} in X-Continuous-Actor to act as that caller. Retrieve it later with GET /v1/simulations/{id}/token.
 	Token string `json:"token"`
 }
 

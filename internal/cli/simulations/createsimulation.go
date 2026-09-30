@@ -28,7 +28,7 @@ func initCreateSimulationCmd(parent *cobra.Command) error {
 	var cmd = &cobra.Command{
 		Use:     "create",
 		Short:   "Create Simulation",
-		Long:    "Creates a Simulation from a ready Simulator and starts it. The response includes the endpoint and a token. New persistent Simulations keep the token across stop and restart; legacy Simulations receive an expiring token.",
+		Long:    "Creates a Simulation from a ready Simulator and starts it. The response includes the endpoint and the Simulation's token, which does not expire.",
 		Example: "  continuous simulations create --simulator-id smr_01J8Z5X4K7M2N9P0Q1R2S3T4V5",
 		RunE:    runCreateSimulationCmd,
 	}

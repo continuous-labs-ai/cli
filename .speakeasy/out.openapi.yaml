@@ -140,16 +140,6 @@ components:
         code: simulation_timeout
         detail: The Simulation runtime did not start before the timeout. Retry the request.
         validation: null
-    simulation_token_conversion_disabled:
-      value:
-        code: simulation_token_legacy
-        detail: This legacy Simulation has expiring tokens and cannot be converted to a persistent token yet. Use POST /v1/simulations/{id}/tokens while it is active.
-        validation: null
-    simulation_token_legacy:
-      value:
-        code: simulation_token_legacy
-        detail: This legacy Simulation has expiring tokens. Use POST /v1/simulations/{id}/tokens while active, or explicitly regenerate its token.
-        validation: null
     simulation_token_regeneration_superseded:
       value:
         code: simulation_token_regeneration_superseded
@@ -345,7 +335,7 @@ components:
           description: Model that builds and reviews the Simulator. Defaults to claude-opus-5-5. Its provider is derived from the model.
           enum:
             - gpt-6-astra
-            - gpt-6-sol
+            - gpt-6.1-sol
             - claude-opus-5-5
             - claude-fable-5-1
           type: string
@@ -392,7 +382,7 @@ components:
           description: Model that builds and reviews starting data. Defaults to claude-opus-5-5. Its provider is derived from the model.
           enum:
             - gpt-6-astra
-            - gpt-6-sol
+            - gpt-6.1-sol
             - claude-opus-5-5
             - claude-fable-5-1
           type: string
@@ -568,7 +558,7 @@ components:
           created_at: "2026-01-15T12:00:00Z"
           current_time: "2024-01-01T00:00:00Z"
           endpoint: https://api.continuouslabs.ai/sim/sim_01J8Z5X4K7M2N9P0Q1R2S3T4V6
-          expires_at: "2026-01-15T13:00:00Z"
+          expires_at: null
           id: sim_01J8Z5X4K7M2N9P0Q1R2S3T4V6
           include_sample_data: false
           metadata:
@@ -600,7 +590,8 @@ components:
           format: uri
           type: string
         expires_at:
-          description: Token expiration time for a legacy token, or null for a persistent token. This field remains through the compatibility release.
+          deprecated: true
+          description: Always null; Simulation tokens do not expire. Deprecated; will be removed.
           format: date-time
           type:
             - string
@@ -644,7 +635,7 @@ components:
             - stopped
           type: string
         token:
-          description: Current token for requests to the Simulation endpoint. Send it in the X-Continuous-Simulation-Token header, with an actor's id from GET /v1/simulations/{id} in X-Continuous-Actor to act as that caller. Retrieve it later with GET /v1/simulations/{id}/token.
+          description: The Simulation's token for requests to its endpoint. It does not expire. Send it in the X-Continuous-Simulation-Token header, with an actor's id from GET /v1/simulations/{id} in X-Continuous-Actor to act as that caller. Retrieve it later with GET /v1/simulations/{id}/token.
           minLength: 1
           type: string
       required:
@@ -671,13 +662,14 @@ components:
           token: <redacted>
       properties:
         expires_at:
-          description: Null for a lifetime credential.
+          deprecated: true
+          description: Always null; Simulation tokens do not expire. Deprecated; will be removed.
           format: date-time
           type:
             - string
             - "null"
         token:
-          description: Current Simulation endpoint credential.
+          description: The Simulation's current token for requests to its endpoint. Send it in the X-Continuous-Simulation-Token header.
           minLength: 1
           type: string
       required:
@@ -811,7 +803,7 @@ components:
         - ttl_seconds: 3600
       properties:
         ttl_seconds:
-          description: Token lifetime in seconds, from 60 through 86,400.
+          description: Accepted for compatibility, from 60 through 86,400. It does not change the token's lifetime.
           format: int64
           maximum: 86400
           minimum: 60
@@ -941,7 +933,7 @@ components:
             - string
             - "null"
         actors:
-          description: The callers a request can act as by sending an actor's id in the X-Continuous-Actor header. Without the header, a request acts as the default actor. Empty when the Simulator's build names none or its artifact cannot be read now.
+          description: The callers a request can act as by sending an actor's id in the X-Continuous-Actor header. Without the header, a request acts as the default actor. Lists the actors the seed holds, plus actors only the sample holds when the Simulation includes sample data. Empty when the Simulator's build names none or its artifact cannot be read now.
           items:
             $ref: "#/components/schemas/SimulatorActor"
           type: array
@@ -1151,9 +1143,10 @@ components:
           description: The model the builder and reviewer run on. A build recorded before model selection reports its provider's default.
           enum:
             - gpt-6-astra
-            - gpt-6-sol
+            - gpt-6.1-sol
             - claude-opus-5-5
             - claude-fable-5-1
+            - gpt-6-sol
           type: string
         phase:
           description: "Agent phase: build for generation, review for the separate reviewer, finalize for author repair after review. Null when not recorded."
@@ -1497,9 +1490,10 @@ components:
           description: The model the builder and reviewer run on, or null for a build created before provider selection. A build recorded before model selection reports its provider's default.
           enum:
             - gpt-6-astra
-            - gpt-6-sol
+            - gpt-6.1-sol
             - claude-opus-5-5
             - claude-fable-5-1
+            - gpt-6-sol
             - null
           type:
             - string
@@ -1757,7 +1751,7 @@ paths:
       tags:
         - simulations
     post:
-      description: Creates a Simulation from a ready Simulator and starts it. The response includes the endpoint and a token. New persistent Simulations keep the token across stop and restart; legacy Simulations receive an expiring token.
+      description: Creates a Simulation from a ready Simulator and starts it. The response includes the endpoint and the Simulation's token, which does not expire.
       operationId: create-simulation
       requestBody:
         content:
@@ -2280,7 +2274,7 @@ paths:
         - simulations
   /v1/simulations/{id}/fork:
     post:
-      description: Creates a new Simulation from the source Simulation's current state, or from an earlier recorded step when you set at_step. The source must be running or paused; a stopped source returns 409 simulation_stopped. Forking does not change the source. The response includes the new endpoint and the fork's own token. A persistent token survives stop and restart; a legacy token expires.
+      description: Creates a new Simulation from the source Simulation's current state, or from an earlier recorded step when you set at_step. The source must be running or paused; a stopped source returns 409 simulation_stopped. Forking does not change the source. The response includes the new endpoint and the fork's own token, which does not expire.
       operationId: fork-simulation
       parameters:
         - description: Source Simulation ID.
@@ -2413,7 +2407,7 @@ paths:
         - simulations
   /v1/simulations/{id}/start:
     post:
-      description: Starts a stopped Simulation from its saved state and returns a usable endpoint token. An already running or paused Simulation returns its current token and status.
+      description: Starts a stopped Simulation from its saved state. The response includes the Simulation's token, which stop and start do not change. An already running or paused Simulation returns its current token and status.
       operationId: start-simulation
       parameters:
         - description: Simulation ID.
@@ -2686,7 +2680,7 @@ paths:
         - simulations
   /v1/simulations/{id}/token:
     get:
-      description: Returns the current persistent credential, including while stopped, without rotating it. Legacy Simulations require the deprecated token-mint endpoint or explicit regeneration.
+      description: Returns the Simulation's current token without rotating it, including while the Simulation is stopped.
       operationId: get-simulation-token
       parameters:
         - description: Simulation ID.
@@ -2733,8 +2727,6 @@ paths:
               examples:
                 simulation_platform_owned:
                   $ref: "#/components/examples/simulation_platform_owned"
-                simulation_token_legacy:
-                  $ref: "#/components/examples/simulation_token_legacy"
               schema:
                 $ref: "#/components/schemas/Error"
           description: Conflict
@@ -2767,7 +2759,7 @@ paths:
         - simulations
   /v1/simulations/{id}/token/regenerate:
     post:
-      description: Explicitly replaces the current Simulation credential. The previous token stops authenticating when the transaction commits. Reuse the Idempotency-Key to retry safely.
+      description: "Replaces the Simulation's token, including while the Simulation is stopped. When the replacement commits, requests with the previous token return 401 auth_invalid with X-Continuous-Simulation-Token-Rejected: true. Reuse the Idempotency-Key to retry safely."
       operationId: regenerate-simulation-token
       parameters:
         - description: Simulation ID.
@@ -2822,8 +2814,6 @@ paths:
               examples:
                 simulation_platform_owned:
                   $ref: "#/components/examples/simulation_platform_owned"
-                simulation_token_conversion_disabled:
-                  $ref: "#/components/examples/simulation_token_conversion_disabled"
                 simulation_token_regeneration_superseded:
                   $ref: "#/components/examples/simulation_token_regeneration_superseded"
               schema:
@@ -2867,7 +2857,8 @@ paths:
         - simulations
   /v1/simulations/{id}/tokens:
     post:
-      description: For an active legacy Simulation, creates another expiring token. For a persistent Simulation, returns its current token without rotating it, including while stopped. Send the token in the X-Continuous-Simulation-Token header.
+      deprecated: true
+      description: Deprecated compatibility alias for GET /v1/simulations/{id}/token. Returns the Simulation's current token without rotating it, including while the Simulation is stopped. ttl_seconds is validated but does not change the token's lifetime.
       operationId: mint-simulation-token
       parameters:
         - description: Simulation ID.

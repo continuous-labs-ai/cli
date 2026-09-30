@@ -16,7 +16,7 @@ import (
 
 var mintSimulationTokenCmdMeta = []flagutil.FlagMeta{
 	{FlagName: "id", Shorthand: "i", FieldPath: "ID", Kind: flagutil.FlagKindString, Required: true, Description: "Simulation ID. [required]"},
-	{FlagName: "ttl-seconds", Shorthand: "t", FieldPath: "Body.TTLSeconds", Kind: flagutil.FlagKindInt64, Required: true, Description: "Token lifetime in seconds, from 60 through 86,400. [required]"},
+	{FlagName: "ttl-seconds", Shorthand: "t", FieldPath: "Body.TTLSeconds", Kind: flagutil.FlagKindInt64, Required: true, Description: "Accepted for compatibility, from 60 through 86,400. It does not change the token's lifetime. [required]"},
 }
 
 // initMintSimulationTokenCmd initializes the mint-simulation-token command.
@@ -24,7 +24,7 @@ func initMintSimulationTokenCmd(parent *cobra.Command) error {
 	var cmd = &cobra.Command{
 		Use:     "mint-simulation-token",
 		Short:   "Mint Simulation Token",
-		Long:    "For an active legacy Simulation, creates another expiring token. For a persistent Simulation, returns its current token without rotating it, including while stopped. Send the token in the X-Continuous-Simulation-Token header.",
+		Long:    "DEPRECATED: This will be removed in a future release, please migrate away from it as soon as possible\n\nDeprecated compatibility alias for GET /v1/simulations/{id}/token. Returns the Simulation's current token without rotating it, including while the Simulation is stopped. ttl_seconds is validated but does not change the token's lifetime.",
 		Example: "  continuous simulations mint-simulation-token --id <id> --ttl-seconds 3600",
 		RunE:    runMintSimulationTokenCmd,
 		Aliases: []string{"mst"},
