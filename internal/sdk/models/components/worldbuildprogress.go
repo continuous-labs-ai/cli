@@ -30,9 +30,10 @@ type WorldBuildProgressModel string
 
 const (
 	WorldBuildProgressModelGpt6Astra     WorldBuildProgressModel = "gpt-6-astra"
-	WorldBuildProgressModelGpt6Sol       WorldBuildProgressModel = "gpt-6-sol"
+	WorldBuildProgressModelGpt61Sol      WorldBuildProgressModel = "gpt-6.1-sol"
 	WorldBuildProgressModelClaudeOpus55  WorldBuildProgressModel = "claude-opus-5-5"
 	WorldBuildProgressModelClaudeFable51 WorldBuildProgressModel = "claude-fable-5-1"
+	WorldBuildProgressModelGpt6Sol       WorldBuildProgressModel = "gpt-6-sol"
 )
 
 func (e WorldBuildProgressModel) ToPointer() *WorldBuildProgressModel {
@@ -43,7 +44,7 @@ func (e WorldBuildProgressModel) ToPointer() *WorldBuildProgressModel {
 func (e *WorldBuildProgressModel) IsExact() bool {
 	if e != nil {
 		switch *e {
-		case "gpt-6-astra", "gpt-6-sol", "claude-opus-5-5", "claude-fable-5-1":
+		case "gpt-6-astra", "gpt-6.1-sol", "claude-opus-5-5", "claude-fable-5-1", "gpt-6-sol":
 			return true
 		}
 	}

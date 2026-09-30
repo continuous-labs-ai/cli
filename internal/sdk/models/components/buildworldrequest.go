@@ -14,7 +14,7 @@ type BuildWorldRequestModel string
 
 const (
 	BuildWorldRequestModelGpt6Astra     BuildWorldRequestModel = "gpt-6-astra"
-	BuildWorldRequestModelGpt6Sol       BuildWorldRequestModel = "gpt-6-sol"
+	BuildWorldRequestModelGpt61Sol      BuildWorldRequestModel = "gpt-6.1-sol"
 	BuildWorldRequestModelClaudeOpus55  BuildWorldRequestModel = "claude-opus-5-5"
 	BuildWorldRequestModelClaudeFable51 BuildWorldRequestModel = "claude-fable-5-1"
 )
@@ -30,7 +30,7 @@ func (e *BuildWorldRequestModel) UnmarshalJSON(data []byte) error {
 	switch v {
 	case "gpt-6-astra":
 		fallthrough
-	case "gpt-6-sol":
+	case "gpt-6.1-sol":
 		fallthrough
 	case "claude-opus-5-5":
 		fallthrough

@@ -3,7 +3,7 @@
 package components
 
 type MintSimulationTokenRequest struct {
-	// Token lifetime in seconds, from 60 through 86,400.
+	// Accepted for compatibility, from 60 through 86,400. It does not change the token's lifetime.
 	TTLSeconds int64 `json:"ttl_seconds"`
 }
 

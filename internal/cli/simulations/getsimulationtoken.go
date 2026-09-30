@@ -23,7 +23,7 @@ func initGetSimulationTokenCmd(parent *cobra.Command) error {
 	var cmd = &cobra.Command{
 		Use:     "get-simulation-token",
 		Short:   "Get Current Simulation Token",
-		Long:    "Returns the current persistent credential, including while stopped, without rotating it. Legacy Simulations require the deprecated token-mint endpoint or explicit regeneration.",
+		Long:    "Returns the Simulation's current token without rotating it, including while the Simulation is stopped.",
 		Example: "  continuous simulations get-simulation-token --id <id>",
 		RunE:    runGetSimulationTokenCmd,
 		Aliases: []string{"gst"},

@@ -13,7 +13,7 @@ type BuildSimulatorRequestModel string
 
 const (
 	BuildSimulatorRequestModelGpt6Astra     BuildSimulatorRequestModel = "gpt-6-astra"
-	BuildSimulatorRequestModelGpt6Sol       BuildSimulatorRequestModel = "gpt-6-sol"
+	BuildSimulatorRequestModelGpt61Sol      BuildSimulatorRequestModel = "gpt-6.1-sol"
 	BuildSimulatorRequestModelClaudeOpus55  BuildSimulatorRequestModel = "claude-opus-5-5"
 	BuildSimulatorRequestModelClaudeFable51 BuildSimulatorRequestModel = "claude-fable-5-1"
 )
@@ -29,7 +29,7 @@ func (e *BuildSimulatorRequestModel) UnmarshalJSON(data []byte) error {
 	switch v {
 	case "gpt-6-astra":
 		fallthrough
-	case "gpt-6-sol":
+	case "gpt-6.1-sol":
 		fallthrough
 	case "claude-opus-5-5":
 		fallthrough
