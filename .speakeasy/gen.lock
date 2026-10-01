@@ -1,19 +1,19 @@
 lockVersion: 2.0.0
 id: ad7b08dc-357d-414c-9f26-16cfbc099767
 management:
-  docChecksum: ab8da733a2e81edb12011ff8dd602b4c
+  docChecksum: e116c367da999ff679fe2671c422f178
   docVersion: v1
   speakeasyVersion: 1.796.4
   generationVersion: 2.935.1
-  releaseVersion: 0.2.0
-  configChecksum: 5ed10ad5a82aadbcaef5427b5ce3c164
+  releaseVersion: 0.2.1
+  configChecksum: d5a24af395f4c167a820b1b02a82745f
   repoURL: https://github.com/continuous-labs-ai/cli.git
   installationURL: https://github.com/continuous-labs-ai/cli
   published: true
 persistentEdits:
-  generation_id: 2f903a09-03f8-4a31-a246-41edab090000
-  pristine_commit_hash: 85d8870bf22d7bc4b80864b69b3b0e4afba36de3
-  pristine_tree_hash: 691903f94a9445789e8261266f7fb625fc1ed0f9
+  generation_id: 74b34173-73b5-4eae-a1a2-ccbe8c5d5079
+  pristine_commit_hash: 1a816b2b30720fbfcc7380a320242de847447e77
+  pristine_tree_hash: 6bc756d29a346c97b7c71d73c47426b564504891
 features:
   cli:
     constsAndDefaults: 0.0.0
@@ -149,8 +149,8 @@ trackedFiles:
     pristine_git_object: ac41e97c224fc5cb2841be589667b31863c30494
   internal/cli/version.go:
     id: 7b0665492f72
-    last_write_checksum: sha1:215329b4da60cc988d9670d82ee1bcfde1445b0a
-    pristine_git_object: 770929c008fed9f31d0d462c1ecb66a1a0742e78
+    last_write_checksum: sha1:c6d1615b779ed52c367253de91e456247f4c8a40
+    pristine_git_object: 95ded61d8a35efca315e5b8ffcfb2be868fef4c9
   internal/cli/whoami.go:
     id: c1787f2298ec
     last_write_checksum: sha1:9b8e8f6830e556f749eede72d72b4f18d9881c28
@@ -261,8 +261,8 @@ trackedFiles:
     pristine_git_object: 942a964e78a81ad9d9590cc67138a0c4c3569fc9
   internal/sdk/continuoussimulation.go:
     id: af3aeba7b54c
-    last_write_checksum: sha1:87ea515350f939e0f0e1bc1859d83dc39b93ca1e
-    pristine_git_object: e583c95324bc461dca537dd43148348dce72d8a7
+    last_write_checksum: sha1:73326d752e912fdc7108f3cceb14782b064fabb9
+    pristine_git_object: ca160dc2bdfc28a5964c0ae5ad9956ef64f521a1
   internal/sdk/models/components/advancetimerequest.go:
     id: 9b1d48d35e1b
     last_write_checksum: sha1:2a73952206733d4ba2e16b49d418a9a655d4f502
@@ -629,8 +629,8 @@ trackedFiles:
     pristine_git_object: 159a87ec97aba99e4edd132f69652e123434303e
   internal/usage/schema.go:
     id: 0f40f4612437
-    last_write_checksum: sha1:2cbcb8b66406532edbc0eaa0aaf7ac3bbaa50712
-    pristine_git_object: 5accc8a1af3ea9ef1b03550a235d74e7089d5e47
+    last_write_checksum: sha1:75238b25d6ec30a55482bb156d29404a5598d6fe
+    pristine_git_object: 3268968e0e24ee35808633e80caf99093b306d1c
   scripts/install.ps1:
     id: fee0853709e9
     last_write_checksum: sha1:2da33f25afaa301dc2a22ac12654c585cef5c572
@@ -1611,4 +1611,3 @@ examples:
         "500":
           application/problem+json: {"code": "<value>", "detail": "<value>", "validation": {"issues": []}}
 examplesVersion: 1.0.2
-releaseNotes: "## Cli SDK Changes:\n* `ContinuousSimulation.Simulators.BuildSimulator()`: \n  *  `request.Request.Request` **Changed** (Breaking ⚠️)\n  *  `response.Build.Model.Enum(gpt6.1Sol)` **Added**\n* `ContinuousSimulation.Worlds.BuildWorld()`: \n  *  `request.Request.Model` **Changed** (Breaking ⚠️)\n  *  `response.Build.Model.Enum(gpt6.1Sol)` **Added**\n* `ContinuousSimulation.Simulations.MintSimulationToken()`: **Deprecated**\n* `ContinuousSimulation.Simulators.ListSimulators()`:  `response.Simulators[].Build.Model.Enum(gpt6.1Sol)` **Added**\n* `ContinuousSimulation.Simulators.GetSimulator()`:  `response.Build.Model.Enum(gpt6.1Sol)` **Added**\n* `ContinuousSimulation.Simulators.CancelSimulator()`:  `response.Build.Model.Enum(gpt6.1Sol)` **Added**\n* `ContinuousSimulation.Worlds.ListWorlds()`:  `response.Worlds[].Build.Model.Enum(gpt6.1Sol)` **Added**\n* `ContinuousSimulation.Worlds.GetWorld()`:  `response.Build.Model.Enum(gpt6.1Sol)` **Added**\n* `ContinuousSimulation.Worlds.CancelWorld()`:  `response.Build.Model.Enum(gpt6.1Sol)` **Added**\n* `ContinuousSimulation.Worlds.StartWorld()`:  `response.Build.Model.Enum(gpt6.1Sol)` **Added**\n* `ContinuousSimulation.Worlds.StopWorld()`:  `response.Build.Model.Enum(gpt6.1Sol)` **Added**\n"

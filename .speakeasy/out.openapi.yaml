@@ -1179,7 +1179,7 @@ components:
           description: Specification defects the build tolerated without changing the specification, set when the build prepares its specification, and limitations the accepted build records, set when the build is accepted. Empty when none.
           items:
             $ref: "#/components/schemas/SpecificationWarning"
-          maxItems: 40
+          maxItems: 70
           type: array
       required:
         - model
