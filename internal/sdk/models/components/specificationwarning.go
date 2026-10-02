@@ -2,7 +2,7 @@
 
 package components
 
-// SpecificationWarningCode - Stable warning code. build.limitation marks behavior the Simulator does not serve like the real system.
+// SpecificationWarningCode - Stable warning code. build.limitation marks behavior the Simulator does not serve like the real system. build.unrepaired marks such behavior that review did not mark a limit of the pinned contract or the scaffold, or that the build declared after review.
 type SpecificationWarningCode string
 
 const (
@@ -11,7 +11,11 @@ const (
 	SpecificationWarningCodeSpecDefaultInvalid        SpecificationWarningCode = "spec.default_invalid"
 	SpecificationWarningCodeSpecResponseUntyped       SpecificationWarningCode = "spec.response_untyped"
 	SpecificationWarningCodeSpecSchemaLimit           SpecificationWarningCode = "spec.schema_limit"
+	SpecificationWarningCodeSpecOperationUnservable   SpecificationWarningCode = "spec.operation_unservable"
+	SpecificationWarningCodeSpecVersionAmbiguous      SpecificationWarningCode = "spec.version_ambiguous"
+	SpecificationWarningCodeSpecExampleNull           SpecificationWarningCode = "spec.example_null"
 	SpecificationWarningCodeBuildLimitation           SpecificationWarningCode = "build.limitation"
+	SpecificationWarningCodeBuildUnrepaired           SpecificationWarningCode = "build.unrepaired"
 )
 
 func (e SpecificationWarningCode) ToPointer() *SpecificationWarningCode {
@@ -22,7 +26,7 @@ func (e SpecificationWarningCode) ToPointer() *SpecificationWarningCode {
 func (e *SpecificationWarningCode) IsExact() bool {
 	if e != nil {
 		switch *e {
-		case "spec.enum_duplicate", "spec.path_parameter_optional", "spec.default_invalid", "spec.response_untyped", "spec.schema_limit", "build.limitation":
+		case "spec.enum_duplicate", "spec.path_parameter_optional", "spec.default_invalid", "spec.response_untyped", "spec.schema_limit", "spec.operation_unservable", "spec.version_ambiguous", "spec.example_null", "build.limitation", "build.unrepaired":
 			return true
 		}
 	}
@@ -30,7 +34,7 @@ func (e *SpecificationWarningCode) IsExact() bool {
 }
 
 type SpecificationWarning struct {
-	// Stable warning code. build.limitation marks behavior the Simulator does not serve like the real system.
+	// Stable warning code. build.limitation marks behavior the Simulator does not serve like the real system. build.unrepaired marks such behavior that review did not mark a limit of the pinned contract or the scaffold, or that the build declared after review.
 	Code SpecificationWarningCode `json:"code"`
 	// Readable endpoint or field affected by this warning, or the affected operations for a limitation.
 	Location string `json:"location"`

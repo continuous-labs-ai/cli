@@ -209,3 +209,13 @@ Based on:
 - [cli v0.2.1] .
 ### Releases
 - [CLI v0.2.1] https://github.com/continuous-labs-ai/cli/releases/tag/v0.2.1 - .
+
+## 2026-10-02 02:51:55
+### Changes
+Based on:
+- OpenAPI Doc  
+- Speakeasy CLI 1.796.4 (2.935.1) https://github.com/speakeasy-api/speakeasy
+### Generated
+- [cli v0.2.2] .
+### Releases
+- [CLI v0.2.2] https://github.com/continuous-labs-ai/cli/releases/tag/v0.2.2 - .
