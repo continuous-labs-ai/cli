@@ -2,6 +2,11 @@
 
 package components
 
+import (
+	"github.com/continuous-labs-ai/cli/internal/sdk/sdkinternal/utils"
+	"time"
+)
+
 // ClockAdvanceMemberStatus - Whether this member is pending, committed, failed, or skipped because it is not running.
 type ClockAdvanceMemberStatus string
 
@@ -31,12 +36,25 @@ type ClockAdvanceMember struct {
 	Error *ResourceError `json:"error"`
 	// Number of committed event executions.
 	EventCount int64 `json:"event_count"`
+	// Clock time a failed advance reached with the batches it kept committed.
+	Reached *time.Time `json:"reached,omitzero"`
 	// Member Simulation ID.
 	SimulationID string `json:"simulation_id"`
 	// Whether this member is pending, committed, failed, or skipped because it is not running.
 	Status ClockAdvanceMemberStatus `json:"status"`
-	// Committed local step, or null for no change or a failed advance.
+	// Last committed local step, or null when the advance committed none.
 	Step *int64 `json:"step"`
+}
+
+func (c ClockAdvanceMember) MarshalJSON() ([]byte, error) {
+	return utils.MarshalJSON(c, "", false)
+}
+
+func (c *ClockAdvanceMember) UnmarshalJSON(data []byte) error {
+	if err := utils.UnmarshalJSON(data, &c, "", false, nil); err != nil {
+		return err
+	}
+	return nil
 }
 
 func (c *ClockAdvanceMember) GetError() *ResourceError {
@@ -51,6 +69,13 @@ func (c *ClockAdvanceMember) GetEventCount() int64 {
 		return 0
 	}
 	return c.EventCount
+}
+
+func (c *ClockAdvanceMember) GetReached() *time.Time {
+	if c == nil {
+		return nil
+	}
+	return c.Reached
 }
 
 func (c *ClockAdvanceMember) GetSimulationID() string {
