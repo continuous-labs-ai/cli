@@ -100,10 +100,14 @@ func (e *SimulatorBuildProgressStage) IsExact() bool {
 }
 
 type SimulatorBuildProgress struct {
+	// Limitations the accepted build records beyond those listed in limitations.
+	HiddenLimitations int64 `json:"hidden_limitations"`
 	// Outcome of the most recent submit attempt, or null.
 	LastSubmission *SimulatorBuildProgressLastSubmission `json:"last_submission"`
 	// Name of the most recent tool call, or null. Tool arguments and output are private.
 	LastTool *string `json:"last_tool"`
+	// Behavior the accepted build does not serve like the real system, most important first, set when the build is accepted. Empty when none.
+	Limitations []Limitation `json:"limitations"`
 	// The model the builder and reviewer run on. A build recorded before model selection reports its provider's default.
 	Model SimulatorBuildProgressModel `json:"model"`
 	// Agent phase: build for generation, review for the separate reviewer, finalize for author repair after review. Null when not recorded.
@@ -114,8 +118,15 @@ type SimulatorBuildProgress struct {
 	Submissions int64 `json:"submissions"`
 	// Tool calls the coding loop executed.
 	ToolCalls int64 `json:"tool_calls"`
-	// Specification defects the build tolerated without changing the specification, set when the build prepares its specification, and limitations the accepted build records, set when the build is accepted. Empty when none.
+	// Specification defects the build tolerated without changing the specification, set when the build prepares its specification. Empty when none.
 	Warnings []SpecificationWarning `json:"warnings"`
+}
+
+func (s *SimulatorBuildProgress) GetHiddenLimitations() int64 {
+	if s == nil {
+		return 0
+	}
+	return s.HiddenLimitations
 }
 
 func (s *SimulatorBuildProgress) GetLastSubmission() *SimulatorBuildProgressLastSubmission {
@@ -130,6 +141,13 @@ func (s *SimulatorBuildProgress) GetLastTool() *string {
 		return nil
 	}
 	return s.LastTool
+}
+
+func (s *SimulatorBuildProgress) GetLimitations() []Limitation {
+	if s == nil {
+		return []Limitation{}
+	}
+	return s.Limitations
 }
 
 func (s *SimulatorBuildProgress) GetModel() SimulatorBuildProgressModel {
