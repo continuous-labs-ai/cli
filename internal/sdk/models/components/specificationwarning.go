@@ -2,7 +2,7 @@
 
 package components
 
-// SpecificationWarningCode - Stable warning code. build.limitation marks behavior the Simulator does not serve like the real system. build.unrepaired marks such behavior that review did not mark a limit of the pinned contract or the scaffold, or that the build declared after review.
+// SpecificationWarningCode - Stable warning code.
 type SpecificationWarningCode string
 
 const (
@@ -14,8 +14,6 @@ const (
 	SpecificationWarningCodeSpecOperationUnservable   SpecificationWarningCode = "spec.operation_unservable"
 	SpecificationWarningCodeSpecVersionAmbiguous      SpecificationWarningCode = "spec.version_ambiguous"
 	SpecificationWarningCodeSpecExampleNull           SpecificationWarningCode = "spec.example_null"
-	SpecificationWarningCodeBuildLimitation           SpecificationWarningCode = "build.limitation"
-	SpecificationWarningCodeBuildUnrepaired           SpecificationWarningCode = "build.unrepaired"
 )
 
 func (e SpecificationWarningCode) ToPointer() *SpecificationWarningCode {
@@ -26,7 +24,7 @@ func (e SpecificationWarningCode) ToPointer() *SpecificationWarningCode {
 func (e *SpecificationWarningCode) IsExact() bool {
 	if e != nil {
 		switch *e {
-		case "spec.enum_duplicate", "spec.path_parameter_optional", "spec.default_invalid", "spec.response_untyped", "spec.schema_limit", "spec.operation_unservable", "spec.version_ambiguous", "spec.example_null", "build.limitation", "build.unrepaired":
+		case "spec.enum_duplicate", "spec.path_parameter_optional", "spec.default_invalid", "spec.response_untyped", "spec.schema_limit", "spec.operation_unservable", "spec.version_ambiguous", "spec.example_null":
 			return true
 		}
 	}
@@ -34,13 +32,13 @@ func (e *SpecificationWarningCode) IsExact() bool {
 }
 
 type SpecificationWarning struct {
-	// Stable warning code. build.limitation marks behavior the Simulator does not serve like the real system. build.unrepaired marks such behavior that review did not mark a limit of the pinned contract or the scaffold, or that the build declared after review.
+	// Stable warning code.
 	Code SpecificationWarningCode `json:"code"`
-	// Readable endpoint or field affected by this warning, or the affected operations for a limitation.
+	// Readable endpoint or field affected by this warning.
 	Location string `json:"location"`
-	// What the specification declares and how the build handles it, or what the limitation is.
+	// What the specification declares and how the build handles it.
 	Message string `json:"message"`
-	// Operation IDs a limitation affects, or empty when the warning names none.
+	// Always empty.
 	Operations []string `json:"operations"`
 }
 

@@ -711,6 +711,31 @@ components:
           maxLength: 128
           type: string
       type: object
+    Limitation:
+      additionalProperties: false
+      properties:
+        location:
+          description: The operations the limitation affects, readably, or Simulator when it names none.
+          maxLength: 512
+          type: string
+        message:
+          description: What the Simulator does differently from the real system.
+          type: string
+        operations:
+          description: Operation IDs the limitation affects, or empty when it names none.
+          items:
+            type: string
+          maxItems: 20
+          type: array
+        reviewed:
+          description: Whether review confirmed that the pinned contract or the scaffold cannot express the correct behavior. False for a limitation the build recorded after review or that review did not confirm.
+          type: boolean
+      required:
+        - message
+        - location
+        - operations
+        - reviewed
+      type: object
     ListClockAdvanceEventsResponse:
       additionalProperties: false
       properties:
@@ -999,8 +1024,10 @@ components:
       additionalProperties: false
       examples:
         - build:
+            hidden_limitations: 0
             last_submission: rejected
             last_tool: test
+            limitations: []
             model: claude-fable-5-1
             phase: build
             stage: build
@@ -1110,6 +1137,11 @@ components:
     SimulatorBuildProgress:
       additionalProperties: false
       properties:
+        hidden_limitations:
+          description: Limitations the accepted build records beyond those listed in limitations.
+          format: int64
+          minimum: 0
+          type: integer
         last_submission:
           description: Outcome of the most recent submit attempt, or null.
           enum:
@@ -1124,6 +1156,12 @@ components:
           type:
             - string
             - "null"
+        limitations:
+          description: Behavior the accepted build does not serve like the real system, most important first, set when the build is accepted. Empty when none.
+          items:
+            $ref: "#/components/schemas/Limitation"
+          maxItems: 50
+          type: array
         model:
           description: The model the builder and reviewer run on. A build recorded before model selection reports its provider's default.
           enum:
@@ -1161,10 +1199,10 @@ components:
           minimum: 0
           type: integer
         warnings:
-          description: Specification defects the build tolerated without changing the specification, set when the build prepares its specification, and limitations the accepted build records, set when the build is accepted. Empty when none.
+          description: Specification defects the build tolerated without changing the specification, set when the build prepares its specification. Empty when none.
           items:
             $ref: "#/components/schemas/SpecificationWarning"
-          maxItems: 70
+          maxItems: 20
           type: array
       required:
         - model
@@ -1175,6 +1213,8 @@ components:
         - last_tool
         - last_submission
         - warnings
+        - limitations
+        - hidden_limitations
       type: object
     SimulatorError:
       additionalProperties: false
@@ -1273,7 +1313,7 @@ components:
       additionalProperties: false
       properties:
         code:
-          description: Stable warning code. build.limitation marks behavior the Simulator does not serve like the real system. build.unrepaired marks such behavior that review did not mark a limit of the pinned contract or the scaffold, or that the build declared after review.
+          description: Stable warning code.
           enum:
             - spec.enum_duplicate
             - spec.path_parameter_optional
@@ -1283,21 +1323,19 @@ components:
             - spec.operation_unservable
             - spec.version_ambiguous
             - spec.example_null
-            - build.limitation
-            - build.unrepaired
           type: string
         location:
-          description: Readable endpoint or field affected by this warning, or the affected operations for a limitation.
+          description: Readable endpoint or field affected by this warning.
           maxLength: 512
           type: string
         message:
-          description: What the specification declares and how the build handles it, or what the limitation is.
+          description: What the specification declares and how the build handles it.
           type: string
         operations:
-          description: Operation IDs a limitation affects, or empty when the warning names none.
+          description: Always empty.
           items:
             type: string
-          maxItems: 20
+          maxItems: 0
           type: array
       required:
         - code
