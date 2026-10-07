@@ -10,8 +10,8 @@ import (
 func InitSimulatorsRoot(parent *cobra.Command) error {
 	var SimulatorsCmd = &cobra.Command{
 		Use:   "simulators",
-		Short: "Build Simulators from OpenAPI or WSDL documents, check or cancel a build, and delete Simulators",
-		Long:  "Build Simulators from OpenAPI or WSDL documents, check or cancel a build, and delete Simulators.",
+		Short: "Build Simulators from OpenAPI or WSDL documents, check or cancel a build, clone Simulators into other workspaces, and delete Simulators",
+		Long:  "Build Simulators from OpenAPI or WSDL documents, check or cancel a build, clone Simulators into other workspaces, and delete Simulators.",
 		RunE: func(cmd *cobra.Command, args []string) error {
 			if usage.UsageRequested(cmd) {
 				return usage.EmitSchema(cmd, cmd.OutOrStdout())
@@ -37,6 +37,10 @@ func InitSimulatorsRoot(parent *cobra.Command) error {
 	}
 
 	if err := initCancelSimulatorCmd(SimulatorsCmd); err != nil {
+		return err
+	}
+
+	if err := initCloneSimulatorCmd(SimulatorsCmd); err != nil {
 		return err
 	}
 
