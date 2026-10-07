@@ -12,7 +12,6 @@ const (
 	SpecificationWarningCodeSpecResponseUntyped       SpecificationWarningCode = "spec.response_untyped"
 	SpecificationWarningCodeSpecSchemaLimit           SpecificationWarningCode = "spec.schema_limit"
 	SpecificationWarningCodeSpecOperationUnservable   SpecificationWarningCode = "spec.operation_unservable"
-	SpecificationWarningCodeSpecVersionAmbiguous      SpecificationWarningCode = "spec.version_ambiguous"
 	SpecificationWarningCodeSpecExampleNull           SpecificationWarningCode = "spec.example_null"
 )
 
@@ -24,7 +23,7 @@ func (e SpecificationWarningCode) ToPointer() *SpecificationWarningCode {
 func (e *SpecificationWarningCode) IsExact() bool {
 	if e != nil {
 		switch *e {
-		case "spec.enum_duplicate", "spec.path_parameter_optional", "spec.default_invalid", "spec.response_untyped", "spec.schema_limit", "spec.operation_unservable", "spec.version_ambiguous", "spec.example_null":
+		case "spec.enum_duplicate", "spec.path_parameter_optional", "spec.default_invalid", "spec.response_untyped", "spec.schema_limit", "spec.operation_unservable", "spec.example_null":
 			return true
 		}
 	}

@@ -53,7 +53,7 @@ type ContinuousSimulation struct {
 	SDKVersion string
 	// Create Simulations from ready Simulators, then fork, stop, start, and delete them.
 	Simulations *Simulations
-	// Build Simulators from OpenAPI or WSDL documents, check or cancel a build, and delete Simulators.
+	// Build Simulators from OpenAPI or WSDL documents, check or cancel a build, clone Simulators into other workspaces, and delete Simulators.
 	Simulators *Simulators
 	// Build Worlds from one or more Simulators and start or stop their Simulations together.
 	Worlds *Worlds
@@ -132,10 +132,10 @@ func WithTimeout(timeout time.Duration) SDKOption {
 // New creates a new instance of the SDK with the provided options
 func New(opts ...SDKOption) *ContinuousSimulation {
 	sdk := &ContinuousSimulation{
-		SDKVersion: "0.2.3",
+		SDKVersion: "0.2.4",
 		sdkConfiguration: config.SDKConfiguration{
-			UserAgent:         "speakeasy-sdk/go 0.2.3 2.935.1 v1 github.com/continuous-labs-ai/cli/internal/sdk",
-			SDKVersion:        "0.2.3",
+			UserAgent:         "speakeasy-sdk/go 0.2.4 2.935.1 v1 github.com/continuous-labs-ai/cli/internal/sdk",
+			SDKVersion:        "0.2.4",
 			GenVersion:        "2.935.1",
 			OpenAPIDocVersion: "v1",
 			ServerList:        ServerList,
