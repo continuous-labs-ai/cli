@@ -372,12 +372,13 @@ components:
           type: string
         model:
           default: claude-opus-5-5
-          description: Model that builds and reviews the Simulator. Defaults to claude-opus-5-5. Its provider is derived from the model.
+          description: "Model that builds and reviews the Simulator. Defaults to claude-opus-5-5. Its provider is derived from the model. combined: builder on claude-opus-5-5, with two parallel reviews on claude-opus-5-5 and gpt-6-astra."
           enum:
             - gpt-6-astra
             - gpt-6.1-sol
             - claude-opus-5-5
             - claude-fable-5-1
+            - combined
           type: string
         name:
           description: Name for the Simulator. Omission generates a name. Names must not contain U+0000. The ID stays its identity, and names need not be unique.
@@ -1249,13 +1250,14 @@ components:
           maxItems: 50
           type: array
         model:
-          description: The model the builder and reviewer run on. A build recorded before model selection reports its provider's default.
+          description: The model the builder and reviewer run on, or combined for a build with two reviewers. A build recorded before model selection reports its provider's default.
           enum:
             - gpt-6-astra
             - gpt-6.1-sol
             - claude-opus-5-5
             - claude-fable-5-1
             - gpt-6-sol
+            - combined
           type: string
         phase:
           description: "Agent phase: build for generation, review for the separate reviewer, finalize for author repair after review. Null when not recorded."

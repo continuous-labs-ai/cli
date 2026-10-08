@@ -25,7 +25,7 @@ func (e *SimulatorBuildProgressLastSubmission) IsExact() bool {
 	return false
 }
 
-// SimulatorBuildProgressModel - The model the builder and reviewer run on. A build recorded before model selection reports its provider's default.
+// SimulatorBuildProgressModel - The model the builder and reviewer run on, or combined for a build with two reviewers. A build recorded before model selection reports its provider's default.
 type SimulatorBuildProgressModel string
 
 const (
@@ -34,6 +34,7 @@ const (
 	SimulatorBuildProgressModelClaudeOpus55  SimulatorBuildProgressModel = "claude-opus-5-5"
 	SimulatorBuildProgressModelClaudeFable51 SimulatorBuildProgressModel = "claude-fable-5-1"
 	SimulatorBuildProgressModelGpt6Sol       SimulatorBuildProgressModel = "gpt-6-sol"
+	SimulatorBuildProgressModelCombined      SimulatorBuildProgressModel = "combined"
 )
 
 func (e SimulatorBuildProgressModel) ToPointer() *SimulatorBuildProgressModel {
@@ -44,7 +45,7 @@ func (e SimulatorBuildProgressModel) ToPointer() *SimulatorBuildProgressModel {
 func (e *SimulatorBuildProgressModel) IsExact() bool {
 	if e != nil {
 		switch *e {
-		case "gpt-6-astra", "gpt-6.1-sol", "claude-opus-5-5", "claude-fable-5-1", "gpt-6-sol":
+		case "gpt-6-astra", "gpt-6.1-sol", "claude-opus-5-5", "claude-fable-5-1", "gpt-6-sol", "combined":
 			return true
 		}
 	}
@@ -108,7 +109,7 @@ type SimulatorBuildProgress struct {
 	LastTool *string `json:"last_tool"`
 	// Behavior the accepted build does not serve like the real system, most important first, set when the build is accepted. Empty when none.
 	Limitations []Limitation `json:"limitations"`
-	// The model the builder and reviewer run on. A build recorded before model selection reports its provider's default.
+	// The model the builder and reviewer run on, or combined for a build with two reviewers. A build recorded before model selection reports its provider's default.
 	Model SimulatorBuildProgressModel `json:"model"`
 	// Agent phase: build for generation, review for the separate reviewer, finalize for author repair after review. Null when not recorded.
 	Phase *SimulatorBuildProgressPhase `json:"phase"`
