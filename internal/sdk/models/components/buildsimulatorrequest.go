@@ -8,7 +8,7 @@ import (
 	"github.com/continuous-labs-ai/cli/internal/sdk/sdkinternal/utils"
 )
 
-// BuildSimulatorRequestModel - Model that builds and reviews the Simulator. Defaults to claude-opus-5-5. Its provider is derived from the model. combined: builder on claude-opus-5-5, with two parallel reviews on claude-opus-5-5 and gpt-6-astra.
+// BuildSimulatorRequestModel - Model that builds and reviews the Simulator. Defaults to combined. Its provider is derived from the model. combined: builder on claude-opus-5-5, with two parallel reviews on claude-opus-5-5 and gpt-6-astra.
 type BuildSimulatorRequestModel string
 
 const (
@@ -72,12 +72,14 @@ func (e *BuildSimulatorRequestSpecKind) UnmarshalJSON(data []byte) error {
 }
 
 type BuildSimulatorRequest struct {
+	// Workspace credentials the builder and reviewer can call real systems with, to observe how they behave. At most 5. Each must belong to the workspace and have a base_url. They send only reads, as guidance; use test tenants.
+	CredentialIds []string `json:"credential_ids,omitzero"`
 	// Regular expressions (RE2 syntax) that select the operations to implement. Each is matched against the OpenAPI operationId or the WSDL operation name; an operation is kept when any expression matches, and an OpenAPI operation without an operationId is dropped. At most 64 expressions of at most 1,024 characters each. Omit or send an empty list to keep every operation. Not allowed for an incremental build.
 	Filter []string `json:"filter,omitzero"`
 	// Instructions for the builder. Required for an incremental build. At most 16,384 characters and 65,536 UTF-8 bytes; must not be blank or contain U+0000.
 	Instructions *string `json:"instructions,omitzero"`
-	// Model that builds and reviews the Simulator. Defaults to claude-opus-5-5. Its provider is derived from the model. combined: builder on claude-opus-5-5, with two parallel reviews on claude-opus-5-5 and gpt-6-astra.
-	Model *BuildSimulatorRequestModel `default:"claude-opus-5-5" json:"model"`
+	// Model that builds and reviews the Simulator. Defaults to combined. Its provider is derived from the model. combined: builder on claude-opus-5-5, with two parallel reviews on claude-opus-5-5 and gpt-6-astra.
+	Model *BuildSimulatorRequestModel `default:"combined" json:"model"`
 	// Name for the Simulator. Omission generates a name. Names must not contain U+0000. The ID stays its identity, and names need not be unique.
 	Name *string `json:"name,omitzero"`
 	// Parent Simulator ID. With instructions and no spec this starts an incremental build: the parent must be ready, and the request takes no filter or spec_kind.
@@ -97,6 +99,13 @@ func (b *BuildSimulatorRequest) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	return nil
+}
+
+func (b *BuildSimulatorRequest) GetCredentialIds() []string {
+	if b == nil {
+		return nil
+	}
+	return b.CredentialIds
 }
 
 func (b *BuildSimulatorRequest) GetFilter() []string {
