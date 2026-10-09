@@ -4,6 +4,7 @@ package cli
 
 import (
 	"fmt"
+	"github.com/continuous-labs-ai/cli/internal/cli/credentials"
 	"github.com/continuous-labs-ai/cli/internal/cli/simulations"
 	"github.com/continuous-labs-ai/cli/internal/cli/simulators"
 	"github.com/continuous-labs-ai/cli/internal/cli/worlds"
@@ -47,6 +48,9 @@ func NewRootCommand() (*cobra.Command, error) {
 			output.InitAgentMode(cmd)
 			return nil
 		},
+	}
+	if err := credentials.InitCredentialsRoot(rootCmd); err != nil {
+		return nil, fmt.Errorf("init credentials: %w", err)
 	}
 	if err := simulations.InitSimulationsRoot(rootCmd); err != nil {
 		return nil, fmt.Errorf("init simulations: %w", err)

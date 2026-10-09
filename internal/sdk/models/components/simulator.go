@@ -83,8 +83,10 @@ type Simulator struct {
 	// The build's latest progress report, or null before the first report. A terminal Simulator keeps its last report.
 	Build *SimulatorBuildProgress `json:"build"`
 	// Simulator creation time.
-	CreatedAt time.Time       `json:"created_at"`
-	Error     *SimulatorError `json:"error"`
+	CreatedAt time.Time `json:"created_at"`
+	// Workspace credentials the build was allowed to call real systems with. Empty when none.
+	CredentialIds []string        `json:"credential_ids"`
+	Error         *SimulatorError `json:"error"`
 	// Simulator ID.
 	ID string `json:"id"`
 	// The instructions the build followed, or empty when none were given.
@@ -124,6 +126,13 @@ func (s *Simulator) GetCreatedAt() time.Time {
 		return time.Time{}
 	}
 	return s.CreatedAt
+}
+
+func (s *Simulator) GetCredentialIds() []string {
+	if s == nil {
+		return []string{}
+	}
+	return s.CredentialIds
 }
 
 func (s *Simulator) GetError() *SimulatorError {
