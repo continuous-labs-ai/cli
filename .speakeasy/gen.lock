@@ -1,19 +1,19 @@
 lockVersion: 2.0.0
 id: ad7b08dc-357d-414c-9f26-16cfbc099767
 management:
-  docChecksum: dd7640cefd38485f495fdd5f7dc90745
+  docChecksum: b49e4d9bf619465b90507786231c3e4d
   docVersion: v1
   speakeasyVersion: 1.796.4
   generationVersion: 2.935.1
-  releaseVersion: 0.2.6
-  configChecksum: da868fe8fbf2a31cace624ecb7df02ab
+  releaseVersion: 0.2.7
+  configChecksum: 98c5cf7e91c4f52d1f4a6ecebdaad64f
   repoURL: https://github.com/continuous-labs-ai/cli.git
   installationURL: https://github.com/continuous-labs-ai/cli
   published: true
 persistentEdits:
-  generation_id: 8a5236d9-45e5-4f64-ae94-c5368afc98f0
-  pristine_commit_hash: 5c6aef6c209cae751b0ffc1a8041a322a9fc9417
-  pristine_tree_hash: 09c477c9204d554f17b149c2c3273ef26ebf6f7a
+  generation_id: 396d47f5-5252-479d-85b4-8a8bb8c14339
+  pristine_commit_hash: eff84b83b91a96a4e1f2050aa84208778fa346d3
+  pristine_tree_hash: 4e06c887f96a2c9b6e61c6d1de81dff81c77c6f8
 features:
   cli:
     constsAndDefaults: 0.0.0
@@ -145,8 +145,8 @@ trackedFiles:
     pristine_git_object: ccddbe39924f51800c8b2a8f4e8596e026ec91e8
   internal/cli/simulators/buildsimulator.go:
     id: 8588410bc4ea
-    last_write_checksum: sha1:057310ca8bd7480555dd09e42e18b861c0ec4292
-    pristine_git_object: fcd61f18ec41e62b29172da88e28cb6f85c19335
+    last_write_checksum: sha1:2e233303b275df770fa492d1d6601aa40eb2c414
+    pristine_git_object: 52acb879e211882f2879e0e85968175b5229f09a
   internal/cli/simulators/cancelsimulator.go:
     id: 31eb0eac2613
     last_write_checksum: sha1:b6e97db954cbad681b70c3623f44dffddcc18989
@@ -173,8 +173,8 @@ trackedFiles:
     pristine_git_object: 5683746b7ddd446a5c966c9144b66cb59279aab2
   internal/cli/version.go:
     id: 7b0665492f72
-    last_write_checksum: sha1:3d4a9fd174bf89a9185f49701fc3499bd58c3cae
-    pristine_git_object: e1151de9c1f971f5ebd2e1d67e74d3c4a5f3262d
+    last_write_checksum: sha1:d12e9d023f4043a7e2ebffadfe5504d6f287e7ea
+    pristine_git_object: cef23b00faa6670e87c6deaf86d17711d77cc4d9
   internal/cli/whoami.go:
     id: c1787f2298ec
     last_write_checksum: sha1:9b8e8f6830e556f749eede72d72b4f18d9881c28
@@ -285,8 +285,8 @@ trackedFiles:
     pristine_git_object: 942a964e78a81ad9d9590cc67138a0c4c3569fc9
   internal/sdk/continuoussimulation.go:
     id: af3aeba7b54c
-    last_write_checksum: sha1:def3058152168e0e6d0e982eac61848531161c1b
-    pristine_git_object: 819c9bc95e7eb46b978ffdb31431b7e05874ed85
+    last_write_checksum: sha1:852f438a69ec3e4ecead23673663b4374147c556
+    pristine_git_object: 064e66ee63362d50128d2d0d893f72f15e9cf561
   internal/sdk/credentials.go:
     id: 67c2f2d273f9
     last_write_checksum: sha1:815e3517be25e5d4f27b35bfc5a2e2b0bf1a3d73
@@ -297,8 +297,8 @@ trackedFiles:
     pristine_git_object: 6a77d15dce5c36ee75de917155b8d26b56bfd6fd
   internal/sdk/models/components/buildsimulatorrequest.go:
     id: 510b20fc8bb2
-    last_write_checksum: sha1:18fa5c1dd49237cfbe5b5c1accf8df591b76e966
-    pristine_git_object: 89f5ef7ef0d29324b04392e07c9dfe9ced9976cf
+    last_write_checksum: sha1:33269727a3e4a7d52872ece6b30dbb98781e638d
+    pristine_git_object: 80376281224ce9185150edff4ee6321b72996d76
   internal/sdk/models/components/buildworldrequest.go:
     id: 8827e29faed8
     last_write_checksum: sha1:0c14eb32c8bd2865a809ae1e392de777eab650d1
@@ -405,8 +405,8 @@ trackedFiles:
     pristine_git_object: 74021da03198934d6e12a3dd1618d804010102f6
   internal/sdk/models/components/simulatorbuildprogress.go:
     id: a03d1ca01fab
-    last_write_checksum: sha1:a395d5557b39c368de018bfc05ff7b22e482a512
-    pristine_git_object: 6ae43fd7779b5f9d12430d2ef4202cd3bfe2d298
+    last_write_checksum: sha1:5f30bf60b579df30fbac14aa72d2909ff705f678
+    pristine_git_object: bb4dfb56ccbb298ac4c775064ea1a8e64568cbe0
   internal/sdk/models/components/simulatorerror.go:
     id: 8c6cc460c5e3
     last_write_checksum: sha1:a6d337ff2c71223313fb4f9766a6299ba4cc1cd8
@@ -469,8 +469,8 @@ trackedFiles:
     pristine_git_object: c73446c6ea6e8f85ee9c3f3574c921b3fd8ee333
   internal/sdk/models/operations/buildsimulator.go:
     id: 0ead813b1137
-    last_write_checksum: sha1:7f8621c045b1f8c44b2387dd01e1df281ff7b71d
-    pristine_git_object: 856dfc7e8717723561c18a501a64250e972c345e
+    last_write_checksum: sha1:e0c906c803a63734a7dad26661875310efef6463
+    pristine_git_object: f40d7e7480c4f863fe8f55e60022bbc4d84e2577
   internal/sdk/models/operations/buildworld.go:
     id: ae2781abebd1
     last_write_checksum: sha1:6fe8647360358d987d318e6991bb225b35944828
@@ -673,8 +673,8 @@ trackedFiles:
     pristine_git_object: f18c8da27b345b1f769ca973a5cd179d0b6e6966
   internal/sdk/simulators.go:
     id: 847405821e0b
-    last_write_checksum: sha1:af14fe708fa3831056873660aa9590175b2aee72
-    pristine_git_object: ea6be762a66fb87b7f2a341c1e222ab357ee33b8
+    last_write_checksum: sha1:343058a13e1f13a8c81fbe4847d07591277cccc0
+    pristine_git_object: 69a1c49128d2bd56811687501ae77c390ba3b323
   internal/sdk/types/bigint.go:
     id: fc530b70337e
     last_write_checksum: sha1:49b004005d0461fb04b846eca062b070b0360b31
@@ -701,8 +701,8 @@ trackedFiles:
     pristine_git_object: 159a87ec97aba99e4edd132f69652e123434303e
   internal/usage/schema.go:
     id: 0f40f4612437
-    last_write_checksum: sha1:3a3970aca72f6e2f45f07d33a7ecf7237352d60c
-    pristine_git_object: ae55acc37ab579ba20e4071483912fad5483ee6a
+    last_write_checksum: sha1:1f792d388c27ad27ab781ba59a3524b05e02ed97
+    pristine_git_object: fa682d5b2a5b0393796548c287e86de1b0ff14e5
   scripts/install.ps1:
     id: fee0853709e9
     last_write_checksum: sha1:2da33f25afaa301dc2a22ac12654c585cef5c572
@@ -994,7 +994,7 @@ examples:
           limit: 50
       responses:
         "200":
-          application/json: {"next_cursor": "<value>", "simulators": [{"build": {"hidden_limitations": 353850, "last_submission": "rejected", "last_tool": "<value>", "limitations": [], "model": "gpt-6-sol", "phase": "build", "stage": "assemble", "submissions": 113509, "tool_calls": 913897, "warnings": []}, "created_at": "2026-01-15T12:00:00Z", "credential_ids": ["<value 1>"], "error": null, "id": "smr_01J8Z5X4K7M2N9P0Q1R2S3T4V5", "instructions": "<value>", "name": "billing-api", "parent_id": "smr_01J8Z5X4K7M2N9P0Q1R2S3T4V9", "source": "workspace", "spec_kind": "wsdl", "status": "building"}]}
+          application/json: {"next_cursor": "<value>", "simulators": [{"build": {"hidden_limitations": 353850, "last_submission": "rejected", "last_tool": "<value>", "limitations": [], "model": "gpt-6-sol", "phase": "build", "review_round": 353850, "review_rounds": 146714, "stage": "assemble", "submissions": 113509, "tool_calls": 913897, "warnings": []}, "created_at": "2026-01-15T12:00:00Z", "credential_ids": ["<value 1>"], "error": null, "id": "smr_01J8Z5X4K7M2N9P0Q1R2S3T4V5", "instructions": "<value>", "name": "billing-api", "parent_id": "smr_01J8Z5X4K7M2N9P0Q1R2S3T4V9", "source": "workspace", "spec_kind": "wsdl", "status": "building"}]}
         "400":
           application/problem+json: {"code": "<value>", "detail": "<value>", "validation": {"issues": []}}
         "500":
@@ -1002,7 +1002,7 @@ examples:
   build-simulator:
     simulator_unknown_parent:
       requestBody:
-        multipart/form-data: {"request": {"filter": [], "instructions": "Return stable example data for every operation.", "model": "claude-fable-5-1", "name": "billing-api", "spec_kind": "openapi", "timeout_seconds": 14400}}
+        multipart/form-data: {"request": {"filter": [], "instructions": "Return stable example data for every operation.", "model": "claude-fable-5-1", "name": "billing-api", "review_rounds": 1, "spec_kind": "openapi", "timeout_seconds": 14400}}
       responses:
         "400":
           application/problem+json: {"code": "simulator_unknown", "detail": "The parent Simulator with ID \"smr_01J8Z5X4K7M2N9P0Q1R2S3T4V5\" is unknown or belongs to another workspace.", "validation": null}
@@ -1014,10 +1014,10 @@ examples:
           application/problem+json: {"code": "simulator_unknown", "detail": "The parent Simulator with ID \"smr_01J8Z5X4K7M2N9P0Q1R2S3T4V5\" is unknown or belongs to another workspace.", "validation": null}
     speakeasy-default-build-simulator:
       requestBody:
-        multipart/form-data: {"request": {"filter": [], "instructions": "Return stable example data for every operation.", "model": "claude-fable-5-1", "name": "billing-api", "spec_kind": "openapi", "timeout_seconds": 14400}}
+        multipart/form-data: {"request": {"filter": [], "instructions": "Return stable example data for every operation.", "model": "claude-fable-5-1", "name": "billing-api", "review_rounds": 1, "spec_kind": "openapi", "timeout_seconds": 14400}}
       responses:
         "202":
-          application/json: {"build": {"hidden_limitations": 0, "last_submission": "rejected", "last_tool": "test", "limitations": [], "model": "claude-fable-5-1", "phase": "build", "stage": "build", "submissions": 1, "tool_calls": 7, "warnings": []}, "created_at": "2026-01-15T12:00:00Z", "credential_ids": [], "error": null, "id": "smr_01J8Z5X4K7M2N9P0Q1R2S3T4V5", "instructions": "Return stable example data for every operation.", "name": "billing-api", "parent_id": "smr_01J8Z5X4K7M2N9P0Q1R2S3T4V9", "source": "workspace", "spec_kind": "openapi", "status": "building"}
+          application/json: {"build": {"hidden_limitations": 0, "last_submission": "rejected", "last_tool": "test", "limitations": [], "model": "claude-fable-5-1", "phase": "build", "review_round": 0, "review_rounds": 1, "stage": "build", "submissions": 1, "tool_calls": 7, "warnings": []}, "created_at": "2026-01-15T12:00:00Z", "credential_ids": [], "error": null, "id": "smr_01J8Z5X4K7M2N9P0Q1R2S3T4V5", "instructions": "Return stable example data for every operation.", "name": "billing-api", "parent_id": "smr_01J8Z5X4K7M2N9P0Q1R2S3T4V9", "source": "workspace", "spec_kind": "openapi", "status": "building"}
         "400":
           application/problem+json: {"code": "<value>", "detail": "<value>", "validation": {"issues": []}}
         "500":
@@ -1028,7 +1028,7 @@ examples:
           application/problem+json: {"code": "<value>", "detail": "<value>", "validation": {"issues": []}}
     bad_request_body:
       requestBody:
-        multipart/form-data: {"request": {"filter": [], "instructions": "Return stable example data for every operation.", "model": "claude-fable-5-1", "name": "billing-api", "spec_kind": "openapi", "timeout_seconds": 14400}}
+        multipart/form-data: {"request": {"filter": [], "instructions": "Return stable example data for every operation.", "model": "claude-fable-5-1", "name": "billing-api", "review_rounds": 1, "spec_kind": "openapi", "timeout_seconds": 14400}}
       responses:
         "400":
           application/problem+json: {"code": "bad_request", "detail": "request body is invalid", "validation": null}
@@ -1075,7 +1075,7 @@ examples:
           id: "<id>"
       responses:
         "200":
-          application/json: {"build": {"hidden_limitations": 0, "last_submission": "rejected", "last_tool": "test", "limitations": [], "model": "claude-fable-5-1", "phase": "build", "stage": "build", "submissions": 1, "tool_calls": 7, "warnings": []}, "created_at": "2026-01-15T12:00:00Z", "credential_ids": [], "error": null, "id": "smr_01J8Z5X4K7M2N9P0Q1R2S3T4V5", "instructions": "Return stable example data for every operation.", "name": "billing-api", "parent_id": "smr_01J8Z5X4K7M2N9P0Q1R2S3T4V9", "source": "workspace", "spec_kind": "openapi", "status": "building"}
+          application/json: {"build": {"hidden_limitations": 0, "last_submission": "rejected", "last_tool": "test", "limitations": [], "model": "claude-fable-5-1", "phase": "build", "review_round": 0, "review_rounds": 1, "stage": "build", "submissions": 1, "tool_calls": 7, "warnings": []}, "created_at": "2026-01-15T12:00:00Z", "credential_ids": [], "error": null, "id": "smr_01J8Z5X4K7M2N9P0Q1R2S3T4V5", "instructions": "Return stable example data for every operation.", "name": "billing-api", "parent_id": "smr_01J8Z5X4K7M2N9P0Q1R2S3T4V9", "source": "workspace", "spec_kind": "openapi", "status": "building"}
         "400":
           application/problem+json: {"code": "<value>", "detail": "<value>"}
         "500":
@@ -1552,7 +1552,7 @@ examples:
           id: "<id>"
       responses:
         "200":
-          application/json: {"build": {"hidden_limitations": 0, "last_submission": "rejected", "last_tool": "test", "limitations": [], "model": "claude-fable-5-1", "phase": "build", "stage": "build", "submissions": 1, "tool_calls": 7, "warnings": []}, "created_at": "2026-01-15T12:00:00Z", "credential_ids": [], "error": null, "id": "smr_01J8Z5X4K7M2N9P0Q1R2S3T4V5", "instructions": "Return stable example data for every operation.", "name": "billing-api", "parent_id": "smr_01J8Z5X4K7M2N9P0Q1R2S3T4V9", "source": "workspace", "spec_kind": "openapi", "status": "building"}
+          application/json: {"build": {"hidden_limitations": 0, "last_submission": "rejected", "last_tool": "test", "limitations": [], "model": "claude-fable-5-1", "phase": "build", "review_round": 0, "review_rounds": 1, "stage": "build", "submissions": 1, "tool_calls": 7, "warnings": []}, "created_at": "2026-01-15T12:00:00Z", "credential_ids": [], "error": null, "id": "smr_01J8Z5X4K7M2N9P0Q1R2S3T4V5", "instructions": "Return stable example data for every operation.", "name": "billing-api", "parent_id": "smr_01J8Z5X4K7M2N9P0Q1R2S3T4V9", "source": "workspace", "spec_kind": "openapi", "status": "building"}
         "401":
           application/problem+json: {"code": "<value>", "detail": "<value>", "validation": {"issues": [{"code": "<value>", "kind": "invalid", "location": "<value>", "message": "<value>", "operation": "<value>", "suggestion": "<value>"}]}}
         "500":
@@ -1842,4 +1842,4 @@ examples:
         "500":
           application/problem+json: {"code": "<value>", "detail": "<value>", "validation": {"issues": []}}
 examplesVersion: 1.0.2
-releaseNotes: "## Cli SDK Changes:\n* `ContinuousSimulation.Credentials.ListCredentials()`: **Added**\n* `ContinuousSimulation.Credentials.CreateCredential()`: **Added**\n* `ContinuousSimulation.Credentials.DeleteCredential()`: **Added**\n* `ContinuousSimulation.Credentials.GetCredential()`: **Added**\n* `ContinuousSimulation.Credentials.UpdateCredential()`: **Added**\n* `ContinuousSimulation.Simulators.ListSimulators()`:  `response.Simulators[].CredentialIds` **Added**\n* `ContinuousSimulation.Simulators.BuildSimulator()`: \n  *  `request.Request.Request` **Changed**\n  *  `response.CredentialIds` **Added**\n* `ContinuousSimulation.Simulators.GetSimulator()`:  `response.CredentialIds` **Added**\n* `ContinuousSimulation.Simulators.CancelSimulator()`:  `response.CredentialIds` **Added**\n"
+releaseNotes: "## Cli SDK Changes:\n* `ContinuousSimulation.Simulators.ListSimulators()`:  `response.Simulators[].Build` **Changed**\n* `ContinuousSimulation.Simulators.BuildSimulator()`: \n  *  `request.Request` **Changed**\n  *  `response.Build` **Changed**\n* `ContinuousSimulation.Simulators.GetSimulator()`:  `response.Build` **Changed**\n* `ContinuousSimulation.Simulators.CancelSimulator()`:  `response.Build` **Changed**\n"
