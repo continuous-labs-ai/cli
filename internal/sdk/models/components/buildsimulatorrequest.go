@@ -84,6 +84,8 @@ type BuildSimulatorRequest struct {
 	Name *string `json:"name,omitzero"`
 	// Parent Simulator ID. With instructions and no spec this starts an incremental build: the parent must be ready, and the request takes no filter or spec_kind.
 	ParentID *string `json:"parent_id,omitzero"`
+	// Review rounds, from 1 to 10. Defaults to 1. Each round is a review and a repair of its findings, by the same builder and reviewers. The rounds stop early when every reviewer reports no findings.
+	ReviewRounds *int64 `default:"1" json:"review_rounds"`
 	// Source specification format. Omission detects the format.
 	SpecKind *BuildSimulatorRequestSpecKind `json:"spec_kind,omitzero"`
 	// Time limit for generation and validation in seconds, from 1 to 72000. Defaults to 14400 (four hours). Excludes queue wait and finalization. Retries share the same deadline.
@@ -141,6 +143,13 @@ func (b *BuildSimulatorRequest) GetParentID() *string {
 		return nil
 	}
 	return b.ParentID
+}
+
+func (b *BuildSimulatorRequest) GetReviewRounds() *int64 {
+	if b == nil {
+		return nil
+	}
+	return b.ReviewRounds
 }
 
 func (b *BuildSimulatorRequest) GetSpecKind() *BuildSimulatorRequestSpecKind {

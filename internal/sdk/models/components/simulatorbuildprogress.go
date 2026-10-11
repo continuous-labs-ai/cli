@@ -113,6 +113,10 @@ type SimulatorBuildProgress struct {
 	Model SimulatorBuildProgressModel `json:"model"`
 	// Agent phase: build for generation, review for the separate reviewer, finalize for author repair after review. Null when not recorded.
 	Phase *SimulatorBuildProgressPhase `json:"phase"`
+	// Review round that phase review or finalize belongs to, from 1. 0 before the first review.
+	ReviewRound int64 `json:"review_round"`
+	// Review rounds the build runs at most. Fewer run when the reviewers agree early.
+	ReviewRounds int64 `json:"review_rounds"`
 	// derive while the effective spec, build skeleton, and sandbox are prepared; build while the coding loop runs; assemble while an accepted artifact publishes.
 	Stage SimulatorBuildProgressStage `json:"stage"`
 	// Submit attempts.
@@ -163,6 +167,20 @@ func (s *SimulatorBuildProgress) GetPhase() *SimulatorBuildProgressPhase {
 		return nil
 	}
 	return s.Phase
+}
+
+func (s *SimulatorBuildProgress) GetReviewRound() int64 {
+	if s == nil {
+		return 0
+	}
+	return s.ReviewRound
+}
+
+func (s *SimulatorBuildProgress) GetReviewRounds() int64 {
+	if s == nil {
+		return 0
+	}
+	return s.ReviewRounds
 }
 
 func (s *SimulatorBuildProgress) GetStage() SimulatorBuildProgressStage {

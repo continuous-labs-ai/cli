@@ -7,6 +7,25 @@ import (
 	"github.com/continuous-labs-ai/cli/internal/sdk/sdkinternal/utils"
 )
 
+type Document struct {
+	FileName string `multipartForm:"name=fileName"`
+	Content  []byte `multipartForm:"content"`
+}
+
+func (d *Document) GetFileName() string {
+	if d == nil {
+		return ""
+	}
+	return d.FileName
+}
+
+func (d *Document) GetContent() []byte {
+	if d == nil {
+		return []byte{}
+	}
+	return d.Content
+}
+
 type Spec struct {
 	FileName string `multipartForm:"name=fileName"`
 	Content  []byte `multipartForm:"content"`
@@ -27,7 +46,9 @@ func (s *Spec) GetContent() []byte {
 }
 
 type BuildSimulatorRequest struct {
-	Request components.BuildSimulatorRequest `multipartForm:"name=request,json"`
+	// Vendor documentation the builder and reviewer read before they start, as repeated file parts: UTF-8 text (.md, .txt, .html, .json, .yaml, .xml, .csv) or PDF (.pdf). The documents share the request body limit with the spec. A parent's documents are not inherited.
+	Document []Document                       `multipartForm:"file,name=document"`
+	Request  components.BuildSimulatorRequest `multipartForm:"name=request,json"`
 	// OpenAPI or WSDL document, UTF-8 encoded, at most 64 MiB. Required unless the request is an incremental build (parent_id and instructions, no spec).
 	Spec *Spec `multipartForm:"file,name=spec"`
 }
@@ -41,6 +62,13 @@ func (b *BuildSimulatorRequest) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	return nil
+}
+
+func (b *BuildSimulatorRequest) GetDocument() []Document {
+	if b == nil {
+		return nil
+	}
+	return b.Document
 }
 
 func (b *BuildSimulatorRequest) GetRequest() components.BuildSimulatorRequest {
