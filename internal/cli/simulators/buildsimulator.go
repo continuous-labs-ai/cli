@@ -15,6 +15,7 @@ import (
 )
 
 var buildSimulatorCmdMeta = []flagutil.FlagMeta{
+	{FlagName: "document", FieldPath: "Document", Kind: flagutil.FlagKindFileArray, Optional: true, Description: "Vendor documentation the builder and reviewer read before they start, as repeated file parts: UTF-8 text (.md, .txt, .html, .json, .yaml, .xml, .csv) or PDF (.pdf). The documents share the request body limit with the spec. A parent's documents are not inherited."},
 	{FlagName: "request", Shorthand: "r", FieldPath: "Request", Kind: flagutil.FlagKindJSON, Required: true, Annotations: `multipartForm:"name=request,json"`, Description: "Request as JSON [required]"},
 	{FlagName: "spec", Shorthand: "s", FieldPath: "Spec", Kind: flagutil.FlagKindFile, Optional: true, Description: "OpenAPI or WSDL document, UTF-8 encoded, at most 64 MiB. Required unless the request is an incremental build (parent_id and instructions, no spec)."},
 }
@@ -24,8 +25,8 @@ func initBuildSimulatorCmd(parent *cobra.Command) error {
 	var cmd = &cobra.Command{
 		Use:     "build",
 		Short:   "Build Simulator",
-		Long:    "Starts an asynchronous Simulator build and returns the Simulator with status pending. Builds start in queue order when workspace capacity is available. Send multipart/form-data with a JSON part named request. To build from a document, add a file part named spec with the OpenAPI or WSDL document. For an incremental build, omit spec and set parent_id and instructions.",
-		Example: "  continuous simulators build --request '{\"request\":{\"filter\":[],\"instructions\":\"Return stable example data for every operation.\",\"model\":\"claude-fable-5-1\",\"name\":\"billing-api\",\"spec_kind\":\"openapi\",\"timeout_seconds\":14400} }'",
+		Long:    "Starts an asynchronous Simulator build and returns the Simulator with status pending. Builds start in queue order when workspace capacity is available. Send multipart/form-data with a JSON part named request. To build from a document, add a file part named spec with the OpenAPI or WSDL document. For an incremental build, omit spec and set parent_id and instructions. Add file parts named document to give the builder and reviewer vendor documentation.",
+		Example: "  continuous simulators build --request '{\"request\":{\"filter\":[],\"instructions\":\"Return stable example data for every operation.\",\"model\":\"claude-fable-5-1\",\"name\":\"billing-api\",\"review_rounds\":1,\"spec_kind\":\"openapi\",\"timeout_seconds\":14400} }'",
 		RunE:    runBuildSimulatorCmd,
 	}
 	flagutil.RegisterFlags(cmd, buildSimulatorCmdMeta)

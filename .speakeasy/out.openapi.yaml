@@ -422,6 +422,13 @@ components:
           maxLength: 30
           pattern: ^smr_[0-9A-HJKMNP-TV-Z]{26}$
           type: string
+        review_rounds:
+          default: 1
+          description: Review rounds, from 1 to 10. Defaults to 1. Each round is a review and a repair of its findings, by the same builder and reviewers. The rounds stop early when every reviewer reports no findings.
+          format: int64
+          maximum: 10
+          minimum: 1
+          type: integer
         spec_kind:
           description: Source specification format. Omission detects the format.
           enum:
@@ -1231,6 +1238,8 @@ components:
             limitations: []
             model: claude-fable-5-1
             phase: build
+            review_round: 0
+            review_rounds: 1
             stage: build
             submissions: 1
             tool_calls: 7
@@ -1390,6 +1399,18 @@ components:
           type:
             - string
             - "null"
+        review_round:
+          description: Review round that phase review or finalize belongs to, from 1. 0 before the first review.
+          format: int64
+          maximum: 10
+          minimum: 0
+          type: integer
+        review_rounds:
+          description: Review rounds the build runs at most. Fewer run when the reviewers agree early.
+          format: int64
+          maximum: 10
+          minimum: 1
+          type: integer
         stage:
           description: derive while the effective spec, build skeleton, and sandbox are prepared; build while the coding loop runs; assemble while an accepted artifact publishes.
           enum:
@@ -1416,6 +1437,8 @@ components:
       required:
         - model
         - phase
+        - review_round
+        - review_rounds
         - stage
         - tool_calls
         - submissions
@@ -3504,12 +3527,14 @@ paths:
       tags:
         - simulators
     post:
-      description: Starts an asynchronous Simulator build and returns the Simulator with status pending. Builds start in queue order when workspace capacity is available. Send multipart/form-data with a JSON part named request. To build from a document, add a file part named spec with the OpenAPI or WSDL document. For an incremental build, omit spec and set parent_id and instructions.
+      description: Starts an asynchronous Simulator build and returns the Simulator with status pending. Builds start in queue order when workspace capacity is available. Send multipart/form-data with a JSON part named request. To build from a document, add a file part named spec with the OpenAPI or WSDL document. For an incremental build, omit spec and set parent_id and instructions. Add file parts named document to give the builder and reviewer vendor documentation.
       operationId: build-simulator
       requestBody:
         content:
           multipart/form-data:
             encoding:
+              document:
+                contentType: application/octet-stream
               request:
                 contentType: application/json
               spec:
@@ -3517,6 +3542,14 @@ paths:
             schema:
               additionalProperties: false
               properties:
+                document:
+                  description: "Vendor documentation the builder and reviewer read before they start, as repeated file parts: UTF-8 text (.md, .txt, .html, .json, .yaml, .xml, .csv) or PDF (.pdf). The documents share the request body limit with the spec. A parent's documents are not inherited."
+                  items:
+                    contentEncoding: binary
+                    contentMediaType: application/octet-stream
+                    format: binary
+                    type: string
+                  type: array
                 request:
                   $ref: "#/components/schemas/BuildSimulatorRequest"
                   description: Build options as JSON.
