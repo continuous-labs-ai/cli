@@ -95,6 +95,8 @@ type Simulator struct {
 	Name string `json:"name"`
 	// Parent Simulator ID, or null.
 	ParentID *string `json:"parent_id"`
+	// The build's research stage, or null for a Simulator built before research ran on every build.
+	Research *SimulatorResearch `json:"research"`
 	// workspace for a Simulator your workspace built; catalog for a read-only Simulator that Continuous publishes.
 	Source Source `json:"source"`
 	// The specification the Simulator was built from, or null until a build has read it.
@@ -168,6 +170,13 @@ func (s *Simulator) GetParentID() *string {
 		return nil
 	}
 	return s.ParentID
+}
+
+func (s *Simulator) GetResearch() *SimulatorResearch {
+	if s == nil {
+		return nil
+	}
+	return s.Research
 }
 
 func (s *Simulator) GetSource() Source {

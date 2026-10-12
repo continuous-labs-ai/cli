@@ -46,7 +46,7 @@ func (s *Spec) GetContent() []byte {
 }
 
 type BuildSimulatorRequest struct {
-	// Vendor documentation the builder and reviewer read before they start, as repeated file parts: UTF-8 text (.md, .txt, .html, .json, .yaml, .xml, .csv) or PDF (.pdf). The documents share the request body limit with the spec. A parent's documents are not inherited.
+	// Vendor documentation the builder and reviewer read before they start, as repeated file parts: UTF-8 text (.md, .txt, .html, .json, .yaml, .xml, .csv) or PDF (.pdf). The documents share the request body limit with the spec. A parent's documents are not inherited. A document named INDEX.md indexes the others and skips research; the build fails if it names a document not sent or leaves out a selected operation.
 	Document []Document                       `multipartForm:"file,name=document"`
 	Request  components.BuildSimulatorRequest `multipartForm:"name=request,json"`
 	// OpenAPI or WSDL document, UTF-8 encoded, at most 64 MiB. Required unless the request is an incremental build (parent_id and instructions, no spec).

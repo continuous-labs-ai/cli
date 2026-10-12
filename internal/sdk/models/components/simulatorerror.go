@@ -53,7 +53,7 @@ func (e *SimulatorErrorReason) IsExact() bool {
 }
 
 type SimulatorError struct {
-	// Plain-text explanation from the build agent, when it could not continue. At most 4096 UTF-8 bytes.
+	// Plain-text explanation from the build agent when it could not continue, or the problems the check of the documents' INDEX.md found. At most 4096 UTF-8 bytes.
 	AgentMessage *string `json:"agent_message"`
 	// Stable Simulator build error code.
 	Code SimulatorErrorCode `json:"code"`

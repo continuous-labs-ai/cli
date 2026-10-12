@@ -384,7 +384,7 @@ components:
           spec_kind: openapi
       properties:
         credential_ids:
-          description: Workspace credentials the builder and reviewer can call real systems with, to observe how they behave. At most 5. Each must belong to the workspace and have a base_url. They send only reads, as guidance; use test tenants.
+          description: Workspace credentials QA and the builder can call real systems with, to compare the Simulator with them. At most 5. Each must belong to the workspace and have a base_url. QA may create test objects in the live system and deletes them or, where the API cannot, leaves them in a final state; the builder sends only reads. Use a sandbox or test account.
           items:
             maxLength: 30
             pattern: ^crd_[0-9A-HJKMNP-TV-Z]{26}$
@@ -1251,6 +1251,7 @@ components:
           instructions: Return stable example data for every operation.
           name: billing-api
           parent_id: smr_01J8Z5X4K7M2N9P0Q1R2S3T4V9
+          research: null
           source: workspace
           spec_kind: openapi
           status: building
@@ -1289,6 +1290,11 @@ components:
           type:
             - string
             - "null"
+        research:
+          description: The build's research stage, or null for a Simulator built before research ran on every build.
+          oneOf:
+            - $ref: "#/components/schemas/SimulatorResearch"
+            - type: "null"
         source:
           description: workspace for a Simulator your workspace built; catalog for a read-only Simulator that Continuous publishes.
           enum:
@@ -1325,6 +1331,7 @@ components:
         - created_at
         - credential_ids
         - build
+        - research
       type: object
     SimulatorActor:
       additionalProperties: false
@@ -1390,19 +1397,21 @@ components:
             - combined
           type: string
         phase:
-          description: "Agent phase: build for generation, review for the separate reviewer, finalize for author repair after review. Null when not recorded."
+          description: "Agent phase: research while the research agent indexes the documents and saves the vendor pages they lack; build for generation, review for the separate reviewer, qa while QA tests the running Simulator from outside, after the last review round, finalize for author repair after review or QA. Null when not recorded."
           enum:
+            - research
             - build
             - review
+            - qa
             - finalize
             - null
           type:
             - string
             - "null"
         review_round:
-          description: Review round that phase review or finalize belongs to, from 1. 0 before the first review.
+          description: Review round that phase review, qa, or finalize belongs to, from 1. QA and the repair after it are in round review_rounds + 1. 0 before the first review.
           format: int64
-          maximum: 10
+          maximum: 11
           minimum: 0
           type: integer
         review_rounds:
@@ -1452,7 +1461,7 @@ components:
       additionalProperties: false
       properties:
         agent_message:
-          description: Plain-text explanation from the build agent, when it could not continue. At most 4096 UTF-8 bytes.
+          description: Plain-text explanation from the build agent when it could not continue, or the problems the check of the documents' INDEX.md found. At most 4096 UTF-8 bytes.
           maxLength: 4096
           type:
             - string
@@ -1491,6 +1500,33 @@ components:
       type:
         - object
         - "null"
+    SimulatorResearch:
+      additionalProperties: false
+      properties:
+        bytes:
+          description: Total size of the saved pages in bytes.
+          format: int64
+          minimum: 0
+          type: integer
+        pages:
+          description: Vendor pages research saved for the build.
+          format: int64
+          minimum: 0
+          type: integer
+        status:
+          description: pending until the stage starts; running while the research agent indexes the documents and saves the vendor pages they lack; complete when it wrote the index; failed when it could not finish, which fails the build, or when the build ended first; provided when the documents included INDEX.md, so research did not run.
+          enum:
+            - pending
+            - running
+            - complete
+            - failed
+            - provided
+          type: string
+      required:
+        - status
+        - pages
+        - bytes
+      type: object
     SpecificationIssue:
       additionalProperties: false
       properties:
@@ -3543,7 +3579,7 @@ paths:
               additionalProperties: false
               properties:
                 document:
-                  description: "Vendor documentation the builder and reviewer read before they start, as repeated file parts: UTF-8 text (.md, .txt, .html, .json, .yaml, .xml, .csv) or PDF (.pdf). The documents share the request body limit with the spec. A parent's documents are not inherited."
+                  description: "Vendor documentation the builder and reviewer read before they start, as repeated file parts: UTF-8 text (.md, .txt, .html, .json, .yaml, .xml, .csv) or PDF (.pdf). The documents share the request body limit with the spec. A parent's documents are not inherited. A document named INDEX.md indexes the others and skips research; the build fails if it names a document not sent or leaves out a selected operation."
                   items:
                     contentEncoding: binary
                     contentMediaType: application/octet-stream
