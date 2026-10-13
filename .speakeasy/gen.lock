@@ -1,19 +1,19 @@
 lockVersion: 2.0.0
 id: ad7b08dc-357d-414c-9f26-16cfbc099767
 management:
-  docChecksum: e2687473e797d742e6003833c25059e5
+  docChecksum: 4ce0745d4e19d03261683d9f5295d865
   docVersion: v1
   speakeasyVersion: 1.796.4
   generationVersion: 2.935.1
-  releaseVersion: 0.2.8
-  configChecksum: 8bf9d65e2ed48f0198d1c600faaf4cac
+  releaseVersion: 0.2.9
+  configChecksum: ac250cc0a84bdaffa2a27fef728c8b9a
   repoURL: https://github.com/continuous-labs-ai/cli.git
   installationURL: https://github.com/continuous-labs-ai/cli
   published: true
 persistentEdits:
-  generation_id: b97ed7dc-8893-49da-b31a-742cd9f92860
-  pristine_commit_hash: ef92fc4c3138fd00756505e4baed27392501d19e
-  pristine_tree_hash: c21a40738e31ca7ba4fcac2642b7a999d6aa997f
+  generation_id: c3089713-93b9-4f79-a614-c2a19ea1773f
+  pristine_commit_hash: fb2e635410ebe8c3ffd29a030ee5e96c5158d028
+  pristine_tree_hash: ab1be8638baaac460a6d9552eede890a735cd70a
 features:
   cli:
     constsAndDefaults: 0.0.0
@@ -173,8 +173,8 @@ trackedFiles:
     pristine_git_object: 5683746b7ddd446a5c966c9144b66cb59279aab2
   internal/cli/version.go:
     id: 7b0665492f72
-    last_write_checksum: sha1:c5c9cb210b08983e62f9407e5010843f5b628e65
-    pristine_git_object: 4d8f132c03af11c0d966f2a197b58cd2a28d3d86
+    last_write_checksum: sha1:442147d6bdffb0bc3dc7b51671162ab5b986e230
+    pristine_git_object: 6262a5fba6af1186a269fc53a2253af873ae70be
   internal/cli/whoami.go:
     id: c1787f2298ec
     last_write_checksum: sha1:9b8e8f6830e556f749eede72d72b4f18d9881c28
@@ -285,8 +285,8 @@ trackedFiles:
     pristine_git_object: 942a964e78a81ad9d9590cc67138a0c4c3569fc9
   internal/sdk/continuoussimulation.go:
     id: af3aeba7b54c
-    last_write_checksum: sha1:9f46ce7c6a0816376a92227e94894bad59822bba
-    pristine_git_object: 7ac260fd76c438b3efccf3b1febefbf5fa180d45
+    last_write_checksum: sha1:4fa508000d8a18d00b2179bccea7f9f005ca4675
+    pristine_git_object: 4d0fbc4b99dd62e67b487f98fabe64ed48d13e5f
   internal/sdk/credentials.go:
     id: 67c2f2d273f9
     last_write_checksum: sha1:815e3517be25e5d4f27b35bfc5a2e2b0bf1a3d73
@@ -297,8 +297,8 @@ trackedFiles:
     pristine_git_object: 6a77d15dce5c36ee75de917155b8d26b56bfd6fd
   internal/sdk/models/components/buildsimulatorrequest.go:
     id: 510b20fc8bb2
-    last_write_checksum: sha1:7560f3a5b761be9c055b30176420edc451fdb2a9
-    pristine_git_object: 4099cb2c2f93b1fe8e8804307eda0e5ce43ea00e
+    last_write_checksum: sha1:b91c67d6ad7045a422e9a16e920844b0d5c5e95c
+    pristine_git_object: 90ca0ef7ae71ddf59786a046375d906c7f0ee453
   internal/sdk/models/components/buildworldrequest.go:
     id: 8827e29faed8
     last_write_checksum: sha1:0c14eb32c8bd2865a809ae1e392de777eab650d1
@@ -405,8 +405,8 @@ trackedFiles:
     pristine_git_object: 74021da03198934d6e12a3dd1618d804010102f6
   internal/sdk/models/components/simulatorbuildprogress.go:
     id: a03d1ca01fab
-    last_write_checksum: sha1:5c4fd1b526dad950ce4ae4c96389a38efb9aba95
-    pristine_git_object: 30912933b104373a5ab4b853190c07d731d674de
+    last_write_checksum: sha1:ccf25672b98e74ac4401a72d77d1f37b095523c7
+    pristine_git_object: 3a917325ad4652c4e6b4092383eddeda233fdc50
   internal/sdk/models/components/simulatorerror.go:
     id: 8c6cc460c5e3
     last_write_checksum: sha1:b8399ff975183caba624c9b1bbb644814620c0f2
@@ -705,8 +705,8 @@ trackedFiles:
     pristine_git_object: 159a87ec97aba99e4edd132f69652e123434303e
   internal/usage/schema.go:
     id: 0f40f4612437
-    last_write_checksum: sha1:e80e25ebc0512e985c3e1474f0d4cb4fb89d18c7
-    pristine_git_object: a6f24ea7eb1bec427ca453af2a362471202bfbd2
+    last_write_checksum: sha1:f54ae4497fdf2b9a9bc9eb154612bb9b75f99627
+    pristine_git_object: 79ed4776d481832e09c14bae8b16b8c78b4a1734
   scripts/install.ps1:
     id: fee0853709e9
     last_write_checksum: sha1:2da33f25afaa301dc2a22ac12654c585cef5c572
@@ -1846,9 +1846,3 @@ examples:
         "500":
           application/problem+json: {"code": "<value>", "detail": "<value>", "validation": {"issues": []}}
 examplesVersion: 1.0.2
-releaseNotes: |
-  ## Cli SDK Changes:
-  * `ContinuousSimulation.Simulators.ListSimulators()`:  `response.Simulators[]` **Changed**
-  * `ContinuousSimulation.Simulators.BuildSimulator()`:  `response` **Changed**
-  * `ContinuousSimulation.Simulators.GetSimulator()`:  `response` **Changed**
-  * `ContinuousSimulation.Simulators.CancelSimulator()`:  `response` **Changed**

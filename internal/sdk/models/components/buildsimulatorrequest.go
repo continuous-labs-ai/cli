@@ -72,7 +72,7 @@ func (e *BuildSimulatorRequestSpecKind) UnmarshalJSON(data []byte) error {
 }
 
 type BuildSimulatorRequest struct {
-	// Workspace credentials QA and the builder can call real systems with, to compare the Simulator with them. At most 5. Each must belong to the workspace and have a base_url. QA may create test objects in the live system and deletes them or, where the API cannot, leaves them in a final state; the builder sends only reads. Use a sandbox or test account.
+	// Workspace credentials QA and the builder can call real systems with, to compare the Simulator with them. A build with credentials runs QA after its review rounds. At most 5. Each must belong to the workspace and have a base_url. QA may create test objects in the live system and deletes them or, where the API cannot, leaves them in a final state; the builder sends only reads. Use a sandbox or test account.
 	CredentialIds []string `json:"credential_ids,omitzero"`
 	// Regular expressions (RE2 syntax) that select the operations to implement. Each is matched against the OpenAPI operationId or the WSDL operation name; an operation is kept when any expression matches, and an OpenAPI operation without an operationId is dropped. At most 64 expressions of at most 1,024 characters each. Omit or send an empty list to keep every operation. Not allowed for an incremental build.
 	Filter []string `json:"filter,omitzero"`
