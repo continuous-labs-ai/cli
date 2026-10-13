@@ -384,7 +384,7 @@ components:
           spec_kind: openapi
       properties:
         credential_ids:
-          description: Workspace credentials QA and the builder can call real systems with, to compare the Simulator with them. At most 5. Each must belong to the workspace and have a base_url. QA may create test objects in the live system and deletes them or, where the API cannot, leaves them in a final state; the builder sends only reads. Use a sandbox or test account.
+          description: Workspace credentials QA and the builder can call real systems with, to compare the Simulator with them. A build with credentials runs QA after its review rounds. At most 5. Each must belong to the workspace and have a base_url. QA may create test objects in the live system and deletes them or, where the API cannot, leaves them in a final state; the builder sends only reads. Use a sandbox or test account.
           items:
             maxLength: 30
             pattern: ^crd_[0-9A-HJKMNP-TV-Z]{26}$
@@ -1397,7 +1397,7 @@ components:
             - combined
           type: string
         phase:
-          description: "Agent phase: research while the research agent indexes the documents and saves the vendor pages they lack; build for generation, review for the separate reviewer, qa while QA tests the running Simulator from outside, after the last review round, finalize for author repair after review or QA. Null when not recorded."
+          description: "Agent phase: research while the research agent indexes the documents and saves the vendor pages they lack; build for generation, review for the separate reviewer, qa while QA tests the running Simulator from outside, after the last review round of a build with credential_ids, finalize for author repair after review or QA. Null when not recorded."
           enum:
             - research
             - build
@@ -1409,7 +1409,7 @@ components:
             - string
             - "null"
         review_round:
-          description: Review round that phase review, qa, or finalize belongs to, from 1. QA and the repair after it are in round review_rounds + 1. 0 before the first review.
+          description: Review round that phase review, qa, or finalize belongs to, from 1. In a build with credential_ids, QA and the repair after it are in round review_rounds + 1. 0 before the first review.
           format: int64
           maximum: 11
           minimum: 0
