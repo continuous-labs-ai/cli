@@ -8,7 +8,7 @@ import (
 	"github.com/continuous-labs-ai/cli/internal/sdk/sdkinternal/utils"
 )
 
-// BuildSimulatorRequestModel - Model that builds and reviews the Simulator. Defaults to combined. Its provider is derived from the model. combined: builder on claude-opus-5-5, with two parallel reviews on claude-opus-5-5 and gpt-6-astra.
+// BuildSimulatorRequestModel - Model that builds and reviews the Simulator. Defaults to combined. Its provider is derived from the model. combined currently builds, reviews, and runs QA exactly as claude-opus-5-5 does.
 type BuildSimulatorRequestModel string
 
 const (
@@ -78,13 +78,13 @@ type BuildSimulatorRequest struct {
 	Filter []string `json:"filter,omitzero"`
 	// Instructions for the builder. Required for an incremental build. At most 16,384 characters and 65,536 UTF-8 bytes; must not be blank or contain U+0000.
 	Instructions *string `json:"instructions,omitzero"`
-	// Model that builds and reviews the Simulator. Defaults to combined. Its provider is derived from the model. combined: builder on claude-opus-5-5, with two parallel reviews on claude-opus-5-5 and gpt-6-astra.
+	// Model that builds and reviews the Simulator. Defaults to combined. Its provider is derived from the model. combined currently builds, reviews, and runs QA exactly as claude-opus-5-5 does.
 	Model *BuildSimulatorRequestModel `default:"combined" json:"model"`
 	// Name for the Simulator. Omission generates a name. Names must not contain U+0000. The ID stays its identity, and names need not be unique.
 	Name *string `json:"name,omitzero"`
 	// Parent Simulator ID. With instructions and no spec this starts an incremental build: the parent must be ready, and the request takes no filter or spec_kind.
 	ParentID *string `json:"parent_id,omitzero"`
-	// Review rounds, from 1 to 10. Defaults to 1. Each round is a review and a repair of its findings, by the same builder and reviewers. The rounds stop early when every reviewer reports no findings.
+	// Review rounds, from 1 to 10. Defaults to 1. Each round is a review and a repair of its findings, by the same builder and reviewer. The rounds stop early when the reviewer reports no findings.
 	ReviewRounds *int64 `default:"1" json:"review_rounds"`
 	// Source specification format. Omission detects the format.
 	SpecKind *BuildSimulatorRequestSpecKind `json:"spec_kind,omitzero"`
