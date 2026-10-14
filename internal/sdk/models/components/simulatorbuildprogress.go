@@ -25,7 +25,7 @@ func (e *SimulatorBuildProgressLastSubmission) IsExact() bool {
 	return false
 }
 
-// SimulatorBuildProgressModel - The model the builder and reviewer run on, or combined for a build with two reviewers. A build recorded before model selection reports its provider's default.
+// SimulatorBuildProgressModel - The model the builder and reviewer run on, or combined, which currently runs as claude-opus-5-5. A build recorded before model selection reports its provider's default.
 type SimulatorBuildProgressModel string
 
 const (
@@ -111,13 +111,13 @@ type SimulatorBuildProgress struct {
 	LastTool *string `json:"last_tool"`
 	// Behavior the accepted build does not serve like the real system, most important first, set when the build is accepted. Empty when none.
 	Limitations []Limitation `json:"limitations"`
-	// The model the builder and reviewer run on, or combined for a build with two reviewers. A build recorded before model selection reports its provider's default.
+	// The model the builder and reviewer run on, or combined, which currently runs as claude-opus-5-5. A build recorded before model selection reports its provider's default.
 	Model SimulatorBuildProgressModel `json:"model"`
 	// Agent phase: research while the research agent indexes the documents and saves the vendor pages they lack; build for generation, review for the separate reviewer, qa while QA tests the running Simulator from outside, after the last review round of a build with credential_ids, finalize for author repair after review or QA. Null when not recorded.
 	Phase *SimulatorBuildProgressPhase `json:"phase"`
 	// Review round that phase review, qa, or finalize belongs to, from 1. In a build with credential_ids, QA and the repair after it are in round review_rounds + 1. 0 before the first review.
 	ReviewRound int64 `json:"review_round"`
-	// Review rounds the build runs at most. Fewer run when the reviewers agree early.
+	// Review rounds the build runs at most. Fewer run when the reviewer agrees early.
 	ReviewRounds int64 `json:"review_rounds"`
 	// derive while the effective spec, build skeleton, and sandbox are prepared; build while the coding loop runs; assemble while an accepted artifact publishes.
 	Stage SimulatorBuildProgressStage `json:"stage"`

@@ -405,7 +405,7 @@ components:
           type: string
         model:
           default: combined
-          description: "Model that builds and reviews the Simulator. Defaults to combined. Its provider is derived from the model. combined: builder on claude-opus-5-5, with two parallel reviews on claude-opus-5-5 and gpt-6-astra."
+          description: Model that builds and reviews the Simulator. Defaults to combined. Its provider is derived from the model. combined currently builds, reviews, and runs QA exactly as claude-opus-5-5 does.
           enum:
             - gpt-6-astra
             - gpt-6.1-sol
@@ -424,7 +424,7 @@ components:
           type: string
         review_rounds:
           default: 1
-          description: Review rounds, from 1 to 10. Defaults to 1. Each round is a review and a repair of its findings, by the same builder and reviewers. The rounds stop early when every reviewer reports no findings.
+          description: Review rounds, from 1 to 10. Defaults to 1. Each round is a review and a repair of its findings, by the same builder and reviewer. The rounds stop early when the reviewer reports no findings.
           format: int64
           maximum: 10
           minimum: 1
@@ -1387,7 +1387,7 @@ components:
           maxItems: 50
           type: array
         model:
-          description: The model the builder and reviewer run on, or combined for a build with two reviewers. A build recorded before model selection reports its provider's default.
+          description: The model the builder and reviewer run on, or combined, which currently runs as claude-opus-5-5. A build recorded before model selection reports its provider's default.
           enum:
             - gpt-6-astra
             - gpt-6.1-sol
@@ -1415,7 +1415,7 @@ components:
           minimum: 0
           type: integer
         review_rounds:
-          description: Review rounds the build runs at most. Fewer run when the reviewers agree early.
+          description: Review rounds the build runs at most. Fewer run when the reviewer agrees early.
           format: int64
           maximum: 10
           minimum: 1
