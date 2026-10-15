@@ -2,7 +2,7 @@
 
 package components
 
-// SimulatorResearchStatus - pending until the stage starts; running while the research agent indexes the documents and saves the vendor pages they lack; complete when it wrote the index; failed when it could not finish, which fails the build, or when the build ended first; provided when the documents included INDEX.md, so research did not run.
+// SimulatorResearchStatus - pending until the stage starts; running while the research agent indexes the documents and saves the vendor pages they lack; complete when it wrote an index that names every document; failed when it could not finish, which fails the build, or when the build ended first; provided when the documents included INDEX.md, so research did not run.
 type SimulatorResearchStatus string
 
 const (
@@ -33,7 +33,7 @@ type SimulatorResearch struct {
 	Bytes int64 `json:"bytes"`
 	// Vendor pages research saved for the build.
 	Pages int64 `json:"pages"`
-	// pending until the stage starts; running while the research agent indexes the documents and saves the vendor pages they lack; complete when it wrote the index; failed when it could not finish, which fails the build, or when the build ended first; provided when the documents included INDEX.md, so research did not run.
+	// pending until the stage starts; running while the research agent indexes the documents and saves the vendor pages they lack; complete when it wrote an index that names every document; failed when it could not finish, which fails the build, or when the build ended first; provided when the documents included INDEX.md, so research did not run.
 	Status SimulatorResearchStatus `json:"status"`
 }
 

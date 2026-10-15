@@ -40,8 +40,10 @@ type SimulationDetail struct {
 	CreatedAt time.Time `json:"created_at"`
 	// Current simulated time.
 	CurrentTime time.Time `json:"current_time"`
-	// Base URL for requests to the Simulation.
+	// Base URL for requests to the Simulation. For a Simulation in your own runtime environment it is that environment's proxy, and the Continuous /sim/{id} URL answers 421 simulation_endpoint_external.
 	Endpoint string `json:"endpoint"`
+	// True when the endpoint is your own runtime environment's proxy rather than Continuous's, so a client calls it directly.
+	EndpointExternal bool `json:"endpoint_external"`
 	// Simulation ID.
 	ID string `json:"id"`
 	// Whether the Simulation started with the Simulator's sample data. A fork inherits its source's state and reports false.
@@ -108,6 +110,13 @@ func (s *SimulationDetail) GetEndpoint() string {
 		return ""
 	}
 	return s.Endpoint
+}
+
+func (s *SimulationDetail) GetEndpointExternal() bool {
+	if s == nil {
+		return false
+	}
+	return s.EndpointExternal
 }
 
 func (s *SimulationDetail) GetID() string {
