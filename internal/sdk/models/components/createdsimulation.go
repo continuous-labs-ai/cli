@@ -38,8 +38,10 @@ type CreatedSimulation struct {
 	CreatedAt time.Time `json:"created_at"`
 	// Current simulated time.
 	CurrentTime time.Time `json:"current_time"`
-	// Base URL for requests to the Simulation.
+	// Base URL for requests to the Simulation. For a Simulation in your own runtime environment it is that environment's proxy, and the Continuous /sim/{id} URL answers 421 simulation_endpoint_external.
 	Endpoint string `json:"endpoint"`
+	// True when the endpoint is your own runtime environment's proxy rather than Continuous's, so a client calls it directly.
+	EndpointExternal bool `json:"endpoint_external"`
 	// Always null; Simulation tokens do not expire. Deprecated; will be removed.
 	//
 	// Deprecated: This will be removed in a future release, please migrate away from it as soon as possible.
@@ -103,6 +105,13 @@ func (c *CreatedSimulation) GetEndpoint() string {
 		return ""
 	}
 	return c.Endpoint
+}
+
+func (c *CreatedSimulation) GetEndpointExternal() bool {
+	if c == nil {
+		return false
+	}
+	return c.EndpointExternal
 }
 
 func (c *CreatedSimulation) GetExpiresAt() *time.Time {

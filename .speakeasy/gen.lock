@@ -1,19 +1,19 @@
 lockVersion: 2.0.0
 id: ad7b08dc-357d-414c-9f26-16cfbc099767
 management:
-  docChecksum: 0750c2d0ab7d3bb090095fe7987acd3d
+  docChecksum: d7ad1e2a6de93afe72fba2b2c898387e
   docVersion: v1
   speakeasyVersion: 1.796.4
   generationVersion: 2.935.1
-  releaseVersion: 0.2.10
-  configChecksum: c27666d0481c3cdd0f4d3492417a90f1
+  releaseVersion: 0.2.11
+  configChecksum: e996a75e8c2b2ac74df80bb12eb6a89b
   repoURL: https://github.com/continuous-labs-ai/cli.git
   installationURL: https://github.com/continuous-labs-ai/cli
   published: true
 persistentEdits:
-  generation_id: d29fd142-2204-456d-9044-ea40598fef55
-  pristine_commit_hash: dfd18748678c93a60c29ff617a39004042a894ec
-  pristine_tree_hash: 4dda5b0bf04a3c1af96cbf1cc9076f40fd61c05e
+  generation_id: 3d92bb3b-880d-4d83-9d95-ac81d67266f9
+  pristine_commit_hash: 533da1f188dc5bc35c9c00316adbd427b710bc00
+  pristine_tree_hash: b41b3288ede8b0de6a347867b1dfc2a7a8dd90cf
 features:
   cli:
     constsAndDefaults: 0.0.0
@@ -145,8 +145,8 @@ trackedFiles:
     pristine_git_object: ccddbe39924f51800c8b2a8f4e8596e026ec91e8
   internal/cli/simulators/buildsimulator.go:
     id: 8588410bc4ea
-    last_write_checksum: sha1:14e8e133c7a07bbefe8895e6a09dd8bca8a7ce91
-    pristine_git_object: 7123ac2d35c5a5058db4c329fcfd2a89717762c8
+    last_write_checksum: sha1:9a3f54e9e2bff6025192d8bde0b39828ddc15a7a
+    pristine_git_object: ff045f581e399f754321faf50fab24aed81f8851
   internal/cli/simulators/cancelsimulator.go:
     id: 31eb0eac2613
     last_write_checksum: sha1:b6e97db954cbad681b70c3623f44dffddcc18989
@@ -173,8 +173,8 @@ trackedFiles:
     pristine_git_object: 5683746b7ddd446a5c966c9144b66cb59279aab2
   internal/cli/version.go:
     id: 7b0665492f72
-    last_write_checksum: sha1:0ae23c657e3e414190677bd134e1e1e6d6d82a3f
-    pristine_git_object: 7ac651958b0758754b784942d5cd6190e2fe4481
+    last_write_checksum: sha1:3c45f5b51cd13adc66919cb9255295f238f79c44
+    pristine_git_object: ea2f4315f0045690130a95f3cc057eb26abca76d
   internal/cli/whoami.go:
     id: c1787f2298ec
     last_write_checksum: sha1:9b8e8f6830e556f749eede72d72b4f18d9881c28
@@ -285,8 +285,8 @@ trackedFiles:
     pristine_git_object: 942a964e78a81ad9d9590cc67138a0c4c3569fc9
   internal/sdk/continuoussimulation.go:
     id: af3aeba7b54c
-    last_write_checksum: sha1:224515389de0c45c4b90216f6b39c0449ff2d57e
-    pristine_git_object: 72eec34edb54721918aa31da5e66515120c3fb8a
+    last_write_checksum: sha1:ac7b9e715ba7bd2180a5037f5b3cad5d785f3802
+    pristine_git_object: c0c0650adf998e9e8ca8baa987933371f71448bd
   internal/sdk/credentials.go:
     id: 67c2f2d273f9
     last_write_checksum: sha1:815e3517be25e5d4f27b35bfc5a2e2b0bf1a3d73
@@ -329,8 +329,8 @@ trackedFiles:
     pristine_git_object: 50c2356d16ce882de47af046acd5ce8bb62f40ce
   internal/sdk/models/components/createdsimulation.go:
     id: 4b3913365b48
-    last_write_checksum: sha1:ae2871b96d9f157851611b27f39b22819d297149
-    pristine_git_object: 1fc7ca58b471714be2ed02c2b0571e9cdc374da2
+    last_write_checksum: sha1:e89cf1b3a5fc98c21e0553746f3a4efb56c2d23f
+    pristine_git_object: 4dc2f029a54c929d901a137865462270d43242fc
   internal/sdk/models/components/createsimulationrequest.go:
     id: 6748442be31e
     last_write_checksum: sha1:6dca7320d53a34f76e5a6ed8faa6aeb0f296a094
@@ -389,12 +389,12 @@ trackedFiles:
     pristine_git_object: eca801da09061c06c8ca5a5c1229134922c4e601
   internal/sdk/models/components/simulation.go:
     id: c8c8df785fde
-    last_write_checksum: sha1:7ec01b51a56fe80a67668fe7ecbc4037ed32a96f
-    pristine_git_object: ece4045a2adadc4012369b59f7e154f9b896da7c
+    last_write_checksum: sha1:0892118c25144b3a923e88ba92f0cd53d7ed0ddf
+    pristine_git_object: fd5474e635dc7d7cac142e832a441487cabf3bcf
   internal/sdk/models/components/simulationdetail.go:
     id: b1b84d664a21
-    last_write_checksum: sha1:6f014f61c8e6d67e1ecba2fea3fdd6922b8b828d
-    pristine_git_object: 8c79f0c90dd1d73c3868c6258537b9ffd16d88eb
+    last_write_checksum: sha1:41f663b37b5bd70a684555bd45ef1fd7496d230d
+    pristine_git_object: a19695c4037c64358c6ec112df7eb563ce4fce83
   internal/sdk/models/components/simulator.go:
     id: cb287534b8b9
     last_write_checksum: sha1:f224dac6d9d46170aedd090a30072e87ff0ad491
@@ -413,8 +413,8 @@ trackedFiles:
     pristine_git_object: 44da51e2f5c45786e9251ec7f8b4d13ec0d76c76
   internal/sdk/models/components/simulatorresearch.go:
     id: 39f3e0d9c99c
-    last_write_checksum: sha1:25cd175db4f486ce78aca28dd1b47a3237324121
-    pristine_git_object: 5c06dfda3ce50c6c22c0cc8c2a71e60f74f8d55c
+    last_write_checksum: sha1:c3a707055e2df73603533d1babbeb83ed1771477
+    pristine_git_object: 376b65ed3fc24479b67a55cee2b5eff29aa6aa45
   internal/sdk/models/components/specificationissue.go:
     id: ac5031dc5758
     last_write_checksum: sha1:08381f7cd64073a8977cc591c090f0b1d3613c6f
@@ -473,8 +473,8 @@ trackedFiles:
     pristine_git_object: c73446c6ea6e8f85ee9c3f3574c921b3fd8ee333
   internal/sdk/models/operations/buildsimulator.go:
     id: 0ead813b1137
-    last_write_checksum: sha1:4d08ec2cd7c24d89bb7dd201052e4bd81ee3973a
-    pristine_git_object: d13c8a457bec85284396a1493e84fe482d5e5d6f
+    last_write_checksum: sha1:12b6577b342c514ada26848c8f38cde82d591da5
+    pristine_git_object: 9fd784462c02399dc3ecb050b7b606d070778014
   internal/sdk/models/operations/buildworld.go:
     id: ae2781abebd1
     last_write_checksum: sha1:6fe8647360358d987d318e6991bb225b35944828
@@ -705,8 +705,8 @@ trackedFiles:
     pristine_git_object: 159a87ec97aba99e4edd132f69652e123434303e
   internal/usage/schema.go:
     id: 0f40f4612437
-    last_write_checksum: sha1:349ab381e754dabc82d7abc8761fa5f47271cf7d
-    pristine_git_object: 0034da74405df37b75c8edeaff1a70c7a879bde2
+    last_write_checksum: sha1:a7dd8aa1a8dd553667991aa73ed857b5dc47316d
+    pristine_git_object: 74a969958f73589ca3760a2cc0e95e8a744ab584
   scripts/install.ps1:
     id: fee0853709e9
     last_write_checksum: sha1:2da33f25afaa301dc2a22ac12654c585cef5c572
@@ -741,7 +741,7 @@ examples:
           limit: 50
       responses:
         "200":
-          application/json: {"next_cursor": "<value>", "simulations": [{"active_advance_id": "<id>", "created_at": "2026-01-15T12:00:00Z", "current_time": "2024-05-07T13:39:47.962Z", "endpoint": "https://api.continuouslabs.ai/sim/sim_01J8Z5X4K7M2N9P0Q1R2S3T4V6", "id": "sim_01J8Z5X4K7M2N9P0Q1R2S3T4V6", "include_sample_data": false, "metadata": "<value>", "name": "billing-sandbox", "parent_id": "sim_01J8Z5X4K7M2N9P0Q1R2S3T4V8", "simulator_digest": "<value>", "simulator_id": "smr_01J8Z5X4K7M2N9P0Q1R2S3T4V5", "start_time": "2025-10-24T14:15:51.051Z", "status": "running", "world_id": "<id>"}]}
+          application/json: {"next_cursor": "<value>", "simulations": [{"active_advance_id": "<id>", "created_at": "2026-01-15T12:00:00Z", "current_time": "2024-05-07T13:39:47.962Z", "endpoint": "https://api.continuouslabs.ai/sim/sim_01J8Z5X4K7M2N9P0Q1R2S3T4V6", "endpoint_external": false, "id": "sim_01J8Z5X4K7M2N9P0Q1R2S3T4V6", "include_sample_data": false, "metadata": "<value>", "name": "billing-sandbox", "parent_id": "sim_01J8Z5X4K7M2N9P0Q1R2S3T4V8", "simulator_digest": "<value>", "simulator_id": "smr_01J8Z5X4K7M2N9P0Q1R2S3T4V5", "start_time": "2025-10-24T14:15:51.051Z", "status": "running", "world_id": "<id>"}]}
         "400":
           application/problem+json: {"code": "<value>", "detail": "<value>", "validation": {"issues": []}}
         "500":
@@ -760,7 +760,7 @@ examples:
         application/json: {"metadata": {"customer_id": "cust_123"}, "name": "billing-sandbox", "simulator_id": "smr_01J8Z5X4K7M2N9P0Q1R2S3T4V5"}
       responses:
         "201":
-          application/json: {"active_advance_id": null, "created_at": "2026-01-15T12:00:00Z", "current_time": "2024-01-01T00:00:00Z", "endpoint": "https://api.continuouslabs.ai/sim/sim_01J8Z5X4K7M2N9P0Q1R2S3T4V6", "expires_at": null, "id": "sim_01J8Z5X4K7M2N9P0Q1R2S3T4V6", "include_sample_data": false, "metadata": {"customer_id": "cust_123"}, "name": "billing-sandbox", "parent_id": "sim_01J8Z5X4K7M2N9P0Q1R2S3T4V8", "simulator_digest": "sha256:aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa", "simulator_id": "smr_01J8Z5X4K7M2N9P0Q1R2S3T4V5", "start_time": "2024-01-01T00:00:00Z", "status": "running", "token": "<redacted>"}
+          application/json: {"active_advance_id": null, "created_at": "2026-01-15T12:00:00Z", "current_time": "2024-01-01T00:00:00Z", "endpoint": "https://api.continuouslabs.ai/sim/sim_01J8Z5X4K7M2N9P0Q1R2S3T4V6", "endpoint_external": false, "expires_at": null, "id": "sim_01J8Z5X4K7M2N9P0Q1R2S3T4V6", "include_sample_data": false, "metadata": {"customer_id": "cust_123"}, "name": "billing-sandbox", "parent_id": "sim_01J8Z5X4K7M2N9P0Q1R2S3T4V8", "simulator_digest": "sha256:aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa", "simulator_id": "smr_01J8Z5X4K7M2N9P0Q1R2S3T4V5", "start_time": "2024-01-01T00:00:00Z", "status": "running", "token": "<redacted>"}
         "400":
           application/problem+json: {"code": "<value>", "detail": "<value>", "validation": {"issues": [{"code": "<value>", "kind": "invalid", "location": "<value>", "message": "<value>", "operation": "<value>", "suggestion": "<value>"}]}}
         "500":
@@ -818,7 +818,7 @@ examples:
           id: "<id>"
       responses:
         "200":
-          application/json: {"active_advance_id": null, "actors": [{"default": true, "entity": "<value>", "id": "<id>", "name": "<value>", "role": "<value>"}], "created_at": "2026-01-15T12:00:00Z", "current_time": "2024-01-01T00:00:00Z", "endpoint": "https://api.continuouslabs.ai/sim/sim_01J8Z5X4K7M2N9P0Q1R2S3T4V6", "id": "sim_01J8Z5X4K7M2N9P0Q1R2S3T4V6", "include_sample_data": false, "metadata": {"customer_id": "cust_123"}, "name": "billing-sandbox", "parent_id": "sim_01J8Z5X4K7M2N9P0Q1R2S3T4V8", "simulator_digest": "sha256:aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa", "simulator_id": "smr_01J8Z5X4K7M2N9P0Q1R2S3T4V5", "start_time": "2024-01-01T00:00:00Z", "status": "running", "world_id": null}
+          application/json: {"active_advance_id": null, "actors": [{"default": true, "entity": "<value>", "id": "<id>", "name": "<value>", "role": "<value>"}], "created_at": "2026-01-15T12:00:00Z", "current_time": "2024-01-01T00:00:00Z", "endpoint": "https://api.continuouslabs.ai/sim/sim_01J8Z5X4K7M2N9P0Q1R2S3T4V6", "endpoint_external": false, "id": "sim_01J8Z5X4K7M2N9P0Q1R2S3T4V6", "include_sample_data": false, "metadata": {"customer_id": "cust_123"}, "name": "billing-sandbox", "parent_id": "sim_01J8Z5X4K7M2N9P0Q1R2S3T4V8", "simulator_digest": "sha256:aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa", "simulator_id": "smr_01J8Z5X4K7M2N9P0Q1R2S3T4V5", "start_time": "2024-01-01T00:00:00Z", "status": "running", "world_id": null}
         "400":
           application/problem+json: {"code": "<value>", "detail": "<value>"}
         "500":
@@ -852,7 +852,7 @@ examples:
         application/json: {"at_step": 42, "name": "billing-fork"}
       responses:
         "201":
-          application/json: {"active_advance_id": null, "created_at": "2026-01-15T12:00:00Z", "current_time": "2024-01-01T00:00:00Z", "endpoint": "https://api.continuouslabs.ai/sim/sim_01J8Z5X4K7M2N9P0Q1R2S3T4V6", "expires_at": null, "id": "sim_01J8Z5X4K7M2N9P0Q1R2S3T4V6", "include_sample_data": false, "metadata": {"customer_id": "cust_123"}, "name": "billing-sandbox", "parent_id": "sim_01J8Z5X4K7M2N9P0Q1R2S3T4V8", "simulator_digest": "sha256:aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa", "simulator_id": "smr_01J8Z5X4K7M2N9P0Q1R2S3T4V5", "start_time": "2024-01-01T00:00:00Z", "status": "running", "token": "<redacted>"}
+          application/json: {"active_advance_id": null, "created_at": "2026-01-15T12:00:00Z", "current_time": "2024-01-01T00:00:00Z", "endpoint": "https://api.continuouslabs.ai/sim/sim_01J8Z5X4K7M2N9P0Q1R2S3T4V6", "endpoint_external": false, "expires_at": null, "id": "sim_01J8Z5X4K7M2N9P0Q1R2S3T4V6", "include_sample_data": false, "metadata": {"customer_id": "cust_123"}, "name": "billing-sandbox", "parent_id": "sim_01J8Z5X4K7M2N9P0Q1R2S3T4V8", "simulator_digest": "sha256:aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa", "simulator_id": "smr_01J8Z5X4K7M2N9P0Q1R2S3T4V5", "start_time": "2024-01-01T00:00:00Z", "status": "running", "token": "<redacted>"}
         "400":
           application/problem+json: {"code": "<value>", "detail": "<value>", "validation": {"issues": []}}
         "500":
@@ -875,7 +875,7 @@ examples:
           id: "<id>"
       responses:
         "200":
-          application/json: {"active_advance_id": null, "created_at": "2026-01-15T12:00:00Z", "current_time": "2024-01-01T00:00:00Z", "endpoint": "https://api.continuouslabs.ai/sim/sim_01J8Z5X4K7M2N9P0Q1R2S3T4V6", "expires_at": null, "id": "sim_01J8Z5X4K7M2N9P0Q1R2S3T4V6", "include_sample_data": false, "metadata": {"customer_id": "cust_123"}, "name": "billing-sandbox", "parent_id": "sim_01J8Z5X4K7M2N9P0Q1R2S3T4V8", "simulator_digest": "sha256:aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa", "simulator_id": "smr_01J8Z5X4K7M2N9P0Q1R2S3T4V5", "start_time": "2024-01-01T00:00:00Z", "status": "running", "token": "<redacted>"}
+          application/json: {"active_advance_id": null, "created_at": "2026-01-15T12:00:00Z", "current_time": "2024-01-01T00:00:00Z", "endpoint": "https://api.continuouslabs.ai/sim/sim_01J8Z5X4K7M2N9P0Q1R2S3T4V6", "endpoint_external": false, "expires_at": null, "id": "sim_01J8Z5X4K7M2N9P0Q1R2S3T4V6", "include_sample_data": false, "metadata": {"customer_id": "cust_123"}, "name": "billing-sandbox", "parent_id": "sim_01J8Z5X4K7M2N9P0Q1R2S3T4V8", "simulator_digest": "sha256:aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa", "simulator_id": "smr_01J8Z5X4K7M2N9P0Q1R2S3T4V5", "start_time": "2024-01-01T00:00:00Z", "status": "running", "token": "<redacted>"}
         "400":
           application/problem+json: {"code": "<value>", "detail": "<value>"}
         "500":
@@ -932,7 +932,7 @@ examples:
           id: "<id>"
       responses:
         "200":
-          application/json: {"active_advance_id": null, "created_at": "2026-01-15T12:00:00Z", "current_time": "2024-01-01T00:00:00Z", "endpoint": "https://api.continuouslabs.ai/sim/sim_01J8Z5X4K7M2N9P0Q1R2S3T4V6", "id": "sim_01J8Z5X4K7M2N9P0Q1R2S3T4V6", "include_sample_data": false, "metadata": {"customer_id": "cust_123"}, "name": "billing-sandbox", "parent_id": "sim_01J8Z5X4K7M2N9P0Q1R2S3T4V8", "simulator_digest": "sha256:aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa", "simulator_id": "smr_01J8Z5X4K7M2N9P0Q1R2S3T4V5", "start_time": "2024-01-01T00:00:00Z", "status": "running", "world_id": null}
+          application/json: {"active_advance_id": null, "created_at": "2026-01-15T12:00:00Z", "current_time": "2024-01-01T00:00:00Z", "endpoint": "https://api.continuouslabs.ai/sim/sim_01J8Z5X4K7M2N9P0Q1R2S3T4V6", "endpoint_external": false, "id": "sim_01J8Z5X4K7M2N9P0Q1R2S3T4V6", "include_sample_data": false, "metadata": {"customer_id": "cust_123"}, "name": "billing-sandbox", "parent_id": "sim_01J8Z5X4K7M2N9P0Q1R2S3T4V8", "simulator_digest": "sha256:aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa", "simulator_id": "smr_01J8Z5X4K7M2N9P0Q1R2S3T4V5", "start_time": "2024-01-01T00:00:00Z", "status": "running", "world_id": null}
         "400":
           application/problem+json: {"code": "<value>", "detail": "<value>"}
         "500":
@@ -1846,3 +1846,11 @@ examples:
         "500":
           application/problem+json: {"code": "<value>", "detail": "<value>", "validation": {"issues": []}}
 examplesVersion: 1.0.2
+releaseNotes: |
+  ## Cli SDK Changes:
+  * `ContinuousSimulation.Simulations.ListSimulations()`:  `response.Simulations[].EndpointExternal` **Added**
+  * `ContinuousSimulation.Simulations.CreateSimulation()`:  `response.EndpointExternal` **Added**
+  * `ContinuousSimulation.Simulations.GetSimulation()`:  `response.EndpointExternal` **Added**
+  * `ContinuousSimulation.Simulations.ForkSimulation()`:  `response.EndpointExternal` **Added**
+  * `ContinuousSimulation.Simulations.StartSimulation()`:  `response.EndpointExternal` **Added**
+  * `ContinuousSimulation.Simulations.StopSimulation()`:  `response.EndpointExternal` **Added**

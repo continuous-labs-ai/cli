@@ -135,10 +135,25 @@ components:
         code: simulation_capacity
         detail: Continuous has no available Simulation capacity. Retry after a short delay.
         validation: null
+    simulation_environment_offline:
+      value:
+        code: simulation_environment_offline
+        detail: The Simulation's runtime environment did not confirm the new token. Retry with the same Idempotency-Key; the old token stops working once it does.
+        validation: null
+    simulation_environment_offline_request:
+      value:
+        code: simulation_environment_offline
+        detail: The runtime environment is offline. Retry the request once it reconnects.
+        validation: null
     simulation_not_found:
       value:
         code: simulation_not_found
         detail: No Simulation was found with ID "sim_01J8Z5X4K7M2N9P0Q1R2S3T4V6".
+        validation: null
+    simulation_observation_external:
+      value:
+        code: simulation_observation_external
+        detail: The Simulation with ID "sim_01J8Z5X4K7M2N9P0Q1R2S3T4V6" runs in a customer environment. Continuous does not read or copy its state, so this operation is unavailable.
         validation: null
     simulation_platform_owned:
       value:
@@ -713,6 +728,7 @@ components:
           created_at: "2026-01-15T12:00:00Z"
           current_time: "2024-01-01T00:00:00Z"
           endpoint: https://api.continuouslabs.ai/sim/sim_01J8Z5X4K7M2N9P0Q1R2S3T4V6
+          endpoint_external: false
           expires_at: null
           id: sim_01J8Z5X4K7M2N9P0Q1R2S3T4V6
           include_sample_data: false
@@ -741,9 +757,12 @@ components:
           format: date-time
           type: string
         endpoint:
-          description: Base URL for requests to the Simulation.
+          description: Base URL for requests to the Simulation. For a Simulation in your own runtime environment it is that environment's proxy, and the Continuous /sim/{id} URL answers 421 simulation_endpoint_external.
           format: uri
           type: string
+        endpoint_external:
+          description: True when the endpoint is your own runtime environment's proxy rather than Continuous's, so a client calls it directly.
+          type: boolean
         expires_at:
           deprecated: true
           description: Always null; Simulation tokens do not expire. Deprecated; will be removed.
@@ -805,6 +824,7 @@ components:
         - parent_id
         - status
         - endpoint
+        - endpoint_external
         - token
         - expires_at
         - created_at
@@ -1051,6 +1071,7 @@ components:
           created_at: "2026-01-15T12:00:00Z"
           current_time: "2024-01-01T00:00:00Z"
           endpoint: https://api.continuouslabs.ai/sim/sim_01J8Z5X4K7M2N9P0Q1R2S3T4V6
+          endpoint_external: false
           id: sim_01J8Z5X4K7M2N9P0Q1R2S3T4V6
           include_sample_data: false
           metadata:
@@ -1078,9 +1099,12 @@ components:
           format: date-time
           type: string
         endpoint:
-          description: Base URL for requests to the Simulation.
+          description: Base URL for requests to the Simulation. For a Simulation in your own runtime environment it is that environment's proxy, and the Continuous /sim/{id} URL answers 421 simulation_endpoint_external.
           format: uri
           type: string
+        endpoint_external:
+          description: True when the endpoint is your own runtime environment's proxy rather than Continuous's, so a client calls it directly.
+          type: boolean
         id:
           description: Simulation ID.
           pattern: ^sim_[0-9A-HJKMNP-TV-Z]{26}$
@@ -1138,6 +1162,7 @@ components:
         - world_id
         - status
         - endpoint
+        - endpoint_external
         - created_at
         - include_sample_data
       type: object
@@ -1164,9 +1189,12 @@ components:
           format: date-time
           type: string
         endpoint:
-          description: Base URL for requests to the Simulation.
+          description: Base URL for requests to the Simulation. For a Simulation in your own runtime environment it is that environment's proxy, and the Continuous /sim/{id} URL answers 421 simulation_endpoint_external.
           format: uri
           type: string
+        endpoint_external:
+          description: True when the endpoint is your own runtime environment's proxy rather than Continuous's, so a client calls it directly.
+          type: boolean
         id:
           description: Simulation ID.
           pattern: ^sim_[0-9A-HJKMNP-TV-Z]{26}$
@@ -1225,6 +1253,7 @@ components:
         - world_id
         - status
         - endpoint
+        - endpoint_external
         - created_at
         - include_sample_data
       type: object
@@ -1514,7 +1543,7 @@ components:
           minimum: 0
           type: integer
         status:
-          description: pending until the stage starts; running while the research agent indexes the documents and saves the vendor pages they lack; complete when it wrote the index; failed when it could not finish, which fails the build, or when the build ended first; provided when the documents included INDEX.md, so research did not run.
+          description: pending until the stage starts; running while the research agent indexes the documents and saves the vendor pages they lack; complete when it wrote an index that names every document; failed when it could not finish, which fails the build, or when the build ended first; provided when the documents included INDEX.md, so research did not run.
           enum:
             - pending
             - running
@@ -2547,6 +2576,8 @@ paths:
                   $ref: "#/components/examples/auth_provider_unavailable"
                 internal_unavailable:
                   $ref: "#/components/examples/internal_unavailable"
+                simulation_environment_offline_request:
+                  $ref: "#/components/examples/simulation_environment_offline_request"
               schema:
                 $ref: "#/components/schemas/Error"
           description: Service Unavailable
@@ -2773,6 +2804,8 @@ paths:
           content:
             application/problem+json:
               examples:
+                simulation_observation_external:
+                  $ref: "#/components/examples/simulation_observation_external"
                 simulation_stopped:
                   $ref: "#/components/examples/simulation_stopped"
               schema:
@@ -2871,6 +2904,8 @@ paths:
           content:
             application/problem+json:
               examples:
+                simulation_observation_external:
+                  $ref: "#/components/examples/simulation_observation_external"
                 simulation_stopped:
                   $ref: "#/components/examples/simulation_stopped"
               schema:
@@ -2969,6 +3004,8 @@ paths:
               examples:
                 clock_conflict:
                   $ref: "#/components/examples/clock_conflict"
+                simulation_observation_external:
+                  $ref: "#/components/examples/simulation_observation_external"
                 simulation_stopped:
                   $ref: "#/components/examples/simulation_stopped"
               schema:
@@ -3122,6 +3159,8 @@ paths:
                   $ref: "#/components/examples/auth_provider_unavailable"
                 internal_unavailable:
                   $ref: "#/components/examples/internal_unavailable"
+                simulation_environment_offline_request:
+                  $ref: "#/components/examples/simulation_environment_offline_request"
                 simulation_provider_unavailable:
                   $ref: "#/components/examples/simulation_provider_unavailable"
               schema:
@@ -3207,6 +3246,8 @@ paths:
           content:
             application/problem+json:
               examples:
+                simulation_observation_external:
+                  $ref: "#/components/examples/simulation_observation_external"
                 simulation_stopped:
                   $ref: "#/components/examples/simulation_stopped"
               schema:
@@ -3301,6 +3342,8 @@ paths:
                   $ref: "#/components/examples/auth_provider_unavailable"
                 internal_unavailable:
                   $ref: "#/components/examples/internal_unavailable"
+                simulation_environment_offline_request:
+                  $ref: "#/components/examples/simulation_environment_offline_request"
               schema:
                 $ref: "#/components/schemas/Error"
           description: Service Unavailable
@@ -3478,6 +3521,10 @@ paths:
                   $ref: "#/components/examples/auth_provider_unavailable"
                 internal_unavailable:
                   $ref: "#/components/examples/internal_unavailable"
+                simulation_environment_offline:
+                  $ref: "#/components/examples/simulation_environment_offline"
+                simulation_environment_offline_request:
+                  $ref: "#/components/examples/simulation_environment_offline_request"
               schema:
                 $ref: "#/components/schemas/Error"
           description: Service Unavailable
@@ -3579,7 +3626,7 @@ paths:
               additionalProperties: false
               properties:
                 document:
-                  description: "Vendor documentation the builder and reviewer read before they start, as repeated file parts: UTF-8 text (.md, .txt, .html, .json, .yaml, .xml, .csv) or PDF (.pdf). The documents share the request body limit with the spec. A parent's documents are not inherited. A document named INDEX.md indexes the others and skips research; the build fails if it names a document not sent or leaves out a selected operation."
+                  description: "Vendor documentation the builder and reviewer read before they start, as repeated file parts: UTF-8 text (.md, .txt, .html, .json, .yaml, .xml, .csv) or PDF (.pdf). The documents share the request body limit with the spec. An incremental build inherits its parent's documents and index; a document sent with the same name replaces the parent's. A document named INDEX.md indexes the others and skips research; the build fails if it names a document the build does not have, leaves a document unnamed, or leaves out a selected operation; an incremental build's documents include the inherited ones."
                   items:
                     contentEncoding: binary
                     contentMediaType: application/octet-stream
@@ -4198,6 +4245,8 @@ paths:
                   $ref: "#/components/examples/auth_provider_unavailable"
                 internal_unavailable:
                   $ref: "#/components/examples/internal_unavailable"
+                simulation_environment_offline_request:
+                  $ref: "#/components/examples/simulation_environment_offline_request"
               schema:
                 $ref: "#/components/schemas/Error"
           description: Service Unavailable
@@ -4481,6 +4530,8 @@ paths:
                   $ref: "#/components/examples/auth_provider_unavailable"
                 internal_unavailable:
                   $ref: "#/components/examples/internal_unavailable"
+                simulation_environment_offline_request:
+                  $ref: "#/components/examples/simulation_environment_offline_request"
               schema:
                 $ref: "#/components/schemas/Error"
           description: Service Unavailable
@@ -4578,6 +4629,8 @@ paths:
                   $ref: "#/components/examples/auth_provider_unavailable"
                 internal_unavailable:
                   $ref: "#/components/examples/internal_unavailable"
+                simulation_environment_offline_request:
+                  $ref: "#/components/examples/simulation_environment_offline_request"
               schema:
                 $ref: "#/components/schemas/Error"
           description: Service Unavailable
@@ -4646,6 +4699,8 @@ paths:
                   $ref: "#/components/examples/auth_provider_unavailable"
                 internal_unavailable:
                   $ref: "#/components/examples/internal_unavailable"
+                simulation_environment_offline_request:
+                  $ref: "#/components/examples/simulation_environment_offline_request"
               schema:
                 $ref: "#/components/schemas/Error"
           description: Service Unavailable
