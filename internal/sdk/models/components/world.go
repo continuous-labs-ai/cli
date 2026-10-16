@@ -38,6 +38,8 @@ func (e *WorldStatus) IsExact() bool {
 type World struct {
 	// Current clock advance operation ID, or null.
 	ActiveAdvanceID *string `json:"active_advance_id"`
+	// Current membership change ID, or null.
+	ActiveChangeID *string `json:"active_change_id"`
 	// The build's latest progress report and verified starting data, or null before the first report.
 	Build *WorldBuildProgress `json:"build"`
 	// World creation time.
@@ -79,6 +81,13 @@ func (w *World) GetActiveAdvanceID() *string {
 		return nil
 	}
 	return w.ActiveAdvanceID
+}
+
+func (w *World) GetActiveChangeID() *string {
+	if w == nil {
+		return nil
+	}
+	return w.ActiveChangeID
 }
 
 func (w *World) GetBuild() *WorldBuildProgress {

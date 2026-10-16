@@ -48,6 +48,18 @@ func InitWorldsRoot(parent *cobra.Command) error {
 		return err
 	}
 
+	if err := initGetWorldChangeCmd(WorldsCmd); err != nil {
+		return err
+	}
+
+	if err := initAddWorldSimulationCmd(WorldsCmd); err != nil {
+		return err
+	}
+
+	if err := initRemoveWorldSimulationCmd(WorldsCmd); err != nil {
+		return err
+	}
+
 	if err := initStartWorldCmd(WorldsCmd); err != nil {
 		return err
 	}
