@@ -16,10 +16,11 @@ import (
 )
 
 var createCredentialCmdMeta = []flagutil.FlagMeta{
-	{FlagName: "base-url", Shorthand: "b", FieldPath: "BaseURL", Kind: flagutil.FlagKindString, Required: true, Description: "The https URL of the real system. Requests go to paths under it. [required]"},
-	{FlagName: "header", FieldPath: "Header", Kind: flagutil.FlagKindString, Optional: true, HasDefault: true, DefaultStr: "Authorization", Description: "The HTTP header that carries the value."},
+	{FlagName: "base-url", Shorthand: "b", FieldPath: "BaseURL", Kind: flagutil.FlagKindString, Optional: true, Description: "The https URL of the real system. Requests go to paths under it. Send exactly one of base_url and login."},
+	{FlagName: "header", FieldPath: "Header", Kind: flagutil.FlagKindString, Optional: true, Description: "The HTTP header that carries the value. Defaults to Authorization. Not allowed with login."},
+	{FlagName: "login", Shorthand: "l", FieldPath: "Login", Kind: flagutil.FlagKindJSON, Optional: true, Annotations: `json:"login,omitempty"`, Description: "JSON object"},
 	{FlagName: "name", Shorthand: "n", FieldPath: "Name", Kind: flagutil.FlagKindString, Required: true, Description: "Credential name. [required]"},
-	{FlagName: "value", Shorthand: "v", FieldPath: "Value", Kind: flagutil.FlagKindString, Required: true, Description: "The full header value, for example Bearer followed by a token. The API never returns it. [required]"},
+	{FlagName: "value", Shorthand: "v", FieldPath: "Value", Kind: flagutil.FlagKindString, Required: true, Description: "The full header value, for example Bearer followed by a token, or the login password. The API never returns it. [required]"},
 }
 
 // initCreateCredentialCmd initializes the create-credential command.
@@ -27,8 +28,8 @@ func initCreateCredentialCmd(parent *cobra.Command) error {
 	var cmd = &cobra.Command{
 		Use:     "create",
 		Short:   "Create credential",
-		Long:    "Stores a connection to a real system: its base URL, the header that carries the credential, and the header value. Returns the credential without its value.",
-		Example: "  continuous credentials create --base-url https://api.stripe.com --name stripe-test --value Bearer <redacted>",
+		Long:    "Stores a connection to a real system: either an API base URL, the header that carries the credential, and the header value, or an app login with its sign-in URL, username, and password. Returns the credential without its value.",
+		Example: "  continuous credentials create --name stripe-test --value Bearer <redacted>",
 		RunE:    runCreateCredentialCmd,
 	}
 	flagutil.RegisterFlags(cmd, createCredentialCmdMeta)

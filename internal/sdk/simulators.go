@@ -16,7 +16,7 @@ import (
 	"net/url"
 )
 
-// Build Simulators from OpenAPI or WSDL documents, check or cancel a build, clone Simulators into other workspaces, and delete Simulators.
+// Build Simulators from OpenAPI, WSDL or GraphQL documents, check or cancel a build, clone Simulators into other workspaces, and delete Simulators.
 type Simulators struct {
 	rootSDK          *ContinuousSimulation
 	sdkConfiguration config.SDKConfiguration
@@ -248,7 +248,7 @@ func (s *Simulators) ListSimulators(ctx context.Context, request *operations.Lis
 }
 
 // BuildSimulator - Build Simulator
-// Starts an asynchronous Simulator build and returns the Simulator with status pending. Builds start in queue order when workspace capacity is available. Send multipart/form-data with a JSON part named request. To build from a document, add a file part named spec with the OpenAPI or WSDL document. For an incremental build, omit spec and set parent_id and instructions. Add file parts named document to give the builder and reviewer vendor documentation.
+// Starts an asynchronous Simulator build and returns the Simulator with status pending. Builds start in queue order when workspace capacity is available. Send multipart/form-data with a JSON part named request. To build from a document, add a file part named spec with the OpenAPI, WSDL or GraphQL document. For an incremental build, omit spec and set parent_id and instructions. Add file parts named document to give the builder and reviewer vendor documentation.
 func (s *Simulators) BuildSimulator(ctx context.Context, request operations.BuildSimulatorRequest, opts ...operations.Option) (*operations.BuildSimulatorResponse, error) {
 	o := operations.Options{}
 	supportedOptions := []string{
@@ -629,13 +629,36 @@ func (s *Simulators) DeleteSimulator(ctx context.Context, request operations.Del
 		if o.SkipDeserialization == nil || !*o.SkipDeserialization {
 			utils.DrainBody(httpRes)
 		}
+	case httpRes.StatusCode == 409:
+		switch {
+		case utils.MatchContentType(httpRes.Header.Get("Content-Type"), `application/problem+json`):
+			rawBody, err := utils.ConsumeRawBody(httpRes)
+			if err != nil {
+				return nil, err
+			}
+
+			var out sdkerrors.SimulatorDeleteConflictError
+			if err := utils.UnmarshalJsonFromResponseBody(bytes.NewBuffer(rawBody), &out, ""); err != nil {
+				return nil, err
+			}
+
+			out.HTTPMeta = components.HTTPMetadata{
+				Request:  req,
+				Response: httpRes,
+			}
+			return nil, &out
+		default:
+			rawBody, err := utils.ConsumeRawBody(httpRes)
+			if err != nil {
+				return nil, err
+			}
+			return nil, sdkerrors.NewSDKDefaultError(fmt.Sprintf("unknown content-type received: %s", httpRes.Header.Get("Content-Type")), httpRes.StatusCode, string(rawBody), httpRes)
+		}
 	case httpRes.StatusCode == 401:
 		fallthrough
 	case httpRes.StatusCode == 403:
 		fallthrough
 	case httpRes.StatusCode == 404:
-		fallthrough
-	case httpRes.StatusCode == 409:
 		fallthrough
 	case httpRes.StatusCode == 422:
 		switch {

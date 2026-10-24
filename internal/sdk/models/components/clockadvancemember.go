@@ -7,7 +7,7 @@ import (
 	"time"
 )
 
-// ClockAdvanceMemberStatus - Whether this member is pending, committed, failed, or skipped because it is not running.
+// ClockAdvanceMemberStatus - Whether this member is pending, committed, failed, or skipped.
 type ClockAdvanceMemberStatus string
 
 const (
@@ -40,7 +40,7 @@ type ClockAdvanceMember struct {
 	Reached *time.Time `json:"reached,omitzero"`
 	// Member Simulation ID.
 	SimulationID string `json:"simulation_id"`
-	// Whether this member is pending, committed, failed, or skipped because it is not running.
+	// Whether this member is pending, committed, failed, or skipped.
 	Status ClockAdvanceMemberStatus `json:"status"`
 	// Last committed local step, or null when the advance committed none.
 	Step *int64 `json:"step"`

@@ -7,12 +7,11 @@ import (
 	"time"
 )
 
-// SimulationDetailStatus - Current status. running serves requests. paused means the Simulation was idle and the platform paused it; the next request wakes it. stopped means its state is saved and requests return 409 until you start it.
+// SimulationDetailStatus - Current status. running serves requests; after a period without requests, the first request can take longer while the Simulation resumes. stopped means its state is saved and requests return 409 until you start it.
 type SimulationDetailStatus string
 
 const (
 	SimulationDetailStatusRunning SimulationDetailStatus = "running"
-	SimulationDetailStatusPaused  SimulationDetailStatus = "paused"
 	SimulationDetailStatusStopped SimulationDetailStatus = "stopped"
 )
 
@@ -24,7 +23,7 @@ func (e SimulationDetailStatus) ToPointer() *SimulationDetailStatus {
 func (e *SimulationDetailStatus) IsExact() bool {
 	if e != nil {
 		switch *e {
-		case "running", "paused", "stopped":
+		case "running", "stopped":
 			return true
 		}
 	}
@@ -60,7 +59,7 @@ type SimulationDetail struct {
 	SimulatorID string `json:"simulator_id"`
 	// Initial simulated time.
 	StartTime time.Time `json:"start_time"`
-	// Current status. running serves requests. paused means the Simulation was idle and the platform paused it; the next request wakes it. stopped means its state is saved and requests return 409 until you start it.
+	// Current status. running serves requests; after a period without requests, the first request can take longer while the Simulation resumes. stopped means its state is saved and requests return 409 until you start it.
 	Status SimulationDetailStatus `json:"status"`
 	// ID of the World that owns this Simulation, or null.
 	WorldID *string `json:"world_id"`

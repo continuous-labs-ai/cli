@@ -14,7 +14,6 @@ type ListSimulationsStatus string
 
 const (
 	ListSimulationsStatusRunning ListSimulationsStatus = "running"
-	ListSimulationsStatusPaused  ListSimulationsStatus = "paused"
 	ListSimulationsStatusStopped ListSimulationsStatus = "stopped"
 )
 
@@ -28,8 +27,6 @@ func (e *ListSimulationsStatus) UnmarshalJSON(data []byte) error {
 	}
 	switch v {
 	case "running":
-		fallthrough
-	case "paused":
 		fallthrough
 	case "stopped":
 		*e = ListSimulationsStatus(v)

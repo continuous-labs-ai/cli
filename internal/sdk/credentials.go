@@ -248,7 +248,7 @@ func (s *Credentials) ListCredentials(ctx context.Context, request *operations.L
 }
 
 // CreateCredential - Create credential
-// Stores a connection to a real system: its base URL, the header that carries the credential, and the header value. Returns the credential without its value.
+// Stores a connection to a real system: either an API base URL, the header that carries the credential, and the header value, or an app login with its sign-in URL, username, and password. Returns the credential without its value.
 func (s *Credentials) CreateCredential(ctx context.Context, request components.CreateCredentialRequest, opts ...operations.Option) (*operations.CreateCredentialResponse, error) {
 	o := operations.Options{}
 	supportedOptions := []string{
@@ -868,7 +868,7 @@ func (s *Credentials) GetCredential(ctx context.Context, request operations.GetC
 }
 
 // UpdateCredential - Update credential
-// Renames a credential, changes its base URL or header, or replaces its value. Omitted fields keep their current values.
+// Renames a credential, changes its base URL and header or its login, or replaces its value. A credential keeps its kind. Omitted fields keep their current values.
 func (s *Credentials) UpdateCredential(ctx context.Context, request operations.UpdateCredentialRequest, opts ...operations.Option) (*operations.UpdateCredentialResponse, error) {
 	o := operations.Options{}
 	supportedOptions := []string{

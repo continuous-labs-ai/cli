@@ -8,14 +8,15 @@ import (
 )
 
 type Credential struct {
-	// The https URL of the real system, or null for a credential created without one. A build can use only a credential with a base URL.
+	// The https URL of the real system, or null for a login credential or one created without a URL. An API build can use only a credential with a base URL.
 	BaseURL *string `json:"base_url"`
 	// Credential creation time.
 	CreatedAt time.Time `json:"created_at"`
-	// The HTTP header that carries the value.
+	// The HTTP header that carries the value, or empty for a login credential.
 	Header string `json:"header"`
 	// Credential ID.
-	ID string `json:"id"`
+	ID    string           `json:"id"`
+	Login *CredentialLogin `json:"login"`
 	// Credential name. Names need not be unique.
 	Name string `json:"name"`
 }
@@ -57,6 +58,13 @@ func (c *Credential) GetID() string {
 		return ""
 	}
 	return c.ID
+}
+
+func (c *Credential) GetLogin() *CredentialLogin {
+	if c == nil {
+		return nil
+	}
+	return c.Login
 }
 
 func (c *Credential) GetName() string {

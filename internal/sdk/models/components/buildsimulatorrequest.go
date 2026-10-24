@@ -8,6 +8,33 @@ import (
 	"github.com/continuous-labs-ai/cli/internal/sdk/sdkinternal/utils"
 )
 
+// BuildSimulatorRequestMode - What the Simulator simulates. api, the default, builds the vendor's API from a spec, or from a parent with instructions. web_app builds the vendor's logged-in web app and the private API behind it: it takes no spec, spec_kind or filter, needs exactly one Web App login credential in credential_ids, runs on a Claude model or combined, and starts with a Discovery stage that logs in and captures the app. With parent_id and instructions, it builds from a ready web_app Simulator and starts with that Simulator's captures instead of Discovery.
+type BuildSimulatorRequestMode string
+
+const (
+	BuildSimulatorRequestModeAPI    BuildSimulatorRequestMode = "api"
+	BuildSimulatorRequestModeWebApp BuildSimulatorRequestMode = "web_app"
+)
+
+func (e BuildSimulatorRequestMode) ToPointer() *BuildSimulatorRequestMode {
+	return &e
+}
+func (e *BuildSimulatorRequestMode) UnmarshalJSON(data []byte) error {
+	var v string
+	if err := json.Unmarshal(data, &v); err != nil {
+		return err
+	}
+	switch v {
+	case "api":
+		fallthrough
+	case "web_app":
+		*e = BuildSimulatorRequestMode(v)
+		return nil
+	default:
+		return fmt.Errorf("invalid value for BuildSimulatorRequestMode: %v", v)
+	}
+}
+
 // BuildSimulatorRequestModel - Model that builds and reviews the Simulator. Defaults to combined. Its provider is derived from the model. combined currently builds, reviews, and runs QA exactly as claude-opus-5-5 does.
 type BuildSimulatorRequestModel string
 
@@ -44,12 +71,13 @@ func (e *BuildSimulatorRequestModel) UnmarshalJSON(data []byte) error {
 	}
 }
 
-// BuildSimulatorRequestSpecKind - Source specification format. Omission detects the format.
+// BuildSimulatorRequestSpecKind - Source specification format. Omission detects the format; GraphQL SDL needs graphql, and a GraphQL introspection result is stored as SDL.
 type BuildSimulatorRequestSpecKind string
 
 const (
 	BuildSimulatorRequestSpecKindOpenapi BuildSimulatorRequestSpecKind = "openapi"
 	BuildSimulatorRequestSpecKindWsdl    BuildSimulatorRequestSpecKind = "wsdl"
+	BuildSimulatorRequestSpecKindGraphql BuildSimulatorRequestSpecKind = "graphql"
 )
 
 func (e BuildSimulatorRequestSpecKind) ToPointer() *BuildSimulatorRequestSpecKind {
@@ -64,6 +92,8 @@ func (e *BuildSimulatorRequestSpecKind) UnmarshalJSON(data []byte) error {
 	case "openapi":
 		fallthrough
 	case "wsdl":
+		fallthrough
+	case "graphql":
 		*e = BuildSimulatorRequestSpecKind(v)
 		return nil
 	default:
@@ -72,21 +102,23 @@ func (e *BuildSimulatorRequestSpecKind) UnmarshalJSON(data []byte) error {
 }
 
 type BuildSimulatorRequest struct {
-	// Workspace credentials QA and the builder can call real systems with, to compare the Simulator with them. A build with credentials runs QA after its review rounds. At most 5. Each must belong to the workspace and have a base_url. QA may create test objects in the live system and deletes them or, where the API cannot, leaves them in a final state; the builder sends only reads. Use a sandbox or test account.
+	// Workspace credentials QA and the builder can call real systems with, to compare the Simulator with them. A build with credentials runs QA after its review rounds. At most 5. Each must belong to the workspace and have a base_url, except the one Web App login a Web App build needs, which its Discovery, Build and QA stages use. QA, and the builder of a Web App build, may create test objects in the live system and delete them or, where the API cannot, leave them in a final state; otherwise the builder sends only reads. Use a sandbox or test account.
 	CredentialIds []string `json:"credential_ids,omitzero"`
-	// Regular expressions (RE2 syntax) that select the operations to implement. Each is matched against the OpenAPI operationId or the WSDL operation name; an operation is kept when any expression matches, and an OpenAPI operation without an operationId is dropped. At most 64 expressions of at most 1,024 characters each. Omit or send an empty list to keep every operation. Not allowed for an incremental build.
+	// Regular expressions (RE2 syntax) that select the operations to implement. Each is matched against the OpenAPI operationId, the WSDL operation name, or the GraphQL Query or Mutation field name; an operation is kept when any expression matches, and an OpenAPI operation without an operationId is dropped. At most 64 expressions of at most 1,024 characters each. Omit or send an empty list to keep every operation. Not allowed for an incremental build.
 	Filter []string `json:"filter,omitzero"`
 	// Instructions for the builder. Required for an incremental build. At most 16,384 characters and 65,536 UTF-8 bytes; must not be blank or contain U+0000.
 	Instructions *string `json:"instructions,omitzero"`
+	// What the Simulator simulates. api, the default, builds the vendor's API from a spec, or from a parent with instructions. web_app builds the vendor's logged-in web app and the private API behind it: it takes no spec, spec_kind or filter, needs exactly one Web App login credential in credential_ids, runs on a Claude model or combined, and starts with a Discovery stage that logs in and captures the app. With parent_id and instructions, it builds from a ready web_app Simulator and starts with that Simulator's captures instead of Discovery.
+	Mode *BuildSimulatorRequestMode `default:"api" json:"mode"`
 	// Model that builds and reviews the Simulator. Defaults to combined. Its provider is derived from the model. combined currently builds, reviews, and runs QA exactly as claude-opus-5-5 does.
 	Model *BuildSimulatorRequestModel `default:"combined" json:"model"`
 	// Name for the Simulator. Omission generates a name. Names must not contain U+0000. The ID stays its identity, and names need not be unique.
 	Name *string `json:"name,omitzero"`
-	// Parent Simulator ID. With instructions and no spec this starts an incremental build: the parent must be ready, and the request takes no filter or spec_kind.
+	// Parent Simulator ID. With instructions and no spec this starts an incremental build: the parent must be ready and in the build's mode, and the request takes no filter or spec_kind.
 	ParentID *string `json:"parent_id,omitzero"`
 	// Review rounds, from 1 to 10. Defaults to 1. Each round is a review and a repair of its findings, by the same builder and reviewer. The rounds stop early when the reviewer reports no findings.
 	ReviewRounds *int64 `default:"1" json:"review_rounds"`
-	// Source specification format. Omission detects the format.
+	// Source specification format. Omission detects the format; GraphQL SDL needs graphql, and a GraphQL introspection result is stored as SDL.
 	SpecKind *BuildSimulatorRequestSpecKind `json:"spec_kind,omitzero"`
 	// Time limit for generation and validation in seconds, from 1 to 72000. Defaults to 14400 (four hours). Excludes queue wait and finalization. Retries share the same deadline.
 	TimeoutSeconds *int64 `default:"14400" json:"timeout_seconds"`
@@ -122,6 +154,13 @@ func (b *BuildSimulatorRequest) GetInstructions() *string {
 		return nil
 	}
 	return b.Instructions
+}
+
+func (b *BuildSimulatorRequest) GetMode() *BuildSimulatorRequestMode {
+	if b == nil {
+		return nil
+	}
+	return b.Mode
 }
 
 func (b *BuildSimulatorRequest) GetModel() *BuildSimulatorRequestModel {

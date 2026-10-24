@@ -48,14 +48,14 @@ func Float64(f float64) *float64 { return &f }
 // Pointer provides a helper function to return a pointer to a type
 func Pointer[T any](v T) *T { return &v }
 
-// ContinuousSimulation - Continuous Simulation API: Build Simulators from OpenAPI or WSDL documents, create Simulations from them, and build Worlds that run Simulations together. Authenticate every request with an API key sent as a Bearer token.
+// ContinuousSimulation - Continuous Simulation API: Build Simulators from OpenAPI, WSDL or GraphQL documents, create Simulations from them, and build Worlds that run Simulations together. Authenticate every request with an API key sent as a Bearer token.
 type ContinuousSimulation struct {
 	SDKVersion string
 	// Store connections to real systems: a base URL, the header that carries the credential, and its value. The API never returns a value.
 	Credentials *Credentials
 	// Create Simulations from ready Simulators, then fork, stop, start, and delete them.
 	Simulations *Simulations
-	// Build Simulators from OpenAPI or WSDL documents, check or cancel a build, clone Simulators into other workspaces, and delete Simulators.
+	// Build Simulators from OpenAPI, WSDL or GraphQL documents, check or cancel a build, clone Simulators into other workspaces, and delete Simulators.
 	Simulators *Simulators
 	// Build Worlds from one or more Simulators and start or stop their Simulations together.
 	Worlds *Worlds
@@ -134,10 +134,10 @@ func WithTimeout(timeout time.Duration) SDKOption {
 // New creates a new instance of the SDK with the provided options
 func New(opts ...SDKOption) *ContinuousSimulation {
 	sdk := &ContinuousSimulation{
-		SDKVersion: "0.2.12",
+		SDKVersion: "0.2.13",
 		sdkConfiguration: config.SDKConfiguration{
-			UserAgent:         "speakeasy-sdk/go 0.2.12 2.935.1 v1 github.com/continuous-labs-ai/cli/internal/sdk",
-			SDKVersion:        "0.2.12",
+			UserAgent:         "speakeasy-sdk/go 0.2.13 2.935.1 v1 github.com/continuous-labs-ai/cli/internal/sdk",
+			SDKVersion:        "0.2.13",
 			GenVersion:        "2.935.1",
 			OpenAPIDocVersion: "v1",
 			ServerList:        ServerList,
