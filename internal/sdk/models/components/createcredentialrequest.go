@@ -7,13 +7,14 @@ import (
 )
 
 type CreateCredentialRequest struct {
-	// The https URL of the real system. Requests go to paths under it.
-	BaseURL string `json:"base_url"`
-	// The HTTP header that carries the value.
-	Header *string `default:"Authorization" json:"header"`
+	// The https URL of the real system. Requests go to paths under it. Send exactly one of base_url and login.
+	BaseURL *string `json:"base_url,omitzero"`
+	// The HTTP header that carries the value. Defaults to Authorization. Not allowed with login.
+	Header *string                 `json:"header,omitzero"`
+	Login  *CredentialLoginRequest `json:"login,omitzero"`
 	// Credential name.
 	Name string `json:"name"`
-	// The full header value, for example Bearer followed by a token. The API never returns it.
+	// The full header value, for example Bearer followed by a token, or the login password. The API never returns it.
 	Value string `json:"value"`
 }
 
@@ -28,9 +29,9 @@ func (c *CreateCredentialRequest) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-func (c *CreateCredentialRequest) GetBaseURL() string {
+func (c *CreateCredentialRequest) GetBaseURL() *string {
 	if c == nil {
-		return ""
+		return nil
 	}
 	return c.BaseURL
 }
@@ -40,6 +41,13 @@ func (c *CreateCredentialRequest) GetHeader() *string {
 		return nil
 	}
 	return c.Header
+}
+
+func (c *CreateCredentialRequest) GetLogin() *CredentialLoginRequest {
+	if c == nil {
+		return nil
+	}
+	return c.Login
 }
 
 func (c *CreateCredentialRequest) GetName() string {

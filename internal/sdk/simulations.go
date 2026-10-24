@@ -1325,7 +1325,7 @@ func (s *Simulations) GetSimulationAdvance(ctx context.Context, request operatio
 }
 
 // ListSimulationAdvanceEvents - List Clock Advance Events
-// Returns the ordered event trace for a committed advance. The Simulation must be running or paused. Forks retain traces in their inherited state.
+// Returns the ordered event trace for a committed advance. The Simulation must be running. Forks retain traces in their inherited state.
 func (s *Simulations) ListSimulationAdvanceEvents(ctx context.Context, request operations.ListSimulationAdvanceEventsRequest, opts ...operations.Option) (*operations.ListSimulationAdvanceEventsResponse, error) {
 	o := operations.Options{}
 	supportedOptions := []string{
@@ -1547,7 +1547,7 @@ func (s *Simulations) ListSimulationAdvanceEvents(ctx context.Context, request o
 }
 
 // ForkSimulation - Fork Simulation
-// Creates a new Simulation from the source Simulation's current state, or from an earlier recorded step when you set at_step. The source must be running or paused; a stopped source returns 409 simulation_stopped. Forking does not change the source. The response includes the new endpoint and the fork's own token, which does not expire.
+// Creates a new Simulation from the source Simulation's current state, or from an earlier recorded step when you set at_step. The source must be running; a stopped source returns 409 simulation_stopped. Forking does not change the source. The response includes the new endpoint and the fork's own token, which does not expire.
 func (s *Simulations) ForkSimulation(ctx context.Context, request operations.ForkSimulationRequest, opts ...operations.Option) (*operations.ForkSimulationResponse, error) {
 	o := operations.Options{}
 	supportedOptions := []string{
@@ -1784,7 +1784,7 @@ func (s *Simulations) ForkSimulation(ctx context.Context, request operations.For
 }
 
 // StartSimulation - Start Simulation
-// Starts a stopped Simulation from its saved state. The response includes the Simulation's token, which stop and start do not change. An already running or paused Simulation returns its current token and status.
+// Starts a stopped Simulation from its saved state. The response includes the Simulation's token, which stop and start do not change. An already running Simulation returns its current token and status.
 func (s *Simulations) StartSimulation(ctx context.Context, request operations.StartSimulationRequest, opts ...operations.Option) (*operations.StartSimulationResponse, error) {
 	o := operations.Options{}
 	supportedOptions := []string{
@@ -2578,8 +2578,6 @@ func (s *Simulations) GetSimulationToken(ctx context.Context, request operations
 	case httpRes.StatusCode == 403:
 		fallthrough
 	case httpRes.StatusCode == 404:
-		fallthrough
-	case httpRes.StatusCode == 409:
 		switch {
 		case utils.MatchContentType(httpRes.Header.Get("Content-Type"), `application/problem+json`):
 			rawBody, err := utils.ConsumeRawBody(httpRes)

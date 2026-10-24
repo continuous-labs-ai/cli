@@ -7,6 +7,29 @@ import (
 	"time"
 )
 
+// SimulatorMode - api for a Simulator of the vendor's API; web_app for one of its logged-in web app.
+type SimulatorMode string
+
+const (
+	SimulatorModeAPI    SimulatorMode = "api"
+	SimulatorModeWebApp SimulatorMode = "web_app"
+)
+
+func (e SimulatorMode) ToPointer() *SimulatorMode {
+	return &e
+}
+
+// IsExact returns true if the value matches a known enum value, false otherwise.
+func (e *SimulatorMode) IsExact() bool {
+	if e != nil {
+		switch *e {
+		case "api", "web_app":
+			return true
+		}
+	}
+	return false
+}
+
 // Source - workspace for a Simulator your workspace built; catalog for a read-only Simulator that Continuous publishes.
 type Source string
 
@@ -30,12 +53,14 @@ func (e *Source) IsExact() bool {
 	return false
 }
 
-// SimulatorSpecKind - The specification the Simulator was built from, or null until a build has read it.
+// SimulatorSpecKind - The specification the Simulator was built from, or null until a build has read it. recorded is a Web App Simulator's: the calls its discovery journeys captured.
 type SimulatorSpecKind string
 
 const (
-	SimulatorSpecKindOpenapi SimulatorSpecKind = "openapi"
-	SimulatorSpecKindWsdl    SimulatorSpecKind = "wsdl"
+	SimulatorSpecKindOpenapi  SimulatorSpecKind = "openapi"
+	SimulatorSpecKindWsdl     SimulatorSpecKind = "wsdl"
+	SimulatorSpecKindGraphql  SimulatorSpecKind = "graphql"
+	SimulatorSpecKindRecorded SimulatorSpecKind = "recorded"
 )
 
 func (e SimulatorSpecKind) ToPointer() *SimulatorSpecKind {
@@ -46,7 +71,7 @@ func (e SimulatorSpecKind) ToPointer() *SimulatorSpecKind {
 func (e *SimulatorSpecKind) IsExact() bool {
 	if e != nil {
 		switch *e {
-		case "openapi", "wsdl":
+		case "openapi", "wsdl", "graphql", "recorded":
 			return true
 		}
 	}
@@ -91,15 +116,19 @@ type Simulator struct {
 	ID string `json:"id"`
 	// The instructions the build followed, or empty when none were given.
 	Instructions string `json:"instructions"`
+	// api for a Simulator of the vendor's API; web_app for one of its logged-in web app.
+	Mode SimulatorMode `json:"mode"`
 	// Simulator name. The ID is its identity, and names need not be unique.
 	Name string `json:"name"`
 	// Parent Simulator ID, or null.
 	ParentID *string `json:"parent_id"`
+	// The latest attempt to publish the Simulator's image into the workspace's default customer runtime environment, or null when the workspace has none, no attempt is recorded, or the response does not report it. Get and list report it.
+	Publication *SimulatorPublication `json:"publication"`
 	// The build's research stage, or null for a Simulator built before research ran on every build.
 	Research *SimulatorResearch `json:"research"`
 	// workspace for a Simulator your workspace built; catalog for a read-only Simulator that Continuous publishes.
 	Source Source `json:"source"`
-	// The specification the Simulator was built from, or null until a build has read it.
+	// The specification the Simulator was built from, or null until a build has read it. recorded is a Web App Simulator's: the calls its discovery journeys captured.
 	SpecKind *SimulatorSpecKind `json:"spec_kind"`
 	// pending while waiting for capacity; building while the build runs; ready when Simulations, Worlds, and incremental builds can use it; failed when the build failed; canceled when a cancel request took effect.
 	Status SimulatorStatus `json:"status"`
@@ -158,6 +187,13 @@ func (s *Simulator) GetInstructions() string {
 	return s.Instructions
 }
 
+func (s *Simulator) GetMode() SimulatorMode {
+	if s == nil {
+		return SimulatorMode("")
+	}
+	return s.Mode
+}
+
 func (s *Simulator) GetName() string {
 	if s == nil {
 		return ""
@@ -170,6 +206,13 @@ func (s *Simulator) GetParentID() *string {
 		return nil
 	}
 	return s.ParentID
+}
+
+func (s *Simulator) GetPublication() *SimulatorPublication {
+	if s == nil {
+		return nil
+	}
+	return s.Publication
 }
 
 func (s *Simulator) GetResearch() *SimulatorResearch {

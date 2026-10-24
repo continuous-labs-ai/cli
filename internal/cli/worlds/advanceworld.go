@@ -25,7 +25,7 @@ func initAdvanceWorldCmd(parent *cobra.Command) error {
 	var cmd = &cobra.Command{
 		Use:     "advance",
 		Short:   "Advance World Time",
-		Long:    "Advances each running member independently and skips paused or stopped members without waking them. Successful advances remain committed when another member fails. The World current_time records the last settled request target; member clocks can differ.",
+		Long:    "Advances each member independently, waking an idle member first, and skips stopped members. Successful advances remain committed when another member fails. The World current_time records the last settled request target; member clocks can differ.",
 		Example: "  continuous worlds advance --id <id> --idempotency-key <value> --to 2026-10-16T14:43:59.349Z",
 		RunE:    runAdvanceWorldCmd,
 	}

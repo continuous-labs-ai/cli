@@ -870,7 +870,7 @@ func (s *Worlds) GetWorld(ctx context.Context, request operations.GetWorldReques
 }
 
 // AdvanceWorld - Advance World Time
-// Advances each running member independently and skips paused or stopped members without waking them. Successful advances remain committed when another member fails. The World current_time records the last settled request target; member clocks can differ.
+// Advances each member independently, waking an idle member first, and skips stopped members. Successful advances remain committed when another member fails. The World current_time records the last settled request target; member clocks can differ.
 func (s *Worlds) AdvanceWorld(ctx context.Context, request operations.AdvanceWorldRequest, opts ...operations.Option) (*operations.AdvanceWorldResponse, error) {
 	o := operations.Options{}
 	supportedOptions := []string{

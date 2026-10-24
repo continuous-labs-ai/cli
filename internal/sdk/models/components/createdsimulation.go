@@ -7,12 +7,11 @@ import (
 	"time"
 )
 
-// CreatedSimulationStatus - Current status. running serves requests. paused means the Simulation was idle and the platform paused it; the next request wakes it. stopped means its state is saved and requests return 409 until you start it.
+// CreatedSimulationStatus - Current status. running serves requests; after a period without requests, the first request can take longer while the Simulation resumes. stopped means its state is saved and requests return 409 until you start it.
 type CreatedSimulationStatus string
 
 const (
 	CreatedSimulationStatusRunning CreatedSimulationStatus = "running"
-	CreatedSimulationStatusPaused  CreatedSimulationStatus = "paused"
 	CreatedSimulationStatusStopped CreatedSimulationStatus = "stopped"
 )
 
@@ -24,7 +23,7 @@ func (e CreatedSimulationStatus) ToPointer() *CreatedSimulationStatus {
 func (e *CreatedSimulationStatus) IsExact() bool {
 	if e != nil {
 		switch *e {
-		case "running", "paused", "stopped":
+		case "running", "stopped":
 			return true
 		}
 	}
@@ -62,7 +61,7 @@ type CreatedSimulation struct {
 	SimulatorID string `json:"simulator_id"`
 	// Initial simulated time.
 	StartTime time.Time `json:"start_time"`
-	// Current status. running serves requests. paused means the Simulation was idle and the platform paused it; the next request wakes it. stopped means its state is saved and requests return 409 until you start it.
+	// Current status. running serves requests; after a period without requests, the first request can take longer while the Simulation resumes. stopped means its state is saved and requests return 409 until you start it.
 	Status CreatedSimulationStatus `json:"status"`
 	// The Simulation's token for requests to its endpoint. It does not expire. Send it in the X-Continuous-Simulation-Token header, with an actor's id from GET /v1/simulations/{id} in X-Continuous-Actor to act as that caller. Retrieve it later with GET /v1/simulations/{id}/token.
 	Token string `json:"token"`

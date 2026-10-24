@@ -18,8 +18,9 @@ var updateCredentialCmdMeta = []flagutil.FlagMeta{
 	{FlagName: "id", Shorthand: "i", FieldPath: "ID", Kind: flagutil.FlagKindString, Required: true, Description: "Credential ID. [required]"},
 	{FlagName: "base-url", Shorthand: "b", FieldPath: "Body.BaseURL", Kind: flagutil.FlagKindString, Optional: true, Description: "New https URL of the real system."},
 	{FlagName: "header", FieldPath: "Body.Header", Kind: flagutil.FlagKindString, Optional: true, Description: "New HTTP header that carries the value."},
+	{FlagName: "login", Shorthand: "l", FieldPath: "Body.Login", Kind: flagutil.FlagKindJSON, Optional: true, Annotations: `json:"login,omitempty"`, Description: "JSON object"},
 	{FlagName: "name", Shorthand: "n", FieldPath: "Body.Name", Kind: flagutil.FlagKindString, Optional: true, Description: "New credential name."},
-	{FlagName: "value", Shorthand: "v", FieldPath: "Body.Value", Kind: flagutil.FlagKindString, Optional: true, Description: "New full header value. Required when base_url or header changes. Builds that start an agent after the change use it. The API never returns it."},
+	{FlagName: "value", Shorthand: "v", FieldPath: "Body.Value", Kind: flagutil.FlagKindString, Optional: true, Description: "New full header value or login password. Required when base_url, header, or login.url changes. Builds that start an agent after the change use it. The API never returns it."},
 }
 
 // initUpdateCredentialCmd initializes the update-credential command.
@@ -27,7 +28,7 @@ func initUpdateCredentialCmd(parent *cobra.Command) error {
 	var cmd = &cobra.Command{
 		Use:     "update",
 		Short:   "Update credential",
-		Long:    "Renames a credential, changes its base URL or header, or replaces its value. Omitted fields keep their current values.",
+		Long:    "Renames a credential, changes its base URL and header or its login, or replaces its value. A credential keeps its kind. Omitted fields keep their current values.",
 		Example: "  continuous credentials update --id <id>",
 		RunE:    runUpdateCredentialCmd,
 	}

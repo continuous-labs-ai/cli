@@ -9,6 +9,8 @@ type CloneSimulatorResponse struct {
 	ID string `json:"id"`
 	// Display name of the clone.
 	Name string `json:"name"`
+	// The attempt to publish the image into the target workspace's default customer runtime environment, or null when it has none. A failure leaves the clone ready; creating a Simulation tries again.
+	Publication *SimulatorPublication `json:"publication"`
 	// Target workspace.
 	WorkspaceID string `json:"workspace_id"`
 }
@@ -32,6 +34,13 @@ func (c *CloneSimulatorResponse) GetName() string {
 		return ""
 	}
 	return c.Name
+}
+
+func (c *CloneSimulatorResponse) GetPublication() *SimulatorPublication {
+	if c == nil {
+		return nil
+	}
+	return c.Publication
 }
 
 func (c *CloneSimulatorResponse) GetWorkspaceID() string {

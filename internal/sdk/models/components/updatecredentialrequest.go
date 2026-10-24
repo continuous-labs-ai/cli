@@ -2,15 +2,31 @@
 
 package components
 
+import (
+	"github.com/continuous-labs-ai/cli/internal/sdk/sdkinternal/utils"
+)
+
 type UpdateCredentialRequest struct {
 	// New https URL of the real system.
 	BaseURL *string `json:"base_url,omitzero"`
 	// New HTTP header that carries the value.
-	Header *string `json:"header,omitzero"`
+	Header *string                `json:"header,omitzero"`
+	Login  *CredentialLoginUpdate `json:"login,omitzero"`
 	// New credential name.
 	Name *string `json:"name,omitzero"`
-	// New full header value. Required when base_url or header changes. Builds that start an agent after the change use it. The API never returns it.
+	// New full header value or login password. Required when base_url, header, or login.url changes. Builds that start an agent after the change use it. The API never returns it.
 	Value *string `json:"value,omitzero"`
+}
+
+func (u UpdateCredentialRequest) MarshalJSON() ([]byte, error) {
+	return utils.MarshalJSON(u, "", false)
+}
+
+func (u *UpdateCredentialRequest) UnmarshalJSON(data []byte) error {
+	if err := utils.UnmarshalJSON(data, &u, "", false, nil); err != nil {
+		return err
+	}
+	return nil
 }
 
 func (u *UpdateCredentialRequest) GetBaseURL() *string {
@@ -25,6 +41,13 @@ func (u *UpdateCredentialRequest) GetHeader() *string {
 		return nil
 	}
 	return u.Header
+}
+
+func (u *UpdateCredentialRequest) GetLogin() *CredentialLoginUpdate {
+	if u == nil {
+		return nil
+	}
+	return u.Login
 }
 
 func (u *UpdateCredentialRequest) GetName() *string {

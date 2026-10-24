@@ -160,11 +160,6 @@ components:
         code: simulation_observation_external
         detail: The Simulation with ID "sim_01J8Z5X4K7M2N9P0Q1R2S3T4V6" runs in a customer environment. Continuous does not read or copy its state, so this operation is unavailable.
         validation: null
-    simulation_platform_owned:
-      value:
-        code: simulation_platform_owned
-        detail: The Simulation with ID "sim_01J8Z5X4K7M2N9P0Q1R2S3T4V6" is in use by the platform and cannot be changed.
-        validation: null
     simulation_provider_unavailable:
       value:
         code: simulation_provider_unavailable
@@ -223,6 +218,12 @@ components:
     simulator_in_use:
       value:
         code: simulator_in_use
+        dependents:
+          simulations:
+            - sim_01J8Z5X4K7M2N9P0Q1R2S3T4V6
+          worlds:
+            - wld_01J8Z5X4K7M2N9P0Q1R2S3T4V7
+          child_simulators: []
         detail: The Simulator with ID "smr_01J8Z5X4K7M2N9P0Q1R2S3T4V5" has dependent Worlds, Simulations, or child Simulators. Delete those resources before you delete this Simulator.
         validation: null
     simulator_not_found:
@@ -446,7 +447,7 @@ components:
           spec_kind: openapi
       properties:
         credential_ids:
-          description: Workspace credentials QA and the builder can call real systems with, to compare the Simulator with them. A build with credentials runs QA after its review rounds. At most 5. Each must belong to the workspace and have a base_url. QA may create test objects in the live system and deletes them or, where the API cannot, leaves them in a final state; the builder sends only reads. Use a sandbox or test account.
+          description: Workspace credentials QA and the builder can call real systems with, to compare the Simulator with them. A build with credentials runs QA after its review rounds. At most 5. Each must belong to the workspace and have a base_url, except the one Web App login a Web App build needs, which its Discovery, Build and QA stages use. QA, and the builder of a Web App build, may create test objects in the live system and delete them or, where the API cannot, leave them in a final state; otherwise the builder sends only reads. Use a sandbox or test account.
           items:
             maxLength: 30
             pattern: ^crd_[0-9A-HJKMNP-TV-Z]{26}$
@@ -455,7 +456,7 @@ components:
           type: array
         filter:
           default: []
-          description: Regular expressions (RE2 syntax) that select the operations to implement. Each is matched against the OpenAPI operationId or the WSDL operation name; an operation is kept when any expression matches, and an OpenAPI operation without an operationId is dropped. At most 64 expressions of at most 1,024 characters each. Omit or send an empty list to keep every operation. Not allowed for an incremental build.
+          description: Regular expressions (RE2 syntax) that select the operations to implement. Each is matched against the OpenAPI operationId, the WSDL operation name, or the GraphQL Query or Mutation field name; an operation is kept when any expression matches, and an OpenAPI operation without an operationId is dropped. At most 64 expressions of at most 1,024 characters each. Omit or send an empty list to keep every operation. Not allowed for an incremental build.
           items:
             maxLength: 1024
             type: string
@@ -464,6 +465,13 @@ components:
         instructions:
           description: Instructions for the builder. Required for an incremental build. At most 16,384 characters and 65,536 UTF-8 bytes; must not be blank or contain U+0000.
           maxLength: 16384
+          type: string
+        mode:
+          default: api
+          description: "What the Simulator simulates. api, the default, builds the vendor's API from a spec, or from a parent with instructions. web_app builds the vendor's logged-in web app and the private API behind it: it takes no spec, spec_kind or filter, needs exactly one Web App login credential in credential_ids, runs on a Claude model or combined, and starts with a Discovery stage that logs in and captures the app. With parent_id and instructions, it builds from a ready web_app Simulator and starts with that Simulator's captures instead of Discovery."
+          enum:
+            - api
+            - web_app
           type: string
         model:
           default: combined
@@ -480,7 +488,7 @@ components:
           maxLength: 128
           type: string
         parent_id:
-          description: "Parent Simulator ID. With instructions and no spec this starts an incremental build: the parent must be ready, and the request takes no filter or spec_kind."
+          description: "Parent Simulator ID. With instructions and no spec this starts an incremental build: the parent must be ready and in the build's mode, and the request takes no filter or spec_kind."
           maxLength: 30
           pattern: ^smr_[0-9A-HJKMNP-TV-Z]{26}$
           type: string
@@ -492,10 +500,11 @@ components:
           minimum: 1
           type: integer
         spec_kind:
-          description: Source specification format. Omission detects the format.
+          description: Source specification format. Omission detects the format; GraphQL SDL needs graphql, and a GraphQL introspection result is stored as SDL.
           enum:
             - openapi
             - wsdl
+            - graphql
           type: string
         timeout_seconds:
           default: 14400
@@ -626,7 +635,7 @@ components:
           pattern: ^sim_[0-9A-HJKMNP-TV-Z]{26}$
           type: string
         status:
-          description: Whether this member is pending, committed, failed, or skipped because it is not running.
+          description: Whether this member is pending, committed, failed, or skipped.
           enum:
             - pending
             - completed
@@ -701,6 +710,11 @@ components:
         name:
           description: Display name of the clone.
           type: string
+        publication:
+          description: The attempt to publish the image into the target workspace's default customer runtime environment, or null when it has none. A failure leaves the clone ready; creating a Simulation tries again.
+          oneOf:
+            - $ref: "#/components/schemas/SimulatorPublication"
+            - type: "null"
         workspace_id:
           description: Target workspace.
           type: string
@@ -709,6 +723,7 @@ components:
         - workspace_id
         - digest
         - name
+        - publication
       type: object
     CreateCredentialRequest:
       additionalProperties: false
@@ -719,24 +734,25 @@ components:
           value: Bearer <redacted>
       properties:
         base_url:
-          description: The https URL of the real system. Requests go to paths under it.
+          description: The https URL of the real system. Requests go to paths under it. Send exactly one of base_url and login.
           type: string
         header:
-          default: Authorization
-          description: The HTTP header that carries the value.
+          description: The HTTP header that carries the value. Defaults to Authorization. Not allowed with login.
           type: string
+        login:
+          $ref: "#/components/schemas/CredentialLoginRequest"
+          description: A Web App login. Send exactly one of base_url and login.
         name:
           description: Credential name.
           minLength: 1
           type: string
         value:
-          description: The full header value, for example Bearer followed by a token. The API never returns it.
+          description: The full header value, for example Bearer followed by a token, or the login password. The API never returns it.
           minLength: 1
           type: string
           writeOnly: true
       required:
         - name
-        - base_url
         - value
       type: object
     CreateSimulationRequest:
@@ -849,10 +865,9 @@ components:
           format: date-time
           type: string
         status:
-          description: Current status. running serves requests. paused means the Simulation was idle and the platform paused it; the next request wakes it. stopped means its state is saved and requests return 409 until you start it.
+          description: Current status. running serves requests; after a period without requests, the first request can take longer while the Simulation resumes. stopped means its state is saved and requests return 409 until you start it.
           enum:
             - running
-            - paused
             - stopped
           type: string
         token:
@@ -884,10 +899,11 @@ components:
           created_at: "2026-01-15T12:00:00Z"
           header: Authorization
           id: crd_01J8Z5X4K7M2N9P0Q1R2S3T4VA
+          login: null
           name: stripe-test
       properties:
         base_url:
-          description: The https URL of the real system, or null for a credential created without one. A build can use only a credential with a base URL.
+          description: The https URL of the real system, or null for a login credential or one created without a URL. An API build can use only a credential with a base URL.
           type:
             - string
             - "null"
@@ -896,12 +912,15 @@ components:
           format: date-time
           type: string
         header:
-          description: The HTTP header that carries the value.
+          description: The HTTP header that carries the value, or empty for a login credential.
           type: string
         id:
           description: Credential ID.
           pattern: ^crd_[0-9A-HJKMNP-TV-Z]{26}$
           type: string
+        login:
+          $ref: "#/components/schemas/CredentialLogin"
+          description: The Web App login of a login credential, or null. Only a Web App build uses a login credential, and it needs exactly one.
         name:
           description: Credential name. Names need not be unique.
           type: string
@@ -910,7 +929,48 @@ components:
         - name
         - base_url
         - header
+        - login
         - created_at
+      type: object
+    CredentialLogin:
+      additionalProperties: false
+      properties:
+        url:
+          description: The https URL of the app's sign-in page.
+          type: string
+        username:
+          description: The user name to sign in with.
+          type: string
+      required:
+        - url
+        - username
+      type:
+        - object
+        - "null"
+    CredentialLoginRequest:
+      additionalProperties: false
+      properties:
+        url:
+          description: The https URL of the app's sign-in page, with a literal host name or IP address and no user information.
+          type: string
+        username:
+          description: The user name to sign in with.
+          minLength: 1
+          type: string
+      required:
+        - url
+        - username
+      type: object
+    CredentialLoginUpdate:
+      additionalProperties: false
+      properties:
+        url:
+          description: New https URL of the app's sign-in page.
+          type: string
+        username:
+          description: New user name.
+          minLength: 1
+          type: string
       type: object
     CurrentSimulationToken:
       additionalProperties: false
@@ -1191,10 +1251,9 @@ components:
           format: date-time
           type: string
         status:
-          description: Current status. running serves requests. paused means the Simulation was idle and the platform paused it; the next request wakes it. stopped means its state is saved and requests return 409 until you start it.
+          description: Current status. running serves requests; after a period without requests, the first request can take longer while the Simulation resumes. stopped means its state is saved and requests return 409 until you start it.
           enum:
             - running
-            - paused
             - stopped
           type: string
         world_id:
@@ -1281,10 +1340,9 @@ components:
           format: date-time
           type: string
         status:
-          description: Current status. running serves requests. paused means the Simulation was idle and the platform paused it; the next request wakes it. stopped means its state is saved and requests return 409 until you start it.
+          description: Current status. running serves requests; after a period without requests, the first request can take longer while the Simulation resumes. stopped means its state is saved and requests return 409 until you start it.
           enum:
             - running
-            - paused
             - stopped
           type: string
         world_id:
@@ -1332,8 +1390,10 @@ components:
           error: null
           id: smr_01J8Z5X4K7M2N9P0Q1R2S3T4V5
           instructions: Return stable example data for every operation.
+          mode: api
           name: billing-api
           parent_id: smr_01J8Z5X4K7M2N9P0Q1R2S3T4V9
+          publication: null
           research: null
           source: workspace
           spec_kind: openapi
@@ -1363,6 +1423,12 @@ components:
         instructions:
           description: The instructions the build followed, or empty when none were given.
           type: string
+        mode:
+          description: api for a Simulator of the vendor's API; web_app for one of its logged-in web app.
+          enum:
+            - api
+            - web_app
+          type: string
         name:
           description: Simulator name. The ID is its identity, and names need not be unique.
           maxLength: 128
@@ -1373,6 +1439,11 @@ components:
           type:
             - string
             - "null"
+        publication:
+          description: The latest attempt to publish the Simulator's image into the workspace's default customer runtime environment, or null when the workspace has none, no attempt is recorded, or the response does not report it. Get and list report it.
+          oneOf:
+            - $ref: "#/components/schemas/SimulatorPublication"
+            - type: "null"
         research:
           description: The build's research stage, or null for a Simulator built before research ran on every build.
           oneOf:
@@ -1385,10 +1456,12 @@ components:
             - catalog
           type: string
         spec_kind:
-          description: The specification the Simulator was built from, or null until a build has read it.
+          description: "The specification the Simulator was built from, or null until a build has read it. recorded is a Web App Simulator's: the calls its discovery journeys captured."
           enum:
             - openapi
             - wsdl
+            - graphql
+            - recorded
             - null
           type:
             - string
@@ -1413,8 +1486,10 @@ components:
         - error
         - created_at
         - credential_ids
+        - mode
         - build
         - research
+        - publication
       type: object
     SimulatorActor:
       additionalProperties: false
@@ -1480,8 +1555,9 @@ components:
             - combined
           type: string
         phase:
-          description: "Agent phase: research while the research agent indexes the documents and saves the vendor pages they lack; build for generation, review for the separate reviewer, qa while QA tests the running Simulator from outside, after the last review round of a build with credential_ids, finalize for author repair after review or QA. Null when not recorded."
+          description: "Agent phase: discovery while the discovery agent logs in to the vendor's web app and captures it, in a Web App build; research while the research agent indexes the documents and saves the vendor pages they lack; build for generation, review for the separate reviewer, qa while QA tests the running Simulator from outside, after the last review round of a build with credential_ids, finalize for author repair after review or QA. Null when not recorded."
           enum:
+            - discovery
             - research
             - build
             - review
@@ -1540,6 +1616,52 @@ components:
         - limitations
         - hidden_limitations
       type: object
+    SimulatorDeleteConflict:
+      additionalProperties: false
+      properties:
+        code:
+          description: Stable machine-readable error code.
+          minLength: 1
+          type: string
+        dependents:
+          $ref: "#/components/schemas/SimulatorDependents"
+          description: Every resource that blocks the delete. Delete them, then retry.
+        detail:
+          description: Safe human-readable error detail.
+          minLength: 1
+          type: string
+        validation:
+          $ref: "#/components/schemas/SpecificationValidation"
+          description: Safe specification diagnostics for a rejected build request, when available.
+      required:
+        - dependents
+        - validation
+        - code
+        - detail
+      type: object
+    SimulatorDependents:
+      additionalProperties: false
+      properties:
+        child_simulators:
+          description: IDs of Simulators built from the Simulator.
+          items:
+            type: string
+          type: array
+        simulations:
+          description: IDs of Simulations created from the Simulator, including World members.
+          items:
+            type: string
+          type: array
+        worlds:
+          description: IDs of Worlds that include the Simulator.
+          items:
+            type: string
+          type: array
+      required:
+        - simulations
+        - worlds
+        - child_simulators
+      type: object
     SimulatorError:
       additionalProperties: false
       properties:
@@ -1583,6 +1705,35 @@ components:
       type:
         - object
         - "null"
+    SimulatorPublication:
+      additionalProperties: false
+      properties:
+        environment_id:
+          description: The workspace's default customer runtime environment.
+          type: string
+        error:
+          description: Why the last attempt failed, naming the role and repository it used, or null.
+          type:
+            - string
+            - "null"
+        published_at:
+          description: When the image was published, or null.
+          format: date-time
+          type:
+            - string
+            - "null"
+        status:
+          description: published once the Simulator's image is in the environment's own registry; failed when the last attempt failed. Creating a Simulation in the environment tries again.
+          enum:
+            - published
+            - failed
+          type: string
+      required:
+        - environment_id
+        - status
+        - error
+        - published_at
+      type: object
     SimulatorResearch:
       additionalProperties: false
       properties:
@@ -1752,12 +1903,15 @@ components:
         header:
           description: New HTTP header that carries the value.
           type: string
+        login:
+          $ref: "#/components/schemas/CredentialLoginUpdate"
+          description: New login fields of a login credential. An omitted url or username keeps its value.
         name:
           description: New credential name.
           minLength: 1
           type: string
         value:
-          description: New full header value. Required when base_url or header changes. Builds that start an agent after the change use it. The API never returns it.
+          description: New full header value or login password. Required when base_url, header, or login.url changes. Builds that start an agent after the change use it. The API never returns it.
           minLength: 1
           type: string
           writeOnly: true
@@ -2123,7 +2277,7 @@ components:
       scheme: bearer
       type: http
 info:
-  description: Build Simulators from OpenAPI or WSDL documents, create Simulations from them, and build Worlds that run Simulations together. Authenticate every request with an API key sent as a Bearer token.
+  description: Build Simulators from OpenAPI, WSDL or GraphQL documents, create Simulations from them, and build Worlds that run Simulations together. Authenticate every request with an API key sent as a Bearer token.
   title: Continuous Simulation API
   version: v1
 openapi: 3.1.0
@@ -2193,7 +2347,7 @@ paths:
       tags:
         - credentials
     post:
-      description: "Stores a connection to a real system: its base URL, the header that carries the credential, and the header value. Returns the credential without its value."
+      description: "Stores a connection to a real system: either an API base URL, the header that carries the credential, and the header value, or an app login with its sign-in URL, username, and password. Returns the credential without its value."
       operationId: create-credential
       requestBody:
         content:
@@ -2360,7 +2514,7 @@ paths:
       tags:
         - credentials
     patch:
-      description: Renames a credential, changes its base URL or header, or replaces its value. Omitted fields keep their current values.
+      description: Renames a credential, changes its base URL and header or its login, or replaces its value. A credential keeps its kind. Omitted fields keep their current values.
       operationId: update-credential
       parameters:
         - description: Credential ID.
@@ -2458,7 +2612,6 @@ paths:
           schema:
             enum:
               - running
-              - paused
               - stopped
             type: string
         - description: Optional Simulator ID filter.
@@ -2629,6 +2782,8 @@ paths:
                   $ref: "#/components/examples/auth_provider_unavailable"
                 internal_unavailable:
                   $ref: "#/components/examples/internal_unavailable"
+                simulation_environment_offline_request:
+                  $ref: "#/components/examples/simulation_environment_offline_request"
                 simulation_provider_unavailable:
                   $ref: "#/components/examples/simulation_provider_unavailable"
               schema:
@@ -2689,8 +2844,6 @@ paths:
               examples:
                 clock_conflict:
                   $ref: "#/components/examples/clock_conflict"
-                simulation_platform_owned:
-                  $ref: "#/components/examples/simulation_platform_owned"
                 simulation_world_owned:
                   $ref: "#/components/examples/simulation_world_owned"
               schema:
@@ -2842,8 +2995,6 @@ paths:
               examples:
                 clock_conflict:
                   $ref: "#/components/examples/clock_conflict"
-                simulation_platform_owned:
-                  $ref: "#/components/examples/simulation_platform_owned"
                 simulation_stopped:
                   $ref: "#/components/examples/simulation_stopped"
                 simulation_world_owned:
@@ -2961,7 +3112,7 @@ paths:
         - simulations
   /v1/simulations/{id}/advances/{advance_id}/events:
     get:
-      description: Returns the ordered event trace for a committed advance. The Simulation must be running or paused. Forks retain traces in their inherited state.
+      description: Returns the ordered event trace for a committed advance. The Simulation must be running. Forks retain traces in their inherited state.
       operationId: list-simulation-advance-events
       parameters:
         - description: Simulation ID.
@@ -3070,7 +3221,7 @@ paths:
         - simulations
   /v1/simulations/{id}/fork:
     post:
-      description: Creates a new Simulation from the source Simulation's current state, or from an earlier recorded step when you set at_step. The source must be running or paused; a stopped source returns 409 simulation_stopped. Forking does not change the source. The response includes the new endpoint and the fork's own token, which does not expire.
+      description: Creates a new Simulation from the source Simulation's current state, or from an earlier recorded step when you set at_step. The source must be running; a stopped source returns 409 simulation_stopped. Forking does not change the source. The response includes the new endpoint and the fork's own token, which does not expire.
       operationId: fork-simulation
       parameters:
         - description: Source Simulation ID.
@@ -3207,7 +3358,7 @@ paths:
         - simulations
   /v1/simulations/{id}/start:
     post:
-      description: Starts a stopped Simulation from its saved state. The response includes the Simulation's token, which stop and start do not change. An already running or paused Simulation returns its current token and status.
+      description: Starts a stopped Simulation from its saved state. The response includes the Simulation's token, which stop and start do not change. An already running Simulation returns its current token and status.
       operationId: start-simulation
       parameters:
         - description: Simulation ID.
@@ -3254,8 +3405,6 @@ paths:
               examples:
                 clock_conflict:
                   $ref: "#/components/examples/clock_conflict"
-                simulation_platform_owned:
-                  $ref: "#/components/examples/simulation_platform_owned"
                 simulation_world_owned:
                   $ref: "#/components/examples/simulation_world_owned"
               schema:
@@ -3457,8 +3606,6 @@ paths:
               examples:
                 clock_conflict:
                   $ref: "#/components/examples/clock_conflict"
-                simulation_platform_owned:
-                  $ref: "#/components/examples/simulation_platform_owned"
                 simulation_runtime_lost:
                   $ref: "#/components/examples/simulation_runtime_lost"
                 simulation_world_owned:
@@ -3529,15 +3676,6 @@ paths:
               schema:
                 $ref: "#/components/schemas/Error"
           description: Not Found
-        "409":
-          content:
-            application/problem+json:
-              examples:
-                simulation_platform_owned:
-                  $ref: "#/components/examples/simulation_platform_owned"
-              schema:
-                $ref: "#/components/schemas/Error"
-          description: Conflict
         "500":
           $ref: "#/components/responses/InternalServerError"
         "502":
@@ -3620,8 +3758,6 @@ paths:
           content:
             application/problem+json:
               examples:
-                simulation_platform_owned:
-                  $ref: "#/components/examples/simulation_platform_owned"
                 simulation_token_regeneration_superseded:
                   $ref: "#/components/examples/simulation_token_regeneration_superseded"
               schema:
@@ -3744,7 +3880,7 @@ paths:
       tags:
         - simulators
     post:
-      description: Starts an asynchronous Simulator build and returns the Simulator with status pending. Builds start in queue order when workspace capacity is available. Send multipart/form-data with a JSON part named request. To build from a document, add a file part named spec with the OpenAPI or WSDL document. For an incremental build, omit spec and set parent_id and instructions. Add file parts named document to give the builder and reviewer vendor documentation.
+      description: Starts an asynchronous Simulator build and returns the Simulator with status pending. Builds start in queue order when workspace capacity is available. Send multipart/form-data with a JSON part named request. To build from a document, add a file part named spec with the OpenAPI, WSDL or GraphQL document. For an incremental build, omit spec and set parent_id and instructions. Add file parts named document to give the builder and reviewer vendor documentation.
       operationId: build-simulator
       requestBody:
         content:
@@ -3773,7 +3909,7 @@ paths:
                 spec:
                   contentEncoding: binary
                   contentMediaType: application/octet-stream
-                  description: OpenAPI or WSDL document, UTF-8 encoded, at most 64 MiB. Required unless the request is an incremental build (parent_id and instructions, no spec).
+                  description: OpenAPI, WSDL or GraphQL document, UTF-8 encoded, at most 64 MiB. Required unless the request is an incremental build (parent_id and instructions, no spec).
                   format: binary
                   type: string
               required:
@@ -3913,7 +4049,7 @@ paths:
                 simulator_in_use:
                   $ref: "#/components/examples/simulator_in_use"
               schema:
-                $ref: "#/components/schemas/Error"
+                $ref: "#/components/schemas/SimulatorDeleteConflict"
           description: Conflict
         "422":
           content:
@@ -4326,6 +4462,10 @@ paths:
                   $ref: "#/components/examples/auth_provider_unavailable"
                 internal_unavailable:
                   $ref: "#/components/examples/internal_unavailable"
+                simulation_environment_offline_request:
+                  $ref: "#/components/examples/simulation_environment_offline_request"
+                simulation_provider_unavailable:
+                  $ref: "#/components/examples/simulation_provider_unavailable"
               schema:
                 $ref: "#/components/schemas/Error"
           description: Service Unavailable
@@ -4447,7 +4587,7 @@ paths:
         - worlds
   /v1/worlds/{id}/advance-time:
     post:
-      description: Advances each running member independently and skips paused or stopped members without waking them. Successful advances remain committed when another member fails. The World current_time records the last settled request target; member clocks can differ.
+      description: Advances each member independently, waking an idle member first, and skips stopped members. Successful advances remain committed when another member fails. The World current_time records the last settled request target; member clocks can differ.
       operationId: advance-world
       parameters:
         - description: World ID.
@@ -5156,7 +5296,7 @@ servers:
   - description: Continuous production API.
     url: https://api.continuouslabs.ai
 tags:
-  - description: Build Simulators from OpenAPI or WSDL documents, check or cancel a build, clone Simulators into other workspaces, and delete Simulators.
+  - description: Build Simulators from OpenAPI, WSDL or GraphQL documents, check or cancel a build, clone Simulators into other workspaces, and delete Simulators.
     name: simulators
     x-group: Simulators
   - description: Create Simulations from ready Simulators, then fork, stop, start, and delete them.
