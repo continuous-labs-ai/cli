@@ -4,3 +4,4 @@
 **/*_test.go
 /tests/**
 /LICENSE
+/.goreleaser.yaml
