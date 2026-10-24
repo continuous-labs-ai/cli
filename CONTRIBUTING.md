@@ -30,9 +30,9 @@ Store `SPEAKEASY_API_KEY` as a repository secret. Store `SPEAKEASY_GITHUB_TOKEN`
 
 ## Releases
 
-Speakeasy generates the release infrastructure. Keep `cli.generateRelease: true`; it writes `.goreleaser.yaml`, `.github/workflows/release.yaml`, `scripts/install.sh`, and `scripts/install.ps1`. These files are not in `.genignore`, so do not edit them by hand.
+Speakeasy generates the release infrastructure. Keep `cli.generateRelease: true`; it writes `.github/workflows/release.yaml`, `scripts/install.sh`, and `scripts/install.ps1`. These files are not in `.genignore`, so do not edit them by hand. `.goreleaser.yaml` is in `.genignore`, so edit it by hand; Speakeasy template changes to it do not arrive.
 
-Owned release changes live in `.speakeasy/patches/`. `.goreleaser.yaml.patch` adds `project_name: continuous` so that archives keep the `continuous_<OS>_<arch>` names the installers download, sets `directory: Formula` and `skip_upload: true` on the Homebrew formula, drops the tap token, and adds the formula to the release assets. The installer patches add archive checksum verification and release tag validation. Speakeasy applies the patches after generation. After changing a patch, regenerate twice and confirm that the second run leaves no diff.
+`.goreleaser.yaml` sets `project_name: continuous` so that archives keep the `continuous_<OS>_<arch>` names the installers download. It gives the Homebrew formula a fixed description, sets `directory: Formula` and `skip_upload: true`, drops the tap token, and adds the formula to the release assets. Owned changes to the generated release files live in `.speakeasy/patches/`. The installer patches add archive checksum verification and release tag validation. Speakeasy applies the patches after generation. After changing a patch, regenerate twice and confirm that the second run leaves no diff.
 
 The `Publish` workflow (`sdk_publish.yaml`) runs when a `.speakeasy/gen.lock` change reaches `main`. Its `release` job runs Speakeasy's action, which tags `v<cli.version>` at that commit. Its `publish-cli` job runs GoReleaser with `CLI_GPG_SECRET_KEY` and `CLI_GPG_PASSPHRASE`, publishes the GitHub release with the archives, the signed `checksums.txt`, and the `continuous.rb` formula, and reports the release to the Speakeasy dashboard.
 
@@ -50,7 +50,7 @@ The generated `Release` workflow (`release.yaml`) stays because `generateRelease
 
 ## Homebrew
 
-Keep `cli.distribution.homebrew.enabled: true` with the tap `continuous-labs-ai/homebrew-tap`. Speakeasy writes the `brews` section of `.goreleaser.yaml` from these settings. The `publish-cli` job does not pass the tap token to GoReleaser, matching upstream, so the patch sets `skip_upload: true` and GoReleaser pushes nothing to the tap.
+Keep `cli.distribution.homebrew.enabled: true` with the tap `continuous-labs-ai/homebrew-tap`. The `publish-cli` job does not pass the tap token to GoReleaser, matching upstream, so `.goreleaser.yaml` sets `skip_upload: true` and GoReleaser pushes nothing to the tap.
 
 The owned `Publish Homebrew` workflow (`homebrew.yaml`) runs after each successful `Publish` run. It reads the latest release, checks that the formula version and its four archive URLs and SHA-256 values match the release and `checksums.txt`, and copies the exact formula to `Formula/continuous.rb` on the tap's `main` branch with `HOMEBREW_TAP_GITHUB_TOKEN`. Prereleases never reach the tap. Run the workflow by hand with the release tag to retry.
 
