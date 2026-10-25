@@ -7,6 +7,8 @@ type SimulatorDependents struct {
 	ChildSimulators []string `json:"child_simulators"`
 	// IDs of Simulations created from the Simulator, including World members.
 	Simulations []string `json:"simulations"`
+	// IDs of Simulation Snapshots of Simulations created from the Simulator.
+	Snapshots []string `json:"snapshots"`
 	// IDs of Worlds that include the Simulator.
 	Worlds []string `json:"worlds"`
 }
@@ -23,6 +25,13 @@ func (s *SimulatorDependents) GetSimulations() []string {
 		return []string{}
 	}
 	return s.Simulations
+}
+
+func (s *SimulatorDependents) GetSnapshots() []string {
+	if s == nil {
+		return []string{}
+	}
+	return s.Snapshots
 }
 
 func (s *SimulatorDependents) GetWorlds() []string {

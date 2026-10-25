@@ -16,7 +16,7 @@ import (
 
 var addWorldSimulationCmdMeta = []flagutil.FlagMeta{
 	{FlagName: "id", FieldPath: "ID", Kind: flagutil.FlagKindString, Required: true, Description: "World ID. [required]"},
-	{FlagName: "idempotency-key", FieldPath: "IdempotencyKey", Kind: flagutil.FlagKindString, Required: true, Description: "Stable key for this request. Reuse with the same body returns the same change. [required]"},
+	{FlagName: "idempotency-key", FieldPath: "IdempotencyKey", Kind: flagutil.FlagKindString, Required: true, Description: "Stable key for this request. Reuse with the same body returns the same change; reuse with a different body returns 409 idempotency_conflict. [required]"},
 	{FlagName: "simulator", Shorthand: "s", FieldPath: "Body.Simulator", Kind: flagutil.FlagKindString, Required: true, Description: "ID of the ready Simulator to add as a new member. [required]"},
 }
 

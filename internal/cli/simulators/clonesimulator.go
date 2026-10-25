@@ -16,7 +16,7 @@ import (
 
 var cloneSimulatorCmdMeta = []flagutil.FlagMeta{
 	{FlagName: "id", FieldPath: "ID", Kind: flagutil.FlagKindString, Required: true, Description: "Source Simulator ID. [required]"},
-	{FlagName: "idempotency-key", FieldPath: "Body.IdempotencyKey", Kind: flagutil.FlagKindString, Required: true, Description: "Stable key for retrying this clone into the target workspace. [required]"},
+	{FlagName: "idempotency-key", FieldPath: "IdempotencyKey", Kind: flagutil.FlagKindString, Optional: true, Description: "Optional key for retrying this create safely. A retry with the same key and request returns the original result with its status; the same key with a different request returns 409 idempotency_conflict. Without a key, each request creates a new resource. Keys are scoped to the target workspace."},
 	{FlagName: "name", Shorthand: "n", FieldPath: "Body.Name", Kind: flagutil.FlagKindString, Optional: true, Description: "Display name for the clone. Defaults to the source Simulator's name."},
 	{FlagName: "target-workspace-id", Shorthand: "t", FieldPath: "Body.TargetWorkspaceID", Kind: flagutil.FlagKindString, Required: true, Description: "Workspace that receives the clone. It must differ from the source workspace. [required]"},
 }
@@ -27,7 +27,7 @@ func initCloneSimulatorCmd(parent *cobra.Command) error {
 		Use:     "clone",
 		Short:   "Clone Simulator",
 		Long:    "Creates a ready copy of a ready Simulator in another workspace. The clone has a new ID and the source's image digest; the source is unchanged. The source is the caller's workspace: an API key's own workspace, or X-Workspace-Id for a session. An API key may clone into any other workspace of its organization.",
-		Example: "  continuous simulators clone --id <id> --idempotency-key <value> --target-workspace-id <id>",
+		Example: "  continuous simulators clone --id <id> --target-workspace-id <id>",
 		RunE:    runCloneSimulatorCmd,
 	}
 	flagutil.RegisterFlags(cmd, cloneSimulatorCmdMeta)

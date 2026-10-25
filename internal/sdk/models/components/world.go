@@ -7,14 +7,16 @@ import (
 	"time"
 )
 
-// WorldStatus - pending while waiting for capacity; building while the build runs; ready when it can be started; running or stopped once its Simulations exist; failed when building or first start fails; canceled when the build was canceled.
+// WorldStatus - pending while waiting for capacity; building while the build runs; ready when it can be started; starting while its Simulations start; running or stopped once its Simulations exist; stopping while they stop; failed when building or first start fails; canceled when the build was canceled.
 type WorldStatus string
 
 const (
 	WorldStatusPending  WorldStatus = "pending"
 	WorldStatusBuilding WorldStatus = "building"
 	WorldStatusReady    WorldStatus = "ready"
+	WorldStatusStarting WorldStatus = "starting"
 	WorldStatusRunning  WorldStatus = "running"
+	WorldStatusStopping WorldStatus = "stopping"
 	WorldStatusStopped  WorldStatus = "stopped"
 	WorldStatusFailed   WorldStatus = "failed"
 	WorldStatusCanceled WorldStatus = "canceled"
@@ -28,7 +30,7 @@ func (e WorldStatus) ToPointer() *WorldStatus {
 func (e *WorldStatus) IsExact() bool {
 	if e != nil {
 		switch *e {
-		case "pending", "building", "ready", "running", "stopped", "failed", "canceled":
+		case "pending", "building", "ready", "starting", "running", "stopping", "stopped", "failed", "canceled":
 			return true
 		}
 	}
@@ -61,7 +63,7 @@ type World struct {
 	Simulators []string `json:"simulators"`
 	// Simulated time the World starts at: chosen at build, and changeable on the first Start.
 	StartTime time.Time `json:"start_time"`
-	// pending while waiting for capacity; building while the build runs; ready when it can be started; running or stopped once its Simulations exist; failed when building or first start fails; canceled when the build was canceled.
+	// pending while waiting for capacity; building while the build runs; ready when it can be started; starting while its Simulations start; running or stopped once its Simulations exist; stopping while they stop; failed when building or first start fails; canceled when the build was canceled.
 	Status WorldStatus `json:"status"`
 }
 

@@ -16,7 +16,9 @@ const (
 	ListWorldsStatusPending  ListWorldsStatus = "pending"
 	ListWorldsStatusBuilding ListWorldsStatus = "building"
 	ListWorldsStatusReady    ListWorldsStatus = "ready"
+	ListWorldsStatusStarting ListWorldsStatus = "starting"
 	ListWorldsStatusRunning  ListWorldsStatus = "running"
+	ListWorldsStatusStopping ListWorldsStatus = "stopping"
 	ListWorldsStatusStopped  ListWorldsStatus = "stopped"
 	ListWorldsStatusFailed   ListWorldsStatus = "failed"
 	ListWorldsStatusCanceled ListWorldsStatus = "canceled"
@@ -37,7 +39,11 @@ func (e *ListWorldsStatus) UnmarshalJSON(data []byte) error {
 		fallthrough
 	case "ready":
 		fallthrough
+	case "starting":
+		fallthrough
 	case "running":
+		fallthrough
+	case "stopping":
 		fallthrough
 	case "stopped":
 		fallthrough

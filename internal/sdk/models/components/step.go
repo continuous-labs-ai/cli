@@ -37,7 +37,7 @@ type Step struct {
 	Kind StepKind `json:"kind"`
 	// HTTP method and path of the request that produced this step, without the query string, for example POST /v1/widgets.
 	Label string `json:"label"`
-	// Step number. Use it as at_step when you save a Snapshot.
+	// Step number.
 	Step int64 `json:"step"`
 	// Clock after the step.
 	TimeAfter *time.Time `json:"time_after"`

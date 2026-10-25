@@ -10,8 +10,8 @@ import (
 func InitSimulationSnapshotsRoot(parent *cobra.Command) error {
 	var SimulationSnapshotsCmd = &cobra.Command{
 		Use:   "simulation-snapshots",
-		Short: "Save a running Simulation's state as a Snapshot, create Simulations from it, and delete it",
-		Long:  "Save a running Simulation's state as a Snapshot, create Simulations from it, and delete it.",
+		Short: "Save a running Simulation's state as a Snapshot, create Simulations from it, and rename and delete it",
+		Long:  "Save a running Simulation's state as a Snapshot, create Simulations from it, and rename and delete it.",
 		RunE: func(cmd *cobra.Command, args []string) error {
 			if usage.UsageRequested(cmd) {
 				return usage.EmitSchema(cmd, cmd.OutOrStdout())
@@ -34,6 +34,10 @@ func InitSimulationSnapshotsRoot(parent *cobra.Command) error {
 	}
 
 	if err := initGetSimulationSnapshotCmd(SimulationSnapshotsCmd); err != nil {
+		return err
+	}
+
+	if err := initUpdateSimulationSnapshotCmd(SimulationSnapshotsCmd); err != nil {
 		return err
 	}
 

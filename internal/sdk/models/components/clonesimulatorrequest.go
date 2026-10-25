@@ -3,19 +3,10 @@
 package components
 
 type CloneSimulatorRequest struct {
-	// Stable key for retrying this clone into the target workspace.
-	IdempotencyKey string `json:"idempotency_key"`
 	// Display name for the clone. Defaults to the source Simulator's name.
 	Name *string `json:"name,omitzero"`
 	// Workspace that receives the clone. It must differ from the source workspace.
 	TargetWorkspaceID string `json:"target_workspace_id"`
-}
-
-func (c *CloneSimulatorRequest) GetIdempotencyKey() string {
-	if c == nil {
-		return ""
-	}
-	return c.IdempotencyKey
 }
 
 func (c *CloneSimulatorRequest) GetName() *string {

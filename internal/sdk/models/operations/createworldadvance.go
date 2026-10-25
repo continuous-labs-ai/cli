@@ -10,7 +10,7 @@ import (
 type CreateWorldAdvanceRequest struct {
 	// World ID.
 	ID string `pathParam:"style=simple,explode=false,name=id"`
-	// Stable key for this request. Reuse with the same target returns the same operation.
+	// Stable key for this request. Reuse with the same target returns the same operation; reuse with a different target returns 409 idempotency_conflict.
 	IdempotencyKey string                        `header:"style=simple,explode=false,name=Idempotency-Key"`
 	Body           components.AdvanceTimeRequest `request:"mediaType=application/json"`
 }

@@ -9,19 +9,19 @@ import (
 	"github.com/continuous-labs-ai/cli/internal/interactive"
 	"github.com/continuous-labs-ai/cli/internal/output"
 	"github.com/continuous-labs-ai/cli/internal/sdk"
-	"github.com/continuous-labs-ai/cli/internal/sdk/models/components"
 	"github.com/continuous-labs-ai/cli/internal/sdk/models/operations"
 	"github.com/continuous-labs-ai/cli/internal/usage"
 	"github.com/spf13/cobra"
 )
 
 var createSimulationCmdMeta = []flagutil.FlagMeta{
-	{FlagName: "include-sample-data", Shorthand: "i", FieldPath: "IncludeSampleData", Kind: flagutil.FlagKindBool, Optional: true, Description: "Start with the Simulator's sample data: a realistic account loaded on top of its seed before the first request. Defaults to false, a brand-new workspace. Requires a Simulator that carries sample data; see its composition. Not allowed with snapshot_id."},
-	{FlagName: "metadata", Shorthand: "m", FieldPath: "Metadata", Kind: flagutil.FlagKindJSON, Optional: true, Annotations: `json:"metadata,omitempty"`, Description: "Customer JSON metadata, up to 16 KiB and 64 nesting levels. Returned by create, get, and list. Omission uses null."},
-	{FlagName: "name", Shorthand: "n", FieldPath: "Name", Kind: flagutil.FlagKindString, Optional: true, Description: "Name for the Simulation. Omission generates a name. The ID stays its identity, and names need not be unique."},
-	{FlagName: "simulator-id", FieldPath: "SimulatorID", Kind: flagutil.FlagKindString, Optional: true, Description: "ID of the ready Simulator. Set exactly one of simulator_id and snapshot_id."},
-	{FlagName: "snapshot-id", FieldPath: "SnapshotID", Kind: flagutil.FlagKindString, Optional: true, Description: "ID of the Snapshot to start from. The Simulation takes its state, clock, Simulator digest and runtime placement. Set exactly one of simulator_id and snapshot_id."},
-	{FlagName: "start-time", FieldPath: "StartTime", Kind: flagutil.FlagKindDateTime, Optional: true, Description: "Initial simulated time in RFC 3339 format. Omission uses 2024-01-01T00:00:00Z. Precision is milliseconds. Not allowed with snapshot_id."},
+	{FlagName: "idempotency-key", FieldPath: "IdempotencyKey", Kind: flagutil.FlagKindString, Optional: true, Description: "Optional key for retrying this create safely. A retry with the same key and request returns the original result with its status; the same key with a different request returns 409 idempotency_conflict. Without a key, each request creates a new resource."},
+	{FlagName: "include-sample-data", FieldPath: "Body.IncludeSampleData", Kind: flagutil.FlagKindBool, Optional: true, Description: "Start with the Simulator's sample data: a realistic account loaded on top of its seed before the first request. Defaults to false, a brand-new workspace. Requires a Simulator that carries sample data; see its composition. Not allowed with snapshot_id."},
+	{FlagName: "metadata", Shorthand: "m", FieldPath: "Body.Metadata", Kind: flagutil.FlagKindJSON, Optional: true, Annotations: `json:"metadata,omitempty"`, Description: "Customer JSON metadata, up to 16 KiB and 64 nesting levels. Returned by create, get, and list. Omission uses null."},
+	{FlagName: "name", Shorthand: "n", FieldPath: "Body.Name", Kind: flagutil.FlagKindString, Optional: true, Description: "Name for the Simulation. Omission generates a name. The ID stays its identity, and names need not be unique."},
+	{FlagName: "simulator-id", FieldPath: "Body.SimulatorID", Kind: flagutil.FlagKindString, Optional: true, Description: "ID of the ready Simulator. Set exactly one of simulator_id and snapshot_id."},
+	{FlagName: "snapshot-id", FieldPath: "Body.SnapshotID", Kind: flagutil.FlagKindString, Optional: true, Description: "ID of the Snapshot to start from. The Simulation takes its state, clock, Simulator digest and runtime placement. Set exactly one of simulator_id and snapshot_id."},
+	{FlagName: "start-time", FieldPath: "Body.StartTime", Kind: flagutil.FlagKindDateTime, Optional: true, Description: "Initial simulated time in RFC 3339 format. Omission uses 2024-01-01T00:00:00Z. Precision is milliseconds. Not allowed with snapshot_id."},
 }
 
 // initCreateSimulationCmd initializes the create-simulation command.
@@ -29,12 +29,12 @@ func initCreateSimulationCmd(parent *cobra.Command) error {
 	var cmd = &cobra.Command{
 		Use:     "create",
 		Short:   "Create Simulation",
-		Long:    "Creates a Simulation from a ready Simulator, or from a Snapshot with its saved state, and starts it. The response includes the endpoint and the Simulation's token, which does not expire.",
+		Long:    "Creates a Simulation from a ready Simulator, or from a Snapshot with its saved state, and starts it. The response returns once the Simulation is admitted, with status starting; read it until it is running. The response includes the endpoint and the Simulation's token, which does not expire. If its runtime cannot start, the Simulation is deleted.",
 		Example: "  continuous simulations create",
 		RunE:    runCreateSimulationCmd,
 	}
 	flagutil.RegisterFlags(cmd, createSimulationCmdMeta)
-	if err := flagutil.ValidateMeta[components.CreateSimulationRequest](createSimulationCmdMeta); err != nil {
+	if err := flagutil.ValidateMeta[operations.CreateSimulationRequest](createSimulationCmdMeta); err != nil {
 		return fmt.Errorf("invalid metadata for create-simulation: %w", err)
 	}
 	cmd.Flags().String("body", "", "Request body as JSON (alternative to individual flags). Can also be provided via stdin.")
@@ -52,7 +52,7 @@ func runCreateSimulationCmd(cmd *cobra.Command, args []string) error {
 			return err
 		}
 	}
-	request, err := flagutil.BuildRequest[components.CreateSimulationRequest](cmd, createSimulationCmdMeta, "", "body")
+	req, err := flagutil.BuildRequest[operations.CreateSimulationRequest](cmd, createSimulationCmdMeta, "Body", "body")
 	if err != nil {
 		return err
 	}
@@ -75,7 +75,7 @@ func runCreateSimulationCmd(cmd *cobra.Command, args []string) error {
 	if output.WantsRawJSON(cmd) {
 		sdkOpts = append(sdkOpts, operations.WithSkipDeserialization())
 	}
-	res, err := s.Simulations.CreateSimulation(cmd.Context(), *request, sdkOpts...)
+	res, err := s.Simulations.CreateSimulation(cmd.Context(), *req, sdkOpts...)
 	if err != nil {
 		return output.Error(cmd, err)
 	}

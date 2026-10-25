@@ -7,6 +7,26 @@ import (
 	"github.com/continuous-labs-ai/cli/internal/sdk/sdkinternal/utils"
 )
 
+type BuildWorldRequest struct {
+	// Optional key for retrying this create safely. A retry with the same key and request returns the original result with its status; the same key with a different request returns 409 idempotency_conflict. Without a key, each request creates a new resource.
+	IdempotencyKey *string                      `header:"style=simple,explode=false,name=Idempotency-Key"`
+	Body           components.BuildWorldRequest `request:"mediaType=application/json"`
+}
+
+func (b *BuildWorldRequest) GetIdempotencyKey() *string {
+	if b == nil {
+		return nil
+	}
+	return b.IdempotencyKey
+}
+
+func (b *BuildWorldRequest) GetBody() components.BuildWorldRequest {
+	if b == nil {
+		return components.BuildWorldRequest{}
+	}
+	return b.Body
+}
+
 type BuildWorldResponse struct {
 	HTTPMeta components.HTTPMetadata `json:"-"`
 	// Accepted

@@ -7,23 +7,50 @@ import (
 	"time"
 )
 
+// SimulationSnapshotStatus - creating while the state is saved. A Simulation can start from a ready Snapshot. A failed Snapshot holds no state.
+type SimulationSnapshotStatus string
+
+const (
+	SimulationSnapshotStatusCreating SimulationSnapshotStatus = "creating"
+	SimulationSnapshotStatusReady    SimulationSnapshotStatus = "ready"
+	SimulationSnapshotStatusFailed   SimulationSnapshotStatus = "failed"
+)
+
+func (e SimulationSnapshotStatus) ToPointer() *SimulationSnapshotStatus {
+	return &e
+}
+
+// IsExact returns true if the value matches a known enum value, false otherwise.
+func (e *SimulationSnapshotStatus) IsExact() bool {
+	if e != nil {
+		switch *e {
+		case "creating", "ready", "failed":
+			return true
+		}
+	}
+	return false
+}
+
 type SimulationSnapshot struct {
-	// Completed step the Snapshot saved, or null for the state that was latest when it was saved.
-	AtStep *int64 `json:"at_step"`
 	// Snapshot creation time.
 	CreatedAt time.Time `json:"created_at"`
-	// Simulated time of the saved state, where a Simulation created from the Snapshot starts.
-	CurrentTime time.Time `json:"current_time"`
+	// Simulated time of the saved state, where a Simulation created from the Snapshot starts, or null until it is ready.
+	CurrentTime *time.Time     `json:"current_time"`
+	Error       *ResourceError `json:"error"`
 	// Snapshot ID.
 	ID string `json:"id"`
 	// Snapshot name. The ID is its identity, and names need not be unique.
 	Name string `json:"name"`
 	// ID of the Simulation the Snapshot saved, or null once that Simulation is deleted.
 	SimulationID *string `json:"simulation_id"`
+	// Current name of the Simulation the Snapshot saved, or null once that Simulation is deleted.
+	SimulationName *string `json:"simulation_name"`
 	// ID of the Simulator a Simulation created from the Snapshot runs, at the digest its source pinned.
 	SimulatorID string `json:"simulator_id"`
-	// Initial simulated time of a Simulation created from the Snapshot.
-	StartTime time.Time `json:"start_time"`
+	// Initial simulated time of a Simulation created from the Snapshot, or null until it is ready.
+	StartTime *time.Time `json:"start_time"`
+	// creating while the state is saved. A Simulation can start from a ready Snapshot. A failed Snapshot holds no state.
+	Status SimulationSnapshotStatus `json:"status"`
 }
 
 func (s SimulationSnapshot) MarshalJSON() ([]byte, error) {
@@ -37,13 +64,6 @@ func (s *SimulationSnapshot) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-func (s *SimulationSnapshot) GetAtStep() *int64 {
-	if s == nil {
-		return nil
-	}
-	return s.AtStep
-}
-
 func (s *SimulationSnapshot) GetCreatedAt() time.Time {
 	if s == nil {
 		return time.Time{}
@@ -51,11 +71,18 @@ func (s *SimulationSnapshot) GetCreatedAt() time.Time {
 	return s.CreatedAt
 }
 
-func (s *SimulationSnapshot) GetCurrentTime() time.Time {
+func (s *SimulationSnapshot) GetCurrentTime() *time.Time {
 	if s == nil {
-		return time.Time{}
+		return nil
 	}
 	return s.CurrentTime
+}
+
+func (s *SimulationSnapshot) GetError() *ResourceError {
+	if s == nil {
+		return nil
+	}
+	return s.Error
 }
 
 func (s *SimulationSnapshot) GetID() string {
@@ -79,6 +106,13 @@ func (s *SimulationSnapshot) GetSimulationID() *string {
 	return s.SimulationID
 }
 
+func (s *SimulationSnapshot) GetSimulationName() *string {
+	if s == nil {
+		return nil
+	}
+	return s.SimulationName
+}
+
 func (s *SimulationSnapshot) GetSimulatorID() string {
 	if s == nil {
 		return ""
@@ -86,9 +120,16 @@ func (s *SimulationSnapshot) GetSimulatorID() string {
 	return s.SimulatorID
 }
 
-func (s *SimulationSnapshot) GetStartTime() time.Time {
+func (s *SimulationSnapshot) GetStartTime() *time.Time {
 	if s == nil {
-		return time.Time{}
+		return nil
 	}
 	return s.StartTime
+}
+
+func (s *SimulationSnapshot) GetStatus() SimulationSnapshotStatus {
+	if s == nil {
+		return SimulationSnapshotStatus("")
+	}
+	return s.Status
 }

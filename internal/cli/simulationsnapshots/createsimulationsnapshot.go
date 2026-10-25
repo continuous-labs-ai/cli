@@ -15,8 +15,7 @@ import (
 )
 
 var createSimulationSnapshotCmdMeta = []flagutil.FlagMeta{
-	{FlagName: "idempotency-key", Shorthand: "i", FieldPath: "IdempotencyKey", Kind: flagutil.FlagKindString, Required: true, Description: "Stable key for this request. A retry with the same key returns the original Snapshot. [required]"},
-	{FlagName: "at-step", Shorthand: "a", FieldPath: "Body.AtStep", Kind: flagutil.FlagKindInt64, Optional: true, Description: "Completed step to save the state after. Omission saves the latest state."},
+	{FlagName: "idempotency-key", Shorthand: "i", FieldPath: "IdempotencyKey", Kind: flagutil.FlagKindString, Optional: true, Description: "Optional key for retrying this create safely. A retry with the same key and request returns the original result with its status; the same key with a different request returns 409 idempotency_conflict. Without a key, each request creates a new resource."},
 	{FlagName: "name", Shorthand: "n", FieldPath: "Body.Name", Kind: flagutil.FlagKindString, Required: true, Description: "Snapshot name. [required]"},
 	{FlagName: "simulation-id", Shorthand: "s", FieldPath: "Body.SimulationID", Kind: flagutil.FlagKindString, Required: true, Description: "ID of the running Simulation to save. [required]"},
 }
@@ -26,8 +25,8 @@ func initCreateSimulationSnapshotCmd(parent *cobra.Command) error {
 	var cmd = &cobra.Command{
 		Use:     "create",
 		Short:   "Create Simulation Snapshot",
-		Long:    "Saves a running Simulation's current state, or its state after an earlier recorded step when you set at_step, and returns the Snapshot once the state is stored. Saving does not change the Simulation. Create Simulations from the Snapshot with snapshot_id; it outlives its Simulation. A stopped Simulation returns 409 simulation_stopped. Reuse the Idempotency-Key to retry safely.",
-		Example: "  continuous simulation-snapshots create --idempotency-key <value> --name before-refund --simulation-id sim_01J8Z5X4K7M2N9P0Q1R2S3T4V6",
+		Long:    "Saves a running Simulation's current state and returns the Snapshot once the state is stored. Saving closes the Simulation's open event streams and WebSockets and does not change its state. Create Simulations from the Snapshot with snapshot_id; it outlives its Simulation. A stopped Simulation returns 409 simulation_stopped. Reuse the Idempotency-Key to retry safely.",
+		Example: "  continuous simulation-snapshots create --name before-refund --simulation-id sim_01J8Z5X4K7M2N9P0Q1R2S3T4V6",
 		RunE:    runCreateSimulationSnapshotCmd,
 	}
 	flagutil.RegisterFlags(cmd, createSimulationSnapshotCmdMeta)

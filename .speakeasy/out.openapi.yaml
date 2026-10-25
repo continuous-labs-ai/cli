@@ -100,6 +100,11 @@ components:
         code: credential_not_found
         detail: No credential was found with ID "crd_01J8Z5X4K7M2N9P0Q1R2S3T4VA".
         validation: null
+    idempotency_conflict:
+      value:
+        code: idempotency_conflict
+        detail: The Idempotency-Key was already used with a different request. Use a new Idempotency-Key.
+        validation: null
     image_unavailable:
       value:
         code: image_unavailable
@@ -130,10 +135,10 @@ components:
         code: request_timeout
         detail: The request body was not received before the timeout. Retry the request.
         validation: null
-    simulation_capacity:
+    simulation_boot_failed:
       value:
-        code: simulation_capacity
-        detail: Continuous has no available Simulation capacity. Retry after a short delay.
+        code: simulation_not_found
+        detail: The Simulation's runtime could not start, so the Simulation was deleted. Create it again.
         validation: null
     simulation_environment_offline:
       value:
@@ -175,25 +180,20 @@ components:
         code: simulation_quota_exceeded
         detail: The workspace has 4 of its 5 Simulation slots in use and cannot start all 3 World Simulations. Stop other Simulations or wait for one to be deleted.
         validation: null
-    simulation_runtime_lost:
+    simulation_starting:
       value:
-        code: simulation_runtime_lost
-        detail: The Simulation's runtime is lost and it has no checkpoint to restart from. Delete the Simulation.
+        code: simulation_starting
+        detail: The Simulation is starting. Read it until it is running, then retry.
         validation: null
     simulation_stopped:
       value:
         code: simulation_stopped
         detail: The Simulation with ID "sim_01J8Z5X4K7M2N9P0Q1R2S3T4V6" is stopped. Start it before you retry this request.
         validation: null
-    simulation_template_missing:
+    simulation_stopping:
       value:
-        code: simulation_template_missing
-        detail: The Simulation runtime template is unavailable. Contact Continuous support before you retry the request.
-        validation: null
-    simulation_timeout:
-      value:
-        code: simulation_timeout
-        detail: The Simulation runtime did not start before the timeout. Retry the request.
+        code: simulation_stopping
+        detail: The Simulation is stopping. Read it until it is stopped, then retry.
         validation: null
     simulation_token_regeneration_superseded:
       value:
@@ -210,11 +210,6 @@ components:
         code: simulation_world_owned
         detail: The Simulation with ID "sim_01J8Z5X4K7M2N9P0Q1R2S3T4V6" belongs to the World with ID "wld_01J8Z5X4K7M2N9P0Q1R2S3T4V7". Manage it through the World.
         validation: null
-    simulator_import_conflict:
-      value:
-        code: simulator_import_conflict
-        detail: idempotency_key already belongs to another import
-        validation: null
     simulator_in_use:
       value:
         code: simulator_in_use
@@ -224,7 +219,8 @@ components:
           worlds:
             - wld_01J8Z5X4K7M2N9P0Q1R2S3T4V7
           child_simulators: []
-        detail: The Simulator with ID "smr_01J8Z5X4K7M2N9P0Q1R2S3T4V5" has dependent Worlds, Simulations, or child Simulators. Delete those resources before you delete this Simulator.
+          snapshots: []
+        detail: The Simulator with ID "smr_01J8Z5X4K7M2N9P0Q1R2S3T4V5" has dependent Worlds, Simulations, child Simulators, or Simulation Snapshots. Delete those resources before you delete this Simulator.
         validation: null
     simulator_not_found:
       value:
@@ -261,10 +257,20 @@ components:
         code: simulator_unknown
         detail: The parent Simulator with ID "smr_01J8Z5X4K7M2N9P0Q1R2S3T4V5" is unknown or belongs to another workspace.
         validation: null
+    snapshot_in_use:
+      value:
+        code: snapshot_in_use
+        detail: A Simulation is starting from the Snapshot. Retry after it starts.
+        validation: null
     snapshot_not_found:
       value:
         code: snapshot_not_found
         detail: No Snapshot was found with ID "sns_01J8Z5X4K7M2N9P0Q1R2S3T4VC".
+        validation: null
+    snapshot_not_ready:
+      value:
+        code: snapshot_not_ready
+        detail: The Snapshot is not ready.
         validation: null
     snapshot_observation_external:
       value:
@@ -316,6 +322,16 @@ components:
         code: validation
         detail: "validation failed: invalid integer at query.limit"
         validation: null
+    validation_metadata:
+      value:
+        code: validation
+        detail: metadata exceeds 16 KiB
+        validation: null
+    validation_name:
+      value:
+        code: validation
+        detail: name must not be blank
+        validation: null
     validation_simulation_source:
       value:
         code: validation
@@ -330,11 +346,6 @@ components:
       value:
         code: validation
         detail: The Simulator ID must be a stable smr_ ID.
-        validation: null
-    validation_snapshot_step:
-      value:
-        code: validation
-        detail: at_step does not identify a recorded step
         validation: null
     workspace_not_found:
       value:
@@ -380,6 +391,16 @@ components:
       value:
         code: world_not_found
         detail: No World was found with ID "wld_01J8Z5X4K7M2N9P0Q1R2S3T4V7".
+        validation: null
+    world_starting:
+      value:
+        code: world_starting
+        detail: The World is starting. Read it until it is running, then retry.
+        validation: null
+    world_stopping:
+      value:
+        code: world_stopping
+        detail: The World is stopping. Read it until it is stopped, then retry.
         validation: null
   responses:
     InternalServerError:
@@ -696,11 +717,6 @@ components:
     CloneSimulatorRequest:
       additionalProperties: false
       properties:
-        idempotency_key:
-          description: Stable key for retrying this clone into the target workspace.
-          maxLength: 128
-          minLength: 1
-          type: string
         name:
           description: Display name for the clone. Defaults to the source Simulator's name.
           maxLength: 128
@@ -711,7 +727,6 @@ components:
           type: string
       required:
         - target_workspace_id
-        - idempotency_key
       type: object
     CloneSimulatorResponse:
       additionalProperties: false
@@ -803,16 +818,9 @@ components:
     CreateSimulationSnapshotRequest:
       additionalProperties: false
       examples:
-        - at_step: 42
-          name: before-refund
+        - name: before-refund
           simulation_id: sim_01J8Z5X4K7M2N9P0Q1R2S3T4V6
       properties:
-        at_step:
-          description: Completed step to save the state after. Omission saves the latest state.
-          format: int64
-          maximum: 9.007199254740991e+15
-          minimum: 0
-          type: integer
         name:
           description: Snapshot name.
           maxLength: 128
@@ -915,11 +923,14 @@ components:
           format: date-time
           type: string
         status:
-          description: Current status. running serves requests; after a period without requests, the first request can take longer while the Simulation resumes. stopped means its state is saved and requests return 409 until you start it.
+          description: Current status. starting means its runtime is booting; read the Simulation until it is running. running serves requests; after a period without requests, the first request can take longer while the Simulation resumes. stopping means its state is being saved, and stopped means it is saved; requests return 409 in both until you start it.
           enum:
+            - starting
             - running
+            - stopping
             - stopped
           type: string
+          x-speakeasy-unknown-values: allow
         token:
           description: The Simulation's token for requests to its endpoint. It does not expire. Send it in the X-Continuous-Simulation-Token header, with an actor's id from GET /v1/simulations/{id} in X-Continuous-Actor to act as that caller. Retrieve it later with GET /v1/simulations/{id}/token.
           minLength: 1
@@ -1296,11 +1307,14 @@ components:
           format: date-time
           type: string
         status:
-          description: Current status. running serves requests; after a period without requests, the first request can take longer while the Simulation resumes. stopped means its state is saved and requests return 409 until you start it.
+          description: Current status. starting means its runtime is booting; read the Simulation until it is running. running serves requests; after a period without requests, the first request can take longer while the Simulation resumes. stopping means its state is being saved, and stopped means it is saved; requests return 409 in both until you start it.
           enum:
+            - starting
             - running
+            - stopping
             - stopped
           type: string
+          x-speakeasy-unknown-values: allow
         world_id:
           description: ID of the World that owns this Simulation, or null.
           pattern: ^wld_[0-9A-HJKMNP-TV-Z]{26}$
@@ -1392,11 +1406,14 @@ components:
           format: date-time
           type: string
         status:
-          description: Current status. running serves requests; after a period without requests, the first request can take longer while the Simulation resumes. stopped means its state is saved and requests return 409 until you start it.
+          description: Current status. starting means its runtime is booting; read the Simulation until it is running. running serves requests; after a period without requests, the first request can take longer while the Simulation resumes. stopping means its state is being saved, and stopped means it is saved; requests return 409 in both until you start it.
           enum:
+            - starting
             - running
+            - stopping
             - stopped
           type: string
+          x-speakeasy-unknown-values: allow
         world_id:
           description: ID of the World that owns this Simulation, or null.
           pattern: ^wld_[0-9A-HJKMNP-TV-Z]{26}$
@@ -1425,29 +1442,30 @@ components:
     SimulationSnapshot:
       additionalProperties: false
       examples:
-        - at_step: 42
-          created_at: "2026-01-15T12:00:00Z"
+        - created_at: "2026-01-15T12:00:00Z"
           current_time: "2024-01-03T00:00:00Z"
+          error: null
           id: sns_01J8Z5X4K7M2N9P0Q1R2S3T4VC
           name: before-refund
           simulation_id: sim_01J8Z5X4K7M2N9P0Q1R2S3T4V8
+          simulation_name: checkout-run
           simulator_id: smr_01J8Z5X4K7M2N9P0Q1R2S3T4V5
           start_time: "2024-01-01T00:00:00Z"
+          status: ready
       properties:
-        at_step:
-          description: Completed step the Snapshot saved, or null for the state that was latest when it was saved.
-          format: int64
-          type:
-            - integer
-            - "null"
         created_at:
           description: Snapshot creation time.
           format: date-time
           type: string
         current_time:
-          description: Simulated time of the saved state, where a Simulation created from the Snapshot starts.
+          description: Simulated time of the saved state, where a Simulation created from the Snapshot starts, or null until it is ready.
           format: date-time
-          type: string
+          type:
+            - string
+            - "null"
+        error:
+          $ref: "#/components/schemas/ResourceError"
+          description: Why the save failed, or null unless status is failed.
         id:
           description: Snapshot ID.
           pattern: ^sns_[0-9A-HJKMNP-TV-Z]{26}$
@@ -1462,20 +1480,36 @@ components:
           type:
             - string
             - "null"
+        simulation_name:
+          description: Current name of the Simulation the Snapshot saved, or null once that Simulation is deleted.
+          type:
+            - string
+            - "null"
         simulator_id:
           description: ID of the Simulator a Simulation created from the Snapshot runs, at the digest its source pinned.
           pattern: ^smr_[0-9A-HJKMNP-TV-Z]{26}$
           type: string
         start_time:
-          description: Initial simulated time of a Simulation created from the Snapshot.
+          description: Initial simulated time of a Simulation created from the Snapshot, or null until it is ready.
           format: date-time
+          type:
+            - string
+            - "null"
+        status:
+          description: creating while the state is saved. A Simulation can start from a ready Snapshot. A failed Snapshot holds no state.
+          enum:
+            - creating
+            - ready
+            - failed
           type: string
       required:
         - id
         - name
         - simulation_id
+        - simulation_name
         - simulator_id
-        - at_step
+        - status
+        - error
         - start_time
         - current_time
         - created_at
@@ -1763,6 +1797,11 @@ components:
           items:
             type: string
           type: array
+        snapshots:
+          description: IDs of Simulation Snapshots of Simulations created from the Simulator.
+          items:
+            type: string
+          type: array
         worlds:
           description: IDs of Worlds that include the Simulator.
           items:
@@ -1772,6 +1811,7 @@ components:
         - simulations
         - worlds
         - child_simulators
+        - snapshots
       type: object
     SimulatorError:
       additionalProperties: false
@@ -1982,7 +2022,7 @@ components:
           description: HTTP method and path of the request that produced this step, without the query string, for example POST /v1/widgets.
           type: string
         step:
-          description: Step number. Use it as at_step when you save a Snapshot.
+          description: Step number.
           format: int64
           type: integer
         time_after:
@@ -2026,6 +2066,46 @@ components:
           minLength: 1
           type: string
           writeOnly: true
+      type: object
+    UpdateSimulationRequest:
+      additionalProperties: false
+      properties:
+        metadata:
+          description: Replacement customer JSON metadata, up to 16 KiB and 64 nesting levels, or null to clear it.
+        name:
+          description: New Simulation name.
+          maxLength: 128
+          minLength: 1
+          type: string
+      type: object
+    UpdateSimulationSnapshotRequest:
+      additionalProperties: false
+      properties:
+        name:
+          description: New Snapshot name.
+          maxLength: 128
+          minLength: 1
+          type: string
+      type: object
+    UpdateSimulatorRequest:
+      additionalProperties: false
+      properties:
+        name:
+          description: New Simulator name.
+          maxLength: 128
+          minLength: 1
+          type: string
+      type: object
+    UpdateWorldRequest:
+      additionalProperties: false
+      properties:
+        metadata:
+          description: Replacement customer JSON metadata, up to 16 KiB and 64 nesting levels, or null to clear it.
+        name:
+          description: New World name.
+          maxLength: 128
+          minLength: 1
+          type: string
       type: object
     World:
       additionalProperties: false
@@ -2112,16 +2192,19 @@ components:
           format: date-time
           type: string
         status:
-          description: pending while waiting for capacity; building while the build runs; ready when it can be started; running or stopped once its Simulations exist; failed when building or first start fails; canceled when the build was canceled.
+          description: pending while waiting for capacity; building while the build runs; ready when it can be started; starting while its Simulations start; running or stopped once its Simulations exist; stopping while they stop; failed when building or first start fails; canceled when the build was canceled.
           enum:
             - pending
             - building
             - ready
+            - starting
             - running
+            - stopping
             - stopped
             - failed
             - canceled
           type: string
+          x-speakeasy-unknown-values: allow
       required:
         - metadata
         - start_time
@@ -2835,16 +2918,14 @@ paths:
           - "504"
         strategy: backoff
     post:
-      description: Saves a running Simulation's current state, or its state after an earlier recorded step when you set at_step, and returns the Snapshot once the state is stored. Saving does not change the Simulation. Create Simulations from the Snapshot with snapshot_id; it outlives its Simulation. A stopped Simulation returns 409 simulation_stopped. Reuse the Idempotency-Key to retry safely.
+      description: Saves a running Simulation's current state and returns the Snapshot once the state is stored. Saving closes the Simulation's open event streams and WebSockets and does not change its state. Create Simulations from the Snapshot with snapshot_id; it outlives its Simulation. A stopped Simulation returns 409 simulation_stopped. Reuse the Idempotency-Key to retry safely.
       operationId: create-simulation-snapshot
       parameters:
-        - description: Stable key for this request. A retry with the same key returns the original Snapshot.
+        - description: Optional key for retrying this create safely. A retry with the same key and request returns the original result with its status; the same key with a different request returns 409 idempotency_conflict. Without a key, each request creates a new resource.
           in: header
           name: Idempotency-Key
-          required: true
           schema:
             maxLength: 256
-            minLength: 1
             type: string
       requestBody:
         content:
@@ -2896,8 +2977,12 @@ paths:
               examples:
                 clock_conflict:
                   $ref: "#/components/examples/clock_conflict"
+                idempotency_conflict:
+                  $ref: "#/components/examples/idempotency_conflict"
                 simulation_observation_external:
                   $ref: "#/components/examples/simulation_observation_external"
+                simulation_starting:
+                  $ref: "#/components/examples/simulation_starting"
                 simulation_stopped:
                   $ref: "#/components/examples/simulation_stopped"
               schema:
@@ -2913,8 +2998,6 @@ paths:
               examples:
                 validation_idempotency_key:
                   $ref: "#/components/examples/validation_idempotency_key"
-                validation_snapshot_step:
-                  $ref: "#/components/examples/validation_snapshot_step"
               schema:
                 $ref: "#/components/schemas/Error"
           description: Unprocessable Entity
@@ -2940,7 +3023,7 @@ paths:
         - simulation-snapshots
   /v1/simulation-snapshots/{id}:
     delete:
-      description: Deletes a Snapshot and its saved state. Simulations created from it keep running, and their snapshot_id becomes null.
+      description: Deletes a Snapshot and its saved state. Simulations created from it keep running, and their snapshot_id becomes null. While it is creating, the response is 409 snapshot_not_ready; while a Simulation is starting from it, 409 snapshot_in_use.
       operationId: delete-simulation-snapshot
       parameters:
         - description: Snapshot ID.
@@ -2968,6 +3051,10 @@ paths:
           content:
             application/problem+json:
               examples:
+                snapshot_in_use:
+                  $ref: "#/components/examples/snapshot_in_use"
+                snapshot_not_ready:
+                  $ref: "#/components/examples/snapshot_not_ready"
                 snapshot_observation_external:
                   $ref: "#/components/examples/snapshot_observation_external"
               schema:
@@ -3052,9 +3139,86 @@ paths:
           - "503"
           - "504"
         strategy: backoff
+    patch:
+      description: Renames a Snapshot. Omitted fields keep their current values.
+      operationId: update-simulation-snapshot
+      parameters:
+        - description: Snapshot ID.
+          in: path
+          name: id
+          required: true
+          schema:
+            pattern: ^sns_[0-9A-HJKMNP-TV-Z]{26}$
+            type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/UpdateSimulationSnapshotRequest"
+        required: true
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/SimulationSnapshot"
+          description: OK
+        "400":
+          content:
+            application/problem+json:
+              examples:
+                bad_request_body:
+                  $ref: "#/components/examples/bad_request_body"
+              schema:
+                $ref: "#/components/schemas/Error"
+          description: Bad Request
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+        "404":
+          content:
+            application/problem+json:
+              examples:
+                snapshot_not_found:
+                  $ref: "#/components/examples/snapshot_not_found"
+              schema:
+                $ref: "#/components/schemas/Error"
+          description: Not Found
+        "408":
+          $ref: "#/components/responses/RequestTimeout"
+        "413":
+          $ref: "#/components/responses/PayloadTooLarge"
+        "415":
+          $ref: "#/components/responses/UnsupportedMediaType"
+        "422":
+          content:
+            application/problem+json:
+              examples:
+                validation_name:
+                  $ref: "#/components/examples/validation_name"
+              schema:
+                $ref: "#/components/schemas/Error"
+          description: Unprocessable Entity
+        "500":
+          $ref: "#/components/responses/InternalServerError"
+        "503":
+          content:
+            application/problem+json:
+              examples:
+                auth_provider_unavailable:
+                  $ref: "#/components/examples/auth_provider_unavailable"
+                internal_unavailable:
+                  $ref: "#/components/examples/internal_unavailable"
+              schema:
+                $ref: "#/components/schemas/Error"
+          description: Service Unavailable
+      security:
+        - apiKeyAuth: []
+      summary: Update Simulation Snapshot
+      tags:
+        - simulation-snapshots
   /v1/simulations:
     get:
-      description: Returns all Simulations that the API key can access. Results can be filtered by status, Simulator ID, or pinned Simulator digest.
+      description: Returns all Simulations that the API key can access. Results can be filtered by status, Simulator ID, pinned Simulator digest, or the Snapshot they started from.
       operationId: list-simulations
       parameters:
         - description: Optional status filter.
@@ -3079,6 +3243,12 @@ paths:
           name: simulator_digest
           schema:
             pattern: ^sha256:[0-9a-f]{64}$
+            type: string
+        - description: Optional filter for the Simulations started from this Snapshot.
+          explode: false
+          in: query
+          name: snapshot_id
+          schema:
             type: string
         - description: Page size. Values below 1 use 50. Values above 200 use 200.
           explode: false
@@ -3166,8 +3336,15 @@ paths:
           - "504"
         strategy: backoff
     post:
-      description: Creates a Simulation from a ready Simulator, or from a Snapshot with its saved state, and starts it. The response includes the endpoint and the Simulation's token, which does not expire.
+      description: Creates a Simulation from a ready Simulator, or from a Snapshot with its saved state, and starts it. The response returns once the Simulation is admitted, with status starting; read it until it is running. The response includes the endpoint and the Simulation's token, which does not expire. If its runtime cannot start, the Simulation is deleted.
       operationId: create-simulation
+      parameters:
+        - description: Optional key for retrying this create safely. A retry with the same key and request returns the original result with its status; the same key with a different request returns 409 idempotency_conflict. Without a key, each request creates a new resource.
+          in: header
+          name: Idempotency-Key
+          schema:
+            maxLength: 256
+            type: string
       requestBody:
         content:
           application/json:
@@ -3175,12 +3352,12 @@ paths:
               $ref: "#/components/schemas/CreateSimulationRequest"
         required: true
       responses:
-        "201":
+        "202":
           content:
             application/json:
               schema:
                 $ref: "#/components/schemas/CreatedSimulation"
-          description: Created
+          description: Accepted
           headers:
             Cache-Control:
               schema:
@@ -3204,6 +3381,8 @@ paths:
           content:
             application/problem+json:
               examples:
+                simulation_boot_failed:
+                  $ref: "#/components/examples/simulation_boot_failed"
                 snapshot_not_found:
                   $ref: "#/components/examples/snapshot_not_found"
               schema:
@@ -3215,8 +3394,12 @@ paths:
           content:
             application/problem+json:
               examples:
+                idempotency_conflict:
+                  $ref: "#/components/examples/idempotency_conflict"
                 simulator_not_ready:
                   $ref: "#/components/examples/simulator_not_ready"
+                snapshot_not_ready:
+                  $ref: "#/components/examples/snapshot_not_ready"
                 snapshot_observation_external:
                   $ref: "#/components/examples/snapshot_observation_external"
               schema:
@@ -3230,6 +3413,8 @@ paths:
           content:
             application/problem+json:
               examples:
+                validation_idempotency_key:
+                  $ref: "#/components/examples/validation_idempotency_key"
                 validation_simulation_source:
                   $ref: "#/components/examples/validation_simulation_source"
                 validation_simulator_id:
@@ -3241,24 +3426,13 @@ paths:
           content:
             application/problem+json:
               examples:
-                simulation_capacity:
-                  $ref: "#/components/examples/simulation_capacity"
                 simulation_quota_exceeded:
                   $ref: "#/components/examples/simulation_quota_exceeded"
               schema:
                 $ref: "#/components/schemas/Error"
           description: Too Many Requests
         "500":
-          content:
-            application/problem+json:
-              examples:
-                internal:
-                  $ref: "#/components/examples/internal"
-                simulation_template_missing:
-                  $ref: "#/components/examples/simulation_template_missing"
-              schema:
-                $ref: "#/components/schemas/Error"
-          description: Internal Server Error
+          $ref: "#/components/responses/InternalServerError"
         "503":
           content:
             application/problem+json:
@@ -3274,15 +3448,6 @@ paths:
               schema:
                 $ref: "#/components/schemas/Error"
           description: Service Unavailable
-        "504":
-          content:
-            application/problem+json:
-              examples:
-                simulation_timeout:
-                  $ref: "#/components/examples/simulation_timeout"
-              schema:
-                $ref: "#/components/schemas/Error"
-          description: Gateway Timeout
       security:
         - apiKeyAuth: []
       summary: Create Simulation
@@ -3290,7 +3455,7 @@ paths:
         - simulations
   /v1/simulations/{id}:
     delete:
-      description: Deletes a Simulation and its saved runtime state. Delete World-owned Simulations through their World.
+      description: Deletes a Simulation and its saved runtime state, and cancels an active advance. Delete World-owned Simulations through their World.
       operationId: delete-simulation
       parameters:
         - description: Simulation ID.
@@ -3327,8 +3492,6 @@ paths:
           content:
             application/problem+json:
               examples:
-                clock_conflict:
-                  $ref: "#/components/examples/clock_conflict"
                 simulation_world_owned:
                   $ref: "#/components/examples/simulation_world_owned"
               schema:
@@ -3410,6 +3573,14 @@ paths:
       summary: Get Simulation
       tags:
         - simulations
+      x-speakeasy-polling:
+        - intervalSeconds: 2
+          limitCount: 817
+          name: WaitUntilSteady
+          successCriteria:
+            - condition: $statusCode == 200
+            - condition: $response.body#/status != "starting"
+            - condition: $response.body#/status != "stopping"
       x-speakeasy-retries:
         backoff:
           exponent: 1.5
@@ -3422,6 +3593,103 @@ paths:
           - "503"
           - "504"
         strategy: backoff
+    patch:
+      description: Renames a Simulation or replaces its metadata. Omitted fields keep their current values. Update World-owned Simulations through their World.
+      operationId: update-simulation
+      parameters:
+        - description: Simulation ID.
+          in: path
+          name: id
+          required: true
+          schema:
+            pattern: ^sim_[0-9A-HJKMNP-TV-Z]{26}$
+            type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/UpdateSimulationRequest"
+        required: true
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Simulation"
+          description: OK
+        "400":
+          content:
+            application/problem+json:
+              examples:
+                bad_request_body:
+                  $ref: "#/components/examples/bad_request_body"
+              schema:
+                $ref: "#/components/schemas/Error"
+          description: Bad Request
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+        "403":
+          content:
+            application/problem+json:
+              examples:
+                auth_forbidden_simulation:
+                  $ref: "#/components/examples/auth_forbidden_simulation"
+              schema:
+                $ref: "#/components/schemas/Error"
+          description: Forbidden
+        "404":
+          content:
+            application/problem+json:
+              examples:
+                simulation_not_found:
+                  $ref: "#/components/examples/simulation_not_found"
+              schema:
+                $ref: "#/components/schemas/Error"
+          description: Not Found
+        "408":
+          $ref: "#/components/responses/RequestTimeout"
+        "409":
+          content:
+            application/problem+json:
+              examples:
+                simulation_world_owned:
+                  $ref: "#/components/examples/simulation_world_owned"
+              schema:
+                $ref: "#/components/schemas/Error"
+          description: Conflict
+        "413":
+          $ref: "#/components/responses/PayloadTooLarge"
+        "415":
+          $ref: "#/components/responses/UnsupportedMediaType"
+        "422":
+          content:
+            application/problem+json:
+              examples:
+                validation_metadata:
+                  $ref: "#/components/examples/validation_metadata"
+                validation_name:
+                  $ref: "#/components/examples/validation_name"
+              schema:
+                $ref: "#/components/schemas/Error"
+          description: Unprocessable Entity
+        "500":
+          $ref: "#/components/responses/InternalServerError"
+        "503":
+          content:
+            application/problem+json:
+              examples:
+                auth_provider_unavailable:
+                  $ref: "#/components/examples/auth_provider_unavailable"
+                internal_unavailable:
+                  $ref: "#/components/examples/internal_unavailable"
+              schema:
+                $ref: "#/components/schemas/Error"
+          description: Service Unavailable
+      security:
+        - apiKeyAuth: []
+      summary: Update Simulation
+      tags:
+        - simulations
   /v1/simulations/{id}/advances:
     post:
       description: Schedules an absolute clock advance. An advance commits due local events in ordered batches, one step each; a failure keeps the batches already committed. World members advance through their World. Poll the returned operation until it completes.
@@ -3434,7 +3702,7 @@ paths:
           schema:
             pattern: ^sim_[0-9A-HJKMNP-TV-Z]{26}$
             type: string
-        - description: Stable key for this request. Reuse with the same target returns the same operation.
+        - description: Stable key for this request. Reuse with the same target returns the same operation; reuse with a different target returns 409 idempotency_conflict.
           in: header
           name: Idempotency-Key
           required: true
@@ -3492,6 +3760,10 @@ paths:
               examples:
                 clock_conflict:
                   $ref: "#/components/examples/clock_conflict"
+                idempotency_conflict:
+                  $ref: "#/components/examples/idempotency_conflict"
+                simulation_starting:
+                  $ref: "#/components/examples/simulation_starting"
                 simulation_stopped:
                   $ref: "#/components/examples/simulation_stopped"
                 simulation_world_owned:
@@ -3584,6 +3856,8 @@ paths:
               examples:
                 simulation_observation_external:
                   $ref: "#/components/examples/simulation_observation_external"
+                simulation_starting:
+                  $ref: "#/components/examples/simulation_starting"
                 simulation_stopped:
                   $ref: "#/components/examples/simulation_stopped"
               schema:
@@ -3696,6 +3970,8 @@ paths:
               examples:
                 simulation_observation_external:
                   $ref: "#/components/examples/simulation_observation_external"
+                simulation_starting:
+                  $ref: "#/components/examples/simulation_starting"
                 simulation_stopped:
                   $ref: "#/components/examples/simulation_stopped"
               schema:
@@ -3750,7 +4026,7 @@ paths:
         strategy: backoff
   /v1/simulations/{id}/start:
     post:
-      description: Starts a stopped Simulation from its saved state. The response includes the Simulation's token, which stop and start do not change. An already running Simulation returns its current token and status.
+      description: Starts a stopped Simulation from its saved state. The response returns once the start is admitted, with status starting; read the Simulation until it is running. If its runtime cannot start, it returns to stopped. Stop and start do not change its token; read it with GET /v1/simulations/{id}/token. A running or starting Simulation is returned unchanged.
       operationId: start-simulation
       parameters:
         - description: Simulation ID.
@@ -3761,16 +4037,12 @@ paths:
             pattern: ^sim_[0-9A-HJKMNP-TV-Z]{26}$
             type: string
       responses:
-        "200":
+        "202":
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/CreatedSimulation"
-          description: OK
-          headers:
-            Cache-Control:
-              schema:
-                type: string
+                $ref: "#/components/schemas/Simulation"
+          description: Accepted
         "401":
           $ref: "#/components/responses/Unauthorized"
         "403":
@@ -3797,6 +4069,8 @@ paths:
               examples:
                 clock_conflict:
                   $ref: "#/components/examples/clock_conflict"
+                simulation_stopping:
+                  $ref: "#/components/examples/simulation_stopping"
                 simulation_world_owned:
                   $ref: "#/components/examples/simulation_world_owned"
               schema:
@@ -3806,24 +4080,13 @@ paths:
           content:
             application/problem+json:
               examples:
-                simulation_capacity:
-                  $ref: "#/components/examples/simulation_capacity"
                 simulation_quota_exceeded:
                   $ref: "#/components/examples/simulation_quota_exceeded"
               schema:
                 $ref: "#/components/schemas/Error"
           description: Too Many Requests
         "500":
-          content:
-            application/problem+json:
-              examples:
-                internal:
-                  $ref: "#/components/examples/internal"
-                simulation_template_missing:
-                  $ref: "#/components/examples/simulation_template_missing"
-              schema:
-                $ref: "#/components/schemas/Error"
-          description: Internal Server Error
+          $ref: "#/components/responses/InternalServerError"
         "503":
           content:
             application/problem+json:
@@ -3834,20 +4097,9 @@ paths:
                   $ref: "#/components/examples/internal_unavailable"
                 simulation_environment_offline_request:
                   $ref: "#/components/examples/simulation_environment_offline_request"
-                simulation_provider_unavailable:
-                  $ref: "#/components/examples/simulation_provider_unavailable"
               schema:
                 $ref: "#/components/schemas/Error"
           description: Service Unavailable
-        "504":
-          content:
-            application/problem+json:
-              examples:
-                simulation_timeout:
-                  $ref: "#/components/examples/simulation_timeout"
-              schema:
-                $ref: "#/components/schemas/Error"
-          description: Gateway Timeout
       security:
         - apiKeyAuth: []
       summary: Start Simulation
@@ -3855,7 +4107,7 @@ paths:
         - simulations
   /v1/simulations/{id}/steps:
     get:
-      description: Lists the Simulation's steps in order. Each request that changed state is one step; a request that only reads registers none. Pass a step number as at_step when you save a Snapshot to save the state after that step. A stopped Simulation returns 409 simulation_stopped; start it first.
+      description: Lists the Simulation's steps in order. Each request that changed state is one step; a request that only reads registers none. A stopped Simulation returns 409 simulation_stopped; start it first.
       operationId: list-simulation-steps
       parameters:
         - description: Simulation ID.
@@ -3921,6 +4173,8 @@ paths:
               examples:
                 simulation_observation_external:
                   $ref: "#/components/examples/simulation_observation_external"
+                simulation_starting:
+                  $ref: "#/components/examples/simulation_starting"
                 simulation_stopped:
                   $ref: "#/components/examples/simulation_stopped"
               schema:
@@ -3975,7 +4229,7 @@ paths:
         strategy: backoff
   /v1/simulations/{id}/stop:
     post:
-      description: Stops a Simulation and saves its state. Requests to its endpoint return 409 simulation_stopped until you start it again. A stopped Simulation is returned unchanged.
+      description: Stops a Simulation and saves its state. The response returns once the stop is accepted, with status stopping; read the Simulation until it is stopped. Requests to its endpoint are refused while it stops, and return 409 simulation_stopped once it is stopped, until you start it again. A stopped or stopping Simulation is returned unchanged.
       operationId: stop-simulation
       parameters:
         - description: Simulation ID.
@@ -3986,12 +4240,12 @@ paths:
             pattern: ^sim_[0-9A-HJKMNP-TV-Z]{26}$
             type: string
       responses:
-        "200":
+        "202":
           content:
             application/json:
               schema:
                 $ref: "#/components/schemas/Simulation"
-          description: OK
+          description: Accepted
         "401":
           $ref: "#/components/responses/Unauthorized"
         "403":
@@ -4018,8 +4272,8 @@ paths:
               examples:
                 clock_conflict:
                   $ref: "#/components/examples/clock_conflict"
-                simulation_runtime_lost:
-                  $ref: "#/components/examples/simulation_runtime_lost"
+                simulation_starting:
+                  $ref: "#/components/examples/simulation_starting"
                 simulation_world_owned:
                   $ref: "#/components/examples/simulation_world_owned"
               schema:
@@ -4090,15 +4344,6 @@ paths:
           description: Not Found
         "500":
           $ref: "#/components/responses/InternalServerError"
-        "502":
-          content:
-            application/problem+json:
-              examples:
-                simulation_unreachable:
-                  $ref: "#/components/examples/simulation_unreachable"
-              schema:
-                $ref: "#/components/schemas/Error"
-          description: Bad Gateway
         "503":
           content:
             application/problem+json:
@@ -4326,6 +4571,13 @@ paths:
     post:
       description: Starts an asynchronous Simulator build and returns the Simulator with status pending. Builds start in queue order when workspace capacity is available. Send multipart/form-data with a JSON part named request. To build from a document, add a file part named spec with the OpenAPI, WSDL or GraphQL document. For an incremental build, omit spec and set parent_id and instructions. Add file parts named document to give the builder and reviewer vendor documentation.
       operationId: build-simulator
+      parameters:
+        - description: Optional key for retrying this create safely. A retry with the same key and request returns the original result with its status; the same key with a different request returns 409 idempotency_conflict. Without a key, each request creates a new resource. The key is recorded before the build starts, so a retry never starts a second build.
+          in: header
+          name: Idempotency-Key
+          schema:
+            maxLength: 256
+            type: string
       requestBody:
         content:
           multipart/form-data:
@@ -4386,6 +4638,8 @@ paths:
           content:
             application/problem+json:
               examples:
+                idempotency_conflict:
+                  $ref: "#/components/examples/idempotency_conflict"
                 simulator_not_ready_base:
                   $ref: "#/components/examples/simulator_not_ready_base"
               schema:
@@ -4403,6 +4657,8 @@ paths:
                   $ref: "#/components/examples/validation_build_credential"
                 validation_build_simulator:
                   $ref: "#/components/examples/validation_build_simulator"
+                validation_idempotency_key:
+                  $ref: "#/components/examples/validation_idempotency_key"
                 validation_simulator_id:
                   $ref: "#/components/examples/validation_simulator_id"
               schema:
@@ -4451,7 +4707,7 @@ paths:
         - simulators
   /v1/simulators/{id}:
     delete:
-      description: Deletes a Simulator that has no dependent Worlds, Simulations, or child Simulators.
+      description: Deletes a Simulator that has no dependent Worlds, Simulations, child Simulators, or Simulation Snapshots.
       operationId: delete-simulator
       parameters:
         - description: Simulator ID.
@@ -4599,9 +4855,99 @@ paths:
           - "503"
           - "504"
         strategy: backoff
+    patch:
+      description: Renames a Simulator. Omitted fields keep their current values. Continuous catalog Simulators cannot be changed.
+      operationId: update-simulator
+      parameters:
+        - description: Simulator ID.
+          in: path
+          name: id
+          required: true
+          schema:
+            pattern: ^smr_[0-9A-HJKMNP-TV-Z]{26}$
+            type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/UpdateSimulatorRequest"
+        required: true
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Simulator"
+          description: OK
+        "400":
+          content:
+            application/problem+json:
+              examples:
+                bad_request_body:
+                  $ref: "#/components/examples/bad_request_body"
+              schema:
+                $ref: "#/components/schemas/Error"
+          description: Bad Request
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+        "403":
+          content:
+            application/problem+json:
+              examples:
+                auth_forbidden_catalog:
+                  $ref: "#/components/examples/auth_forbidden_catalog"
+                auth_forbidden_simulator:
+                  $ref: "#/components/examples/auth_forbidden_simulator"
+              schema:
+                $ref: "#/components/schemas/Error"
+          description: Forbidden
+        "404":
+          content:
+            application/problem+json:
+              examples:
+                simulator_not_found:
+                  $ref: "#/components/examples/simulator_not_found"
+              schema:
+                $ref: "#/components/schemas/Error"
+          description: Not Found
+        "408":
+          $ref: "#/components/responses/RequestTimeout"
+        "413":
+          $ref: "#/components/responses/PayloadTooLarge"
+        "415":
+          $ref: "#/components/responses/UnsupportedMediaType"
+        "422":
+          content:
+            application/problem+json:
+              examples:
+                validation_name:
+                  $ref: "#/components/examples/validation_name"
+                validation_simulator_id:
+                  $ref: "#/components/examples/validation_simulator_id"
+              schema:
+                $ref: "#/components/schemas/Error"
+          description: Unprocessable Entity
+        "500":
+          $ref: "#/components/responses/InternalServerError"
+        "503":
+          content:
+            application/problem+json:
+              examples:
+                auth_provider_unavailable:
+                  $ref: "#/components/examples/auth_provider_unavailable"
+                internal_unavailable:
+                  $ref: "#/components/examples/internal_unavailable"
+              schema:
+                $ref: "#/components/schemas/Error"
+          description: Service Unavailable
+      security:
+        - apiKeyAuth: []
+      summary: Update Simulator
+      tags:
+        - simulators
   /v1/simulators/{id}/cancel:
     post:
-      description: Requests cancellation of an active Simulator build. The build can finish before cancellation takes effect. A Simulator that is not building is returned unchanged.
+      description: Requests cancellation of a pending or active Simulator build and returns the Simulator without waiting for the build to stop. Get the Simulator until its status leaves pending or building. The build can finish before cancellation takes effect. A Simulator whose build has settled is returned unchanged.
       operationId: cancel-simulator
       parameters:
         - description: Simulator ID.
@@ -4612,12 +4958,12 @@ paths:
             pattern: ^smr_[0-9A-HJKMNP-TV-Z]{26}$
             type: string
       responses:
-        "200":
+        "202":
           content:
             application/json:
               schema:
                 $ref: "#/components/schemas/Simulator"
-          description: OK
+          description: Accepted
         "401":
           $ref: "#/components/responses/Unauthorized"
         "403":
@@ -4679,6 +5025,12 @@ paths:
           schema:
             pattern: ^smr_[0-9A-HJKMNP-TV-Z]{26}$
             type: string
+        - description: Optional key for retrying this create safely. A retry with the same key and request returns the original result with its status; the same key with a different request returns 409 idempotency_conflict. Without a key, each request creates a new resource. Keys are scoped to the target workspace.
+          in: header
+          name: Idempotency-Key
+          schema:
+            maxLength: 256
+            type: string
       requestBody:
         content:
           application/json:
@@ -4733,8 +5085,8 @@ paths:
           content:
             application/problem+json:
               examples:
-                simulator_import_conflict:
-                  $ref: "#/components/examples/simulator_import_conflict"
+                idempotency_conflict:
+                  $ref: "#/components/examples/idempotency_conflict"
                 simulator_not_ready_clone:
                   $ref: "#/components/examples/simulator_not_ready_clone"
               schema:
@@ -4750,6 +5102,8 @@ paths:
               examples:
                 artifact_invalid:
                   $ref: "#/components/examples/artifact_invalid"
+                validation_idempotency_key:
+                  $ref: "#/components/examples/validation_idempotency_key"
                 validation_simulator_id:
                   $ref: "#/components/examples/validation_simulator_id"
               schema:
@@ -4789,7 +5143,9 @@ paths:
               - pending
               - building
               - ready
+              - starting
               - running
+              - stopping
               - stopped
               - failed
               - canceled
@@ -4876,6 +5232,13 @@ paths:
     post:
       description: Starts an asynchronous World build from ready Simulators and returns it in the pending state. Builds start in queue order when workspace capacity is available. Instructions generate and validate initial synthetic data. Start the World once it is ready to create its Simulations.
       operationId: build-world
+      parameters:
+        - description: Optional key for retrying this create safely. A retry with the same key and request returns the original result with its status; the same key with a different request returns 409 idempotency_conflict. Without a key, each request creates a new resource.
+          in: header
+          name: Idempotency-Key
+          schema:
+            maxLength: 256
+            type: string
       requestBody:
         content:
           application/json:
@@ -4908,6 +5271,8 @@ paths:
           content:
             application/problem+json:
               examples:
+                idempotency_conflict:
+                  $ref: "#/components/examples/idempotency_conflict"
                 simulator_not_ready:
                   $ref: "#/components/examples/simulator_not_ready"
               schema:
@@ -4923,6 +5288,8 @@ paths:
               examples:
                 validation_build_world:
                   $ref: "#/components/examples/validation_build_world"
+                validation_idempotency_key:
+                  $ref: "#/components/examples/validation_idempotency_key"
                 validation_simulator_id:
                   $ref: "#/components/examples/validation_simulator_id"
               schema:
@@ -5061,6 +5428,14 @@ paths:
       summary: Get World
       tags:
         - worlds
+      x-speakeasy-polling:
+        - intervalSeconds: 2
+          limitCount: 817
+          name: WaitUntilSteady
+          successCriteria:
+            - condition: $statusCode == 200
+            - condition: $response.body#/status != "starting"
+            - condition: $response.body#/status != "stopping"
       x-speakeasy-retries:
         backoff:
           exponent: 1.5
@@ -5073,6 +5448,94 @@ paths:
           - "503"
           - "504"
         strategy: backoff
+    patch:
+      description: Renames a World or replaces its metadata. Omitted fields keep their current values.
+      operationId: update-world
+      parameters:
+        - description: World ID.
+          in: path
+          name: id
+          required: true
+          schema:
+            pattern: ^wld_[0-9A-HJKMNP-TV-Z]{26}$
+            type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/UpdateWorldRequest"
+        required: true
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/World"
+          description: OK
+        "400":
+          content:
+            application/problem+json:
+              examples:
+                bad_request_body:
+                  $ref: "#/components/examples/bad_request_body"
+              schema:
+                $ref: "#/components/schemas/Error"
+          description: Bad Request
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+        "403":
+          content:
+            application/problem+json:
+              examples:
+                auth_forbidden_world:
+                  $ref: "#/components/examples/auth_forbidden_world"
+              schema:
+                $ref: "#/components/schemas/Error"
+          description: Forbidden
+        "404":
+          content:
+            application/problem+json:
+              examples:
+                world_not_found:
+                  $ref: "#/components/examples/world_not_found"
+              schema:
+                $ref: "#/components/schemas/Error"
+          description: Not Found
+        "408":
+          $ref: "#/components/responses/RequestTimeout"
+        "413":
+          $ref: "#/components/responses/PayloadTooLarge"
+        "415":
+          $ref: "#/components/responses/UnsupportedMediaType"
+        "422":
+          content:
+            application/problem+json:
+              examples:
+                validation_metadata:
+                  $ref: "#/components/examples/validation_metadata"
+                validation_name:
+                  $ref: "#/components/examples/validation_name"
+              schema:
+                $ref: "#/components/schemas/Error"
+          description: Unprocessable Entity
+        "500":
+          $ref: "#/components/responses/InternalServerError"
+        "503":
+          content:
+            application/problem+json:
+              examples:
+                auth_provider_unavailable:
+                  $ref: "#/components/examples/auth_provider_unavailable"
+                internal_unavailable:
+                  $ref: "#/components/examples/internal_unavailable"
+              schema:
+                $ref: "#/components/schemas/Error"
+          description: Service Unavailable
+      security:
+        - apiKeyAuth: []
+      summary: Update World
+      tags:
+        - worlds
   /v1/worlds/{id}/advances:
     post:
       description: Advances each member independently, waking an idle member first, and skips stopped members. Successful advances remain committed when another member fails. The World current_time records the last settled request target; member clocks can differ.
@@ -5085,7 +5548,7 @@ paths:
           schema:
             pattern: ^wld_[0-9A-HJKMNP-TV-Z]{26}$
             type: string
-        - description: Stable key for this request. Reuse with the same target returns the same operation.
+        - description: Stable key for this request. Reuse with the same target returns the same operation; reuse with a different target returns 409 idempotency_conflict.
           in: header
           name: Idempotency-Key
           required: true
@@ -5143,6 +5606,12 @@ paths:
               examples:
                 clock_conflict:
                   $ref: "#/components/examples/clock_conflict"
+                idempotency_conflict:
+                  $ref: "#/components/examples/idempotency_conflict"
+                world_starting:
+                  $ref: "#/components/examples/world_starting"
+                world_stopping:
+                  $ref: "#/components/examples/world_stopping"
               schema:
                 $ref: "#/components/schemas/Error"
           description: Conflict
@@ -5257,7 +5726,7 @@ paths:
         strategy: backoff
   /v1/worlds/{id}/cancel:
     post:
-      description: Cancels an active World build. Repeated cancellation returns the current World.
+      description: Requests cancellation of a pending or active World build and returns the World without waiting for the build to stop. Get the World until its status leaves pending or building. The build can finish before cancellation takes effect. A World whose build has settled is returned unchanged.
       operationId: cancel-world
       parameters:
         - description: World ID.
@@ -5268,12 +5737,12 @@ paths:
             pattern: ^wld_[0-9A-HJKMNP-TV-Z]{26}$
             type: string
       responses:
-        "200":
+        "202":
           content:
             application/json:
               schema:
                 $ref: "#/components/schemas/World"
-          description: OK
+          description: Accepted
         "401":
           $ref: "#/components/responses/Unauthorized"
         "403":
@@ -5404,7 +5873,7 @@ paths:
           schema:
             pattern: ^wld_[0-9A-HJKMNP-TV-Z]{26}$
             type: string
-        - description: Stable key for this request. Reuse with the same body returns the same change.
+        - description: Stable key for this request. Reuse with the same body returns the same change; reuse with a different body returns 409 idempotency_conflict.
           in: header
           name: Idempotency-Key
           required: true
@@ -5464,12 +5933,18 @@ paths:
               examples:
                 clock_conflict:
                   $ref: "#/components/examples/clock_conflict"
+                idempotency_conflict:
+                  $ref: "#/components/examples/idempotency_conflict"
                 simulator_not_ready:
                   $ref: "#/components/examples/simulator_not_ready"
                 world_change_active:
                   $ref: "#/components/examples/world_change_active"
                 world_conflict_change:
                   $ref: "#/components/examples/world_conflict_change"
+                world_starting:
+                  $ref: "#/components/examples/world_starting"
+                world_stopping:
+                  $ref: "#/components/examples/world_stopping"
               schema:
                 $ref: "#/components/schemas/Error"
           description: Conflict
@@ -5542,7 +6017,7 @@ paths:
           name: delete
           schema:
             type: boolean
-        - description: Stable key for this request. Reuse with the same delete value returns the same change.
+        - description: Stable key for this request. Reuse with the same member and delete value returns the same change; reuse with a different request returns 409 idempotency_conflict.
           in: header
           name: Idempotency-Key
           required: true
@@ -5585,10 +6060,16 @@ paths:
               examples:
                 clock_conflict:
                   $ref: "#/components/examples/clock_conflict"
+                idempotency_conflict:
+                  $ref: "#/components/examples/idempotency_conflict"
                 world_change_active:
                   $ref: "#/components/examples/world_change_active"
                 world_conflict_last_member:
                   $ref: "#/components/examples/world_conflict_last_member"
+                world_starting:
+                  $ref: "#/components/examples/world_starting"
+                world_stopping:
+                  $ref: "#/components/examples/world_stopping"
               schema:
                 $ref: "#/components/schemas/Error"
           description: Conflict
@@ -5623,7 +6104,7 @@ paths:
         - worlds
   /v1/worlds/{id}/start:
     post:
-      description: Starts every Simulation in the World. The first start creates the Simulations; later starts restore them from saved state. The World must be ready or stopped, and the workspace must have room for all members under its active-Simulation limit. A running World is returned unchanged.
+      description: Starts every Simulation in the World. The first start creates the Simulations; later starts restore them from saved state. The World must be ready or stopped, and the workspace must have room for all members under its active-Simulation limit. The response returns once the start is accepted, with status starting; read the World until it is running. A running or starting World is returned unchanged.
       operationId: start-world
       parameters:
         - description: World ID.
@@ -5639,12 +6120,12 @@ paths:
             schema:
               $ref: "#/components/schemas/StartWorldRequest"
       responses:
-        "200":
+        "202":
           content:
             application/json:
               schema:
                 $ref: "#/components/schemas/World"
-          description: OK
+          description: Accepted
         "400":
           content:
             application/problem+json:
@@ -5682,8 +6163,12 @@ paths:
               examples:
                 clock_conflict:
                   $ref: "#/components/examples/clock_conflict"
+                world_change_active:
+                  $ref: "#/components/examples/world_change_active"
                 world_conflict:
                   $ref: "#/components/examples/world_conflict"
+                world_stopping:
+                  $ref: "#/components/examples/world_stopping"
               schema:
                 $ref: "#/components/schemas/Error"
           description: Conflict
@@ -5722,7 +6207,7 @@ paths:
         - worlds
   /v1/worlds/{id}/stop:
     post:
-      description: Stops a World and saves each Simulation state. You can start the World later from the saved states.
+      description: Stops a World and saves each Simulation state. You can start the World later from the saved states. The response returns once the stop is accepted, with status stopping; read the World until it is stopped. A stopped or stopping World is returned unchanged.
       operationId: stop-world
       parameters:
         - description: World ID.
@@ -5733,12 +6218,12 @@ paths:
             pattern: ^wld_[0-9A-HJKMNP-TV-Z]{26}$
             type: string
       responses:
-        "200":
+        "202":
           content:
             application/json:
               schema:
                 $ref: "#/components/schemas/World"
-          description: OK
+          description: Accepted
         "401":
           $ref: "#/components/responses/Unauthorized"
         "403":
@@ -5765,8 +6250,12 @@ paths:
               examples:
                 clock_conflict:
                   $ref: "#/components/examples/clock_conflict"
+                world_change_active:
+                  $ref: "#/components/examples/world_change_active"
                 world_conflict_stop:
                   $ref: "#/components/examples/world_conflict_stop"
+                world_starting:
+                  $ref: "#/components/examples/world_starting"
               schema:
                 $ref: "#/components/schemas/Error"
           description: Conflict
@@ -5794,16 +6283,16 @@ servers:
   - description: Continuous production API.
     url: https://api.continuouslabs.ai
 tags:
-  - description: Build Simulators from OpenAPI, WSDL or GraphQL documents, check or cancel a build, clone Simulators into other workspaces, and delete Simulators.
+  - description: Build Simulators from OpenAPI, WSDL or GraphQL documents, check or cancel a build, clone Simulators into other workspaces, and rename and delete Simulators.
     name: simulators
     x-group: Simulators
-  - description: Create Simulations from ready Simulators or Snapshots, then stop, start, and delete them.
+  - description: Create Simulations from ready Simulators or Snapshots, then rename, stop, start, and delete them.
     name: simulations
     x-group: Simulations
-  - description: Save a running Simulation's state as a Snapshot, create Simulations from it, and delete it.
+  - description: Save a running Simulation's state as a Snapshot, create Simulations from it, and rename and delete it.
     name: simulation-snapshots
     x-group: Simulation Snapshots
-  - description: Build Worlds from one or more Simulators and start or stop their Simulations together.
+  - description: Build Worlds from one or more Simulators, rename them, and start or stop their Simulations together.
     name: worlds
     x-group: Worlds
   - description: "Store connections to real systems: a base URL, the header that carries the credential, and its value. The API never returns a value."

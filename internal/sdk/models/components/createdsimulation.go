@@ -7,12 +7,14 @@ import (
 	"time"
 )
 
-// CreatedSimulationStatus - Current status. running serves requests; after a period without requests, the first request can take longer while the Simulation resumes. stopped means its state is saved and requests return 409 until you start it.
+// CreatedSimulationStatus - Current status. starting means its runtime is booting; read the Simulation until it is running. running serves requests; after a period without requests, the first request can take longer while the Simulation resumes. stopping means its state is being saved, and stopped means it is saved; requests return 409 in both until you start it.
 type CreatedSimulationStatus string
 
 const (
-	CreatedSimulationStatusRunning CreatedSimulationStatus = "running"
-	CreatedSimulationStatusStopped CreatedSimulationStatus = "stopped"
+	CreatedSimulationStatusStarting CreatedSimulationStatus = "starting"
+	CreatedSimulationStatusRunning  CreatedSimulationStatus = "running"
+	CreatedSimulationStatusStopping CreatedSimulationStatus = "stopping"
+	CreatedSimulationStatusStopped  CreatedSimulationStatus = "stopped"
 )
 
 func (e CreatedSimulationStatus) ToPointer() *CreatedSimulationStatus {
@@ -23,7 +25,7 @@ func (e CreatedSimulationStatus) ToPointer() *CreatedSimulationStatus {
 func (e *CreatedSimulationStatus) IsExact() bool {
 	if e != nil {
 		switch *e {
-		case "running", "stopped":
+		case "starting", "running", "stopping", "stopped":
 			return true
 		}
 	}
@@ -63,7 +65,7 @@ type CreatedSimulation struct {
 	SnapshotID *string `json:"snapshot_id"`
 	// Initial simulated time.
 	StartTime time.Time `json:"start_time"`
-	// Current status. running serves requests; after a period without requests, the first request can take longer while the Simulation resumes. stopped means its state is saved and requests return 409 until you start it.
+	// Current status. starting means its runtime is booting; read the Simulation until it is running. running serves requests; after a period without requests, the first request can take longer while the Simulation resumes. stopping means its state is being saved, and stopped means it is saved; requests return 409 in both until you start it.
 	Status CreatedSimulationStatus `json:"status"`
 	// The Simulation's token for requests to its endpoint. It does not expire. Send it in the X-Continuous-Simulation-Token header, with an actor's id from GET /v1/simulations/{id} in X-Continuous-Actor to act as that caller. Retrieve it later with GET /v1/simulations/{id}/token.
 	Token string `json:"token"`

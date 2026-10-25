@@ -9,8 +9,10 @@ import (
 
 type CloneSimulatorRequest struct {
 	// Source Simulator ID.
-	ID   string                           `pathParam:"style=simple,explode=false,name=id"`
-	Body components.CloneSimulatorRequest `request:"mediaType=application/json"`
+	ID string `pathParam:"style=simple,explode=false,name=id"`
+	// Optional key for retrying this create safely. A retry with the same key and request returns the original result with its status; the same key with a different request returns 409 idempotency_conflict. Without a key, each request creates a new resource. Keys are scoped to the target workspace.
+	IdempotencyKey *string                          `header:"style=simple,explode=false,name=Idempotency-Key"`
+	Body           components.CloneSimulatorRequest `request:"mediaType=application/json"`
 }
 
 func (c *CloneSimulatorRequest) GetID() string {
@@ -18,6 +20,13 @@ func (c *CloneSimulatorRequest) GetID() string {
 		return ""
 	}
 	return c.ID
+}
+
+func (c *CloneSimulatorRequest) GetIdempotencyKey() *string {
+	if c == nil {
+		return nil
+	}
+	return c.IdempotencyKey
 }
 
 func (c *CloneSimulatorRequest) GetBody() components.CloneSimulatorRequest {

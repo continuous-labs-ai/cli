@@ -45,7 +45,7 @@ func (s *Spec) GetContent() []byte {
 	return s.Content
 }
 
-type BuildSimulatorRequest struct {
+type BuildSimulatorRequestBody struct {
 	// Vendor documentation the builder and reviewer read before they start, as repeated file parts: UTF-8 text (.md, .txt, .html, .json, .yaml, .xml, .csv) or PDF (.pdf). The documents share the request body limit with the spec. An incremental build inherits its parent's documents and index; a document sent with the same name replaces the parent's. A document named INDEX.md indexes the others and skips research; the build fails if it names a document the build does not have, leaves a document unnamed, or leaves out a selected operation; an incremental build's documents include the inherited ones.
 	Document []Document                       `multipartForm:"file,name=document"`
 	Request  components.BuildSimulatorRequest `multipartForm:"name=request,json"`
@@ -53,36 +53,56 @@ type BuildSimulatorRequest struct {
 	Spec *Spec `multipartForm:"file,name=spec"`
 }
 
-func (b BuildSimulatorRequest) MarshalJSON() ([]byte, error) {
+func (b BuildSimulatorRequestBody) MarshalJSON() ([]byte, error) {
 	return utils.MarshalJSON(b, "", false)
 }
 
-func (b *BuildSimulatorRequest) UnmarshalJSON(data []byte) error {
+func (b *BuildSimulatorRequestBody) UnmarshalJSON(data []byte) error {
 	if err := utils.UnmarshalJSON(data, &b, "", false, nil); err != nil {
 		return err
 	}
 	return nil
 }
 
-func (b *BuildSimulatorRequest) GetDocument() []Document {
+func (b *BuildSimulatorRequestBody) GetDocument() []Document {
 	if b == nil {
 		return nil
 	}
 	return b.Document
 }
 
-func (b *BuildSimulatorRequest) GetRequest() components.BuildSimulatorRequest {
+func (b *BuildSimulatorRequestBody) GetRequest() components.BuildSimulatorRequest {
 	if b == nil {
 		return components.BuildSimulatorRequest{}
 	}
 	return b.Request
 }
 
-func (b *BuildSimulatorRequest) GetSpec() *Spec {
+func (b *BuildSimulatorRequestBody) GetSpec() *Spec {
 	if b == nil {
 		return nil
 	}
 	return b.Spec
+}
+
+type BuildSimulatorRequest struct {
+	// Optional key for retrying this create safely. A retry with the same key and request returns the original result with its status; the same key with a different request returns 409 idempotency_conflict. Without a key, each request creates a new resource. The key is recorded before the build starts, so a retry never starts a second build.
+	IdempotencyKey *string                   `header:"style=simple,explode=false,name=Idempotency-Key"`
+	Body           BuildSimulatorRequestBody `request:"mediaType=multipart/form-data"`
+}
+
+func (b *BuildSimulatorRequest) GetIdempotencyKey() *string {
+	if b == nil {
+		return nil
+	}
+	return b.IdempotencyKey
+}
+
+func (b *BuildSimulatorRequest) GetBody() BuildSimulatorRequestBody {
+	if b == nil {
+		return BuildSimulatorRequestBody{}
+	}
+	return b.Body
 }
 
 type BuildSimulatorResponse struct {

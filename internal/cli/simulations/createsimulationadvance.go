@@ -16,7 +16,7 @@ import (
 
 var createSimulationAdvanceCmdMeta = []flagutil.FlagMeta{
 	{FlagName: "id", FieldPath: "ID", Kind: flagutil.FlagKindString, Required: true, Description: "Simulation ID. [required]"},
-	{FlagName: "idempotency-key", FieldPath: "IdempotencyKey", Kind: flagutil.FlagKindString, Required: true, Description: "Stable key for this request. Reuse with the same target returns the same operation. [required]"},
+	{FlagName: "idempotency-key", FieldPath: "IdempotencyKey", Kind: flagutil.FlagKindString, Required: true, Description: "Stable key for this request. Reuse with the same target returns the same operation; reuse with a different target returns 409 idempotency_conflict. [required]"},
 	{FlagName: "to", Shorthand: "t", FieldPath: "Body.To", Kind: flagutil.FlagKindDateTime, Required: true, Description: "Absolute target time in RFC 3339, with at most millisecond precision. [required]"},
 }
 

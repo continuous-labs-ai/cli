@@ -9,20 +9,20 @@ import (
 	"github.com/continuous-labs-ai/cli/internal/interactive"
 	"github.com/continuous-labs-ai/cli/internal/output"
 	"github.com/continuous-labs-ai/cli/internal/sdk"
-	"github.com/continuous-labs-ai/cli/internal/sdk/models/components"
 	"github.com/continuous-labs-ai/cli/internal/sdk/models/operations"
 	"github.com/continuous-labs-ai/cli/internal/usage"
 	"github.com/spf13/cobra"
 )
 
 var buildWorldCmdMeta = []flagutil.FlagMeta{
-	{FlagName: "instructions", Shorthand: "i", FieldPath: "Instructions", Kind: flagutil.FlagKindString, Optional: true, Description: "Describe the initial data, scenario, and relationships. Populated Worlds support up to 8 selected Simulators and 1,000 starting records in total. Named record types replace their default data. At most 16,384 characters and 65,536 UTF-8 bytes. U+0000 is not permitted."},
-	{FlagName: "metadata", FieldPath: "Metadata", Kind: flagutil.FlagKindJSON, Optional: true, Annotations: `json:"metadata,omitempty"`, Description: "Customer JSON metadata, up to 16 KiB and 64 nesting levels. Returned by build, get, and list. Omission uses null."},
-	{FlagName: "model", FieldPath: "Model", Kind: flagutil.FlagKindEnum, Optional: true, HasDefault: true, DefaultStr: "claude-opus-5-5", EnumValues: []string{"gpt-6-astra", "gpt-6.1-sol", "claude-opus-5-5", "claude-fable-5-1"}, Description: "Model that builds and reviews starting data. Defaults to claude-opus-5-5. Its provider is derived from the model. (options: gpt-6-astra, gpt-6.1-sol, claude-opus-5-5, claude-fable-5-1)"},
-	{FlagName: "name", Shorthand: "n", FieldPath: "Name", Kind: flagutil.FlagKindString, Optional: true, Description: "Name for the World. Omission generates a name. The ID stays its identity, and names need not be unique."},
-	{FlagName: "simulators", FieldPath: "Simulators", Kind: flagutil.FlagKindStringArray, Required: true, Description: "Simulator IDs for the World. [required]"},
-	{FlagName: "start-time", FieldPath: "StartTime", Kind: flagutil.FlagKindDateTime, Optional: true, Description: "Simulated time the World starts at, in RFC 3339 format. Omission uses 2024-01-01T00:00:00Z. Saved starting data keeps its build dates."},
-	{FlagName: "timeout-seconds", Shorthand: "t", FieldPath: "TimeoutSeconds", Kind: flagutil.FlagKindInt64, Optional: true, HasDefault: true, DefaultInt: 14400, Description: "Time limit for generation and validation in seconds, from 1 to 72000. Defaults to 14400 (four hours). Excludes queue wait and finalization. Retries share the same deadline."},
+	{FlagName: "idempotency-key", FieldPath: "IdempotencyKey", Kind: flagutil.FlagKindString, Optional: true, Description: "Optional key for retrying this create safely. A retry with the same key and request returns the original result with its status; the same key with a different request returns 409 idempotency_conflict. Without a key, each request creates a new resource."},
+	{FlagName: "instructions", FieldPath: "Body.Instructions", Kind: flagutil.FlagKindString, Optional: true, Description: "Describe the initial data, scenario, and relationships. Populated Worlds support up to 8 selected Simulators and 1,000 starting records in total. Named record types replace their default data. At most 16,384 characters and 65,536 UTF-8 bytes. U+0000 is not permitted."},
+	{FlagName: "metadata", FieldPath: "Body.Metadata", Kind: flagutil.FlagKindJSON, Optional: true, Annotations: `json:"metadata,omitempty"`, Description: "Customer JSON metadata, up to 16 KiB and 64 nesting levels. Returned by build, get, and list. Omission uses null."},
+	{FlagName: "model", FieldPath: "Body.Model", Kind: flagutil.FlagKindEnum, Optional: true, HasDefault: true, DefaultStr: "claude-opus-5-5", EnumValues: []string{"gpt-6-astra", "gpt-6.1-sol", "claude-opus-5-5", "claude-fable-5-1"}, Description: "Model that builds and reviews starting data. Defaults to claude-opus-5-5. Its provider is derived from the model. (options: gpt-6-astra, gpt-6.1-sol, claude-opus-5-5, claude-fable-5-1)"},
+	{FlagName: "name", Shorthand: "n", FieldPath: "Body.Name", Kind: flagutil.FlagKindString, Optional: true, Description: "Name for the World. Omission generates a name. The ID stays its identity, and names need not be unique."},
+	{FlagName: "simulators", FieldPath: "Body.Simulators", Kind: flagutil.FlagKindStringArray, Required: true, Description: "Simulator IDs for the World. [required]"},
+	{FlagName: "start-time", FieldPath: "Body.StartTime", Kind: flagutil.FlagKindDateTime, Optional: true, Description: "Simulated time the World starts at, in RFC 3339 format. Omission uses 2024-01-01T00:00:00Z. Saved starting data keeps its build dates."},
+	{FlagName: "timeout-seconds", Shorthand: "t", FieldPath: "Body.TimeoutSeconds", Kind: flagutil.FlagKindInt64, Optional: true, HasDefault: true, DefaultInt: 14400, Description: "Time limit for generation and validation in seconds, from 1 to 72000. Defaults to 14400 (four hours). Excludes queue wait and finalization. Retries share the same deadline."},
 }
 
 // initBuildWorldCmd initializes the build-world command.
@@ -35,7 +35,7 @@ func initBuildWorldCmd(parent *cobra.Command) error {
 		RunE:    runBuildWorldCmd,
 	}
 	flagutil.RegisterFlags(cmd, buildWorldCmdMeta)
-	if err := flagutil.ValidateMeta[components.BuildWorldRequest](buildWorldCmdMeta); err != nil {
+	if err := flagutil.ValidateMeta[operations.BuildWorldRequest](buildWorldCmdMeta); err != nil {
 		return fmt.Errorf("invalid metadata for build-world: %w", err)
 	}
 	cmd.Flags().String("body", "", "Request body as JSON (alternative to individual flags). Can also be provided via stdin.")
@@ -53,7 +53,7 @@ func runBuildWorldCmd(cmd *cobra.Command, args []string) error {
 			return err
 		}
 	}
-	request, err := flagutil.BuildRequest[components.BuildWorldRequest](cmd, buildWorldCmdMeta, "", "body")
+	req, err := flagutil.BuildRequest[operations.BuildWorldRequest](cmd, buildWorldCmdMeta, "Body", "body")
 	if err != nil {
 		return err
 	}
@@ -76,7 +76,7 @@ func runBuildWorldCmd(cmd *cobra.Command, args []string) error {
 	if output.WantsRawJSON(cmd) {
 		sdkOpts = append(sdkOpts, operations.WithSkipDeserialization())
 	}
-	res, err := s.Worlds.BuildWorld(cmd.Context(), *request, sdkOpts...)
+	res, err := s.Worlds.BuildWorld(cmd.Context(), *req, sdkOpts...)
 	if err != nil {
 		return output.Error(cmd, err)
 	}

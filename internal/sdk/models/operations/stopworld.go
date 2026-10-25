@@ -21,7 +21,7 @@ func (s *StopWorldRequest) GetID() string {
 
 type StopWorldResponse struct {
 	HTTPMeta components.HTTPMetadata `json:"-"`
-	// OK
+	// Accepted
 	World *components.World
 }
 

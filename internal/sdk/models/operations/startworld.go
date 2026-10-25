@@ -40,7 +40,7 @@ func (s *StartWorldRequest) GetBody() *components.StartWorldRequest {
 
 type StartWorldResponse struct {
 	HTTPMeta components.HTTPMetadata `json:"-"`
-	// OK
+	// Accepted
 	World *components.World
 }
 

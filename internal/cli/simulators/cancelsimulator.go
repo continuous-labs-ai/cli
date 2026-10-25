@@ -23,7 +23,7 @@ func initCancelSimulatorCmd(parent *cobra.Command) error {
 	var cmd = &cobra.Command{
 		Use:     "cancel",
 		Short:   "Cancel Simulator Build",
-		Long:    "Requests cancellation of an active Simulator build. The build can finish before cancellation takes effect. A Simulator that is not building is returned unchanged.",
+		Long:    "Requests cancellation of a pending or active Simulator build and returns the Simulator without waiting for the build to stop. Get the Simulator until its status leaves pending or building. The build can finish before cancellation takes effect. A Simulator whose build has settled is returned unchanged.",
 		Example: "  continuous simulators cancel --id <id>",
 		RunE:    runCancelSimulatorCmd,
 	}

@@ -10,7 +10,7 @@ import (
 type AddWorldSimulationRequest struct {
 	// World ID.
 	ID string `pathParam:"style=simple,explode=false,name=id"`
-	// Stable key for this request. Reuse with the same body returns the same change.
+	// Stable key for this request. Reuse with the same body returns the same change; reuse with a different body returns 409 idempotency_conflict.
 	IdempotencyKey string                               `header:"style=simple,explode=false,name=Idempotency-Key"`
 	Body           components.AddWorldSimulationRequest `request:"mediaType=application/json"`
 }

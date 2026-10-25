@@ -21,7 +21,7 @@ func (c *CancelSimulatorRequest) GetID() string {
 
 type CancelSimulatorResponse struct {
 	HTTPMeta components.HTTPMetadata `json:"-"`
-	// OK
+	// Accepted
 	Simulator *components.Simulator
 }
 

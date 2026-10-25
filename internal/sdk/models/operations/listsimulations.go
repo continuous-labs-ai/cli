@@ -43,6 +43,8 @@ type ListSimulationsRequest struct {
 	SimulatorID *string `queryParam:"style=form,explode=false,name=simulator_id"`
 	// Optional exact pinned OCI manifest digest filter.
 	SimulatorDigest *string `queryParam:"style=form,explode=false,name=simulator_digest"`
+	// Optional filter for the Simulations started from this Snapshot.
+	SnapshotID *string `queryParam:"style=form,explode=false,name=snapshot_id"`
 	// Page size. Values below 1 use 50. Values above 200 use 200.
 	Limit *int64 `default:"50" queryParam:"style=form,explode=false,name=limit"`
 	// Opaque next_cursor value from a previous page.
@@ -79,6 +81,13 @@ func (l *ListSimulationsRequest) GetSimulatorDigest() *string {
 		return nil
 	}
 	return l.SimulatorDigest
+}
+
+func (l *ListSimulationsRequest) GetSnapshotID() *string {
+	if l == nil {
+		return nil
+	}
+	return l.SnapshotID
 }
 
 func (l *ListSimulationsRequest) GetLimit() *int64 {

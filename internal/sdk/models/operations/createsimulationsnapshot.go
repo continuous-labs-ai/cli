@@ -8,14 +8,14 @@ import (
 )
 
 type CreateSimulationSnapshotRequest struct {
-	// Stable key for this request. A retry with the same key returns the original Snapshot.
-	IdempotencyKey string                                     `header:"style=simple,explode=false,name=Idempotency-Key"`
+	// Optional key for retrying this create safely. A retry with the same key and request returns the original result with its status; the same key with a different request returns 409 idempotency_conflict. Without a key, each request creates a new resource.
+	IdempotencyKey *string                                    `header:"style=simple,explode=false,name=Idempotency-Key"`
 	Body           components.CreateSimulationSnapshotRequest `request:"mediaType=application/json"`
 }
 
-func (c *CreateSimulationSnapshotRequest) GetIdempotencyKey() string {
+func (c *CreateSimulationSnapshotRequest) GetIdempotencyKey() *string {
 	if c == nil {
-		return ""
+		return nil
 	}
 	return c.IdempotencyKey
 }

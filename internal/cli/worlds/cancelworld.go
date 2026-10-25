@@ -23,7 +23,7 @@ func initCancelWorldCmd(parent *cobra.Command) error {
 	var cmd = &cobra.Command{
 		Use:     "cancel",
 		Short:   "Cancel World Build",
-		Long:    "Cancels an active World build. Repeated cancellation returns the current World.",
+		Long:    "Requests cancellation of a pending or active World build and returns the World without waiting for the build to stop. Get the World until its status leaves pending or building. The build can finish before cancellation takes effect. A World whose build has settled is returned unchanged.",
 		Example: "  continuous worlds cancel --id <id>",
 		RunE:    runCancelWorldCmd,
 	}
