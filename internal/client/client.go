@@ -3,11 +3,13 @@
 package client
 
 import (
+	"encoding/json"
 	"fmt"
 	"github.com/continuous-labs-ai/cli/internal/config"
 	"github.com/continuous-labs-ai/cli/internal/flagutil"
 	"github.com/continuous-labs-ai/cli/internal/sdk"
 	"github.com/continuous-labs-ai/cli/internal/sdk/models/components"
+	"github.com/continuous-labs-ai/cli/internal/sdk/retry"
 	"github.com/continuous-labs-ai/cli/internal/testclient"
 	"github.com/spf13/cobra"
 	"net/http"
@@ -37,6 +39,13 @@ func NewClient(cmd *cobra.Command) (*sdk.ContinuousSimulation, error) {
 			return nil, fmt.Errorf("invalid --timeout value %q: %w", timeoutStr, err)
 		}
 		sdkOpts = append(sdkOpts, sdk.WithTimeout(timeout))
+	} // Retry configuration
+	retryConfig, err := buildRetryConfig(cmd)
+	if err != nil {
+		return nil, err
+	}
+	if retryConfig != nil {
+		sdkOpts = append(sdkOpts, sdk.WithRetryConfig(*retryConfig))
 	}
 
 	// Diagnostics and test client composition.
@@ -68,4 +77,71 @@ func buildGlobalSecurity(cmd *cobra.Command) components.Security {
 		globalSecurity.APIKeyAuth = apiKeyAuth
 	}
 	return globalSecurity
+}
+
+// buildRetryConfig reads retry flags and constructs a retry configuration.
+// Returns (nil, nil) if no retry flags were set (use spec/SDK defaults).
+// Returns non-nil error for invalid flag values (malformed JSON, bad duration).
+func buildRetryConfig(cmd *cobra.Command) (*retry.Config, error) {
+	// --no-retries: highest precedence
+	if noRetries, changed := flagutil.GetBoolFlag(cmd, "no-retries"); changed {
+		if noRetries {
+			return &retry.Config{Strategy: ""}, nil
+		}
+		// Explicit --no-retries=false: skip config fallback, proceed to other flags
+	} else if val := config.GetString("no-retries"); val == "true" {
+		return &retry.Config{Strategy: ""}, nil
+	}
+
+	// --retry-config: full JSON override
+	if configJSON, changed := flagutil.GetStringFlag(cmd, "retry-config"); changed && configJSON != "" {
+		var cfg retry.Config
+		if err := json.Unmarshal([]byte(configJSON), &cfg); err != nil {
+			return nil, fmt.Errorf("invalid --retry-config JSON: %w", err)
+		}
+		return &cfg, nil
+	}
+	if configJSON := config.GetString("retry-config"); configJSON != "" {
+		var cfg retry.Config
+		if err := json.Unmarshal([]byte(configJSON), &cfg); err != nil {
+			return nil, fmt.Errorf("invalid retry-config in config file: %w", err)
+		}
+		return &cfg, nil
+	}
+
+	// Individual flags: build fresh config with CLI defaults, override specific fields.
+	// Note: this REPLACES the spec-level retry config entirely (the SDK takes a
+	// complete retry.Config, not a partial merge). Use --retry-config JSON for
+	// exact control over all parameters.
+	var hasOverride bool
+	retryConfig := retry.Config{
+		Strategy: "backoff",
+		Backoff: &retry.BackoffStrategy{
+			InitialInterval: 500,
+			MaxInterval:     10000,
+			Exponent:        1.5,
+			MaxElapsedTime:  30000,
+		},
+	}
+
+	if maxElapsed := resolveStringFlag(cmd, "retry-max-elapsed-time"); maxElapsed != "" {
+		dur, err := time.ParseDuration(maxElapsed)
+		if err != nil {
+			return nil, fmt.Errorf("invalid --retry-max-elapsed-time value %q: %w", maxElapsed, err)
+		}
+		retryConfig.Backoff.MaxElapsedTime = int(dur.Milliseconds())
+		hasOverride = true
+	}
+	if retryConn, changed := flagutil.GetBoolFlag(cmd, "retry-connection-errors"); changed {
+		retryConfig.RetryConnectionErrors = retryConn
+		hasOverride = true
+	} else if val := config.GetString("retry-connection-errors"); val == "true" {
+		retryConfig.RetryConnectionErrors = true
+		hasOverride = true
+	}
+
+	if hasOverride {
+		return &retryConfig, nil
+	}
+	return nil, nil
 }

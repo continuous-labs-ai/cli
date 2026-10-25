@@ -3,10 +3,8 @@
 package components
 
 type CredentialLoginUpdate struct {
-	// New https URL of the app's sign-in page.
+	// New https URL of the app's sign-in page. A new URL ends the saved sign-in.
 	URL *string `json:"url,omitzero"`
-	// New user name.
-	Username *string `json:"username,omitzero"`
 }
 
 func (c *CredentialLoginUpdate) GetURL() *string {
@@ -14,11 +12,4 @@ func (c *CredentialLoginUpdate) GetURL() *string {
 		return nil
 	}
 	return c.URL
-}
-
-func (c *CredentialLoginUpdate) GetUsername() *string {
-	if c == nil {
-		return nil
-	}
-	return c.Username
 }

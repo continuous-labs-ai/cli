@@ -9,11 +9,15 @@ import (
 	"github.com/continuous-labs-ai/cli/internal/sdk/models/components"
 	"github.com/continuous-labs-ai/cli/internal/sdk/models/operations"
 	"github.com/continuous-labs-ai/cli/internal/sdk/models/sdkerrors"
+	"github.com/continuous-labs-ai/cli/internal/sdk/retry"
 	"github.com/continuous-labs-ai/cli/internal/sdk/sdkinternal/config"
 	"github.com/continuous-labs-ai/cli/internal/sdk/sdkinternal/hooks"
 	"github.com/continuous-labs-ai/cli/internal/sdk/sdkinternal/utils"
+	"github.com/spyzhov/ajson"
 	"net/http"
 	"net/url"
+	"strconv"
+	"strings"
 )
 
 // Build Worlds from one or more Simulators and start or stop their Simulations together.
@@ -36,6 +40,7 @@ func newWorlds(rootSDK *ContinuousSimulation, sdkConfig config.SDKConfiguration,
 func (s *Worlds) ListWorlds(ctx context.Context, request *operations.ListWorldsRequest, opts ...operations.Option) (*operations.ListWorldsResponse, error) {
 	o := operations.Options{}
 	supportedOptions := []string{
+		operations.SupportedOptionRetries,
 		operations.SupportedOptionTimeout,
 		operations.SupportedOptionSkipDeserialization,
 	}
@@ -71,6 +76,7 @@ func (s *Worlds) ListWorlds(ctx context.Context, request *operations.ListWorldsR
 	if timeout == nil {
 		timeout = s.sdkConfiguration.Timeout
 	}
+	paginationCtx := ctx
 
 	var streamCancel context.CancelFunc
 
@@ -104,32 +110,102 @@ func (s *Worlds) ListWorlds(ctx context.Context, request *operations.ListWorldsR
 		req.Header.Set(k, v)
 	}
 
-	req, err = s.hooks.BeforeRequest(hooks.BeforeRequestContext{HookContext: hookCtx}, req)
-	if err != nil {
-		return nil, err
+	globalRetryConfig := s.sdkConfiguration.RetryConfig
+	retryConfig := o.Retries
+	if retryConfig == nil {
+		if globalRetryConfig != nil {
+			retryConfig = globalRetryConfig
+		} else {
+			retryConfig = &retry.Config{
+				Strategy: "backoff", Backoff: &retry.BackoffStrategy{
+					InitialInterval: 500,
+					MaxInterval:     5000,
+					Exponent:        1.5,
+					MaxElapsedTime:  60000,
+				},
+				RetryConnectionErrors: true,
+			}
+		}
 	}
 
-	httpRes, err := s.sdkConfiguration.Client.Do(req)
-	if err != nil || httpRes == nil {
-		if err != nil {
-			err = fmt.Errorf("error sending request: %w", err)
-		} else {
-			err = fmt.Errorf("error sending request: no response")
-		}
+	var httpRes *http.Response
+	if retryConfig != nil {
+		httpRes, err = utils.Retry(ctx, utils.Retries{
+			Config: retryConfig,
+			StatusCodes: []string{
+				"502",
+				"503",
+				"504",
+			},
+		}, func() (*http.Response, error) {
+			if req.Body != nil && req.Body != http.NoBody && req.GetBody != nil {
+				copyBody, err := req.GetBody()
 
-		_, err = s.hooks.AfterError(hooks.AfterErrorContext{HookContext: hookCtx}, nil, err)
-		return nil, err
-	} else if utils.MatchStatusCodes([]string{"4XX", "5XX"}, httpRes.StatusCode) {
-		_httpRes, err := s.hooks.AfterError(hooks.AfterErrorContext{HookContext: hookCtx}, httpRes, nil)
+				if err != nil {
+					return nil, err
+				}
+
+				req.Body = copyBody
+			}
+
+			req, err = s.hooks.BeforeRequest(hooks.BeforeRequestContext{HookContext: hookCtx}, req)
+			if err != nil {
+				if retry.IsPermanentError(err) || retry.IsTemporaryError(err) {
+					return nil, err
+				}
+
+				return nil, retry.Permanent(err)
+			}
+
+			httpRes, err := s.sdkConfiguration.Client.Do(req)
+			if err != nil || httpRes == nil {
+				if err != nil {
+					err = fmt.Errorf("error sending request: %w", err)
+				} else {
+					err = fmt.Errorf("error sending request: no response")
+				}
+
+				_, err = s.hooks.AfterError(hooks.AfterErrorContext{HookContext: hookCtx}, nil, err)
+			}
+			return httpRes, err
+		})
+
 		if err != nil {
 			return nil, err
-		} else if _httpRes != nil {
-			httpRes = _httpRes
+		} else {
+			httpRes, err = s.hooks.AfterSuccess(hooks.AfterSuccessContext{HookContext: hookCtx}, httpRes)
+			if err != nil {
+				return nil, err
+			}
 		}
 	} else {
-		httpRes, err = s.hooks.AfterSuccess(hooks.AfterSuccessContext{HookContext: hookCtx}, httpRes)
+		req, err = s.hooks.BeforeRequest(hooks.BeforeRequestContext{HookContext: hookCtx}, req)
 		if err != nil {
 			return nil, err
+		}
+
+		httpRes, err = s.sdkConfiguration.Client.Do(req)
+		if err != nil || httpRes == nil {
+			if err != nil {
+				err = fmt.Errorf("error sending request: %w", err)
+			} else {
+				err = fmt.Errorf("error sending request: no response")
+			}
+
+			_, err = s.hooks.AfterError(hooks.AfterErrorContext{HookContext: hookCtx}, nil, err)
+			return nil, err
+		} else if utils.MatchStatusCodes([]string{"4XX", "5XX"}, httpRes.StatusCode) {
+			_httpRes, err := s.hooks.AfterError(hooks.AfterErrorContext{HookContext: hookCtx}, httpRes, nil)
+			if err != nil {
+				return nil, err
+			} else if _httpRes != nil {
+				httpRes = _httpRes
+			}
+		} else {
+			httpRes, err = s.hooks.AfterSuccess(hooks.AfterSuccessContext{HookContext: hookCtx}, httpRes)
+			if err != nil {
+				return nil, err
+			}
 		}
 	}
 
@@ -138,6 +214,53 @@ func (s *Worlds) ListWorlds(ctx context.Context, request *operations.ListWorldsR
 			Request:  req,
 			Response: httpRes,
 		},
+	}
+	res.Next = func() (*operations.ListWorldsResponse, error) {
+		if request == nil {
+			request = &operations.ListWorldsRequest{}
+		}
+		rawBody, err := utils.ConsumeRawBody(httpRes)
+		if err != nil {
+			return nil, err
+		}
+
+		b, err := ajson.Unmarshal(rawBody)
+		if err != nil {
+			return nil, err
+		}
+		nC, err := ajson.Eval(b, "$.next_cursor")
+		if err != nil {
+			return nil, err
+		}
+		var nCVal string
+
+		if nC.IsNumeric() {
+			numVal, err := nC.GetNumeric()
+			if err != nil {
+				return nil, err
+			}
+			// GetNumeric returns as float64 so convert to the appropriate type.
+			nCVal = strconv.FormatFloat(numVal, 'f', 0, 64)
+		} else {
+			val, err := nC.Value()
+			if err != nil {
+				return nil, err
+			}
+			if val == nil {
+				return nil, nil
+			}
+			nCVal = val.(string)
+			if strings.TrimSpace(nCVal) == "" {
+				return nil, nil
+			}
+		}
+		request.Cursor = &nCVal
+
+		return s.ListWorlds(
+			paginationCtx,
+			request,
+			opts...,
+		)
 	}
 
 	switch {
@@ -662,6 +785,7 @@ func (s *Worlds) DeleteWorld(ctx context.Context, request operations.DeleteWorld
 func (s *Worlds) GetWorld(ctx context.Context, request operations.GetWorldRequest, opts ...operations.Option) (*operations.GetWorldResponse, error) {
 	o := operations.Options{}
 	supportedOptions := []string{
+		operations.SupportedOptionRetries,
 		operations.SupportedOptionTimeout,
 		operations.SupportedOptionSkipDeserialization,
 	}
@@ -726,32 +850,102 @@ func (s *Worlds) GetWorld(ctx context.Context, request operations.GetWorldReques
 		req.Header.Set(k, v)
 	}
 
-	req, err = s.hooks.BeforeRequest(hooks.BeforeRequestContext{HookContext: hookCtx}, req)
-	if err != nil {
-		return nil, err
+	globalRetryConfig := s.sdkConfiguration.RetryConfig
+	retryConfig := o.Retries
+	if retryConfig == nil {
+		if globalRetryConfig != nil {
+			retryConfig = globalRetryConfig
+		} else {
+			retryConfig = &retry.Config{
+				Strategy: "backoff", Backoff: &retry.BackoffStrategy{
+					InitialInterval: 500,
+					MaxInterval:     5000,
+					Exponent:        1.5,
+					MaxElapsedTime:  60000,
+				},
+				RetryConnectionErrors: true,
+			}
+		}
 	}
 
-	httpRes, err := s.sdkConfiguration.Client.Do(req)
-	if err != nil || httpRes == nil {
-		if err != nil {
-			err = fmt.Errorf("error sending request: %w", err)
-		} else {
-			err = fmt.Errorf("error sending request: no response")
-		}
+	var httpRes *http.Response
+	if retryConfig != nil {
+		httpRes, err = utils.Retry(ctx, utils.Retries{
+			Config: retryConfig,
+			StatusCodes: []string{
+				"502",
+				"503",
+				"504",
+			},
+		}, func() (*http.Response, error) {
+			if req.Body != nil && req.Body != http.NoBody && req.GetBody != nil {
+				copyBody, err := req.GetBody()
 
-		_, err = s.hooks.AfterError(hooks.AfterErrorContext{HookContext: hookCtx}, nil, err)
-		return nil, err
-	} else if utils.MatchStatusCodes([]string{"4XX", "5XX"}, httpRes.StatusCode) {
-		_httpRes, err := s.hooks.AfterError(hooks.AfterErrorContext{HookContext: hookCtx}, httpRes, nil)
+				if err != nil {
+					return nil, err
+				}
+
+				req.Body = copyBody
+			}
+
+			req, err = s.hooks.BeforeRequest(hooks.BeforeRequestContext{HookContext: hookCtx}, req)
+			if err != nil {
+				if retry.IsPermanentError(err) || retry.IsTemporaryError(err) {
+					return nil, err
+				}
+
+				return nil, retry.Permanent(err)
+			}
+
+			httpRes, err := s.sdkConfiguration.Client.Do(req)
+			if err != nil || httpRes == nil {
+				if err != nil {
+					err = fmt.Errorf("error sending request: %w", err)
+				} else {
+					err = fmt.Errorf("error sending request: no response")
+				}
+
+				_, err = s.hooks.AfterError(hooks.AfterErrorContext{HookContext: hookCtx}, nil, err)
+			}
+			return httpRes, err
+		})
+
 		if err != nil {
 			return nil, err
-		} else if _httpRes != nil {
-			httpRes = _httpRes
+		} else {
+			httpRes, err = s.hooks.AfterSuccess(hooks.AfterSuccessContext{HookContext: hookCtx}, httpRes)
+			if err != nil {
+				return nil, err
+			}
 		}
 	} else {
-		httpRes, err = s.hooks.AfterSuccess(hooks.AfterSuccessContext{HookContext: hookCtx}, httpRes)
+		req, err = s.hooks.BeforeRequest(hooks.BeforeRequestContext{HookContext: hookCtx}, req)
 		if err != nil {
 			return nil, err
+		}
+
+		httpRes, err = s.sdkConfiguration.Client.Do(req)
+		if err != nil || httpRes == nil {
+			if err != nil {
+				err = fmt.Errorf("error sending request: %w", err)
+			} else {
+				err = fmt.Errorf("error sending request: no response")
+			}
+
+			_, err = s.hooks.AfterError(hooks.AfterErrorContext{HookContext: hookCtx}, nil, err)
+			return nil, err
+		} else if utils.MatchStatusCodes([]string{"4XX", "5XX"}, httpRes.StatusCode) {
+			_httpRes, err := s.hooks.AfterError(hooks.AfterErrorContext{HookContext: hookCtx}, httpRes, nil)
+			if err != nil {
+				return nil, err
+			} else if _httpRes != nil {
+				httpRes = _httpRes
+			}
+		} else {
+			httpRes, err = s.hooks.AfterSuccess(hooks.AfterSuccessContext{HookContext: hookCtx}, httpRes)
+			if err != nil {
+				return nil, err
+			}
 		}
 	}
 
@@ -869,9 +1063,9 @@ func (s *Worlds) GetWorld(ctx context.Context, request operations.GetWorldReques
 
 }
 
-// AdvanceWorld - Advance World Time
+// CreateWorldAdvance - Advance World Time
 // Advances each member independently, waking an idle member first, and skips stopped members. Successful advances remain committed when another member fails. The World current_time records the last settled request target; member clocks can differ.
-func (s *Worlds) AdvanceWorld(ctx context.Context, request operations.AdvanceWorldRequest, opts ...operations.Option) (*operations.AdvanceWorldResponse, error) {
+func (s *Worlds) CreateWorldAdvance(ctx context.Context, request operations.CreateWorldAdvanceRequest, opts ...operations.Option) (*operations.CreateWorldAdvanceResponse, error) {
 	o := operations.Options{}
 	supportedOptions := []string{
 		operations.SupportedOptionTimeout,
@@ -890,7 +1084,7 @@ func (s *Worlds) AdvanceWorld(ctx context.Context, request operations.AdvanceWor
 	} else {
 		baseURL = *o.ServerURL
 	}
-	opURL, err := utils.GenerateURL(ctx, baseURL, "/v1/worlds/{id}/advance-time", request, nil)
+	opURL, err := utils.GenerateURL(ctx, baseURL, "/v1/worlds/{id}/advances", request, nil)
 	if err != nil {
 		return nil, fmt.Errorf("error generating URL: %w", err)
 	}
@@ -900,7 +1094,7 @@ func (s *Worlds) AdvanceWorld(ctx context.Context, request operations.AdvanceWor
 		SDKConfiguration: s.sdkConfiguration,
 		BaseURL:          baseURL,
 		Context:          ctx,
-		OperationID:      "advance-world",
+		OperationID:      "create-world-advance",
 		OAuth2Scopes:     nil,
 		SecuritySource:   s.sdkConfiguration.Security,
 	}
@@ -976,7 +1170,7 @@ func (s *Worlds) AdvanceWorld(ctx context.Context, request operations.AdvanceWor
 		}
 	}
 
-	res := &operations.AdvanceWorldResponse{
+	res := &operations.CreateWorldAdvanceResponse{
 		HTTPMeta: components.HTTPMetadata{
 			Request:  req,
 			Response: httpRes,
@@ -1107,6 +1301,7 @@ func (s *Worlds) AdvanceWorld(ctx context.Context, request operations.AdvanceWor
 func (s *Worlds) GetWorldAdvance(ctx context.Context, request operations.GetWorldAdvanceRequest, opts ...operations.Option) (*operations.GetWorldAdvanceResponse, error) {
 	o := operations.Options{}
 	supportedOptions := []string{
+		operations.SupportedOptionRetries,
 		operations.SupportedOptionTimeout,
 		operations.SupportedOptionSkipDeserialization,
 	}
@@ -1171,32 +1366,102 @@ func (s *Worlds) GetWorldAdvance(ctx context.Context, request operations.GetWorl
 		req.Header.Set(k, v)
 	}
 
-	req, err = s.hooks.BeforeRequest(hooks.BeforeRequestContext{HookContext: hookCtx}, req)
-	if err != nil {
-		return nil, err
+	globalRetryConfig := s.sdkConfiguration.RetryConfig
+	retryConfig := o.Retries
+	if retryConfig == nil {
+		if globalRetryConfig != nil {
+			retryConfig = globalRetryConfig
+		} else {
+			retryConfig = &retry.Config{
+				Strategy: "backoff", Backoff: &retry.BackoffStrategy{
+					InitialInterval: 500,
+					MaxInterval:     5000,
+					Exponent:        1.5,
+					MaxElapsedTime:  60000,
+				},
+				RetryConnectionErrors: true,
+			}
+		}
 	}
 
-	httpRes, err := s.sdkConfiguration.Client.Do(req)
-	if err != nil || httpRes == nil {
-		if err != nil {
-			err = fmt.Errorf("error sending request: %w", err)
-		} else {
-			err = fmt.Errorf("error sending request: no response")
-		}
+	var httpRes *http.Response
+	if retryConfig != nil {
+		httpRes, err = utils.Retry(ctx, utils.Retries{
+			Config: retryConfig,
+			StatusCodes: []string{
+				"502",
+				"503",
+				"504",
+			},
+		}, func() (*http.Response, error) {
+			if req.Body != nil && req.Body != http.NoBody && req.GetBody != nil {
+				copyBody, err := req.GetBody()
 
-		_, err = s.hooks.AfterError(hooks.AfterErrorContext{HookContext: hookCtx}, nil, err)
-		return nil, err
-	} else if utils.MatchStatusCodes([]string{"4XX", "5XX"}, httpRes.StatusCode) {
-		_httpRes, err := s.hooks.AfterError(hooks.AfterErrorContext{HookContext: hookCtx}, httpRes, nil)
+				if err != nil {
+					return nil, err
+				}
+
+				req.Body = copyBody
+			}
+
+			req, err = s.hooks.BeforeRequest(hooks.BeforeRequestContext{HookContext: hookCtx}, req)
+			if err != nil {
+				if retry.IsPermanentError(err) || retry.IsTemporaryError(err) {
+					return nil, err
+				}
+
+				return nil, retry.Permanent(err)
+			}
+
+			httpRes, err := s.sdkConfiguration.Client.Do(req)
+			if err != nil || httpRes == nil {
+				if err != nil {
+					err = fmt.Errorf("error sending request: %w", err)
+				} else {
+					err = fmt.Errorf("error sending request: no response")
+				}
+
+				_, err = s.hooks.AfterError(hooks.AfterErrorContext{HookContext: hookCtx}, nil, err)
+			}
+			return httpRes, err
+		})
+
 		if err != nil {
 			return nil, err
-		} else if _httpRes != nil {
-			httpRes = _httpRes
+		} else {
+			httpRes, err = s.hooks.AfterSuccess(hooks.AfterSuccessContext{HookContext: hookCtx}, httpRes)
+			if err != nil {
+				return nil, err
+			}
 		}
 	} else {
-		httpRes, err = s.hooks.AfterSuccess(hooks.AfterSuccessContext{HookContext: hookCtx}, httpRes)
+		req, err = s.hooks.BeforeRequest(hooks.BeforeRequestContext{HookContext: hookCtx}, req)
 		if err != nil {
 			return nil, err
+		}
+
+		httpRes, err = s.sdkConfiguration.Client.Do(req)
+		if err != nil || httpRes == nil {
+			if err != nil {
+				err = fmt.Errorf("error sending request: %w", err)
+			} else {
+				err = fmt.Errorf("error sending request: no response")
+			}
+
+			_, err = s.hooks.AfterError(hooks.AfterErrorContext{HookContext: hookCtx}, nil, err)
+			return nil, err
+		} else if utils.MatchStatusCodes([]string{"4XX", "5XX"}, httpRes.StatusCode) {
+			_httpRes, err := s.hooks.AfterError(hooks.AfterErrorContext{HookContext: hookCtx}, httpRes, nil)
+			if err != nil {
+				return nil, err
+			} else if _httpRes != nil {
+				httpRes = _httpRes
+			}
+		} else {
+			httpRes, err = s.hooks.AfterSuccess(hooks.AfterSuccessContext{HookContext: hookCtx}, httpRes)
+			if err != nil {
+				return nil, err
+			}
 		}
 	}
 
@@ -1531,6 +1796,7 @@ func (s *Worlds) CancelWorld(ctx context.Context, request operations.CancelWorld
 func (s *Worlds) GetWorldChange(ctx context.Context, request operations.GetWorldChangeRequest, opts ...operations.Option) (*operations.GetWorldChangeResponse, error) {
 	o := operations.Options{}
 	supportedOptions := []string{
+		operations.SupportedOptionRetries,
 		operations.SupportedOptionTimeout,
 		operations.SupportedOptionSkipDeserialization,
 	}
@@ -1595,32 +1861,102 @@ func (s *Worlds) GetWorldChange(ctx context.Context, request operations.GetWorld
 		req.Header.Set(k, v)
 	}
 
-	req, err = s.hooks.BeforeRequest(hooks.BeforeRequestContext{HookContext: hookCtx}, req)
-	if err != nil {
-		return nil, err
+	globalRetryConfig := s.sdkConfiguration.RetryConfig
+	retryConfig := o.Retries
+	if retryConfig == nil {
+		if globalRetryConfig != nil {
+			retryConfig = globalRetryConfig
+		} else {
+			retryConfig = &retry.Config{
+				Strategy: "backoff", Backoff: &retry.BackoffStrategy{
+					InitialInterval: 500,
+					MaxInterval:     5000,
+					Exponent:        1.5,
+					MaxElapsedTime:  60000,
+				},
+				RetryConnectionErrors: true,
+			}
+		}
 	}
 
-	httpRes, err := s.sdkConfiguration.Client.Do(req)
-	if err != nil || httpRes == nil {
-		if err != nil {
-			err = fmt.Errorf("error sending request: %w", err)
-		} else {
-			err = fmt.Errorf("error sending request: no response")
-		}
+	var httpRes *http.Response
+	if retryConfig != nil {
+		httpRes, err = utils.Retry(ctx, utils.Retries{
+			Config: retryConfig,
+			StatusCodes: []string{
+				"502",
+				"503",
+				"504",
+			},
+		}, func() (*http.Response, error) {
+			if req.Body != nil && req.Body != http.NoBody && req.GetBody != nil {
+				copyBody, err := req.GetBody()
 
-		_, err = s.hooks.AfterError(hooks.AfterErrorContext{HookContext: hookCtx}, nil, err)
-		return nil, err
-	} else if utils.MatchStatusCodes([]string{"4XX", "5XX"}, httpRes.StatusCode) {
-		_httpRes, err := s.hooks.AfterError(hooks.AfterErrorContext{HookContext: hookCtx}, httpRes, nil)
+				if err != nil {
+					return nil, err
+				}
+
+				req.Body = copyBody
+			}
+
+			req, err = s.hooks.BeforeRequest(hooks.BeforeRequestContext{HookContext: hookCtx}, req)
+			if err != nil {
+				if retry.IsPermanentError(err) || retry.IsTemporaryError(err) {
+					return nil, err
+				}
+
+				return nil, retry.Permanent(err)
+			}
+
+			httpRes, err := s.sdkConfiguration.Client.Do(req)
+			if err != nil || httpRes == nil {
+				if err != nil {
+					err = fmt.Errorf("error sending request: %w", err)
+				} else {
+					err = fmt.Errorf("error sending request: no response")
+				}
+
+				_, err = s.hooks.AfterError(hooks.AfterErrorContext{HookContext: hookCtx}, nil, err)
+			}
+			return httpRes, err
+		})
+
 		if err != nil {
 			return nil, err
-		} else if _httpRes != nil {
-			httpRes = _httpRes
+		} else {
+			httpRes, err = s.hooks.AfterSuccess(hooks.AfterSuccessContext{HookContext: hookCtx}, httpRes)
+			if err != nil {
+				return nil, err
+			}
 		}
 	} else {
-		httpRes, err = s.hooks.AfterSuccess(hooks.AfterSuccessContext{HookContext: hookCtx}, httpRes)
+		req, err = s.hooks.BeforeRequest(hooks.BeforeRequestContext{HookContext: hookCtx}, req)
 		if err != nil {
 			return nil, err
+		}
+
+		httpRes, err = s.sdkConfiguration.Client.Do(req)
+		if err != nil || httpRes == nil {
+			if err != nil {
+				err = fmt.Errorf("error sending request: %w", err)
+			} else {
+				err = fmt.Errorf("error sending request: no response")
+			}
+
+			_, err = s.hooks.AfterError(hooks.AfterErrorContext{HookContext: hookCtx}, nil, err)
+			return nil, err
+		} else if utils.MatchStatusCodes([]string{"4XX", "5XX"}, httpRes.StatusCode) {
+			_httpRes, err := s.hooks.AfterError(hooks.AfterErrorContext{HookContext: hookCtx}, httpRes, nil)
+			if err != nil {
+				return nil, err
+			} else if _httpRes != nil {
+				httpRes = _httpRes
+			}
+		} else {
+			httpRes, err = s.hooks.AfterSuccess(hooks.AfterSuccessContext{HookContext: hookCtx}, httpRes)
+			if err != nil {
+				return nil, err
+			}
 		}
 	}
 
@@ -1974,7 +2310,7 @@ func (s *Worlds) AddWorldSimulation(ctx context.Context, request operations.AddW
 }
 
 // RemoveWorldSimulation - Remove World Simulation
-// Removes a member from a running or stopped World and returns the change. By default the member is detached and keeps running as a standalone Simulation; delete removes it and its saved state. A World keeps at least one member.
+// Removes a member from a running or stopped World and returns the change. By default the member is detached and keeps running as a standalone Simulation; delete=true removes it and its saved state. A World keeps at least one member.
 func (s *Worlds) RemoveWorldSimulation(ctx context.Context, request operations.RemoveWorldSimulationRequest, opts ...operations.Option) (*operations.RemoveWorldSimulationResponse, error) {
 	o := operations.Options{}
 	supportedOptions := []string{
@@ -1994,7 +2330,7 @@ func (s *Worlds) RemoveWorldSimulation(ctx context.Context, request operations.R
 	} else {
 		baseURL = *o.ServerURL
 	}
-	opURL, err := utils.GenerateURL(ctx, baseURL, "/v1/worlds/{id}/simulations/{simulation_id}/remove", request, nil)
+	opURL, err := utils.GenerateURL(ctx, baseURL, "/v1/worlds/{id}/simulations/{simulation_id}", request, nil)
 	if err != nil {
 		return nil, fmt.Errorf("error generating URL: %w", err)
 	}
@@ -2007,10 +2343,6 @@ func (s *Worlds) RemoveWorldSimulation(ctx context.Context, request operations.R
 		OperationID:      "remove-world-simulation",
 		OAuth2Scopes:     nil,
 		SecuritySource:   s.sdkConfiguration.Security,
-	}
-	bodyReader, reqContentType, err := utils.SerializeRequestBody(ctx, request, false, true, "Body", "json", `request:"mediaType=application/json"`)
-	if err != nil {
-		return nil, err
 	}
 
 	timeout := o.Timeout
@@ -2031,17 +2363,18 @@ func (s *Worlds) RemoveWorldSimulation(ctx context.Context, request operations.R
 		}()
 	}
 
-	req, err := http.NewRequestWithContext(ctx, "POST", opURL, bodyReader)
+	req, err := http.NewRequestWithContext(ctx, "DELETE", opURL, nil)
 	if err != nil {
 		return nil, fmt.Errorf("error creating request: %w", err)
 	}
 	req.Header.Set("Accept", "application/json")
 	req.Header.Set("User-Agent", s.sdkConfiguration.UserAgent)
-	if reqContentType != "" {
-		req.Header.Set("Content-Type", reqContentType)
-	}
 
 	utils.PopulateHeaders(ctx, req, request, nil)
+
+	if err := utils.PopulateQueryParams(ctx, req, request, nil, nil); err != nil {
+		return nil, fmt.Errorf("error populating query params: %w", err)
+	}
 
 	if err := utils.PopulateSecurity(ctx, req, s.sdkConfiguration.Security); err != nil {
 		return nil, err
@@ -2114,21 +2447,13 @@ func (s *Worlds) RemoveWorldSimulation(ctx context.Context, request operations.R
 			}
 			return nil, sdkerrors.NewSDKDefaultError(fmt.Sprintf("unknown content-type received: %s", httpRes.Header.Get("Content-Type")), httpRes.StatusCode, string(rawBody), httpRes)
 		}
-	case httpRes.StatusCode == 400:
-		fallthrough
 	case httpRes.StatusCode == 401:
 		fallthrough
 	case httpRes.StatusCode == 403:
 		fallthrough
 	case httpRes.StatusCode == 404:
 		fallthrough
-	case httpRes.StatusCode == 408:
-		fallthrough
 	case httpRes.StatusCode == 409:
-		fallthrough
-	case httpRes.StatusCode == 413:
-		fallthrough
-	case httpRes.StatusCode == 415:
 		fallthrough
 	case httpRes.StatusCode == 422:
 		switch {

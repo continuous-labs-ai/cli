@@ -20,7 +20,7 @@ var createCredentialCmdMeta = []flagutil.FlagMeta{
 	{FlagName: "header", FieldPath: "Header", Kind: flagutil.FlagKindString, Optional: true, Description: "The HTTP header that carries the value. Defaults to Authorization. Not allowed with login."},
 	{FlagName: "login", Shorthand: "l", FieldPath: "Login", Kind: flagutil.FlagKindJSON, Optional: true, Annotations: `json:"login,omitempty"`, Description: "JSON object"},
 	{FlagName: "name", Shorthand: "n", FieldPath: "Name", Kind: flagutil.FlagKindString, Required: true, Description: "Credential name. [required]"},
-	{FlagName: "value", Shorthand: "v", FieldPath: "Value", Kind: flagutil.FlagKindString, Required: true, Description: "The full header value, for example Bearer followed by a token, or the login password. The API never returns it. [required]"},
+	{FlagName: "value", Shorthand: "v", FieldPath: "Value", Kind: flagutil.FlagKindString, Optional: true, Description: "The full header value, for example Bearer followed by a token. Required with base_url; not allowed with login, which a person signs in to by hand after the credential exists. The API never returns it."},
 }
 
 // initCreateCredentialCmd initializes the create-credential command.
@@ -28,8 +28,8 @@ func initCreateCredentialCmd(parent *cobra.Command) error {
 	var cmd = &cobra.Command{
 		Use:     "create",
 		Short:   "Create credential",
-		Long:    "Stores a connection to a real system: either an API base URL, the header that carries the credential, and the header value, or an app login with its sign-in URL, username, and password. Returns the credential without its value.",
-		Example: "  continuous credentials create --name stripe-test --value Bearer <redacted>",
+		Long:    "Stores a connection to a real system: either an API base URL, the header that carries the credential, and the header value, or a Web App login with its sign-in URL, which a person then signs in to by hand in the console. Returns the credential without its value.",
+		Example: "  continuous credentials create --name stripe-test",
 		RunE:    runCreateCredentialCmd,
 	}
 	flagutil.RegisterFlags(cmd, createCredentialCmdMeta)

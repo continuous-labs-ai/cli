@@ -14,7 +14,7 @@ type UpdateCredentialRequest struct {
 	Login  *CredentialLoginUpdate `json:"login,omitzero"`
 	// New credential name.
 	Name *string `json:"name,omitzero"`
-	// New full header value or login password. Required when base_url, header, or login.url changes. Builds that start an agent after the change use it. The API never returns it.
+	// New full header value. Required when base_url or header changes; not allowed for a login credential. Builds that start an agent after the change use it. The API never returns it.
 	Value *string `json:"value,omitzero"`
 }
 

@@ -45,18 +45,20 @@ type SimulationDetail struct {
 	EndpointExternal bool `json:"endpoint_external"`
 	// Simulation ID.
 	ID string `json:"id"`
-	// Whether the Simulation started with the Simulator's sample data. A fork inherits its source's state and reports false.
+	// Whether the Simulation started with the Simulator's sample data. A Simulation created from a Snapshot takes the Snapshot's state and reports false.
 	IncludeSampleData bool `json:"include_sample_data"`
 	// Customer JSON metadata, or null.
 	Metadata any `json:"metadata"`
 	// Simulation name. The ID is its identity, and names need not be unique.
 	Name string `json:"name"`
-	// Source Simulation ID for a fork, or null.
+	// ID of the Simulation whose Snapshot this Simulation started from, or null.
 	ParentID *string `json:"parent_id"`
 	// OCI manifest digest pinned when the Simulation was created.
 	SimulatorDigest string `json:"simulator_digest"`
 	// ID of the Simulator bound to this Simulation.
 	SimulatorID string `json:"simulator_id"`
+	// ID of the Snapshot the Simulation started from, or null once that Snapshot is deleted.
+	SnapshotID *string `json:"snapshot_id"`
 	// Initial simulated time.
 	StartTime time.Time `json:"start_time"`
 	// Current status. running serves requests; after a period without requests, the first request can take longer while the Simulation resumes. stopped means its state is saved and requests return 409 until you start it.
@@ -165,6 +167,13 @@ func (s *SimulationDetail) GetSimulatorID() string {
 		return ""
 	}
 	return s.SimulatorID
+}
+
+func (s *SimulationDetail) GetSnapshotID() *string {
+	if s == nil {
+		return nil
+	}
+	return s.SnapshotID
 }
 
 func (s *SimulationDetail) GetStartTime() time.Time {

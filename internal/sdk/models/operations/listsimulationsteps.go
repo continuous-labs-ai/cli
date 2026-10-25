@@ -52,6 +52,8 @@ type ListSimulationStepsResponse struct {
 	HTTPMeta components.HTTPMetadata `json:"-"`
 	// OK
 	ListSimulationStepsResponse *components.ListSimulationStepsResponse
+
+	Next func() (*ListSimulationStepsResponse, error)
 }
 
 func (l ListSimulationStepsResponse) MarshalJSON() ([]byte, error) {

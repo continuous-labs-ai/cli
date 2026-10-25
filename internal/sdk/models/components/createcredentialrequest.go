@@ -14,8 +14,8 @@ type CreateCredentialRequest struct {
 	Login  *CredentialLoginRequest `json:"login,omitzero"`
 	// Credential name.
 	Name string `json:"name"`
-	// The full header value, for example Bearer followed by a token, or the login password. The API never returns it.
-	Value string `json:"value"`
+	// The full header value, for example Bearer followed by a token. Required with base_url; not allowed with login, which a person signs in to by hand after the credential exists. The API never returns it.
+	Value *string `json:"value,omitzero"`
 }
 
 func (c CreateCredentialRequest) MarshalJSON() ([]byte, error) {
@@ -57,9 +57,9 @@ func (c *CreateCredentialRequest) GetName() string {
 	return c.Name
 }
 
-func (c *CreateCredentialRequest) GetValue() string {
+func (c *CreateCredentialRequest) GetValue() *string {
 	if c == nil {
-		return ""
+		return nil
 	}
 	return c.Value
 }

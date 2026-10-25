@@ -99,6 +99,8 @@ type ListSimulationsResponse struct {
 	HTTPMeta components.HTTPMetadata `json:"-"`
 	// OK
 	ListSimulationsResponse *components.ListSimulationsResponse
+
+	Next func() (*ListSimulationsResponse, error)
 }
 
 func (l ListSimulationsResponse) MarshalJSON() ([]byte, error) {

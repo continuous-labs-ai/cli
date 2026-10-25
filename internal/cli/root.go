@@ -6,6 +6,7 @@ import (
 	"fmt"
 	"github.com/continuous-labs-ai/cli/internal/cli/credentials"
 	"github.com/continuous-labs-ai/cli/internal/cli/simulations"
+	"github.com/continuous-labs-ai/cli/internal/cli/simulationsnapshots"
 	"github.com/continuous-labs-ai/cli/internal/cli/simulators"
 	"github.com/continuous-labs-ai/cli/internal/cli/worlds"
 	"github.com/continuous-labs-ai/cli/internal/config"
@@ -51,6 +52,9 @@ func NewRootCommand() (*cobra.Command, error) {
 	}
 	if err := credentials.InitCredentialsRoot(rootCmd); err != nil {
 		return nil, fmt.Errorf("init credentials: %w", err)
+	}
+	if err := simulationsnapshots.InitSimulationSnapshotsRoot(rootCmd); err != nil {
+		return nil, fmt.Errorf("init simulation-snapshots: %w", err)
 	}
 	if err := simulations.InitSimulationsRoot(rootCmd); err != nil {
 		return nil, fmt.Errorf("init simulations: %w", err)
@@ -113,6 +117,12 @@ func NewRootCommand() (*cobra.Command, error) {
 		"Enable structured errors and default TOON output for AI coding agents. "+
 			"Automatically enabled when a known agent environment is detected (CLAUDE_CODE, CURSOR_AGENT, etc.). "+
 			"Use --agent-mode=false to disable.")
+	// Retry control flags
+	// Defaults: exponential backoff, 500ms initial / 10s max interval, 1.5x exponent, 30s max elapsed time.
+	rootCmd.PersistentFlags().Bool("no-retries", false, "Disable automatic retries (default: retries enabled with exponential backoff)")
+	rootCmd.PersistentFlags().String("retry-max-elapsed-time", "", "Maximum total time for retries (e.g., 30s, 5m). Default: 30s")
+	rootCmd.PersistentFlags().Bool("retry-connection-errors", false, "Retry on connection errors (EOF, reset, etc.)")
+	rootCmd.PersistentFlags().String("retry-config", "", `Full retry config as JSON. Schema: {"strategy":"backoff","backoff":{"initialInterval":500,"maxInterval":10000,"exponent":1.5,"maxElapsedTime":30000},"retryConnectionErrors":false}. Times are in milliseconds.`)
 
 	// Global security flags
 	rootCmd.PersistentFlags().String("api-key-auth", "", "Use a Continuous API key. Send it in the Authorization header as a Bearer token.")
@@ -135,6 +145,9 @@ func NewRootCommand() (*cobra.Command, error) {
 		{"agent-mode", "Diagnostics"},
 	} {
 		_ = rootCmd.PersistentFlags().SetAnnotation(ga.flag, "speakeasy:group", []string{ga.group})
+	}
+	for _, flag := range []string{"no-retries", "retry-max-elapsed-time", "retry-connection-errors", "retry-config"} {
+		_ = rootCmd.PersistentFlags().SetAnnotation(flag, "speakeasy:group", []string{"Network"})
 	}
 
 	rootCmd.SetUsageTemplate(groupedUsageTemplate())

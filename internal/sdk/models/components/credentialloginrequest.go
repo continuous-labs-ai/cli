@@ -5,8 +5,6 @@ package components
 type CredentialLoginRequest struct {
 	// The https URL of the app's sign-in page, with a literal host name or IP address and no user information.
 	URL string `json:"url"`
-	// The user name to sign in with.
-	Username string `json:"username"`
 }
 
 func (c *CredentialLoginRequest) GetURL() string {
@@ -14,11 +12,4 @@ func (c *CredentialLoginRequest) GetURL() string {
 		return ""
 	}
 	return c.URL
-}
-
-func (c *CredentialLoginRequest) GetUsername() string {
-	if c == nil {
-		return ""
-	}
-	return c.Username
 }

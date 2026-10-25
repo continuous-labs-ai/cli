@@ -36,7 +36,7 @@ func InitWorldsRoot(parent *cobra.Command) error {
 		return err
 	}
 
-	if err := initAdvanceWorldCmd(WorldsCmd); err != nil {
+	if err := initCreateWorldAdvanceCmd(WorldsCmd); err != nil {
 		return err
 	}
 

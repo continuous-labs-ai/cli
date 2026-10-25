@@ -12,20 +12,10 @@ type RemoveWorldSimulationRequest struct {
 	ID string `pathParam:"style=simple,explode=false,name=id"`
 	// ID of the member Simulation to remove.
 	SimulationID string `pathParam:"style=simple,explode=false,name=simulation_id"`
-	// Stable key for this request. Reuse with the same body returns the same change.
-	IdempotencyKey string                                   `header:"style=simple,explode=false,name=Idempotency-Key"`
-	Body           *components.RemoveWorldSimulationRequest `request:"mediaType=application/json"`
-}
-
-func (r RemoveWorldSimulationRequest) MarshalJSON() ([]byte, error) {
-	return utils.MarshalJSON(r, "", false)
-}
-
-func (r *RemoveWorldSimulationRequest) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &r, "", false, nil); err != nil {
-		return err
-	}
-	return nil
+	// true stops and deletes the member and its saved state. false, the default, detaches it: it keeps its ID, endpoint, token, clock, and data as a standalone Simulation.
+	Delete *bool `queryParam:"style=form,explode=false,name=delete"`
+	// Stable key for this request. Reuse with the same delete value returns the same change.
+	IdempotencyKey string `header:"style=simple,explode=false,name=Idempotency-Key"`
 }
 
 func (r *RemoveWorldSimulationRequest) GetID() string {
@@ -42,18 +32,18 @@ func (r *RemoveWorldSimulationRequest) GetSimulationID() string {
 	return r.SimulationID
 }
 
+func (r *RemoveWorldSimulationRequest) GetDelete() *bool {
+	if r == nil {
+		return nil
+	}
+	return r.Delete
+}
+
 func (r *RemoveWorldSimulationRequest) GetIdempotencyKey() string {
 	if r == nil {
 		return ""
 	}
 	return r.IdempotencyKey
-}
-
-func (r *RemoveWorldSimulationRequest) GetBody() *components.RemoveWorldSimulationRequest {
-	if r == nil {
-		return nil
-	}
-	return r.Body
 }
 
 type RemoveWorldSimulationResponse struct {

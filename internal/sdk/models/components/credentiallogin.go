@@ -2,11 +2,34 @@
 
 package components
 
+import (
+	"github.com/continuous-labs-ai/cli/internal/sdk/sdkinternal/utils"
+	"time"
+)
+
 type CredentialLogin struct {
+	// When a person last signed in by hand in the console, or null. A build cannot use a login before its first sign-in.
+	SignedInAt *time.Time `json:"signed_in_at"`
 	// The https URL of the app's sign-in page.
 	URL string `json:"url"`
-	// The user name to sign in with.
-	Username string `json:"username"`
+}
+
+func (c CredentialLogin) MarshalJSON() ([]byte, error) {
+	return utils.MarshalJSON(c, "", false)
+}
+
+func (c *CredentialLogin) UnmarshalJSON(data []byte) error {
+	if err := utils.UnmarshalJSON(data, &c, "", false, nil); err != nil {
+		return err
+	}
+	return nil
+}
+
+func (c *CredentialLogin) GetSignedInAt() *time.Time {
+	if c == nil {
+		return nil
+	}
+	return c.SignedInAt
 }
 
 func (c *CredentialLogin) GetURL() string {
@@ -14,11 +37,4 @@ func (c *CredentialLogin) GetURL() string {
 		return ""
 	}
 	return c.URL
-}
-
-func (c *CredentialLogin) GetUsername() string {
-	if c == nil {
-		return ""
-	}
-	return c.Username
 }

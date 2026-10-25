@@ -34,10 +34,14 @@ type SecurityConfig struct {
 // Security credentials and other settings are populated from the config file
 // and can be overridden by environment variables or CLI flags.
 type Config struct {
-	Version      int            `yaml:"version,omitempty"`
-	Security     SecurityConfig `yaml:"security,omitempty"`
-	OutputFormat string         `yaml:"output_format,omitempty"`
-	Timeout      string         `yaml:"timeout,omitempty"`
+	Version               int            `yaml:"version,omitempty"`
+	Security              SecurityConfig `yaml:"security,omitempty"`
+	OutputFormat          string         `yaml:"output_format,omitempty"`
+	Timeout               string         `yaml:"timeout,omitempty"`
+	NoRetries             string         `yaml:"no_retries,omitempty"`
+	RetryMaxElapsedTime   string         `yaml:"retry_max_elapsed_time,omitempty"`
+	RetryConnectionErrors string         `yaml:"retry_connection_errors,omitempty"`
+	RetryConfig           string         `yaml:"retry_config,omitempty"`
 }
 
 var (
@@ -143,6 +147,14 @@ func GetConfigValue(key string) string {
 		return cfg.OutputFormat
 	case "timeout":
 		return cfg.Timeout
+	case "no-retries":
+		return cfg.NoRetries
+	case "retry-max-elapsed-time":
+		return cfg.RetryMaxElapsedTime
+	case "retry-connection-errors":
+		return cfg.RetryConnectionErrors
+	case "retry-config":
+		return cfg.RetryConfig
 	}
 	return ""
 }
