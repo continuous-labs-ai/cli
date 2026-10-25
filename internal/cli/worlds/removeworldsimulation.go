@@ -17,8 +17,8 @@ import (
 var removeWorldSimulationCmdMeta = []flagutil.FlagMeta{
 	{FlagName: "id", FieldPath: "ID", Kind: flagutil.FlagKindString, Required: true, Description: "World ID. [required]"},
 	{FlagName: "simulation-id", Shorthand: "s", FieldPath: "SimulationID", Kind: flagutil.FlagKindString, Required: true, Description: "ID of the member Simulation to remove. [required]"},
-	{FlagName: "idempotency-key", FieldPath: "IdempotencyKey", Kind: flagutil.FlagKindString, Required: true, Description: "Stable key for this request. Reuse with the same body returns the same change. [required]"},
-	{FlagName: "delete", FieldPath: "Body.Delete", Kind: flagutil.FlagKindBool, Optional: true, Description: "true stops and deletes the member and its saved state. false, the default, detaches it: it keeps its ID, endpoint, token, clock, and data as a standalone Simulation."},
+	{FlagName: "delete", FieldPath: "Delete", Kind: flagutil.FlagKindBool, Optional: true, Description: "true stops and deletes the member and its saved state. false, the default, detaches it: it keeps its ID, endpoint, token, clock, and data as a standalone Simulation."},
+	{FlagName: "idempotency-key", FieldPath: "IdempotencyKey", Kind: flagutil.FlagKindString, Required: true, Description: "Stable key for this request. Reuse with the same delete value returns the same change. [required]"},
 }
 
 // initRemoveWorldSimulationCmd initializes the remove-world-simulation command.
@@ -26,7 +26,7 @@ func initRemoveWorldSimulationCmd(parent *cobra.Command) error {
 	var cmd = &cobra.Command{
 		Use:     "remove-world-simulation",
 		Short:   "Remove World Simulation",
-		Long:    "Removes a member from a running or stopped World and returns the change. By default the member is detached and keeps running as a standalone Simulation; delete removes it and its saved state. A World keeps at least one member.",
+		Long:    "Removes a member from a running or stopped World and returns the change. By default the member is detached and keeps running as a standalone Simulation; delete=true removes it and its saved state. A World keeps at least one member.",
 		Example: "  continuous worlds remove-world-simulation --id <id> --simulation-id <id> --idempotency-key <value>",
 		RunE:    runRemoveWorldSimulationCmd,
 		Aliases: []string{"rws"},
@@ -35,7 +35,6 @@ func initRemoveWorldSimulationCmd(parent *cobra.Command) error {
 	if err := flagutil.ValidateMeta[operations.RemoveWorldSimulationRequest](removeWorldSimulationCmdMeta); err != nil {
 		return fmt.Errorf("invalid metadata for remove-world-simulation: %w", err)
 	}
-	cmd.Flags().String("body", "", "Request body as JSON (alternative to individual flags). Can also be provided via stdin.")
 	parent.AddCommand(cmd)
 	return nil
 }
@@ -50,7 +49,7 @@ func runRemoveWorldSimulationCmd(cmd *cobra.Command, args []string) error {
 			return err
 		}
 	}
-	req, err := flagutil.BuildRequest[operations.RemoveWorldSimulationRequest](cmd, removeWorldSimulationCmdMeta, "Body", "body")
+	req, err := flagutil.BuildRequest[operations.RemoveWorldSimulationRequest](cmd, removeWorldSimulationCmdMeta, "", "")
 	if err != nil {
 		return err
 	}

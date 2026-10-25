@@ -16,7 +16,7 @@ import (
 
 var listSimulationAdvanceEventsCmdMeta = []flagutil.FlagMeta{
 	{FlagName: "id", Shorthand: "i", FieldPath: "ID", Kind: flagutil.FlagKindString, Required: true, Description: "Simulation ID. [required]"},
-	{FlagName: "advance-id", Shorthand: "a", FieldPath: "AdvanceID", Kind: flagutil.FlagKindString, Required: true, Description: "Advance ID. A historical fork can read inherited runtime receipts. [required]"},
+	{FlagName: "advance-id", FieldPath: "AdvanceID", Kind: flagutil.FlagKindString, Required: true, Description: "Advance ID. A Simulation created from a Snapshot can read the runtime receipts in the state it started from. [required]"},
 	{FlagName: "limit", Shorthand: "l", FieldPath: "Limit", Kind: flagutil.FlagKindInt64, Optional: true, HasDefault: true, DefaultInt: 50, Description: "Page size. Values below 1 use 50. Values above 200 use 200."},
 	{FlagName: "cursor", Shorthand: "c", FieldPath: "Cursor", Kind: flagutil.FlagKindString, Optional: true, Description: "Opaque next_cursor value from a previous page."},
 }
@@ -26,7 +26,7 @@ func initListSimulationAdvanceEventsCmd(parent *cobra.Command) error {
 	var cmd = &cobra.Command{
 		Use:     "list-simulation-advance-events",
 		Short:   "List Clock Advance Events",
-		Long:    "Returns the ordered event trace for a committed advance. The Simulation must be running. Forks retain traces in their inherited state.",
+		Long:    "Returns the ordered event trace for a committed advance. The Simulation must be running. A Simulation created from a Snapshot keeps the traces in the state it started from.",
 		Example: "  continuous simulations list-simulation-advance-events --id <id> --advance-id <id>",
 		RunE:    runListSimulationAdvanceEventsCmd,
 		Aliases: []string{"lsae"},
@@ -35,6 +35,8 @@ func initListSimulationAdvanceEventsCmd(parent *cobra.Command) error {
 	if err := flagutil.ValidateMeta[operations.ListSimulationAdvanceEventsRequest](listSimulationAdvanceEventsCmdMeta); err != nil {
 		return fmt.Errorf("invalid metadata for list-simulation-advance-events: %w", err)
 	}
+	cmd.Flags().BoolP("all", "a", false, "Automatically paginate and fetch all results (streams NDJSON for JSON output)")
+	cmd.Flags().Int("max-pages", 0, "Maximum number of pages to fetch when using --all (0 = no limit)")
 	parent.AddCommand(cmd)
 	return nil
 }
@@ -69,6 +71,14 @@ func runListSimulationAdvanceEventsCmd(cmd *cobra.Command, args []string) error 
 	if err := output.ValidateGlobalServerIndex(cmd, len(sdk.ServerList)); err != nil {
 		return err
 	}
+	if allPages, _ := flagutil.GetBoolFlag(cmd, "all"); allPages && !client.IsDryRun(cmd) {
+		maxPages, _ := flagutil.GetIntFlag(cmd, "max-pages")
+		res, err := s.Simulations.ListSimulationAdvanceEvents(cmd.Context(), *req, sdkOpts...)
+		if err != nil {
+			return output.Error(cmd, err)
+		}
+		return output.PaginatedResult(cmd, res, "ListClockAdvanceEventsResponse", "", maxPages)
+	}
 	if output.WantsRawJSON(cmd) {
 		sdkOpts = append(sdkOpts, operations.WithSkipDeserialization())
 	}
@@ -79,6 +89,9 @@ func runListSimulationAdvanceEventsCmd(cmd *cobra.Command, args []string) error 
 
 	if err := output.Result(cmd, res); err != nil {
 		return err
+	}
+	if output.HasMorePages(res) {
+		fmt.Fprintln(cmd.ErrOrStderr(), "Hint: more pages available. Use --all to fetch all results, or use --cursor for manual pagination.")
 	}
 	return nil
 }

@@ -25,7 +25,7 @@ func initListSimulationStepsCmd(parent *cobra.Command) error {
 	var cmd = &cobra.Command{
 		Use:     "list-simulation-steps",
 		Short:   "List Simulation Steps",
-		Long:    "Lists the Simulation's steps in order. Each request that changed state is one step; a request that only reads registers none. Pass a step number as at_step when you fork to start the child from the state after that step. A stopped Simulation returns 409 simulation_stopped; start it first.",
+		Long:    "Lists the Simulation's steps in order. Each request that changed state is one step; a request that only reads registers none. Pass a step number as at_step when you save a Snapshot to save the state after that step. A stopped Simulation returns 409 simulation_stopped; start it first.",
 		Example: "  continuous simulations list-simulation-steps --id <id>",
 		RunE:    runListSimulationStepsCmd,
 		Aliases: []string{"lss"},
@@ -34,6 +34,8 @@ func initListSimulationStepsCmd(parent *cobra.Command) error {
 	if err := flagutil.ValidateMeta[operations.ListSimulationStepsRequest](listSimulationStepsCmdMeta); err != nil {
 		return fmt.Errorf("invalid metadata for list-simulation-steps: %w", err)
 	}
+	cmd.Flags().BoolP("all", "a", false, "Automatically paginate and fetch all results (streams NDJSON for JSON output)")
+	cmd.Flags().Int("max-pages", 0, "Maximum number of pages to fetch when using --all (0 = no limit)")
 	parent.AddCommand(cmd)
 	return nil
 }
@@ -68,6 +70,14 @@ func runListSimulationStepsCmd(cmd *cobra.Command, args []string) error {
 	if err := output.ValidateGlobalServerIndex(cmd, len(sdk.ServerList)); err != nil {
 		return err
 	}
+	if allPages, _ := flagutil.GetBoolFlag(cmd, "all"); allPages && !client.IsDryRun(cmd) {
+		maxPages, _ := flagutil.GetIntFlag(cmd, "max-pages")
+		res, err := s.Simulations.ListSimulationSteps(cmd.Context(), *req, sdkOpts...)
+		if err != nil {
+			return output.Error(cmd, err)
+		}
+		return output.PaginatedResult(cmd, res, "ListSimulationStepsResponse", "", maxPages)
+	}
 	if output.WantsRawJSON(cmd) {
 		sdkOpts = append(sdkOpts, operations.WithSkipDeserialization())
 	}
@@ -78,6 +88,9 @@ func runListSimulationStepsCmd(cmd *cobra.Command, args []string) error {
 
 	if err := output.Result(cmd, res); err != nil {
 		return err
+	}
+	if output.HasMorePages(res) {
+		fmt.Fprintln(cmd.ErrOrStderr(), "Hint: more pages available. Use --all to fetch all results, or use --cursor for manual pagination.")
 	}
 	return nil
 }

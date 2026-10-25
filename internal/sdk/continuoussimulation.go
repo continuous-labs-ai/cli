@@ -53,7 +53,9 @@ type ContinuousSimulation struct {
 	SDKVersion string
 	// Store connections to real systems: a base URL, the header that carries the credential, and its value. The API never returns a value.
 	Credentials *Credentials
-	// Create Simulations from ready Simulators, then fork, stop, start, and delete them.
+	// Save a running Simulation's state as a Snapshot, create Simulations from it, and delete it.
+	SimulationSnapshots *SimulationSnapshots
+	// Create Simulations from ready Simulators or Snapshots, then stop, start, and delete them.
 	Simulations *Simulations
 	// Build Simulators from OpenAPI, WSDL or GraphQL documents, check or cancel a build, clone Simulators into other workspaces, and delete Simulators.
 	Simulators *Simulators
@@ -134,10 +136,10 @@ func WithTimeout(timeout time.Duration) SDKOption {
 // New creates a new instance of the SDK with the provided options
 func New(opts ...SDKOption) *ContinuousSimulation {
 	sdk := &ContinuousSimulation{
-		SDKVersion: "0.2.13",
+		SDKVersion: "0.3.0",
 		sdkConfiguration: config.SDKConfiguration{
-			UserAgent:         "speakeasy-sdk/go 0.2.13 2.935.1 v1 github.com/continuous-labs-ai/cli/internal/sdk",
-			SDKVersion:        "0.2.13",
+			UserAgent:         "speakeasy-sdk/go 0.3.0 2.935.1 v1 github.com/continuous-labs-ai/cli/internal/sdk",
+			SDKVersion:        "0.3.0",
 			GenVersion:        "2.935.1",
 			OpenAPIDocVersion: "v1",
 			ServerList:        ServerList,
@@ -156,6 +158,7 @@ func New(opts ...SDKOption) *ContinuousSimulation {
 	sdk.sdkConfiguration = sdk.hooks.SDKInit(sdk.sdkConfiguration)
 
 	sdk.Credentials = newCredentials(sdk, sdk.sdkConfiguration, sdk.hooks)
+	sdk.SimulationSnapshots = newSimulationSnapshots(sdk, sdk.sdkConfiguration, sdk.hooks)
 	sdk.Simulations = newSimulations(sdk, sdk.sdkConfiguration, sdk.hooks)
 	sdk.Simulators = newSimulators(sdk, sdk.sdkConfiguration, sdk.hooks)
 	sdk.Worlds = newWorlds(sdk, sdk.sdkConfiguration, sdk.hooks)

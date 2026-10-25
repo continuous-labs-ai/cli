@@ -8,15 +8,17 @@ import (
 )
 
 type CreateSimulationRequest struct {
-	// Start with the Simulator's sample data: a realistic account loaded on top of its seed before the first request. Defaults to false, a brand-new workspace. Requires a Simulator that carries sample data; see its composition.
+	// Start with the Simulator's sample data: a realistic account loaded on top of its seed before the first request. Defaults to false, a brand-new workspace. Requires a Simulator that carries sample data; see its composition. Not allowed with snapshot_id.
 	IncludeSampleData *bool `json:"include_sample_data,omitzero"`
 	// Customer JSON metadata, up to 16 KiB and 64 nesting levels. Returned by create, get, and list. Omission uses null.
 	Metadata any `json:"metadata,omitzero"`
 	// Name for the Simulation. Omission generates a name. The ID stays its identity, and names need not be unique.
 	Name *string `json:"name,omitzero"`
-	// ID of the ready Simulator.
-	SimulatorID string `json:"simulator_id"`
-	// Initial simulated time in RFC 3339 format. Omission uses 2024-01-01T00:00:00Z. Precision is milliseconds.
+	// ID of the ready Simulator. Set exactly one of simulator_id and snapshot_id.
+	SimulatorID *string `json:"simulator_id,omitzero"`
+	// ID of the Snapshot to start from. The Simulation takes its state, clock, Simulator digest and runtime placement. Set exactly one of simulator_id and snapshot_id.
+	SnapshotID *string `json:"snapshot_id,omitzero"`
+	// Initial simulated time in RFC 3339 format. Omission uses 2024-01-01T00:00:00Z. Precision is milliseconds. Not allowed with snapshot_id.
 	StartTime *time.Time `json:"start_time,omitzero"`
 }
 
@@ -52,11 +54,18 @@ func (c *CreateSimulationRequest) GetName() *string {
 	return c.Name
 }
 
-func (c *CreateSimulationRequest) GetSimulatorID() string {
+func (c *CreateSimulationRequest) GetSimulatorID() *string {
 	if c == nil {
-		return ""
+		return nil
 	}
 	return c.SimulatorID
+}
+
+func (c *CreateSimulationRequest) GetSnapshotID() *string {
+	if c == nil {
+		return nil
+	}
+	return c.SnapshotID
 }
 
 func (c *CreateSimulationRequest) GetStartTime() *time.Time {

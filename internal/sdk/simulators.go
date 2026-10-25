@@ -9,11 +9,15 @@ import (
 	"github.com/continuous-labs-ai/cli/internal/sdk/models/components"
 	"github.com/continuous-labs-ai/cli/internal/sdk/models/operations"
 	"github.com/continuous-labs-ai/cli/internal/sdk/models/sdkerrors"
+	"github.com/continuous-labs-ai/cli/internal/sdk/retry"
 	"github.com/continuous-labs-ai/cli/internal/sdk/sdkinternal/config"
 	"github.com/continuous-labs-ai/cli/internal/sdk/sdkinternal/hooks"
 	"github.com/continuous-labs-ai/cli/internal/sdk/sdkinternal/utils"
+	"github.com/spyzhov/ajson"
 	"net/http"
 	"net/url"
+	"strconv"
+	"strings"
 )
 
 // Build Simulators from OpenAPI, WSDL or GraphQL documents, check or cancel a build, clone Simulators into other workspaces, and delete Simulators.
@@ -36,6 +40,7 @@ func newSimulators(rootSDK *ContinuousSimulation, sdkConfig config.SDKConfigurat
 func (s *Simulators) ListSimulators(ctx context.Context, request *operations.ListSimulatorsRequest, opts ...operations.Option) (*operations.ListSimulatorsResponse, error) {
 	o := operations.Options{}
 	supportedOptions := []string{
+		operations.SupportedOptionRetries,
 		operations.SupportedOptionTimeout,
 		operations.SupportedOptionSkipDeserialization,
 	}
@@ -71,6 +76,7 @@ func (s *Simulators) ListSimulators(ctx context.Context, request *operations.Lis
 	if timeout == nil {
 		timeout = s.sdkConfiguration.Timeout
 	}
+	paginationCtx := ctx
 
 	var streamCancel context.CancelFunc
 
@@ -104,32 +110,102 @@ func (s *Simulators) ListSimulators(ctx context.Context, request *operations.Lis
 		req.Header.Set(k, v)
 	}
 
-	req, err = s.hooks.BeforeRequest(hooks.BeforeRequestContext{HookContext: hookCtx}, req)
-	if err != nil {
-		return nil, err
+	globalRetryConfig := s.sdkConfiguration.RetryConfig
+	retryConfig := o.Retries
+	if retryConfig == nil {
+		if globalRetryConfig != nil {
+			retryConfig = globalRetryConfig
+		} else {
+			retryConfig = &retry.Config{
+				Strategy: "backoff", Backoff: &retry.BackoffStrategy{
+					InitialInterval: 500,
+					MaxInterval:     5000,
+					Exponent:        1.5,
+					MaxElapsedTime:  60000,
+				},
+				RetryConnectionErrors: true,
+			}
+		}
 	}
 
-	httpRes, err := s.sdkConfiguration.Client.Do(req)
-	if err != nil || httpRes == nil {
-		if err != nil {
-			err = fmt.Errorf("error sending request: %w", err)
-		} else {
-			err = fmt.Errorf("error sending request: no response")
-		}
+	var httpRes *http.Response
+	if retryConfig != nil {
+		httpRes, err = utils.Retry(ctx, utils.Retries{
+			Config: retryConfig,
+			StatusCodes: []string{
+				"502",
+				"503",
+				"504",
+			},
+		}, func() (*http.Response, error) {
+			if req.Body != nil && req.Body != http.NoBody && req.GetBody != nil {
+				copyBody, err := req.GetBody()
 
-		_, err = s.hooks.AfterError(hooks.AfterErrorContext{HookContext: hookCtx}, nil, err)
-		return nil, err
-	} else if utils.MatchStatusCodes([]string{"4XX", "5XX"}, httpRes.StatusCode) {
-		_httpRes, err := s.hooks.AfterError(hooks.AfterErrorContext{HookContext: hookCtx}, httpRes, nil)
+				if err != nil {
+					return nil, err
+				}
+
+				req.Body = copyBody
+			}
+
+			req, err = s.hooks.BeforeRequest(hooks.BeforeRequestContext{HookContext: hookCtx}, req)
+			if err != nil {
+				if retry.IsPermanentError(err) || retry.IsTemporaryError(err) {
+					return nil, err
+				}
+
+				return nil, retry.Permanent(err)
+			}
+
+			httpRes, err := s.sdkConfiguration.Client.Do(req)
+			if err != nil || httpRes == nil {
+				if err != nil {
+					err = fmt.Errorf("error sending request: %w", err)
+				} else {
+					err = fmt.Errorf("error sending request: no response")
+				}
+
+				_, err = s.hooks.AfterError(hooks.AfterErrorContext{HookContext: hookCtx}, nil, err)
+			}
+			return httpRes, err
+		})
+
 		if err != nil {
 			return nil, err
-		} else if _httpRes != nil {
-			httpRes = _httpRes
+		} else {
+			httpRes, err = s.hooks.AfterSuccess(hooks.AfterSuccessContext{HookContext: hookCtx}, httpRes)
+			if err != nil {
+				return nil, err
+			}
 		}
 	} else {
-		httpRes, err = s.hooks.AfterSuccess(hooks.AfterSuccessContext{HookContext: hookCtx}, httpRes)
+		req, err = s.hooks.BeforeRequest(hooks.BeforeRequestContext{HookContext: hookCtx}, req)
 		if err != nil {
 			return nil, err
+		}
+
+		httpRes, err = s.sdkConfiguration.Client.Do(req)
+		if err != nil || httpRes == nil {
+			if err != nil {
+				err = fmt.Errorf("error sending request: %w", err)
+			} else {
+				err = fmt.Errorf("error sending request: no response")
+			}
+
+			_, err = s.hooks.AfterError(hooks.AfterErrorContext{HookContext: hookCtx}, nil, err)
+			return nil, err
+		} else if utils.MatchStatusCodes([]string{"4XX", "5XX"}, httpRes.StatusCode) {
+			_httpRes, err := s.hooks.AfterError(hooks.AfterErrorContext{HookContext: hookCtx}, httpRes, nil)
+			if err != nil {
+				return nil, err
+			} else if _httpRes != nil {
+				httpRes = _httpRes
+			}
+		} else {
+			httpRes, err = s.hooks.AfterSuccess(hooks.AfterSuccessContext{HookContext: hookCtx}, httpRes)
+			if err != nil {
+				return nil, err
+			}
 		}
 	}
 
@@ -138,6 +214,53 @@ func (s *Simulators) ListSimulators(ctx context.Context, request *operations.Lis
 			Request:  req,
 			Response: httpRes,
 		},
+	}
+	res.Next = func() (*operations.ListSimulatorsResponse, error) {
+		if request == nil {
+			request = &operations.ListSimulatorsRequest{}
+		}
+		rawBody, err := utils.ConsumeRawBody(httpRes)
+		if err != nil {
+			return nil, err
+		}
+
+		b, err := ajson.Unmarshal(rawBody)
+		if err != nil {
+			return nil, err
+		}
+		nC, err := ajson.Eval(b, "$.next_cursor")
+		if err != nil {
+			return nil, err
+		}
+		var nCVal string
+
+		if nC.IsNumeric() {
+			numVal, err := nC.GetNumeric()
+			if err != nil {
+				return nil, err
+			}
+			// GetNumeric returns as float64 so convert to the appropriate type.
+			nCVal = strconv.FormatFloat(numVal, 'f', 0, 64)
+		} else {
+			val, err := nC.Value()
+			if err != nil {
+				return nil, err
+			}
+			if val == nil {
+				return nil, nil
+			}
+			nCVal = val.(string)
+			if strings.TrimSpace(nCVal) == "" {
+				return nil, nil
+			}
+		}
+		request.Cursor = &nCVal
+
+		return s.ListSimulators(
+			paginationCtx,
+			request,
+			opts...,
+		)
 	}
 
 	switch {
@@ -741,6 +864,7 @@ func (s *Simulators) DeleteSimulator(ctx context.Context, request operations.Del
 func (s *Simulators) GetSimulator(ctx context.Context, request operations.GetSimulatorRequest, opts ...operations.Option) (*operations.GetSimulatorResponse, error) {
 	o := operations.Options{}
 	supportedOptions := []string{
+		operations.SupportedOptionRetries,
 		operations.SupportedOptionTimeout,
 		operations.SupportedOptionSkipDeserialization,
 	}
@@ -805,32 +929,102 @@ func (s *Simulators) GetSimulator(ctx context.Context, request operations.GetSim
 		req.Header.Set(k, v)
 	}
 
-	req, err = s.hooks.BeforeRequest(hooks.BeforeRequestContext{HookContext: hookCtx}, req)
-	if err != nil {
-		return nil, err
+	globalRetryConfig := s.sdkConfiguration.RetryConfig
+	retryConfig := o.Retries
+	if retryConfig == nil {
+		if globalRetryConfig != nil {
+			retryConfig = globalRetryConfig
+		} else {
+			retryConfig = &retry.Config{
+				Strategy: "backoff", Backoff: &retry.BackoffStrategy{
+					InitialInterval: 500,
+					MaxInterval:     5000,
+					Exponent:        1.5,
+					MaxElapsedTime:  60000,
+				},
+				RetryConnectionErrors: true,
+			}
+		}
 	}
 
-	httpRes, err := s.sdkConfiguration.Client.Do(req)
-	if err != nil || httpRes == nil {
-		if err != nil {
-			err = fmt.Errorf("error sending request: %w", err)
-		} else {
-			err = fmt.Errorf("error sending request: no response")
-		}
+	var httpRes *http.Response
+	if retryConfig != nil {
+		httpRes, err = utils.Retry(ctx, utils.Retries{
+			Config: retryConfig,
+			StatusCodes: []string{
+				"502",
+				"503",
+				"504",
+			},
+		}, func() (*http.Response, error) {
+			if req.Body != nil && req.Body != http.NoBody && req.GetBody != nil {
+				copyBody, err := req.GetBody()
 
-		_, err = s.hooks.AfterError(hooks.AfterErrorContext{HookContext: hookCtx}, nil, err)
-		return nil, err
-	} else if utils.MatchStatusCodes([]string{"4XX", "5XX"}, httpRes.StatusCode) {
-		_httpRes, err := s.hooks.AfterError(hooks.AfterErrorContext{HookContext: hookCtx}, httpRes, nil)
+				if err != nil {
+					return nil, err
+				}
+
+				req.Body = copyBody
+			}
+
+			req, err = s.hooks.BeforeRequest(hooks.BeforeRequestContext{HookContext: hookCtx}, req)
+			if err != nil {
+				if retry.IsPermanentError(err) || retry.IsTemporaryError(err) {
+					return nil, err
+				}
+
+				return nil, retry.Permanent(err)
+			}
+
+			httpRes, err := s.sdkConfiguration.Client.Do(req)
+			if err != nil || httpRes == nil {
+				if err != nil {
+					err = fmt.Errorf("error sending request: %w", err)
+				} else {
+					err = fmt.Errorf("error sending request: no response")
+				}
+
+				_, err = s.hooks.AfterError(hooks.AfterErrorContext{HookContext: hookCtx}, nil, err)
+			}
+			return httpRes, err
+		})
+
 		if err != nil {
 			return nil, err
-		} else if _httpRes != nil {
-			httpRes = _httpRes
+		} else {
+			httpRes, err = s.hooks.AfterSuccess(hooks.AfterSuccessContext{HookContext: hookCtx}, httpRes)
+			if err != nil {
+				return nil, err
+			}
 		}
 	} else {
-		httpRes, err = s.hooks.AfterSuccess(hooks.AfterSuccessContext{HookContext: hookCtx}, httpRes)
+		req, err = s.hooks.BeforeRequest(hooks.BeforeRequestContext{HookContext: hookCtx}, req)
 		if err != nil {
 			return nil, err
+		}
+
+		httpRes, err = s.sdkConfiguration.Client.Do(req)
+		if err != nil || httpRes == nil {
+			if err != nil {
+				err = fmt.Errorf("error sending request: %w", err)
+			} else {
+				err = fmt.Errorf("error sending request: no response")
+			}
+
+			_, err = s.hooks.AfterError(hooks.AfterErrorContext{HookContext: hookCtx}, nil, err)
+			return nil, err
+		} else if utils.MatchStatusCodes([]string{"4XX", "5XX"}, httpRes.StatusCode) {
+			_httpRes, err := s.hooks.AfterError(hooks.AfterErrorContext{HookContext: hookCtx}, httpRes, nil)
+			if err != nil {
+				return nil, err
+			} else if _httpRes != nil {
+				httpRes = _httpRes
+			}
+		} else {
+			httpRes, err = s.hooks.AfterSuccess(hooks.AfterSuccessContext{HookContext: hookCtx}, httpRes)
+			if err != nil {
+				return nil, err
+			}
 		}
 	}
 

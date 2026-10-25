@@ -7,7 +7,7 @@ import (
 	"github.com/continuous-labs-ai/cli/internal/sdk/sdkinternal/utils"
 )
 
-type AdvanceWorldRequest struct {
+type CreateWorldAdvanceRequest struct {
 	// World ID.
 	ID string `pathParam:"style=simple,explode=false,name=id"`
 	// Stable key for this request. Reuse with the same target returns the same operation.
@@ -15,54 +15,54 @@ type AdvanceWorldRequest struct {
 	Body           components.AdvanceTimeRequest `request:"mediaType=application/json"`
 }
 
-func (a *AdvanceWorldRequest) GetID() string {
-	if a == nil {
+func (c *CreateWorldAdvanceRequest) GetID() string {
+	if c == nil {
 		return ""
 	}
-	return a.ID
+	return c.ID
 }
 
-func (a *AdvanceWorldRequest) GetIdempotencyKey() string {
-	if a == nil {
+func (c *CreateWorldAdvanceRequest) GetIdempotencyKey() string {
+	if c == nil {
 		return ""
 	}
-	return a.IdempotencyKey
+	return c.IdempotencyKey
 }
 
-func (a *AdvanceWorldRequest) GetBody() components.AdvanceTimeRequest {
-	if a == nil {
+func (c *CreateWorldAdvanceRequest) GetBody() components.AdvanceTimeRequest {
+	if c == nil {
 		return components.AdvanceTimeRequest{}
 	}
-	return a.Body
+	return c.Body
 }
 
-type AdvanceWorldResponse struct {
+type CreateWorldAdvanceResponse struct {
 	HTTPMeta components.HTTPMetadata `json:"-"`
 	// Accepted
 	ClockAdvance *components.ClockAdvance
 }
 
-func (a AdvanceWorldResponse) MarshalJSON() ([]byte, error) {
-	return utils.MarshalJSON(a, "", false)
+func (c CreateWorldAdvanceResponse) MarshalJSON() ([]byte, error) {
+	return utils.MarshalJSON(c, "", false)
 }
 
-func (a *AdvanceWorldResponse) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &a, "", false, nil); err != nil {
+func (c *CreateWorldAdvanceResponse) UnmarshalJSON(data []byte) error {
+	if err := utils.UnmarshalJSON(data, &c, "", false, nil); err != nil {
 		return err
 	}
 	return nil
 }
 
-func (a *AdvanceWorldResponse) GetHTTPMeta() components.HTTPMetadata {
-	if a == nil {
+func (c *CreateWorldAdvanceResponse) GetHTTPMeta() components.HTTPMetadata {
+	if c == nil {
 		return components.HTTPMetadata{}
 	}
-	return a.HTTPMeta
+	return c.HTTPMeta
 }
 
-func (a *AdvanceWorldResponse) GetClockAdvance() *components.ClockAdvance {
-	if a == nil {
+func (c *CreateWorldAdvanceResponse) GetClockAdvance() *components.ClockAdvance {
+	if c == nil {
 		return nil
 	}
-	return a.ClockAdvance
+	return c.ClockAdvance
 }

@@ -20,7 +20,7 @@ var updateCredentialCmdMeta = []flagutil.FlagMeta{
 	{FlagName: "header", FieldPath: "Body.Header", Kind: flagutil.FlagKindString, Optional: true, Description: "New HTTP header that carries the value."},
 	{FlagName: "login", Shorthand: "l", FieldPath: "Body.Login", Kind: flagutil.FlagKindJSON, Optional: true, Annotations: `json:"login,omitempty"`, Description: "JSON object"},
 	{FlagName: "name", Shorthand: "n", FieldPath: "Body.Name", Kind: flagutil.FlagKindString, Optional: true, Description: "New credential name."},
-	{FlagName: "value", Shorthand: "v", FieldPath: "Body.Value", Kind: flagutil.FlagKindString, Optional: true, Description: "New full header value or login password. Required when base_url, header, or login.url changes. Builds that start an agent after the change use it. The API never returns it."},
+	{FlagName: "value", Shorthand: "v", FieldPath: "Body.Value", Kind: flagutil.FlagKindString, Optional: true, Description: "New full header value. Required when base_url or header changes; not allowed for a login credential. Builds that start an agent after the change use it. The API never returns it."},
 }
 
 // initUpdateCredentialCmd initializes the update-credential command.

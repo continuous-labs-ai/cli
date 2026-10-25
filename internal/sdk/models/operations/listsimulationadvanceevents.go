@@ -10,7 +10,7 @@ import (
 type ListSimulationAdvanceEventsRequest struct {
 	// Simulation ID.
 	ID string `pathParam:"style=simple,explode=false,name=id"`
-	// Advance ID. A historical fork can read inherited runtime receipts.
+	// Advance ID. A Simulation created from a Snapshot can read the runtime receipts in the state it started from.
 	AdvanceID string `pathParam:"style=simple,explode=false,name=advance_id"`
 	// Page size. Values below 1 use 50. Values above 200 use 200.
 	Limit *int64 `default:"50" queryParam:"style=form,explode=false,name=limit"`
@@ -61,6 +61,8 @@ type ListSimulationAdvanceEventsResponse struct {
 	HTTPMeta components.HTTPMetadata `json:"-"`
 	// OK
 	ListClockAdvanceEventsResponse *components.ListClockAdvanceEventsResponse
+
+	Next func() (*ListSimulationAdvanceEventsResponse, error)
 }
 
 func (l ListSimulationAdvanceEventsResponse) MarshalJSON() ([]byte, error) {

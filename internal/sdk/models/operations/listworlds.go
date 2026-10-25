@@ -96,6 +96,8 @@ type ListWorldsResponse struct {
 	HTTPMeta components.HTTPMetadata `json:"-"`
 	// OK
 	ListWorldsResponse *components.ListWorldsResponse
+
+	Next func() (*ListWorldsResponse, error)
 }
 
 func (l ListWorldsResponse) MarshalJSON() ([]byte, error) {
