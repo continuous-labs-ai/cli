@@ -53,13 +53,13 @@ type ContinuousSimulation struct {
 	SDKVersion string
 	// Store connections to real systems: a base URL, the header that carries the credential, and its value. The API never returns a value.
 	Credentials *Credentials
-	// Save a running Simulation's state as a Snapshot, create Simulations from it, and delete it.
+	// Save a running Simulation's state as a Snapshot, create Simulations from it, and rename and delete it.
 	SimulationSnapshots *SimulationSnapshots
-	// Create Simulations from ready Simulators or Snapshots, then stop, start, and delete them.
+	// Create Simulations from ready Simulators or Snapshots, then rename, stop, start, and delete them.
 	Simulations *Simulations
-	// Build Simulators from OpenAPI, WSDL or GraphQL documents, check or cancel a build, clone Simulators into other workspaces, and delete Simulators.
+	// Build Simulators from OpenAPI, WSDL or GraphQL documents, check or cancel a build, clone Simulators into other workspaces, and rename and delete Simulators.
 	Simulators *Simulators
-	// Build Worlds from one or more Simulators and start or stop their Simulations together.
+	// Build Worlds from one or more Simulators, rename them, and start or stop their Simulations together.
 	Worlds *Worlds
 
 	sdkConfiguration config.SDKConfiguration
@@ -136,10 +136,10 @@ func WithTimeout(timeout time.Duration) SDKOption {
 // New creates a new instance of the SDK with the provided options
 func New(opts ...SDKOption) *ContinuousSimulation {
 	sdk := &ContinuousSimulation{
-		SDKVersion: "0.3.0",
+		SDKVersion: "0.4.0",
 		sdkConfiguration: config.SDKConfiguration{
-			UserAgent:         "speakeasy-sdk/go 0.3.0 2.935.1 v1 github.com/continuous-labs-ai/cli/internal/sdk",
-			SDKVersion:        "0.3.0",
+			UserAgent:         "speakeasy-sdk/go 0.4.0 2.935.1 v1 github.com/continuous-labs-ai/cli/internal/sdk",
+			SDKVersion:        "0.4.0",
 			GenVersion:        "2.935.1",
 			OpenAPIDocVersion: "v1",
 			ServerList:        ServerList,

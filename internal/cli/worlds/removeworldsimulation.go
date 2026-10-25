@@ -18,7 +18,7 @@ var removeWorldSimulationCmdMeta = []flagutil.FlagMeta{
 	{FlagName: "id", FieldPath: "ID", Kind: flagutil.FlagKindString, Required: true, Description: "World ID. [required]"},
 	{FlagName: "simulation-id", Shorthand: "s", FieldPath: "SimulationID", Kind: flagutil.FlagKindString, Required: true, Description: "ID of the member Simulation to remove. [required]"},
 	{FlagName: "delete", FieldPath: "Delete", Kind: flagutil.FlagKindBool, Optional: true, Description: "true stops and deletes the member and its saved state. false, the default, detaches it: it keeps its ID, endpoint, token, clock, and data as a standalone Simulation."},
-	{FlagName: "idempotency-key", FieldPath: "IdempotencyKey", Kind: flagutil.FlagKindString, Required: true, Description: "Stable key for this request. Reuse with the same delete value returns the same change. [required]"},
+	{FlagName: "idempotency-key", FieldPath: "IdempotencyKey", Kind: flagutil.FlagKindString, Required: true, Description: "Stable key for this request. Reuse with the same member and delete value returns the same change; reuse with a different request returns 409 idempotency_conflict. [required]"},
 }
 
 // initRemoveWorldSimulationCmd initializes the remove-world-simulation command.

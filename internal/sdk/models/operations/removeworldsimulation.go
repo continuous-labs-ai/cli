@@ -14,7 +14,7 @@ type RemoveWorldSimulationRequest struct {
 	SimulationID string `pathParam:"style=simple,explode=false,name=simulation_id"`
 	// true stops and deletes the member and its saved state. false, the default, detaches it: it keeps its ID, endpoint, token, clock, and data as a standalone Simulation.
 	Delete *bool `queryParam:"style=form,explode=false,name=delete"`
-	// Stable key for this request. Reuse with the same delete value returns the same change.
+	// Stable key for this request. Reuse with the same member and delete value returns the same change; reuse with a different request returns 409 idempotency_conflict.
 	IdempotencyKey string `header:"style=simple,explode=false,name=Idempotency-Key"`
 }
 

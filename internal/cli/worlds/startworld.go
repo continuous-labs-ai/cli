@@ -24,7 +24,7 @@ func initStartWorldCmd(parent *cobra.Command) error {
 	var cmd = &cobra.Command{
 		Use:     "start",
 		Short:   "Start World",
-		Long:    "Starts every Simulation in the World. The first start creates the Simulations; later starts restore them from saved state. The World must be ready or stopped, and the workspace must have room for all members under its active-Simulation limit. A running World is returned unchanged.",
+		Long:    "Starts every Simulation in the World. The first start creates the Simulations; later starts restore them from saved state. The World must be ready or stopped, and the workspace must have room for all members under its active-Simulation limit. The response returns once the start is accepted, with status starting; read the World until it is running. A running or starting World is returned unchanged.",
 		Example: "  continuous worlds start --id <id>",
 		RunE:    runStartWorldCmd,
 	}

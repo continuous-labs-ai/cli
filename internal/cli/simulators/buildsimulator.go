@@ -15,9 +15,10 @@ import (
 )
 
 var buildSimulatorCmdMeta = []flagutil.FlagMeta{
-	{FlagName: "document", FieldPath: "Document", Kind: flagutil.FlagKindFileArray, Optional: true, Description: "Vendor documentation the builder and reviewer read before they start, as repeated file parts: UTF-8 text (.md, .txt, .html, .json, .yaml, .xml, .csv) or PDF (.pdf). The documents share the request body limit with the spec. An incremental build inherits its parent's documents and index; a document sent with the same name replaces the parent's. A document named INDEX.md indexes the others and skips research; the build fails if it names a document the build does not have, leaves a document unnamed, or leaves out a selected operation; an incremental build's documents include the inherited ones."},
-	{FlagName: "request", Shorthand: "r", FieldPath: "Request", Kind: flagutil.FlagKindJSON, Required: true, Annotations: `multipartForm:"name=request,json"`, Description: "Request as JSON [required]"},
-	{FlagName: "spec", Shorthand: "s", FieldPath: "Spec", Kind: flagutil.FlagKindFile, Optional: true, Description: "OpenAPI, WSDL or GraphQL document, UTF-8 encoded, at most 64 MiB. Required unless the request is an incremental build (parent_id and instructions, no spec)."},
+	{FlagName: "idempotency-key", Shorthand: "i", FieldPath: "IdempotencyKey", Kind: flagutil.FlagKindString, Optional: true, Description: "Optional key for retrying this create safely. A retry with the same key and request returns the original result with its status; the same key with a different request returns 409 idempotency_conflict. Without a key, each request creates a new resource. The key is recorded before the build starts, so a retry never starts a second build."},
+	{FlagName: "document", FieldPath: "Body.Document", Kind: flagutil.FlagKindFileArray, Optional: true, Description: "Vendor documentation the builder and reviewer read before they start, as repeated file parts: UTF-8 text (.md, .txt, .html, .json, .yaml, .xml, .csv) or PDF (.pdf). The documents share the request body limit with the spec. An incremental build inherits its parent's documents and index; a document sent with the same name replaces the parent's. A document named INDEX.md indexes the others and skips research; the build fails if it names a document the build does not have, leaves a document unnamed, or leaves out a selected operation; an incremental build's documents include the inherited ones."},
+	{FlagName: "request", Shorthand: "r", FieldPath: "Body.Request", Kind: flagutil.FlagKindJSON, Required: true, Annotations: `multipartForm:"name=request,json"`, Description: "Request as JSON [required]"},
+	{FlagName: "spec", Shorthand: "s", FieldPath: "Body.Spec", Kind: flagutil.FlagKindFile, Optional: true, Description: "OpenAPI, WSDL or GraphQL document, UTF-8 encoded, at most 64 MiB. Required unless the request is an incremental build (parent_id and instructions, no spec)."},
 }
 
 // initBuildSimulatorCmd initializes the build-simulator command.
@@ -26,7 +27,7 @@ func initBuildSimulatorCmd(parent *cobra.Command) error {
 		Use:     "build",
 		Short:   "Build Simulator",
 		Long:    "Starts an asynchronous Simulator build and returns the Simulator with status pending. Builds start in queue order when workspace capacity is available. Send multipart/form-data with a JSON part named request. To build from a document, add a file part named spec with the OpenAPI, WSDL or GraphQL document. For an incremental build, omit spec and set parent_id and instructions. Add file parts named document to give the builder and reviewer vendor documentation.",
-		Example: "  continuous simulators build --request '{\"request\":{\"filter\":[],\"instructions\":\"Return stable example data for every operation.\",\"mode\":\"api\",\"model\":\"claude-fable-5-1\",\"name\":\"billing-api\",\"review_rounds\":1,\"spec_kind\":\"openapi\",\"timeout_seconds\":14400} }'",
+		Example: "  continuous simulators build",
 		RunE:    runBuildSimulatorCmd,
 	}
 	flagutil.RegisterFlags(cmd, buildSimulatorCmdMeta)
@@ -47,7 +48,7 @@ func runBuildSimulatorCmd(cmd *cobra.Command, args []string) error {
 			return err
 		}
 	}
-	request, err := flagutil.BuildRequest[operations.BuildSimulatorRequest](cmd, buildSimulatorCmdMeta, "", "")
+	req, err := flagutil.BuildRequest[operations.BuildSimulatorRequest](cmd, buildSimulatorCmdMeta, "Body", "")
 	if err != nil {
 		return err
 	}
@@ -70,7 +71,7 @@ func runBuildSimulatorCmd(cmd *cobra.Command, args []string) error {
 	if output.WantsRawJSON(cmd) {
 		sdkOpts = append(sdkOpts, operations.WithSkipDeserialization())
 	}
-	res, err := s.Simulators.BuildSimulator(cmd.Context(), *request, sdkOpts...)
+	res, err := s.Simulators.BuildSimulator(cmd.Context(), *req, sdkOpts...)
 	if err != nil {
 		return output.Error(cmd, err)
 	}

@@ -10,8 +10,8 @@ import (
 func InitSimulationsRoot(parent *cobra.Command) error {
 	var SimulationsCmd = &cobra.Command{
 		Use:   "simulations",
-		Short: "Create Simulations from ready Simulators or Snapshots, then stop, start, and delete them",
-		Long:  "Create Simulations from ready Simulators or Snapshots, then stop, start, and delete them.",
+		Short: "Create Simulations from ready Simulators or Snapshots, then rename, stop, start, and delete them",
+		Long:  "Create Simulations from ready Simulators or Snapshots, then rename, stop, start, and delete them.",
 		RunE: func(cmd *cobra.Command, args []string) error {
 			if usage.UsageRequested(cmd) {
 				return usage.EmitSchema(cmd, cmd.OutOrStdout())
@@ -33,6 +33,10 @@ func InitSimulationsRoot(parent *cobra.Command) error {
 	}
 
 	if err := initGetSimulationCmd(SimulationsCmd); err != nil {
+		return err
+	}
+
+	if err := initUpdateSimulationCmd(SimulationsCmd); err != nil {
 		return err
 	}
 

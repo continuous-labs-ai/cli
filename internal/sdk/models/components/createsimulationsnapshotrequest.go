@@ -3,19 +3,10 @@
 package components
 
 type CreateSimulationSnapshotRequest struct {
-	// Completed step to save the state after. Omission saves the latest state.
-	AtStep *int64 `json:"at_step,omitzero"`
 	// Snapshot name.
 	Name string `json:"name"`
 	// ID of the running Simulation to save.
 	SimulationID string `json:"simulation_id"`
-}
-
-func (c *CreateSimulationSnapshotRequest) GetAtStep() *int64 {
-	if c == nil {
-		return nil
-	}
-	return c.AtStep
 }
 
 func (c *CreateSimulationSnapshotRequest) GetName() string {

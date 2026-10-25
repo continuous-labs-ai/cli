@@ -7,12 +7,14 @@ import (
 	"time"
 )
 
-// SimulationStatus - Current status. running serves requests; after a period without requests, the first request can take longer while the Simulation resumes. stopped means its state is saved and requests return 409 until you start it.
+// SimulationStatus - Current status. starting means its runtime is booting; read the Simulation until it is running. running serves requests; after a period without requests, the first request can take longer while the Simulation resumes. stopping means its state is being saved, and stopped means it is saved; requests return 409 in both until you start it.
 type SimulationStatus string
 
 const (
-	SimulationStatusRunning SimulationStatus = "running"
-	SimulationStatusStopped SimulationStatus = "stopped"
+	SimulationStatusStarting SimulationStatus = "starting"
+	SimulationStatusRunning  SimulationStatus = "running"
+	SimulationStatusStopping SimulationStatus = "stopping"
+	SimulationStatusStopped  SimulationStatus = "stopped"
 )
 
 func (e SimulationStatus) ToPointer() *SimulationStatus {
@@ -23,7 +25,7 @@ func (e SimulationStatus) ToPointer() *SimulationStatus {
 func (e *SimulationStatus) IsExact() bool {
 	if e != nil {
 		switch *e {
-		case "running", "stopped":
+		case "starting", "running", "stopping", "stopped":
 			return true
 		}
 	}
@@ -59,7 +61,7 @@ type Simulation struct {
 	SnapshotID *string `json:"snapshot_id"`
 	// Initial simulated time.
 	StartTime time.Time `json:"start_time"`
-	// Current status. running serves requests; after a period without requests, the first request can take longer while the Simulation resumes. stopped means its state is saved and requests return 409 until you start it.
+	// Current status. starting means its runtime is booting; read the Simulation until it is running. running serves requests; after a period without requests, the first request can take longer while the Simulation resumes. stopping means its state is being saved, and stopped means it is saved; requests return 409 in both until you start it.
 	Status SimulationStatus `json:"status"`
 	// ID of the World that owns this Simulation, or null.
 	WorldID *string `json:"world_id"`

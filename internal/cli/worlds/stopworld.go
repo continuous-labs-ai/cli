@@ -23,7 +23,7 @@ func initStopWorldCmd(parent *cobra.Command) error {
 	var cmd = &cobra.Command{
 		Use:     "stop",
 		Short:   "Stop World",
-		Long:    "Stops a World and saves each Simulation state. You can start the World later from the saved states.",
+		Long:    "Stops a World and saves each Simulation state. You can start the World later from the saved states. The response returns once the stop is accepted, with status stopping; read the World until it is stopped. A stopped or stopping World is returned unchanged.",
 		Example: "  continuous worlds stop --id <id>",
 		RunE:    runStopWorldCmd,
 	}

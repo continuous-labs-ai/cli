@@ -23,7 +23,7 @@ func initDeleteSimulatorCmd(parent *cobra.Command) error {
 	var cmd = &cobra.Command{
 		Use:     "delete",
 		Short:   "Delete Simulator",
-		Long:    "Deletes a Simulator that has no dependent Worlds, Simulations, or child Simulators.",
+		Long:    "Deletes a Simulator that has no dependent Worlds, Simulations, child Simulators, or Simulation Snapshots.",
 		Example: "  continuous simulators delete --id <id>",
 		RunE:    runDeleteSimulatorCmd,
 	}

@@ -21,7 +21,7 @@ func (c *CancelWorldRequest) GetID() string {
 
 type CancelWorldResponse struct {
 	HTTPMeta components.HTTPMetadata `json:"-"`
-	// OK
+	// Accepted
 	World *components.World
 }
 

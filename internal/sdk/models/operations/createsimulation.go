@@ -7,9 +7,29 @@ import (
 	"github.com/continuous-labs-ai/cli/internal/sdk/sdkinternal/utils"
 )
 
+type CreateSimulationRequest struct {
+	// Optional key for retrying this create safely. A retry with the same key and request returns the original result with its status; the same key with a different request returns 409 idempotency_conflict. Without a key, each request creates a new resource.
+	IdempotencyKey *string                            `header:"style=simple,explode=false,name=Idempotency-Key"`
+	Body           components.CreateSimulationRequest `request:"mediaType=application/json"`
+}
+
+func (c *CreateSimulationRequest) GetIdempotencyKey() *string {
+	if c == nil {
+		return nil
+	}
+	return c.IdempotencyKey
+}
+
+func (c *CreateSimulationRequest) GetBody() components.CreateSimulationRequest {
+	if c == nil {
+		return components.CreateSimulationRequest{}
+	}
+	return c.Body
+}
+
 type CreateSimulationResponse struct {
 	HTTPMeta components.HTTPMetadata `json:"-"`
-	// Created
+	// Accepted
 	CreatedSimulation *components.CreatedSimulation
 	Headers           map[string][]string
 }
