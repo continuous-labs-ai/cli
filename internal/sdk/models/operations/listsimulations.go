@@ -45,6 +45,10 @@ type ListSimulationsRequest struct {
 	SimulatorDigest *string `queryParam:"style=form,explode=false,name=simulator_digest"`
 	// Optional filter for the Simulations started from this Snapshot.
 	SnapshotID *string `queryParam:"style=form,explode=false,name=snapshot_id"`
+	// Optional Simulation ID filter; repeat it to list up to 200 Simulations by ID. Absent lists every Simulation.
+	ID []string `queryParam:"style=form,explode=true,name=id"`
+	// Optional filter for the Simulations this World owns.
+	WorldID *string `queryParam:"style=form,explode=false,name=world_id"`
 	// Page size. Values below 1 use 50. Values above 200 use 200.
 	Limit *int64 `default:"50" queryParam:"style=form,explode=false,name=limit"`
 	// Opaque next_cursor value from a previous page.
@@ -88,6 +92,20 @@ func (l *ListSimulationsRequest) GetSnapshotID() *string {
 		return nil
 	}
 	return l.SnapshotID
+}
+
+func (l *ListSimulationsRequest) GetID() []string {
+	if l == nil {
+		return nil
+	}
+	return l.ID
+}
+
+func (l *ListSimulationsRequest) GetWorldID() *string {
+	if l == nil {
+		return nil
+	}
+	return l.WorldID
 }
 
 func (l *ListSimulationsRequest) GetLimit() *int64 {

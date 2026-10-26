@@ -1,19 +1,19 @@
 lockVersion: 2.0.0
 id: ad7b08dc-357d-414c-9f26-16cfbc099767
 management:
-  docChecksum: ae8355d110e2ce0155db2c8320db0fbe
+  docChecksum: dc1d8c6589708b2d1f061039547cb610
   docVersion: v1
   speakeasyVersion: 1.796.4
   generationVersion: 2.935.1
-  releaseVersion: 0.4.0
-  configChecksum: e013c1976d986ca27d38fd3d906e639a
+  releaseVersion: 0.4.1
+  configChecksum: 7decf9bcdbfbaf6adf15111e77430a20
   repoURL: https://github.com/continuous-labs-ai/cli.git
   installationURL: https://github.com/continuous-labs-ai/cli
   published: true
 persistentEdits:
-  generation_id: b29df5a6-c244-447d-ac40-aea5b931ddf0
-  pristine_commit_hash: 4a75675f26c84eb3230440b85bb9b9a2b6ebe444
-  pristine_tree_hash: faf6a57996e95af2daa4ea96e672adf52fb686e2
+  generation_id: f585b386-f156-4296-b117-43a7715f9a06
+  pristine_commit_hash: 284f74409e488adc99b00180cdbf1c9c0a138439
+  pristine_tree_hash: 305283ca937173202cab5559840c75cbd1864cd3
 features:
   cli:
     constsAndDefaults: 0.0.0
@@ -116,8 +116,8 @@ trackedFiles:
     pristine_git_object: c627144cafc3ef2df32c14a5654c0beb293e865e
   internal/cli/simulations/listsimulations.go:
     id: ec9b43ba5a16
-    last_write_checksum: sha1:826909d4f221b23cf45a1da015a5c1b881806b16
-    pristine_git_object: 03cf3419d70ce19d051f127edbedacaaefb3f48b
+    last_write_checksum: sha1:bfc602ccd66d5f96077ac85592a807aa7dda339d
+    pristine_git_object: 38e6a21b437ba62283451011650d74adb8c1eecf
   internal/cli/simulations/listsimulationsteps.go:
     id: 495e2ecce809
     last_write_checksum: sha1:2ce1d549da8a07407e086967980711f72fa3dc5a
@@ -144,8 +144,8 @@ trackedFiles:
     pristine_git_object: d3762a86ad21ec2877c37955fe835d3424a616d6
   internal/cli/simulationsnapshots/createsimulationsnapshot.go:
     id: 818fdb739e44
-    last_write_checksum: sha1:f92f7ad57f8478de4ccce35efc886ccdc95a4005
-    pristine_git_object: 649d4f28ecff2b6ed2873a0f6f2dde93aece69f2
+    last_write_checksum: sha1:4354420dcb8d714800a268cb6214e3437763609b
+    pristine_git_object: 6f102b57aa5b9db74377bfaaabe43020a046f0cd
   internal/cli/simulationsnapshots/deletesimulationsnapshot.go:
     id: bbef5913960a
     last_write_checksum: sha1:5e77ed3cf86a9999e6680c9074021975b0dfaf1f
@@ -200,8 +200,8 @@ trackedFiles:
     pristine_git_object: d588e896afd8d8b7719740f3af260a101587fb40
   internal/cli/version.go:
     id: 7b0665492f72
-    last_write_checksum: sha1:7cec15b2d2f6b3d4331557de0e8bbc341f73a659
-    pristine_git_object: 30c097a328eebb518f2435314b501e93927dd41e
+    last_write_checksum: sha1:ae8d70c1a034b23d136f506776bdb0f29a00a946
+    pristine_git_object: 09e8a59c37cc188d5847eba2bfcdb08012f47750
   internal/cli/whoami.go:
     id: c1787f2298ec
     last_write_checksum: sha1:9b8e8f6830e556f749eede72d72b4f18d9881c28
@@ -336,8 +336,8 @@ trackedFiles:
     pristine_git_object: 942a964e78a81ad9d9590cc67138a0c4c3569fc9
   internal/sdk/continuoussimulation.go:
     id: af3aeba7b54c
-    last_write_checksum: sha1:7fb01c9d7e4e87895f210a787034170b130b6e97
-    pristine_git_object: 51b40bac7ab7dfe232197577ad882e7bbc03f96e
+    last_write_checksum: sha1:1e7494e690bb7f035a52927d7eaaf0a54ddb97e5
+    pristine_git_object: 68f38866e86c6aa3544f7280f50e1c9a0325164c
   internal/sdk/credentials.go:
     id: 67c2f2d273f9
     last_write_checksum: sha1:129ee524a7455add86f1f2da71ea6329114eb38b
@@ -608,8 +608,8 @@ trackedFiles:
     pristine_git_object: 9ae3862961fa87424e45051622562225ebd278c4
   internal/sdk/models/operations/createsimulationsnapshot.go:
     id: cd594e8f53e3
-    last_write_checksum: sha1:956c875d788ca53eeb7049beb958821df45c1514
-    pristine_git_object: a88b32cfce0ed8fbb012e4aed67ae0dee960f2fb
+    last_write_checksum: sha1:9081b8a0c82d25d233489eed516a340fd48bfc82
+    pristine_git_object: bbdaa511fe706fddbb99b399079a0931fe7a98be
   internal/sdk/models/operations/createworldadvance.go:
     id: 31421f973052
     last_write_checksum: sha1:a270573084c24b21bd7719d9dc42ec5444e8a7d7
@@ -680,8 +680,8 @@ trackedFiles:
     pristine_git_object: 2d767e44a47f3c55b6511480c172a8cc653a7ce5
   internal/sdk/models/operations/listsimulations.go:
     id: b5b7771571e1
-    last_write_checksum: sha1:5f973dd57599a52cf86f7bfddeb81e84ed0e275e
-    pristine_git_object: 2791b961b167a53a4ba1e21092185839d43e63c6
+    last_write_checksum: sha1:3d7d2452da74d9d61d680b707756ad82e1ef8273
+    pristine_git_object: ec7a2c7879d2cec515920d97faa31dda1fb1eaca
   internal/sdk/models/operations/listsimulationsnapshots.go:
     id: c1280d8f8902
     last_write_checksum: sha1:c5fe09fb84bcee2d86ce56bae800465f259f3258
@@ -828,8 +828,8 @@ trackedFiles:
     pristine_git_object: ad00c6617d6c94fab6bf5e3d57e397586af4de75
   internal/sdk/simulationsnapshots.go:
     id: ab8538aef4c3
-    last_write_checksum: sha1:f411ec3c66597865d50f951e50f34bf5d28a332c
-    pristine_git_object: b2ee35126082c962b3e526e4fbad7e4cd1610108
+    last_write_checksum: sha1:3ce4b1e6dd1e70bcca0c3b19e4e509c4d4d180a0
+    pristine_git_object: a88b0b19a66de2c151b03897727a210fbe9bed15
   internal/sdk/simulators.go:
     id: 847405821e0b
     last_write_checksum: sha1:c02c99bc5b84b8370cd66d514088e228fe976dca
@@ -860,8 +860,8 @@ trackedFiles:
     pristine_git_object: 159a87ec97aba99e4edd132f69652e123434303e
   internal/usage/schema.go:
     id: 0f40f4612437
-    last_write_checksum: sha1:adde4d9bc17d82b197cf2b1632286e3e4f6ab248
-    pristine_git_object: b4149e43ad087d844c1fcde4bb404b61aa7ea6b2
+    last_write_checksum: sha1:1a601a25e8f9df83daf8103554d706a6cbbb9706
+    pristine_git_object: 15f62f34f99b5954c89d60b2d13b9f0cb5b5f306
   scripts/install.ps1:
     id: fee0853709e9
     last_write_checksum: sha1:2da33f25afaa301dc2a22ac12654c585cef5c572
@@ -2197,6 +2197,8 @@ examples:
           application/problem+json: {"code": "<value>", "detail": "<value>", "validation": {"issues": []}}
         "500":
           application/problem+json: {"code": "<value>", "detail": "<value>", "validation": {"issues": []}}
+        "202":
+          application/json: {"created_at": "2026-01-15T12:00:00Z", "current_time": "2024-01-03T00:00:00Z", "error": null, "id": "sns_01J8Z5X4K7M2N9P0Q1R2S3T4VC", "name": "before-refund", "simulation_id": "sim_01J8Z5X4K7M2N9P0Q1R2S3T4V8", "simulation_name": "checkout-run", "simulator_id": "smr_01J8Z5X4K7M2N9P0Q1R2S3T4V5", "start_time": "2024-01-01T00:00:00Z", "status": "ready"}
   delete-simulation-snapshot:
     auth_invalid:
       parameters:
@@ -2414,4 +2416,7 @@ examples:
         "500":
           application/problem+json: {"code": "<value>", "detail": "<value>", "validation": {"issues": []}}
 examplesVersion: 1.0.2
-releaseNotes: "## Cli SDK Changes:\n* `ContinuousSimulation.Simulations.StartSimulation()`: \n  *  `response` **Changed** (Breaking ⚠️)\n  *  `error.status[504]` **Removed** (Breaking ⚠️)\n* `ContinuousSimulation.Simulations.CreateSimulation()`: \n  *  `request.Request` **Changed** (Breaking ⚠️)\n  *  `response` **Changed** (Breaking ⚠️)\n  *  `error.status[504]` **Removed** (Breaking ⚠️)\n* `ContinuousSimulation.Worlds.StopWorld()`:  `response` **Changed** (Breaking ⚠️)\n* `ContinuousSimulation.Worlds.StartWorld()`:  `response` **Changed** (Breaking ⚠️)\n* `ContinuousSimulation.SimulationSnapshots.ListSimulationSnapshots()`:  `response.SimulationSnapshots[]` **Changed** (Breaking ⚠️)\n* `ContinuousSimulation.SimulationSnapshots.CreateSimulationSnapshot()`: \n  *  `request.Request` **Changed** (Breaking ⚠️)\n  *  `response` **Changed** (Breaking ⚠️)\n* `ContinuousSimulation.SimulationSnapshots.GetSimulationSnapshot()`:  `response` **Changed** (Breaking ⚠️)\n* `ContinuousSimulation.Simulations.GetSimulationToken()`:  `error.status[502]` **Removed** (Breaking ⚠️)\n* `ContinuousSimulation.Simulations.StopSimulation()`:  `response` **Changed** (Breaking ⚠️)\n* `ContinuousSimulation.Worlds.CancelWorld()`:  `response` **Changed** (Breaking ⚠️)\n* `ContinuousSimulation.Worlds.BuildWorld()`: \n  *  `request.Request` **Changed** (Breaking ⚠️)\n  *  `response.Status` **Changed**\n* `ContinuousSimulation.Simulators.CloneSimulator()`:  `request.Request` **Changed** (Breaking ⚠️)\n* `ContinuousSimulation.Simulators.CancelSimulator()`:  `response` **Changed** (Breaking ⚠️)\n* `ContinuousSimulation.Simulators.BuildSimulator()`:  `request.Request` **Changed** (Breaking ⚠️)\n* `ContinuousSimulation.Simulators.DeleteSimulator()`:  `error.Dependents.Snapshots` **Added**\n* `ContinuousSimulation.Simulations.ListSimulations()`: \n  *  `request.Request.SnapshotId` **Added**\n  *  `response.Simulations[].Status` **Changed**\n* `ContinuousSimulation.SimulationSnapshots.UpdateSimulationSnapshot()`: **Added**\n* `ContinuousSimulation.Worlds.ListWorlds()`: \n  *  `request.Request.Status` **Changed**\n  *  `response.Worlds[].Status` **Changed**\n* `ContinuousSimulation.Simulations.UpdateSimulation()`: **Added**\n* `ContinuousSimulation.Worlds.GetWorld()`:  `response.Status` **Changed**\n* `ContinuousSimulation.Simulations.GetSimulation()`:  `response.Status` **Changed**\n* `ContinuousSimulation.Worlds.UpdateWorld()`: **Added**\n* `ContinuousSimulation.Simulators.UpdateSimulator()`: **Added**\n"
+releaseNotes: |
+  ## Cli SDK Changes:
+  * `ContinuousSimulation.SimulationSnapshots.CreateSimulationSnapshot()`:  `response` **Changed** (Breaking ⚠️)
+  * `ContinuousSimulation.Simulations.ListSimulations()`:  `request.Request` **Changed**
