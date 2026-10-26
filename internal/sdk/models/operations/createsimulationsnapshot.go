@@ -29,7 +29,7 @@ func (c *CreateSimulationSnapshotRequest) GetBody() components.CreateSimulationS
 
 type CreateSimulationSnapshotResponse struct {
 	HTTPMeta components.HTTPMetadata `json:"-"`
-	// Created
+	// Accepted
 	SimulationSnapshot *components.SimulationSnapshot
 }
 

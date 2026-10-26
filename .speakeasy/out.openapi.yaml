@@ -2918,7 +2918,7 @@ paths:
           - "504"
         strategy: backoff
     post:
-      description: Saves a running Simulation's current state and returns the Snapshot once the state is stored. Saving closes the Simulation's open event streams and WebSockets and does not change its state. Create Simulations from the Snapshot with snapshot_id; it outlives its Simulation. A stopped Simulation returns 409 simulation_stopped. Reuse the Idempotency-Key to retry safely.
+      description: Starts saving a running Simulation's current state and returns the Snapshot with status creating. Poll it until it is ready, or failed with an error. Saving closes the Simulation's open event streams and WebSockets and does not change its state; while it saves, an advance returns 409 clock_conflict, and a stop waits for it. Create Simulations from a ready Snapshot with snapshot_id; it outlives its Simulation. A stopped Simulation returns 409 simulation_stopped. Reuse the Idempotency-Key to retry safely.
       operationId: create-simulation-snapshot
       parameters:
         - description: Optional key for retrying this create safely. A retry with the same key and request returns the original result with its status; the same key with a different request returns 409 idempotency_conflict. Without a key, each request creates a new resource.
@@ -2934,12 +2934,12 @@ paths:
               $ref: "#/components/schemas/CreateSimulationSnapshotRequest"
         required: true
       responses:
-        "201":
+        "202":
           content:
             application/json:
               schema:
                 $ref: "#/components/schemas/SimulationSnapshot"
-          description: Created
+          description: Accepted
         "400":
           content:
             application/problem+json:
@@ -3248,6 +3248,22 @@ paths:
           explode: false
           in: query
           name: snapshot_id
+          schema:
+            type: string
+        - description: Optional Simulation ID filter; repeat it to list up to 200 Simulations by ID. Absent lists every Simulation.
+          explode: true
+          in: query
+          name: id
+          schema:
+            items:
+              pattern: ^sim_[0-9A-HJKMNP-TV-Z]{26}$
+              type: string
+            maxItems: 200
+            type: array
+        - description: Optional filter for the Simulations this World owns.
+          explode: false
+          in: query
+          name: world_id
           schema:
             type: string
         - description: Page size. Values below 1 use 50. Values above 200 use 200.

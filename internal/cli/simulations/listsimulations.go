@@ -19,6 +19,8 @@ var listSimulationsCmdMeta = []flagutil.FlagMeta{
 	{FlagName: "simulator-id", FieldPath: "SimulatorID", Kind: flagutil.FlagKindString, Optional: true, Description: "Optional Simulator ID filter."},
 	{FlagName: "simulator-digest", FieldPath: "SimulatorDigest", Kind: flagutil.FlagKindString, Optional: true, Description: "Optional exact pinned OCI manifest digest filter."},
 	{FlagName: "snapshot-id", FieldPath: "SnapshotID", Kind: flagutil.FlagKindString, Optional: true, Description: "Optional filter for the Simulations started from this Snapshot."},
+	{FlagName: "id", Shorthand: "i", FieldPath: "ID", Kind: flagutil.FlagKindStringArray, Optional: true, Description: "Optional Simulation ID filter; repeat it to list up to 200 Simulations by ID. Absent lists every Simulation."},
+	{FlagName: "world-id", Shorthand: "w", FieldPath: "WorldID", Kind: flagutil.FlagKindString, Optional: true, Description: "Optional filter for the Simulations this World owns."},
 	{FlagName: "limit", Shorthand: "l", FieldPath: "Limit", Kind: flagutil.FlagKindInt64, Optional: true, HasDefault: true, DefaultInt: 50, Description: "Page size. Values below 1 use 50. Values above 200 use 200."},
 	{FlagName: "cursor", Shorthand: "c", FieldPath: "Cursor", Kind: flagutil.FlagKindString, Optional: true, Description: "Opaque next_cursor value from a previous page."},
 }
