@@ -8,7 +8,7 @@ import (
 	"github.com/continuous-labs-ai/cli/internal/sdk/sdkinternal/utils"
 )
 
-// BuildSimulatorRequestMode - What the Simulator simulates. api, the default, builds the vendor's API from a spec, or from a parent with instructions. web_app builds the vendor's logged-in web app and the private API behind it: it takes no spec, spec_kind or filter, needs exactly one Web App login credential in credential_ids, runs on a Claude model or combined, and starts with a Discovery stage that logs in and captures the app. With parent_id and instructions, it builds from a ready web_app Simulator and starts with that Simulator's captures instead of Discovery.
+// BuildSimulatorRequestMode - What the Simulator simulates. api, the default, builds the vendor's API from a spec, or from a parent with instructions. web_app builds the vendor's logged-in web app and the private API behind it: it takes no spec, spec_kind or filter, needs exactly one Web App login credential in credential_ids, runs on a Claude model or combined, and its builder and QA use the live app through that login. With parent_id and instructions, it builds from a ready web_app Simulator.
 type BuildSimulatorRequestMode string
 
 const (
@@ -102,13 +102,13 @@ func (e *BuildSimulatorRequestSpecKind) UnmarshalJSON(data []byte) error {
 }
 
 type BuildSimulatorRequest struct {
-	// Workspace credentials QA and the builder can call real systems with, to compare the Simulator with them. A build with credentials runs QA after its review rounds. At most 5. Each must belong to the workspace and have a base_url, except the one Web App login a Web App build needs, which its Discovery, Build and QA stages use. QA, and the builder of a Web App build, may create test objects in the live system and delete them or, where the API cannot, leave them in a final state; otherwise the builder sends only reads. Use a sandbox or test account.
+	// Workspace credentials QA and the builder can call real systems with, to compare the Simulator with them. A build with credentials runs QA after its review rounds. At most 5. Each must belong to the workspace and have a base_url, except the one Web App login a Web App build needs, which its Build and QA stages use. QA, and the builder of a Web App build, may create test objects in the live system and delete them or, where the API cannot, leave them in a final state; otherwise the builder sends only reads. Use a sandbox or test account.
 	CredentialIds []string `json:"credential_ids,omitzero"`
 	// Regular expressions (RE2 syntax) that select the operations to implement. Each is matched against the OpenAPI operationId, the WSDL operation name, or the GraphQL Query or Mutation field name; an operation is kept when any expression matches, and an OpenAPI operation without an operationId is dropped. At most 64 expressions of at most 1,024 characters each. Omit or send an empty list to keep every operation. Not allowed for an incremental build.
 	Filter []string `json:"filter,omitzero"`
 	// Instructions for the builder. Required for an incremental build. At most 16,384 characters and 65,536 UTF-8 bytes; must not be blank or contain U+0000.
 	Instructions *string `json:"instructions,omitzero"`
-	// What the Simulator simulates. api, the default, builds the vendor's API from a spec, or from a parent with instructions. web_app builds the vendor's logged-in web app and the private API behind it: it takes no spec, spec_kind or filter, needs exactly one Web App login credential in credential_ids, runs on a Claude model or combined, and starts with a Discovery stage that logs in and captures the app. With parent_id and instructions, it builds from a ready web_app Simulator and starts with that Simulator's captures instead of Discovery.
+	// What the Simulator simulates. api, the default, builds the vendor's API from a spec, or from a parent with instructions. web_app builds the vendor's logged-in web app and the private API behind it: it takes no spec, spec_kind or filter, needs exactly one Web App login credential in credential_ids, runs on a Claude model or combined, and its builder and QA use the live app through that login. With parent_id and instructions, it builds from a ready web_app Simulator.
 	Mode *BuildSimulatorRequestMode `default:"api" json:"mode"`
 	// Model that builds and reviews the Simulator. Defaults to combined. Its provider is derived from the model. combined currently builds, reviews, and runs QA exactly as claude-opus-5-5 does.
 	Model *BuildSimulatorRequestModel `default:"combined" json:"model"`

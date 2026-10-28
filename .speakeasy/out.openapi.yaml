@@ -483,7 +483,7 @@ components:
           spec_kind: openapi
       properties:
         credential_ids:
-          description: Workspace credentials QA and the builder can call real systems with, to compare the Simulator with them. A build with credentials runs QA after its review rounds. At most 5. Each must belong to the workspace and have a base_url, except the one Web App login a Web App build needs, which its Discovery, Build and QA stages use. QA, and the builder of a Web App build, may create test objects in the live system and delete them or, where the API cannot, leave them in a final state; otherwise the builder sends only reads. Use a sandbox or test account.
+          description: Workspace credentials QA and the builder can call real systems with, to compare the Simulator with them. A build with credentials runs QA after its review rounds. At most 5. Each must belong to the workspace and have a base_url, except the one Web App login a Web App build needs, which its Build and QA stages use. QA, and the builder of a Web App build, may create test objects in the live system and delete them or, where the API cannot, leave them in a final state; otherwise the builder sends only reads. Use a sandbox or test account.
           items:
             maxLength: 30
             pattern: ^crd_[0-9A-HJKMNP-TV-Z]{26}$
@@ -504,7 +504,7 @@ components:
           type: string
         mode:
           default: api
-          description: "What the Simulator simulates. api, the default, builds the vendor's API from a spec, or from a parent with instructions. web_app builds the vendor's logged-in web app and the private API behind it: it takes no spec, spec_kind or filter, needs exactly one Web App login credential in credential_ids, runs on a Claude model or combined, and starts with a Discovery stage that logs in and captures the app. With parent_id and instructions, it builds from a ready web_app Simulator and starts with that Simulator's captures instead of Discovery."
+          description: "What the Simulator simulates. api, the default, builds the vendor's API from a spec, or from a parent with instructions. web_app builds the vendor's logged-in web app and the private API behind it: it takes no spec, spec_kind or filter, needs exactly one Web App login credential in credential_ids, runs on a Claude model or combined, and its builder and QA use the live app through that login. With parent_id and instructions, it builds from a ready web_app Simulator."
           enum:
             - api
             - web_app
@@ -1601,7 +1601,7 @@ components:
             - catalog
           type: string
         spec_kind:
-          description: "The specification the Simulator was built from, or null until a build has read it. recorded is a Web App Simulator's: the calls its discovery journeys captured."
+          description: "The specification the Simulator was built from, or null until a build has read it. recorded is a Web App Simulator's: the app's origin."
           enum:
             - openapi
             - wsdl
@@ -1700,9 +1700,8 @@ components:
             - combined
           type: string
         phase:
-          description: "Agent phase: discovery while the discovery agent logs in to the vendor's web app and captures it, in a Web App build; research while the research agent indexes the documents and saves the vendor pages they lack; build for generation, review for the separate reviewer, qa while QA tests the running Simulator from outside, after the last review round of a build with credential_ids, finalize for author repair after review or QA. Null when not recorded."
+          description: "Agent phase: research while the research agent indexes the documents and saves the vendor pages they lack; build for generation, review for the separate reviewer, qa while QA tests the running Simulator from outside, after the last review round of a build with credential_ids, finalize for author repair after review or QA. Null when not recorded."
           enum:
-            - discovery
             - research
             - build
             - review
@@ -1817,7 +1816,7 @@ components:
       additionalProperties: false
       properties:
         agent_message:
-          description: Plain-text explanation from the build agent when it could not continue, or the problems the check of the documents' INDEX.md found. At most 4096 UTF-8 bytes.
+          description: Plain-text explanation from the build agent when it could not continue, or the problems the check of the build's index found. At most 4096 UTF-8 bytes.
           maxLength: 4096
           type:
             - string
@@ -1899,7 +1898,7 @@ components:
           minimum: 0
           type: integer
         status:
-          description: pending until the stage starts; running while the research agent indexes the documents and saves the vendor pages they lack; complete when it wrote an index that names every document; failed when it could not finish, which fails the build, or when the build ended first; provided when the documents included INDEX.md, so research did not run.
+          description: pending until the stage starts; running while the research agent indexes the documents and saves the vendor pages they lack; complete when it wrote an index that names every document; failed when it could not finish, which fails the build, or when the build ended first; provided when research did not run because the build already had an index.
           enum:
             - pending
             - running
@@ -4608,7 +4607,7 @@ paths:
               additionalProperties: false
               properties:
                 document:
-                  description: "Vendor documentation the builder and reviewer read before they start, as repeated file parts: UTF-8 text (.md, .txt, .html, .json, .yaml, .xml, .csv) or PDF (.pdf). The documents share the request body limit with the spec. An incremental build inherits its parent's documents and index; a document sent with the same name replaces the parent's. A document named INDEX.md indexes the others and skips research; the build fails if it names a document the build does not have, leaves a document unnamed, or leaves out a selected operation; an incremental build's documents include the inherited ones."
+                  description: "Vendor documentation the builder and reviewer read before they start, as repeated file parts: UTF-8 text (.md, .txt, .html, .json, .yaml, .xml, .csv) or PDF (.pdf). The documents share the request body limit with the spec. An incremental build inherits its parent's documents; a document sent with the same name replaces the parent's."
                   items:
                     contentEncoding: binary
                     contentMediaType: application/octet-stream

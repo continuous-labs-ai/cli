@@ -1,19 +1,19 @@
 lockVersion: 2.0.0
 id: ad7b08dc-357d-414c-9f26-16cfbc099767
 management:
-  docChecksum: dc1d8c6589708b2d1f061039547cb610
+  docChecksum: 168c67349ecdfe253d6d149cac1638ab
   docVersion: v1
   speakeasyVersion: 1.796.4
   generationVersion: 2.935.1
-  releaseVersion: 0.4.1
-  configChecksum: 7decf9bcdbfbaf6adf15111e77430a20
+  releaseVersion: 0.4.2
+  configChecksum: 8c14e4447a1762a1d0ebcac8c757dd3e
   repoURL: https://github.com/continuous-labs-ai/cli.git
   installationURL: https://github.com/continuous-labs-ai/cli
   published: true
 persistentEdits:
-  generation_id: f585b386-f156-4296-b117-43a7715f9a06
-  pristine_commit_hash: 284f74409e488adc99b00180cdbf1c9c0a138439
-  pristine_tree_hash: 305283ca937173202cab5559840c75cbd1864cd3
+  generation_id: a617e54e-aaac-4263-9830-246968426fe9
+  pristine_commit_hash: b4c323ba28bb07aeefdd4fcf7929ef1ad4b51162
+  pristine_tree_hash: f522e8e626ff44ed3f7c2ced8ccb63a15381c181
 features:
   cli:
     constsAndDefaults: 0.0.0
@@ -168,8 +168,8 @@ trackedFiles:
     pristine_git_object: ba8cab6c9efce56f426da1d966c64c3feedc4e16
   internal/cli/simulators/buildsimulator.go:
     id: 8588410bc4ea
-    last_write_checksum: sha1:b7f2bbc9a86715d794f8cb16820d0c4f2c4d0003
-    pristine_git_object: 0f77dd95d379ef9572796b69e680041365a29cc5
+    last_write_checksum: sha1:ac8f97cc9eadd5cd4d7e4164f7baf553368d85c9
+    pristine_git_object: 3ba262be7b45ccb11978876aabe41b45bc32279a
   internal/cli/simulators/cancelsimulator.go:
     id: 31eb0eac2613
     last_write_checksum: sha1:43a72e427b757a4612590eece35d75a467061fc2
@@ -200,8 +200,8 @@ trackedFiles:
     pristine_git_object: d588e896afd8d8b7719740f3af260a101587fb40
   internal/cli/version.go:
     id: 7b0665492f72
-    last_write_checksum: sha1:ae8d70c1a034b23d136f506776bdb0f29a00a946
-    pristine_git_object: 09e8a59c37cc188d5847eba2bfcdb08012f47750
+    last_write_checksum: sha1:4764a22313030e77855e4f3d0db2ca06fbfe1e99
+    pristine_git_object: 4c7e8dfeaa14a88641a12e920d90ac7197d3f39e
   internal/cli/whoami.go:
     id: c1787f2298ec
     last_write_checksum: sha1:9b8e8f6830e556f749eede72d72b4f18d9881c28
@@ -336,8 +336,8 @@ trackedFiles:
     pristine_git_object: 942a964e78a81ad9d9590cc67138a0c4c3569fc9
   internal/sdk/continuoussimulation.go:
     id: af3aeba7b54c
-    last_write_checksum: sha1:1e7494e690bb7f035a52927d7eaaf0a54ddb97e5
-    pristine_git_object: 68f38866e86c6aa3544f7280f50e1c9a0325164c
+    last_write_checksum: sha1:7fcbeeb65af7dcc2620faf3d353d045946d6468c
+    pristine_git_object: a29110c682bbcc9435e25993f601650d5db9d809
   internal/sdk/credentials.go:
     id: 67c2f2d273f9
     last_write_checksum: sha1:129ee524a7455add86f1f2da71ea6329114eb38b
@@ -356,8 +356,8 @@ trackedFiles:
     pristine_git_object: 6a77d15dce5c36ee75de917155b8d26b56bfd6fd
   internal/sdk/models/components/buildsimulatorrequest.go:
     id: 510b20fc8bb2
-    last_write_checksum: sha1:864992a7184a26021cb9c9d38a6cb0eafb411215
-    pristine_git_object: 459e4b8c2ed3f252521af7c76f3255d2b8436e6c
+    last_write_checksum: sha1:47eac64665fcabdc29caf5fd8c3c66b2b56c5098
+    pristine_git_object: 70aaf79b7547e3cd82b445e86cfbadfa53de4c3e
   internal/sdk/models/components/buildworldrequest.go:
     id: 8827e29faed8
     last_write_checksum: sha1:0c14eb32c8bd2865a809ae1e392de777eab650d1
@@ -476,32 +476,32 @@ trackedFiles:
     pristine_git_object: e348d0953156edab1e2a8358c293152f45db3eaf
   internal/sdk/models/components/simulator.go:
     id: cb287534b8b9
-    last_write_checksum: sha1:e8c2293647a9894ec3eff0bba45af901e719c1f8
-    pristine_git_object: 8c64c868bdfde6043b08099450debc0e9d290570
+    last_write_checksum: sha1:538ce6879609a6c5619dfa13a00972a9688b9a60
+    pristine_git_object: e98611e81e90b7fe86678756191a63dbe1db63f3
   internal/sdk/models/components/simulatoractor.go:
     id: 0ca594244eb8
     last_write_checksum: sha1:d2c5523bd556c99e902dc82963ed8b6ddcbcfc2c
     pristine_git_object: 74021da03198934d6e12a3dd1618d804010102f6
   internal/sdk/models/components/simulatorbuildprogress.go:
     id: a03d1ca01fab
-    last_write_checksum: sha1:8baa532b2e1d05869d2b06ddcf281f71fa00d0f6
-    pristine_git_object: 63be5138e717fa590ab92f0357800959199a10da
+    last_write_checksum: sha1:40ef10cb96ab5d5f9da69e6c50f1c56a87392caf
+    pristine_git_object: 0bb979eb4d13bb344b413327d26e21825a86a89e
   internal/sdk/models/components/simulatordependents.go:
     id: b8240c8e2ad3
     last_write_checksum: sha1:07ae0cd6233b84dd00b4202297ff7e03a84fab51
     pristine_git_object: 24c56bc06017a651027f4db4d3cf6418fedaf60d
   internal/sdk/models/components/simulatorerror.go:
     id: 8c6cc460c5e3
-    last_write_checksum: sha1:b8399ff975183caba624c9b1bbb644814620c0f2
-    pristine_git_object: 44da51e2f5c45786e9251ec7f8b4d13ec0d76c76
+    last_write_checksum: sha1:21b496de7b00abc23498f17b0ee159c743800cd1
+    pristine_git_object: 16b5a29c0618c1f8113c937a7ac8725944410b04
   internal/sdk/models/components/simulatorpublication.go:
     id: 73a69684f56b
     last_write_checksum: sha1:799e515bdb4ec33de9abf08f316b92dc729adab5
     pristine_git_object: d2a1bcbd0c00fb7f7694afca273be2894ddcce36
   internal/sdk/models/components/simulatorresearch.go:
     id: 39f3e0d9c99c
-    last_write_checksum: sha1:c3a707055e2df73603533d1babbeb83ed1771477
-    pristine_git_object: 376b65ed3fc24479b67a55cee2b5eff29aa6aa45
+    last_write_checksum: sha1:87dbae393dc38728db3712d840d7e810caabd321
+    pristine_git_object: 55396f97669967dbb48b502aad75fa648864d094
   internal/sdk/models/components/specificationissue.go:
     id: ac5031dc5758
     last_write_checksum: sha1:08381f7cd64073a8977cc591c090f0b1d3613c6f
@@ -576,8 +576,8 @@ trackedFiles:
     pristine_git_object: e04afd16279307db6d20a68a5d74b1a53a44e94b
   internal/sdk/models/operations/buildsimulator.go:
     id: 0ead813b1137
-    last_write_checksum: sha1:77bbe863a721bfed404ddd6e4861a9820cd260ea
-    pristine_git_object: 8c50488c9c5f4394d0c3fee75a0e1cf2cd9538f0
+    last_write_checksum: sha1:1675deadba76b3c6c72395e5720f3c6e403eee04
+    pristine_git_object: 34209785848b39a0241fa103d01a865e8b7882c0
   internal/sdk/models/operations/buildworld.go:
     id: ae2781abebd1
     last_write_checksum: sha1:dfe8973e0d16cb06067b907a12293d39176ce7b2
@@ -860,8 +860,8 @@ trackedFiles:
     pristine_git_object: 159a87ec97aba99e4edd132f69652e123434303e
   internal/usage/schema.go:
     id: 0f40f4612437
-    last_write_checksum: sha1:1a601a25e8f9df83daf8103554d706a6cbbb9706
-    pristine_git_object: 15f62f34f99b5954c89d60b2d13b9f0cb5b5f306
+    last_write_checksum: sha1:07bdec8cc256e4f6fe102d016116cd26ac72cc21
+    pristine_git_object: 56309387a0f2c709c4faa547b8c5170edd5a229b
   scripts/install.ps1:
     id: fee0853709e9
     last_write_checksum: sha1:2da33f25afaa301dc2a22ac12654c585cef5c572
@@ -2418,5 +2418,8 @@ examples:
 examplesVersion: 1.0.2
 releaseNotes: |
   ## Cli SDK Changes:
-  * `ContinuousSimulation.SimulationSnapshots.CreateSimulationSnapshot()`:  `response` **Changed** (Breaking ⚠️)
-  * `ContinuousSimulation.Simulations.ListSimulations()`:  `request.Request` **Changed**
+  * `ContinuousSimulation.Simulators.ListSimulators()`:  `response.Simulators[].Build.Phase.Enum(discovery)` **Removed** (Breaking ⚠️)
+  * `ContinuousSimulation.Simulators.BuildSimulator()`:  `response.Build.Phase.Enum(discovery)` **Removed** (Breaking ⚠️)
+  * `ContinuousSimulation.Simulators.GetSimulator()`:  `response.Build.Phase.Enum(discovery)` **Removed** (Breaking ⚠️)
+  * `ContinuousSimulation.Simulators.UpdateSimulator()`:  `response.Build.Phase.Enum(discovery)` **Removed** (Breaking ⚠️)
+  * `ContinuousSimulation.Simulators.CancelSimulator()`:  `response.Build.Phase.Enum(discovery)` **Removed** (Breaking ⚠️)

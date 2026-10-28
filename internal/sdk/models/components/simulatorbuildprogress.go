@@ -52,16 +52,15 @@ func (e *SimulatorBuildProgressModel) IsExact() bool {
 	return false
 }
 
-// SimulatorBuildProgressPhase - Agent phase: discovery while the discovery agent logs in to the vendor's web app and captures it, in a Web App build; research while the research agent indexes the documents and saves the vendor pages they lack; build for generation, review for the separate reviewer, qa while QA tests the running Simulator from outside, after the last review round of a build with credential_ids, finalize for author repair after review or QA. Null when not recorded.
+// SimulatorBuildProgressPhase - Agent phase: research while the research agent indexes the documents and saves the vendor pages they lack; build for generation, review for the separate reviewer, qa while QA tests the running Simulator from outside, after the last review round of a build with credential_ids, finalize for author repair after review or QA. Null when not recorded.
 type SimulatorBuildProgressPhase string
 
 const (
-	SimulatorBuildProgressPhaseDiscovery SimulatorBuildProgressPhase = "discovery"
-	SimulatorBuildProgressPhaseResearch  SimulatorBuildProgressPhase = "research"
-	SimulatorBuildProgressPhaseBuild     SimulatorBuildProgressPhase = "build"
-	SimulatorBuildProgressPhaseReview    SimulatorBuildProgressPhase = "review"
-	SimulatorBuildProgressPhaseQa        SimulatorBuildProgressPhase = "qa"
-	SimulatorBuildProgressPhaseFinalize  SimulatorBuildProgressPhase = "finalize"
+	SimulatorBuildProgressPhaseResearch SimulatorBuildProgressPhase = "research"
+	SimulatorBuildProgressPhaseBuild    SimulatorBuildProgressPhase = "build"
+	SimulatorBuildProgressPhaseReview   SimulatorBuildProgressPhase = "review"
+	SimulatorBuildProgressPhaseQa       SimulatorBuildProgressPhase = "qa"
+	SimulatorBuildProgressPhaseFinalize SimulatorBuildProgressPhase = "finalize"
 )
 
 func (e SimulatorBuildProgressPhase) ToPointer() *SimulatorBuildProgressPhase {
@@ -72,7 +71,7 @@ func (e SimulatorBuildProgressPhase) ToPointer() *SimulatorBuildProgressPhase {
 func (e *SimulatorBuildProgressPhase) IsExact() bool {
 	if e != nil {
 		switch *e {
-		case "discovery", "research", "build", "review", "qa", "finalize":
+		case "research", "build", "review", "qa", "finalize":
 			return true
 		}
 	}
@@ -114,7 +113,7 @@ type SimulatorBuildProgress struct {
 	Limitations []Limitation `json:"limitations"`
 	// The model the builder and reviewer run on, or combined, which currently runs as claude-opus-5-5. A build recorded before model selection reports its provider's default.
 	Model SimulatorBuildProgressModel `json:"model"`
-	// Agent phase: discovery while the discovery agent logs in to the vendor's web app and captures it, in a Web App build; research while the research agent indexes the documents and saves the vendor pages they lack; build for generation, review for the separate reviewer, qa while QA tests the running Simulator from outside, after the last review round of a build with credential_ids, finalize for author repair after review or QA. Null when not recorded.
+	// Agent phase: research while the research agent indexes the documents and saves the vendor pages they lack; build for generation, review for the separate reviewer, qa while QA tests the running Simulator from outside, after the last review round of a build with credential_ids, finalize for author repair after review or QA. Null when not recorded.
 	Phase *SimulatorBuildProgressPhase `json:"phase"`
 	// Review round that phase review, qa, or finalize belongs to, from 1. In a build with credential_ids, QA and the repair after it are in round review_rounds + 1. 0 before the first review.
 	ReviewRound int64 `json:"review_round"`
