@@ -2,13 +2,14 @@
 
 package components
 
-// SpecificationIssueKind - Whether the input is invalid, unsupported, incomplete, or has no specific diagnosis.
+// SpecificationIssueKind - Whether the input is invalid, unsupported, incomplete, exceeds a build limit, or has no specific diagnosis.
 type SpecificationIssueKind string
 
 const (
 	SpecificationIssueKindInvalid     SpecificationIssueKind = "invalid"
 	SpecificationIssueKindUnsupported SpecificationIssueKind = "unsupported"
 	SpecificationIssueKindIncomplete  SpecificationIssueKind = "incomplete"
+	SpecificationIssueKindLimit       SpecificationIssueKind = "limit"
 	SpecificationIssueKindUnknown     SpecificationIssueKind = "unknown"
 )
 
@@ -20,7 +21,7 @@ func (e SpecificationIssueKind) ToPointer() *SpecificationIssueKind {
 func (e *SpecificationIssueKind) IsExact() bool {
 	if e != nil {
 		switch *e {
-		case "invalid", "unsupported", "incomplete", "unknown":
+		case "invalid", "unsupported", "incomplete", "limit", "unknown":
 			return true
 		}
 	}
@@ -30,7 +31,7 @@ func (e *SpecificationIssueKind) IsExact() bool {
 type SpecificationIssue struct {
 	// Stable validation rule code.
 	Code string `json:"code"`
-	// Whether the input is invalid, unsupported, incomplete, or has no specific diagnosis.
+	// Whether the input is invalid, unsupported, incomplete, exceeds a build limit, or has no specific diagnosis.
 	Kind SpecificationIssueKind `json:"kind"`
 	// Readable endpoint or field affected by this issue.
 	Location string `json:"location"`

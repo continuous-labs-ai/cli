@@ -1,19 +1,19 @@
 lockVersion: 2.0.0
 id: ad7b08dc-357d-414c-9f26-16cfbc099767
 management:
-  docChecksum: 168c67349ecdfe253d6d149cac1638ab
+  docChecksum: 1e8306dd3721d9984443ffeb61b337f6
   docVersion: v1
   speakeasyVersion: 1.796.4
   generationVersion: 2.935.1
-  releaseVersion: 0.4.2
-  configChecksum: 8c14e4447a1762a1d0ebcac8c757dd3e
+  releaseVersion: 0.4.3
+  configChecksum: 979dc2b849e43e2ae7513ff93d872eae
   repoURL: https://github.com/continuous-labs-ai/cli.git
   installationURL: https://github.com/continuous-labs-ai/cli
   published: true
 persistentEdits:
-  generation_id: a617e54e-aaac-4263-9830-246968426fe9
-  pristine_commit_hash: b4c323ba28bb07aeefdd4fcf7929ef1ad4b51162
-  pristine_tree_hash: f522e8e626ff44ed3f7c2ced8ccb63a15381c181
+  generation_id: 117646f3-78b0-4249-9ad1-dd3dfe1fb618
+  pristine_commit_hash: 015580f74a84b8613d1d33ba765c2a0411dbd50d
+  pristine_tree_hash: e4c2905633621a74d94a0371e13cf22161cac4b8
 features:
   cli:
     constsAndDefaults: 0.0.0
@@ -200,8 +200,8 @@ trackedFiles:
     pristine_git_object: d588e896afd8d8b7719740f3af260a101587fb40
   internal/cli/version.go:
     id: 7b0665492f72
-    last_write_checksum: sha1:4764a22313030e77855e4f3d0db2ca06fbfe1e99
-    pristine_git_object: 4c7e8dfeaa14a88641a12e920d90ac7197d3f39e
+    last_write_checksum: sha1:f23bf780d45bd639edca355e6e410a8f7f7835f2
+    pristine_git_object: 7ac5f72824afb129f6b54afded0eecbc8531eba2
   internal/cli/whoami.go:
     id: c1787f2298ec
     last_write_checksum: sha1:9b8e8f6830e556f749eede72d72b4f18d9881c28
@@ -336,8 +336,8 @@ trackedFiles:
     pristine_git_object: 942a964e78a81ad9d9590cc67138a0c4c3569fc9
   internal/sdk/continuoussimulation.go:
     id: af3aeba7b54c
-    last_write_checksum: sha1:7fcbeeb65af7dcc2620faf3d353d045946d6468c
-    pristine_git_object: a29110c682bbcc9435e25993f601650d5db9d809
+    last_write_checksum: sha1:333cfe8e5b7af26ebb1afbcca42130bdfc754063
+    pristine_git_object: 17d2574ed17a8e5045f2e3ea436d87472706aa24
   internal/sdk/credentials.go:
     id: 67c2f2d273f9
     last_write_checksum: sha1:129ee524a7455add86f1f2da71ea6329114eb38b
@@ -504,8 +504,8 @@ trackedFiles:
     pristine_git_object: 55396f97669967dbb48b502aad75fa648864d094
   internal/sdk/models/components/specificationissue.go:
     id: ac5031dc5758
-    last_write_checksum: sha1:08381f7cd64073a8977cc591c090f0b1d3613c6f
-    pristine_git_object: 8fa81486583f235f34c64d92243d3b41a5949e62
+    last_write_checksum: sha1:61579c66bd5a166008510b4b72b29ee0716d9fca
+    pristine_git_object: b98b2d9f21ea085e15e045209cb8519201d0351f
   internal/sdk/models/components/specificationvalidation.go:
     id: cac50c09d542
     last_write_checksum: sha1:dbff6a5503115ed86356efb50d0965d5dec1ad67
@@ -860,8 +860,8 @@ trackedFiles:
     pristine_git_object: 159a87ec97aba99e4edd132f69652e123434303e
   internal/usage/schema.go:
     id: 0f40f4612437
-    last_write_checksum: sha1:07bdec8cc256e4f6fe102d016116cd26ac72cc21
-    pristine_git_object: 56309387a0f2c709c4faa547b8c5170edd5a229b
+    last_write_checksum: sha1:a7ffb9d16415f970eaea8936a7def7651e36e664
+    pristine_git_object: 366a4545a9062f89e296691d8e7ad332f8891b7d
   scripts/install.ps1:
     id: fee0853709e9
     last_write_checksum: sha1:2da33f25afaa301dc2a22ac12654c585cef5c572
@@ -2416,10 +2416,4 @@ examples:
         "500":
           application/problem+json: {"code": "<value>", "detail": "<value>", "validation": {"issues": []}}
 examplesVersion: 1.0.2
-releaseNotes: |
-  ## Cli SDK Changes:
-  * `ContinuousSimulation.Simulators.ListSimulators()`:  `response.Simulators[].Build.Phase.Enum(discovery)` **Removed** (Breaking ⚠️)
-  * `ContinuousSimulation.Simulators.BuildSimulator()`:  `response.Build.Phase.Enum(discovery)` **Removed** (Breaking ⚠️)
-  * `ContinuousSimulation.Simulators.GetSimulator()`:  `response.Build.Phase.Enum(discovery)` **Removed** (Breaking ⚠️)
-  * `ContinuousSimulation.Simulators.UpdateSimulator()`:  `response.Build.Phase.Enum(discovery)` **Removed** (Breaking ⚠️)
-  * `ContinuousSimulation.Simulators.CancelSimulator()`:  `response.Build.Phase.Enum(discovery)` **Removed** (Breaking ⚠️)
+releaseNotes: "## Cli SDK Changes:\n* `ContinuousSimulation.Credentials.ListCredentials()`:  `error.Validation.Issues[].Kind.Enum(limit)` **Added**\n* `ContinuousSimulation.Credentials.CreateCredential()`:  `error.Validation.Issues[].Kind.Enum(limit)` **Added**\n* `ContinuousSimulation.Credentials.DeleteCredential()`:  `error.Validation.Issues[].Kind.Enum(limit)` **Added**\n* `ContinuousSimulation.Credentials.GetCredential()`:  `error.Validation.Issues[].Kind.Enum(limit)` **Added**\n* `ContinuousSimulation.Credentials.UpdateCredential()`:  `error.Validation.Issues[].Kind.Enum(limit)` **Added**\n* `ContinuousSimulation.SimulationSnapshots.ListSimulationSnapshots()`:  `error.Validation.Issues[].Kind.Enum(limit)` **Added**\n* `ContinuousSimulation.SimulationSnapshots.CreateSimulationSnapshot()`:  `error.Validation.Issues[].Kind.Enum(limit)` **Added**\n* `ContinuousSimulation.SimulationSnapshots.DeleteSimulationSnapshot()`:  `error.Validation.Issues[].Kind.Enum(limit)` **Added**\n* `ContinuousSimulation.SimulationSnapshots.GetSimulationSnapshot()`:  `error.Validation.Issues[].Kind.Enum(limit)` **Added**\n* `ContinuousSimulation.SimulationSnapshots.UpdateSimulationSnapshot()`:  `error.Validation.Issues[].Kind.Enum(limit)` **Added**\n* `ContinuousSimulation.Simulations.ListSimulations()`:  `error.Validation.Issues[].Kind.Enum(limit)` **Added**\n* `ContinuousSimulation.Simulations.CreateSimulation()`:  `error.Validation.Issues[].Kind.Enum(limit)` **Added**\n* `ContinuousSimulation.Simulations.DeleteSimulation()`:  `error.Validation.Issues[].Kind.Enum(limit)` **Added**\n* `ContinuousSimulation.Simulations.GetSimulation()`:  `error.Validation.Issues[].Kind.Enum(limit)` **Added**\n* `ContinuousSimulation.Simulations.UpdateSimulation()`:  `error.Validation.Issues[].Kind.Enum(limit)` **Added**\n* `ContinuousSimulation.Simulations.CreateSimulationAdvance()`:  `error.Validation.Issues[].Kind.Enum(limit)` **Added**\n* `ContinuousSimulation.Simulations.GetSimulationAdvance()`:  `error.Validation.Issues[].Kind.Enum(limit)` **Added**\n* `ContinuousSimulation.Simulations.ListSimulationAdvanceEvents()`:  `error.Validation.Issues[].Kind.Enum(limit)` **Added**\n* `ContinuousSimulation.Simulations.StartSimulation()`:  `error.Validation.Issues[].Kind.Enum(limit)` **Added**\n* `ContinuousSimulation.Simulations.ListSimulationSteps()`:  `error.Validation.Issues[].Kind.Enum(limit)` **Added**\n* `ContinuousSimulation.Simulations.StopSimulation()`:  `error.Validation.Issues[].Kind.Enum(limit)` **Added**\n* `ContinuousSimulation.Simulations.GetSimulationToken()`:  `error.Validation.Issues[].Kind.Enum(limit)` **Added**\n* `ContinuousSimulation.Simulations.RegenerateSimulationToken()`:  `error.Validation.Issues[].Kind.Enum(limit)` **Added**\n* `ContinuousSimulation.Simulators.ListSimulators()`: \n  *  `response.Simulators[].Error.Validation.Issues[].Kind.Enum(limit)` **Added**\n  *  `error.Validation.Issues[].Kind.Enum(limit)` **Added**\n* `ContinuousSimulation.Simulators.BuildSimulator()`: \n  *  `response.Error.Validation.Issues[].Kind.Enum(limit)` **Added**\n  *  `error.Validation.Issues[].Kind.Enum(limit)` **Added**\n* `ContinuousSimulation.Simulators.DeleteSimulator()`:  `error.Validation.Issues[].Kind.Enum(limit)` **Added**\n* `ContinuousSimulation.Simulators.GetSimulator()`: \n  *  `response.Error.Validation.Issues[].Kind.Enum(limit)` **Added**\n  *  `error.Validation.Issues[].Kind.Enum(limit)` **Added**\n* `ContinuousSimulation.Simulators.UpdateSimulator()`: \n  *  `response.Error.Validation.Issues[].Kind.Enum(limit)` **Added**\n  *  `error.Validation.Issues[].Kind.Enum(limit)` **Added**\n* `ContinuousSimulation.Simulators.CancelSimulator()`: \n  *  `response.Error.Validation.Issues[].Kind.Enum(limit)` **Added**\n  *  `error.Validation.Issues[].Kind.Enum(limit)` **Added**\n* `ContinuousSimulation.Simulators.CloneSimulator()`:  `error.Validation.Issues[].Kind.Enum(limit)` **Added**\n* `ContinuousSimulation.Worlds.ListWorlds()`:  `error.Validation.Issues[].Kind.Enum(limit)` **Added**\n* `ContinuousSimulation.Worlds.BuildWorld()`:  `error.Validation.Issues[].Kind.Enum(limit)` **Added**\n* `ContinuousSimulation.Worlds.DeleteWorld()`:  `error.Validation.Issues[].Kind.Enum(limit)` **Added**\n* `ContinuousSimulation.Worlds.GetWorld()`:  `error.Validation.Issues[].Kind.Enum(limit)` **Added**\n* `ContinuousSimulation.Worlds.UpdateWorld()`:  `error.Validation.Issues[].Kind.Enum(limit)` **Added**\n* `ContinuousSimulation.Worlds.CreateWorldAdvance()`:  `error.Validation.Issues[].Kind.Enum(limit)` **Added**\n* `ContinuousSimulation.Worlds.GetWorldAdvance()`:  `error.Validation.Issues[].Kind.Enum(limit)` **Added**\n* `ContinuousSimulation.Worlds.CancelWorld()`:  `error.Validation.Issues[].Kind.Enum(limit)` **Added**\n* `ContinuousSimulation.Worlds.GetWorldChange()`:  `error.Validation.Issues[].Kind.Enum(limit)` **Added**\n* `ContinuousSimulation.Worlds.AddWorldSimulation()`:  `error.Validation.Issues[].Kind.Enum(limit)` **Added**\n* `ContinuousSimulation.Worlds.RemoveWorldSimulation()`:  `error.Validation.Issues[].Kind.Enum(limit)` **Added**\n* `ContinuousSimulation.Worlds.StartWorld()`:  `error.Validation.Issues[].Kind.Enum(limit)` **Added**\n* `ContinuousSimulation.Worlds.StopWorld()`:  `error.Validation.Issues[].Kind.Enum(limit)` **Added**\n"
