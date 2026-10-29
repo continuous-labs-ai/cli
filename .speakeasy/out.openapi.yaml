@@ -1918,11 +1918,12 @@ components:
           description: Stable validation rule code.
           type: string
         kind:
-          description: Whether the input is invalid, unsupported, incomplete, or has no specific diagnosis.
+          description: Whether the input is invalid, unsupported, incomplete, exceeds a build limit, or has no specific diagnosis.
           enum:
             - invalid
             - unsupported
             - incomplete
+            - limit
             - unknown
           type: string
         location:
