@@ -63,8 +63,6 @@ type Simulation struct {
 	StartTime time.Time `json:"start_time"`
 	// Current status. starting means its runtime is booting; read the Simulation until it is running. running serves requests; after a period without requests, the first request can take longer while the Simulation resumes. stopping means its state is being saved, and stopped means it is saved; requests return 409 in both until you start it.
 	Status SimulationStatus `json:"status"`
-	// ID of the World that owns this Simulation, or null.
-	WorldID *string `json:"world_id"`
 }
 
 func (s Simulation) MarshalJSON() ([]byte, error) {
@@ -181,11 +179,4 @@ func (s *Simulation) GetStatus() SimulationStatus {
 		return SimulationStatus("")
 	}
 	return s.Status
-}
-
-func (s *Simulation) GetWorldID() *string {
-	if s == nil {
-		return nil
-	}
-	return s.WorldID
 }

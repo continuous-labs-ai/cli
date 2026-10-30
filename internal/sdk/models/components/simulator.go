@@ -78,7 +78,7 @@ func (e *SimulatorSpecKind) IsExact() bool {
 	return false
 }
 
-// SimulatorStatus - pending while waiting for capacity; building while the build runs; ready when Simulations, Worlds, and incremental builds can use it; failed when the build failed; canceled when a cancel request took effect.
+// SimulatorStatus - pending while waiting for capacity; building while the build runs; ready when Simulations and incremental builds can use it; failed when the build failed; canceled when a cancel request took effect.
 type SimulatorStatus string
 
 const (
@@ -130,7 +130,7 @@ type Simulator struct {
 	Source Source `json:"source"`
 	// The specification the Simulator was built from, or null until a build has read it. recorded is a Web App Simulator's: the app's origin.
 	SpecKind *SimulatorSpecKind `json:"spec_kind"`
-	// pending while waiting for capacity; building while the build runs; ready when Simulations, Worlds, and incremental builds can use it; failed when the build failed; canceled when a cancel request took effect.
+	// pending while waiting for capacity; building while the build runs; ready when Simulations and incremental builds can use it; failed when the build failed; canceled when a cancel request took effect.
 	Status SimulatorStatus `json:"status"`
 }
 

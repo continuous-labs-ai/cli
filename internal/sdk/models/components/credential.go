@@ -18,7 +18,8 @@ type Credential struct {
 	ID    string           `json:"id"`
 	Login *CredentialLogin `json:"login"`
 	// Credential name. Names need not be unique.
-	Name string `json:"name"`
+	Name  string           `json:"name"`
+	Oauth *CredentialOAuth `json:"oauth"`
 }
 
 func (c Credential) MarshalJSON() ([]byte, error) {
@@ -72,4 +73,11 @@ func (c *Credential) GetName() string {
 		return ""
 	}
 	return c.Name
+}
+
+func (c *Credential) GetOauth() *CredentialOAuth {
+	if c == nil {
+		return nil
+	}
+	return c.Oauth
 }

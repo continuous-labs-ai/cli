@@ -23,7 +23,7 @@ func initDeleteSimulationCmd(parent *cobra.Command) error {
 	var cmd = &cobra.Command{
 		Use:     "delete",
 		Short:   "Delete Simulation",
-		Long:    "Deletes a Simulation and its saved runtime state, and cancels an active advance. Delete World-owned Simulations through their World.",
+		Long:    "Deletes a Simulation and its saved runtime state, and cancels an active advance.",
 		Example: "  continuous simulations delete --id <id>",
 		RunE:    runDeleteSimulationCmd,
 	}

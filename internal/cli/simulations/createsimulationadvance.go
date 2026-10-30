@@ -25,7 +25,7 @@ func initCreateSimulationAdvanceCmd(parent *cobra.Command) error {
 	var cmd = &cobra.Command{
 		Use:     "create-simulation-advance",
 		Short:   "Advance Simulation Time",
-		Long:    "Schedules an absolute clock advance. An advance commits due local events in ordered batches, one step each; a failure keeps the batches already committed. World members advance through their World. Poll the returned operation until it completes.",
+		Long:    "Schedules an absolute clock advance. An advance commits due local events in ordered batches, one step each; a failure keeps the batches already committed. Poll the returned operation until it completes.",
 		Example: "  continuous simulations create-simulation-advance --id <id> --idempotency-key <value> --to 2026-07-12T00:40:22.318Z",
 		RunE:    runCreateSimulationAdvanceCmd,
 		Aliases: []string{"csa"},

@@ -44,7 +44,7 @@ type ClockAdvance struct {
 	Members []ClockAdvanceMember `json:"members"`
 	// Durable operation state. Poll while pending or running.
 	Status ClockAdvanceStatus `json:"status"`
-	// Committed local step, or null for no change or a World operation.
+	// Committed local step, or null for no change.
 	Step *int64 `json:"step"`
 	// Requested absolute target time.
 	To time.Time `json:"to"`
