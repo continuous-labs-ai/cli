@@ -606,7 +606,7 @@ func (s *Simulations) CreateSimulation(ctx context.Context, request operations.C
 }
 
 // DeleteSimulation - Delete Simulation
-// Deletes a Simulation and its saved runtime state, and cancels an active advance. Delete World-owned Simulations through their World.
+// Deletes a Simulation and its saved runtime state, and cancels an active advance.
 func (s *Simulations) DeleteSimulation(ctx context.Context, request operations.DeleteSimulationRequest, opts ...operations.Option) (*operations.DeleteSimulationResponse, error) {
 	o := operations.Options{}
 	supportedOptions := []string{
@@ -713,8 +713,6 @@ func (s *Simulations) DeleteSimulation(ctx context.Context, request operations.D
 	case httpRes.StatusCode == 403:
 		fallthrough
 	case httpRes.StatusCode == 404:
-		fallthrough
-	case httpRes.StatusCode == 409:
 		switch {
 		case utils.MatchContentType(httpRes.Header.Get("Content-Type"), `application/problem+json`):
 			rawBody, err := utils.ConsumeRawBody(httpRes)
@@ -1074,7 +1072,7 @@ func (s *Simulations) GetSimulation(ctx context.Context, request operations.GetS
 }
 
 // UpdateSimulation - Update Simulation
-// Renames a Simulation or replaces its metadata. Omitted fields keep their current values. Update World-owned Simulations through their World.
+// Renames a Simulation or replaces its metadata. Omitted fields keep their current values.
 func (s *Simulations) UpdateSimulation(ctx context.Context, request operations.UpdateSimulationRequest, opts ...operations.Option) (*operations.UpdateSimulationResponse, error) {
 	o := operations.Options{}
 	supportedOptions := []string{
@@ -1222,8 +1220,6 @@ func (s *Simulations) UpdateSimulation(ctx context.Context, request operations.U
 		fallthrough
 	case httpRes.StatusCode == 408:
 		fallthrough
-	case httpRes.StatusCode == 409:
-		fallthrough
 	case httpRes.StatusCode == 413:
 		fallthrough
 	case httpRes.StatusCode == 415:
@@ -1305,7 +1301,7 @@ func (s *Simulations) UpdateSimulation(ctx context.Context, request operations.U
 }
 
 // CreateSimulationAdvance - Advance Simulation Time
-// Schedules an absolute clock advance. An advance commits due local events in ordered batches, one step each; a failure keeps the batches already committed. World members advance through their World. Poll the returned operation until it completes.
+// Schedules an absolute clock advance. An advance commits due local events in ordered batches, one step each; a failure keeps the batches already committed. Poll the returned operation until it completes.
 func (s *Simulations) CreateSimulationAdvance(ctx context.Context, request operations.CreateSimulationAdvanceRequest, opts ...operations.Option) (*operations.CreateSimulationAdvanceResponse, error) {
 	o := operations.Options{}
 	supportedOptions := []string{

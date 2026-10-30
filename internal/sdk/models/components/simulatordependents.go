@@ -5,12 +5,10 @@ package components
 type SimulatorDependents struct {
 	// IDs of Simulators built from the Simulator.
 	ChildSimulators []string `json:"child_simulators"`
-	// IDs of Simulations created from the Simulator, including World members.
+	// IDs of Simulations created from the Simulator.
 	Simulations []string `json:"simulations"`
 	// IDs of Simulation Snapshots of Simulations created from the Simulator.
 	Snapshots []string `json:"snapshots"`
-	// IDs of Worlds that include the Simulator.
-	Worlds []string `json:"worlds"`
 }
 
 func (s *SimulatorDependents) GetChildSimulators() []string {
@@ -32,11 +30,4 @@ func (s *SimulatorDependents) GetSnapshots() []string {
 		return []string{}
 	}
 	return s.Snapshots
-}
-
-func (s *SimulatorDependents) GetWorlds() []string {
-	if s == nil {
-		return []string{}
-	}
-	return s.Worlds
 }

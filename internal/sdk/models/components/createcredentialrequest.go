@@ -13,8 +13,9 @@ type CreateCredentialRequest struct {
 	Header *string                 `json:"header,omitzero"`
 	Login  *CredentialLoginRequest `json:"login,omitzero"`
 	// Credential name.
-	Name string `json:"name"`
-	// The full header value, for example Bearer followed by a token. Required with base_url; not allowed with login, which a person signs in to by hand after the credential exists. The API never returns it.
+	Name  string                  `json:"name"`
+	Oauth *CredentialOAuthRequest `json:"oauth,omitzero"`
+	// The full header value, for example Bearer followed by a token. Required with base_url unless oauth is sent; not allowed with login, which a person signs in to by hand after the credential exists. The API never returns it.
 	Value *string `json:"value,omitzero"`
 }
 
@@ -55,6 +56,13 @@ func (c *CreateCredentialRequest) GetName() string {
 		return ""
 	}
 	return c.Name
+}
+
+func (c *CreateCredentialRequest) GetOauth() *CredentialOAuthRequest {
+	if c == nil {
+		return nil
+	}
+	return c.Oauth
 }
 
 func (c *CreateCredentialRequest) GetValue() *string {

@@ -2,13 +2,14 @@
 
 package components
 
-// SimulatorErrorCode - Stable Simulator build error code.
+// SimulatorErrorCode - Stable Simulator build error code. live_credential_rejected is a build that waited at QA for its rejected live credentials and was not resumed within 7 days.
 type SimulatorErrorCode string
 
 const (
 	SimulatorErrorCodeBuildFailed                   SimulatorErrorCode = "build_failed"
 	SimulatorErrorCodeBuildCanceled                 SimulatorErrorCode = "build_canceled"
 	SimulatorErrorCodeSpecificationValidationFailed SimulatorErrorCode = "specification_validation_failed"
+	SimulatorErrorCodeLiveCredentialRejected        SimulatorErrorCode = "live_credential_rejected"
 )
 
 func (e SimulatorErrorCode) ToPointer() *SimulatorErrorCode {
@@ -19,30 +20,30 @@ func (e SimulatorErrorCode) ToPointer() *SimulatorErrorCode {
 func (e *SimulatorErrorCode) IsExact() bool {
 	if e != nil {
 		switch *e {
-		case "build_failed", "build_canceled", "specification_validation_failed":
+		case "build_failed", "build_canceled", "specification_validation_failed", "live_credential_rejected":
 			return true
 		}
 	}
 	return false
 }
 
-// SimulatorErrorReason - Bounded failure reason for selecting recovery guidance, or null when unavailable.
-type SimulatorErrorReason string
+// Reason - Bounded failure reason for selecting recovery guidance, or null when unavailable.
+type Reason string
 
 const (
-	SimulatorErrorReasonCanceled             SimulatorErrorReason = "canceled"
-	SimulatorErrorReasonSpecificationInvalid SimulatorErrorReason = "specification_invalid"
-	SimulatorErrorReasonTimeLimit            SimulatorErrorReason = "time_limit"
-	SimulatorErrorReasonServiceUnavailable   SimulatorErrorReason = "service_unavailable"
-	SimulatorErrorReasonBuildFailed          SimulatorErrorReason = "build_failed"
+	ReasonCanceled             Reason = "canceled"
+	ReasonSpecificationInvalid Reason = "specification_invalid"
+	ReasonTimeLimit            Reason = "time_limit"
+	ReasonServiceUnavailable   Reason = "service_unavailable"
+	ReasonBuildFailed          Reason = "build_failed"
 )
 
-func (e SimulatorErrorReason) ToPointer() *SimulatorErrorReason {
+func (e Reason) ToPointer() *Reason {
 	return &e
 }
 
 // IsExact returns true if the value matches a known enum value, false otherwise.
-func (e *SimulatorErrorReason) IsExact() bool {
+func (e *Reason) IsExact() bool {
 	if e != nil {
 		switch *e {
 		case "canceled", "specification_invalid", "time_limit", "service_unavailable", "build_failed":
@@ -55,12 +56,12 @@ func (e *SimulatorErrorReason) IsExact() bool {
 type SimulatorError struct {
 	// Plain-text explanation from the build agent when it could not continue, or the problems the check of the build's index found. At most 4096 UTF-8 bytes.
 	AgentMessage *string `json:"agent_message"`
-	// Stable Simulator build error code.
+	// Stable Simulator build error code. live_credential_rejected is a build that waited at QA for its rejected live credentials and was not resumed within 7 days.
 	Code SimulatorErrorCode `json:"code"`
 	// Safe human-readable error detail.
 	Detail string `json:"detail"`
 	// Bounded failure reason for selecting recovery guidance, or null when unavailable.
-	Reason     *SimulatorErrorReason    `json:"reason"`
+	Reason     *Reason                  `json:"reason"`
 	Validation *SpecificationValidation `json:"validation"`
 }
 
@@ -85,7 +86,7 @@ func (s *SimulatorError) GetDetail() string {
 	return s.Detail
 }
 
-func (s *SimulatorError) GetReason() *SimulatorErrorReason {
+func (s *SimulatorError) GetReason() *Reason {
 	if s == nil {
 		return nil
 	}

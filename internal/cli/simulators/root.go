@@ -48,6 +48,10 @@ func InitSimulatorsRoot(parent *cobra.Command) error {
 		return err
 	}
 
+	if err := initResumeSimulatorCmd(SimulatorsCmd); err != nil {
+		return err
+	}
+
 	parent.AddCommand(SimulatorsCmd)
 	return nil
 }

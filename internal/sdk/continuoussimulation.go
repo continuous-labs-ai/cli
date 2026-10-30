@@ -48,7 +48,7 @@ func Float64(f float64) *float64 { return &f }
 // Pointer provides a helper function to return a pointer to a type
 func Pointer[T any](v T) *T { return &v }
 
-// ContinuousSimulation - Continuous Simulation API: Build Simulators from OpenAPI, WSDL or GraphQL documents, create Simulations from them, and build Worlds that run Simulations together. Authenticate every request with an API key sent as a Bearer token.
+// ContinuousSimulation - Continuous Simulation API: Build Simulators from OpenAPI, WSDL or GraphQL documents and create Simulations from them. Authenticate every request with an API key sent as a Bearer token.
 type ContinuousSimulation struct {
 	SDKVersion string
 	// Store connections to real systems: a base URL, the header that carries the credential, and its value. The API never returns a value.
@@ -59,8 +59,6 @@ type ContinuousSimulation struct {
 	Simulations *Simulations
 	// Build Simulators from OpenAPI, WSDL or GraphQL documents, check or cancel a build, clone Simulators into other workspaces, and rename and delete Simulators.
 	Simulators *Simulators
-	// Build Worlds from one or more Simulators, rename them, and start or stop their Simulations together.
-	Worlds *Worlds
 
 	sdkConfiguration config.SDKConfiguration
 	hooks            *hooks.Hooks
@@ -136,10 +134,10 @@ func WithTimeout(timeout time.Duration) SDKOption {
 // New creates a new instance of the SDK with the provided options
 func New(opts ...SDKOption) *ContinuousSimulation {
 	sdk := &ContinuousSimulation{
-		SDKVersion: "0.4.3",
+		SDKVersion: "0.4.4",
 		sdkConfiguration: config.SDKConfiguration{
-			UserAgent:         "speakeasy-sdk/go 0.4.3 2.935.1 v1 github.com/continuous-labs-ai/cli/internal/sdk",
-			SDKVersion:        "0.4.3",
+			UserAgent:         "speakeasy-sdk/go 0.4.4 2.935.1 v1 github.com/continuous-labs-ai/cli/internal/sdk",
+			SDKVersion:        "0.4.4",
 			GenVersion:        "2.935.1",
 			OpenAPIDocVersion: "v1",
 			ServerList:        ServerList,
@@ -161,7 +159,6 @@ func New(opts ...SDKOption) *ContinuousSimulation {
 	sdk.SimulationSnapshots = newSimulationSnapshots(sdk, sdk.sdkConfiguration, sdk.hooks)
 	sdk.Simulations = newSimulations(sdk, sdk.sdkConfiguration, sdk.hooks)
 	sdk.Simulators = newSimulators(sdk, sdk.sdkConfiguration, sdk.hooks)
-	sdk.Worlds = newWorlds(sdk, sdk.sdkConfiguration, sdk.hooks)
 
 	return sdk
 }

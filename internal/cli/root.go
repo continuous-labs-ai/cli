@@ -8,7 +8,6 @@ import (
 	"github.com/continuous-labs-ai/cli/internal/cli/simulations"
 	"github.com/continuous-labs-ai/cli/internal/cli/simulationsnapshots"
 	"github.com/continuous-labs-ai/cli/internal/cli/simulators"
-	"github.com/continuous-labs-ai/cli/internal/cli/worlds"
 	"github.com/continuous-labs-ai/cli/internal/config"
 	"github.com/continuous-labs-ai/cli/internal/explorer"
 	"github.com/continuous-labs-ai/cli/internal/output"
@@ -29,8 +28,8 @@ func NewRootCommand() (*cobra.Command, error) {
 	cobra.AddTemplateFunc("groupedGlobalFlagUsages", groupedGlobalFlagUsages)
 	rootCmd := &cobra.Command{
 		Use:           "continuous",
-		Short:         "Continuous Simulation API: Build Simulators from OpenAPI, WSDL or GraphQL documents, create Simulations from them, and build Worlds that run Simulations together",
-		Long:          "Continuous Simulation API: Build Simulators from OpenAPI, WSDL or GraphQL documents, create Simulations from them, and build Worlds that run Simulations together. Authenticate every request with an API key sent as a Bearer token.",
+		Short:         "Continuous Simulation API: Build Simulators from OpenAPI, WSDL or GraphQL documents and create Simulations from them",
+		Long:          "Continuous Simulation API: Build Simulators from OpenAPI, WSDL or GraphQL documents and create Simulations from them. Authenticate every request with an API key sent as a Bearer token.",
 		SilenceUsage:  true,
 		SilenceErrors: true,
 		RunE: func(cmd *cobra.Command, args []string) error {
@@ -61,9 +60,6 @@ func NewRootCommand() (*cobra.Command, error) {
 	}
 	if err := simulators.InitSimulatorsRoot(rootCmd); err != nil {
 		return nil, fmt.Errorf("init simulators: %w", err)
-	}
-	if err := worlds.InitWorldsRoot(rootCmd); err != nil {
-		return nil, fmt.Errorf("init worlds: %w", err)
 	}
 	if err := initConfigureCmd(rootCmd); err != nil {
 		return nil, fmt.Errorf("init configure: %w", err)

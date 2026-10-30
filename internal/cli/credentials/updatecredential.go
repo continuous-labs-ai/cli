@@ -20,7 +20,8 @@ var updateCredentialCmdMeta = []flagutil.FlagMeta{
 	{FlagName: "header", FieldPath: "Body.Header", Kind: flagutil.FlagKindString, Optional: true, Description: "New HTTP header that carries the value."},
 	{FlagName: "login", Shorthand: "l", FieldPath: "Body.Login", Kind: flagutil.FlagKindJSON, Optional: true, Annotations: `json:"login,omitempty"`, Description: "JSON object"},
 	{FlagName: "name", Shorthand: "n", FieldPath: "Body.Name", Kind: flagutil.FlagKindString, Optional: true, Description: "New credential name."},
-	{FlagName: "value", Shorthand: "v", FieldPath: "Body.Value", Kind: flagutil.FlagKindString, Optional: true, Description: "New full header value. Required when base_url or header changes; not allowed for a login credential. Builds that start an agent after the change use it. The API never returns it."},
+	{FlagName: "oauth", FieldPath: "Body.Oauth", Kind: flagutil.FlagKindJSON, Optional: true, Annotations: `json:"oauth,omitempty"`, Description: "JSON object"},
+	{FlagName: "value", Shorthand: "v", FieldPath: "Body.Value", Kind: flagutil.FlagKindString, Optional: true, Description: "New full header value, in place of any OAuth client. Value or oauth is required when base_url or header changes; not allowed for a login credential. Builds that start an agent after the change use it. The API never returns it."},
 }
 
 // initUpdateCredentialCmd initializes the update-credential command.
@@ -28,7 +29,7 @@ func initUpdateCredentialCmd(parent *cobra.Command) error {
 	var cmd = &cobra.Command{
 		Use:     "update",
 		Short:   "Update credential",
-		Long:    "Renames a credential, changes its base URL and header or its login, or replaces its value. A credential keeps its kind. Omitted fields keep their current values.",
+		Long:    "Renames a credential, changes its base URL and header or its login, or replaces its value or its OAuth 2.0 client. An API credential can move between a value and an OAuth client; a login stays a login. Omitted fields keep their current values.",
 		Example: "  continuous credentials update --id <id>",
 		RunE:    runUpdateCredentialCmd,
 	}

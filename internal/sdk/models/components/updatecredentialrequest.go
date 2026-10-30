@@ -13,8 +13,9 @@ type UpdateCredentialRequest struct {
 	Header *string                `json:"header,omitzero"`
 	Login  *CredentialLoginUpdate `json:"login,omitzero"`
 	// New credential name.
-	Name *string `json:"name,omitzero"`
-	// New full header value. Required when base_url or header changes; not allowed for a login credential. Builds that start an agent after the change use it. The API never returns it.
+	Name  *string                 `json:"name,omitzero"`
+	Oauth *CredentialOAuthRequest `json:"oauth,omitzero"`
+	// New full header value, in place of any OAuth client. Value or oauth is required when base_url or header changes; not allowed for a login credential. Builds that start an agent after the change use it. The API never returns it.
 	Value *string `json:"value,omitzero"`
 }
 
@@ -55,6 +56,13 @@ func (u *UpdateCredentialRequest) GetName() *string {
 		return nil
 	}
 	return u.Name
+}
+
+func (u *UpdateCredentialRequest) GetOauth() *CredentialOAuthRequest {
+	if u == nil {
+		return nil
+	}
+	return u.Oauth
 }
 
 func (u *UpdateCredentialRequest) GetValue() *string {

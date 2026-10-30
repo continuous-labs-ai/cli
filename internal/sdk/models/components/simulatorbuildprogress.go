@@ -2,20 +2,20 @@
 
 package components
 
-// SimulatorBuildProgressLastSubmission - Outcome of the most recent submit attempt, or null.
-type SimulatorBuildProgressLastSubmission string
+// LastSubmission - Outcome of the most recent submit attempt, or null.
+type LastSubmission string
 
 const (
-	SimulatorBuildProgressLastSubmissionAccepted SimulatorBuildProgressLastSubmission = "accepted"
-	SimulatorBuildProgressLastSubmissionRejected SimulatorBuildProgressLastSubmission = "rejected"
+	LastSubmissionAccepted LastSubmission = "accepted"
+	LastSubmissionRejected LastSubmission = "rejected"
 )
 
-func (e SimulatorBuildProgressLastSubmission) ToPointer() *SimulatorBuildProgressLastSubmission {
+func (e LastSubmission) ToPointer() *LastSubmission {
 	return &e
 }
 
 // IsExact returns true if the value matches a known enum value, false otherwise.
-func (e *SimulatorBuildProgressLastSubmission) IsExact() bool {
+func (e *LastSubmission) IsExact() bool {
 	if e != nil {
 		switch *e {
 		case "accepted", "rejected":
@@ -52,23 +52,23 @@ func (e *SimulatorBuildProgressModel) IsExact() bool {
 	return false
 }
 
-// SimulatorBuildProgressPhase - Agent phase: research while the research agent indexes the documents and saves the vendor pages they lack; build for generation, review for the separate reviewer, qa while QA tests the running Simulator from outside, after the last review round of a build with credential_ids, finalize for author repair after review or QA. Null when not recorded.
-type SimulatorBuildProgressPhase string
+// Phase - Agent phase: research while the research agent indexes the documents and saves the vendor pages they lack; build for generation, review for the separate reviewer, qa while QA tests the running Simulator from outside, after the last review round of a build with credential_ids, finalize for author repair after review or QA. Null when not recorded.
+type Phase string
 
 const (
-	SimulatorBuildProgressPhaseResearch SimulatorBuildProgressPhase = "research"
-	SimulatorBuildProgressPhaseBuild    SimulatorBuildProgressPhase = "build"
-	SimulatorBuildProgressPhaseReview   SimulatorBuildProgressPhase = "review"
-	SimulatorBuildProgressPhaseQa       SimulatorBuildProgressPhase = "qa"
-	SimulatorBuildProgressPhaseFinalize SimulatorBuildProgressPhase = "finalize"
+	PhaseResearch Phase = "research"
+	PhaseBuild    Phase = "build"
+	PhaseReview   Phase = "review"
+	PhaseQa       Phase = "qa"
+	PhaseFinalize Phase = "finalize"
 )
 
-func (e SimulatorBuildProgressPhase) ToPointer() *SimulatorBuildProgressPhase {
+func (e Phase) ToPointer() *Phase {
 	return &e
 }
 
 // IsExact returns true if the value matches a known enum value, false otherwise.
-func (e *SimulatorBuildProgressPhase) IsExact() bool {
+func (e *Phase) IsExact() bool {
 	if e != nil {
 		switch *e {
 		case "research", "build", "review", "qa", "finalize":
@@ -78,21 +78,21 @@ func (e *SimulatorBuildProgressPhase) IsExact() bool {
 	return false
 }
 
-// SimulatorBuildProgressStage - derive while the effective spec, build skeleton, and sandbox are prepared; build while the coding loop runs; assemble while an accepted artifact publishes.
-type SimulatorBuildProgressStage string
+// Stage - derive while the effective spec, build skeleton, and sandbox are prepared; build while the coding loop runs; assemble while an accepted artifact publishes.
+type Stage string
 
 const (
-	SimulatorBuildProgressStageDerive   SimulatorBuildProgressStage = "derive"
-	SimulatorBuildProgressStageBuild    SimulatorBuildProgressStage = "build"
-	SimulatorBuildProgressStageAssemble SimulatorBuildProgressStage = "assemble"
+	StageDerive   Stage = "derive"
+	StageBuild    Stage = "build"
+	StageAssemble Stage = "assemble"
 )
 
-func (e SimulatorBuildProgressStage) ToPointer() *SimulatorBuildProgressStage {
+func (e Stage) ToPointer() *Stage {
 	return &e
 }
 
 // IsExact returns true if the value matches a known enum value, false otherwise.
-func (e *SimulatorBuildProgressStage) IsExact() bool {
+func (e *Stage) IsExact() bool {
 	if e != nil {
 		switch *e {
 		case "derive", "build", "assemble":
@@ -106,7 +106,7 @@ type SimulatorBuildProgress struct {
 	// Limitations the accepted build records beyond those listed in limitations.
 	HiddenLimitations int64 `json:"hidden_limitations"`
 	// Outcome of the most recent submit attempt, or null.
-	LastSubmission *SimulatorBuildProgressLastSubmission `json:"last_submission"`
+	LastSubmission *LastSubmission `json:"last_submission"`
 	// Name of the most recent tool call, or null. Tool arguments and output are private.
 	LastTool *string `json:"last_tool"`
 	// Behavior the accepted build does not serve like the real system, most important first, set when the build is accepted. Empty when none.
@@ -114,17 +114,19 @@ type SimulatorBuildProgress struct {
 	// The model the builder and reviewer run on, or combined, which currently runs as claude-opus-5-5. A build recorded before model selection reports its provider's default.
 	Model SimulatorBuildProgressModel `json:"model"`
 	// Agent phase: research while the research agent indexes the documents and saves the vendor pages they lack; build for generation, review for the separate reviewer, qa while QA tests the running Simulator from outside, after the last review round of a build with credential_ids, finalize for author repair after review or QA. Null when not recorded.
-	Phase *SimulatorBuildProgressPhase `json:"phase"`
+	Phase *Phase `json:"phase"`
 	// Review round that phase review, qa, or finalize belongs to, from 1. In a build with credential_ids, QA and the repair after it are in round review_rounds + 1. 0 before the first review.
 	ReviewRound int64 `json:"review_round"`
 	// Review rounds the build runs at most. Fewer run when the reviewer agrees early.
 	ReviewRounds int64 `json:"review_rounds"`
 	// derive while the effective spec, build skeleton, and sandbox are prepared; build while the coding loop runs; assemble while an accepted artifact publishes.
-	Stage SimulatorBuildProgressStage `json:"stage"`
+	Stage Stage `json:"stage"`
 	// Submit attempts.
 	Submissions int64 `json:"submissions"`
 	// Tool calls the coding loop executed.
 	ToolCalls int64 `json:"tool_calls"`
+	// Set while the build waits at QA because the live systems rejected its credentials; refresh them, then resume the build with its resource's resume operation, such as POST /v1/simulators/{id}/resume. Null otherwise.
+	Waiting *SimulatorBuildWaiting `json:"waiting"`
 	// Specification defects the build tolerated without changing the specification, set when the build prepares its specification. Empty when none.
 	Warnings []SpecificationWarning `json:"warnings"`
 }
@@ -136,7 +138,7 @@ func (s *SimulatorBuildProgress) GetHiddenLimitations() int64 {
 	return s.HiddenLimitations
 }
 
-func (s *SimulatorBuildProgress) GetLastSubmission() *SimulatorBuildProgressLastSubmission {
+func (s *SimulatorBuildProgress) GetLastSubmission() *LastSubmission {
 	if s == nil {
 		return nil
 	}
@@ -164,7 +166,7 @@ func (s *SimulatorBuildProgress) GetModel() SimulatorBuildProgressModel {
 	return s.Model
 }
 
-func (s *SimulatorBuildProgress) GetPhase() *SimulatorBuildProgressPhase {
+func (s *SimulatorBuildProgress) GetPhase() *Phase {
 	if s == nil {
 		return nil
 	}
@@ -185,9 +187,9 @@ func (s *SimulatorBuildProgress) GetReviewRounds() int64 {
 	return s.ReviewRounds
 }
 
-func (s *SimulatorBuildProgress) GetStage() SimulatorBuildProgressStage {
+func (s *SimulatorBuildProgress) GetStage() Stage {
 	if s == nil {
-		return SimulatorBuildProgressStage("")
+		return Stage("")
 	}
 	return s.Stage
 }
@@ -204,6 +206,13 @@ func (s *SimulatorBuildProgress) GetToolCalls() int64 {
 		return 0
 	}
 	return s.ToolCalls
+}
+
+func (s *SimulatorBuildProgress) GetWaiting() *SimulatorBuildWaiting {
+	if s == nil {
+		return nil
+	}
+	return s.Waiting
 }
 
 func (s *SimulatorBuildProgress) GetWarnings() []SpecificationWarning {
