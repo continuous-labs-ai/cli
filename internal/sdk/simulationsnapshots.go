@@ -20,7 +20,7 @@ import (
 	"strings"
 )
 
-// SimulationSnapshots - Save a running Simulation's state as a Snapshot, create Simulations from it, and rename and delete it.
+// SimulationSnapshots - Deprecated. Use API Box for APIs and Web Box for web apps. Save a running Simulation's state as a Snapshot, create Simulations from it, and rename and delete it.
 type SimulationSnapshots struct {
 	rootSDK          *ContinuousSimulation
 	sdkConfiguration config.SDKConfiguration
@@ -37,6 +37,10 @@ func newSimulationSnapshots(rootSDK *ContinuousSimulation, sdkConfig config.SDKC
 
 // ListSimulationSnapshots - List Simulation Snapshots
 // Returns the workspace's Snapshots, newest first. Filter by simulation_id for the Snapshots of one Simulation.
+//
+// Deprecated. Use API Box for APIs and Web Box for web apps.
+//
+// Deprecated: Use API Box for APIs and Web Box for web apps.
 func (s *SimulationSnapshots) ListSimulationSnapshots(ctx context.Context, request *operations.ListSimulationSnapshotsRequest, opts ...operations.Option) (*operations.ListSimulationSnapshotsResponse, error) {
 	o := operations.Options{}
 	supportedOptions := []string{
@@ -372,6 +376,10 @@ func (s *SimulationSnapshots) ListSimulationSnapshots(ctx context.Context, reque
 
 // CreateSimulationSnapshot - Create Simulation Snapshot
 // Starts saving a running Simulation's current state and returns the Snapshot with status creating. Poll it until it is ready, or failed with an error. Saving closes the Simulation's open event streams and WebSockets and does not change its state; while it saves, an advance returns 409 clock_conflict, and a stop waits for it. Create Simulations from a ready Snapshot with snapshot_id; it outlives its Simulation. A stopped Simulation returns 409 simulation_stopped. Reuse the Idempotency-Key to retry safely.
+//
+// Deprecated. Use API Box for APIs and Web Box for web apps.
+//
+// Deprecated: Use API Box for APIs and Web Box for web apps.
 func (s *SimulationSnapshots) CreateSimulationSnapshot(ctx context.Context, request operations.CreateSimulationSnapshotRequest, opts ...operations.Option) (*operations.CreateSimulationSnapshotResponse, error) {
 	o := operations.Options{}
 	supportedOptions := []string{
@@ -605,6 +613,10 @@ func (s *SimulationSnapshots) CreateSimulationSnapshot(ctx context.Context, requ
 
 // DeleteSimulationSnapshot - Delete Simulation Snapshot
 // Deletes a Snapshot and its saved state. Simulations created from it keep running, and their snapshot_id becomes null. While it is creating, the response is 409 snapshot_not_ready; while a Simulation is starting from it, 409 snapshot_in_use.
+//
+// Deprecated. Use API Box for APIs and Web Box for web apps.
+//
+// Deprecated: Use API Box for APIs and Web Box for web apps.
 func (s *SimulationSnapshots) DeleteSimulationSnapshot(ctx context.Context, request operations.DeleteSimulationSnapshotRequest, opts ...operations.Option) (*operations.DeleteSimulationSnapshotResponse, error) {
 	o := operations.Options{}
 	supportedOptions := []string{
@@ -788,6 +800,10 @@ func (s *SimulationSnapshots) DeleteSimulationSnapshot(ctx context.Context, requ
 
 // GetSimulationSnapshot - Get Simulation Snapshot
 // Returns a Snapshot.
+//
+// Deprecated. Use API Box for APIs and Web Box for web apps.
+//
+// Deprecated: Use API Box for APIs and Web Box for web apps.
 func (s *SimulationSnapshots) GetSimulationSnapshot(ctx context.Context, request operations.GetSimulationSnapshotRequest, opts ...operations.Option) (*operations.GetSimulationSnapshotResponse, error) {
 	o := operations.Options{}
 	supportedOptions := []string{
@@ -1069,6 +1085,10 @@ func (s *SimulationSnapshots) GetSimulationSnapshot(ctx context.Context, request
 
 // UpdateSimulationSnapshot - Update Simulation Snapshot
 // Renames a Snapshot. Omitted fields keep their current values.
+//
+// Deprecated. Use API Box for APIs and Web Box for web apps.
+//
+// Deprecated: Use API Box for APIs and Web Box for web apps.
 func (s *SimulationSnapshots) UpdateSimulationSnapshot(ctx context.Context, request operations.UpdateSimulationSnapshotRequest, opts ...operations.Option) (*operations.UpdateSimulationSnapshotResponse, error) {
 	o := operations.Options{}
 	supportedOptions := []string{

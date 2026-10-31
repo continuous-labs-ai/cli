@@ -23,7 +23,7 @@ func initDeleteSimulatorCmd(parent *cobra.Command) error {
 	var cmd = &cobra.Command{
 		Use:     "delete",
 		Short:   "Delete Simulator",
-		Long:    "Deletes a Simulator that has no dependent Simulations, child Simulators, or Simulation Snapshots.",
+		Long:    "DEPRECATED: Use API Box for APIs and Web Box for web apps\n\nDeletes a Simulator that has no dependent Simulations, child Simulators, or Simulation Snapshots.\n\nDeprecated. Use API Box for APIs and Web Box for web apps.",
 		Example: "  continuous simulators delete --id <id>",
 		RunE:    runDeleteSimulatorCmd,
 	}

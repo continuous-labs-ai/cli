@@ -20,7 +20,7 @@ import (
 	"strings"
 )
 
-// Build Simulators from OpenAPI, WSDL or GraphQL documents, check or cancel a build, clone Simulators into other workspaces, and rename and delete Simulators.
+// Simulators - Deprecated. Use API Box for APIs and Web Box for web apps. Build Simulators from OpenAPI, WSDL or GraphQL documents, check or cancel a build, clone Simulators into other workspaces, and rename and delete Simulators.
 type Simulators struct {
 	rootSDK          *ContinuousSimulation
 	sdkConfiguration config.SDKConfiguration
@@ -37,6 +37,10 @@ func newSimulators(rootSDK *ContinuousSimulation, sdkConfig config.SDKConfigurat
 
 // ListSimulators - List Simulators
 // Returns all Simulators that the API key can access. Results can be filtered by status.
+//
+// Deprecated. Use API Box for APIs and Web Box for web apps.
+//
+// Deprecated: Use API Box for APIs and Web Box for web apps.
 func (s *Simulators) ListSimulators(ctx context.Context, request *operations.ListSimulatorsRequest, opts ...operations.Option) (*operations.ListSimulatorsResponse, error) {
 	o := operations.Options{}
 	supportedOptions := []string{
@@ -372,6 +376,10 @@ func (s *Simulators) ListSimulators(ctx context.Context, request *operations.Lis
 
 // BuildSimulator - Build Simulator
 // Starts an asynchronous Simulator build and returns the Simulator with status pending. Builds start in queue order when workspace capacity is available. Send multipart/form-data with a JSON part named request. To build from a document, add a file part named spec with the OpenAPI, WSDL or GraphQL document. For an incremental build, omit spec and set parent_id and instructions. Add file parts named document to give the builder and reviewer vendor documentation.
+//
+// Deprecated. Use API Box for APIs and Web Box for web apps.
+//
+// Deprecated: Use API Box for APIs and Web Box for web apps.
 func (s *Simulators) BuildSimulator(ctx context.Context, request operations.BuildSimulatorRequest, opts ...operations.Option) (*operations.BuildSimulatorResponse, error) {
 	o := operations.Options{}
 	supportedOptions := []string{
@@ -653,6 +661,10 @@ func (s *Simulators) BuildSimulator(ctx context.Context, request operations.Buil
 
 // DeleteSimulator - Delete Simulator
 // Deletes a Simulator that has no dependent Simulations, child Simulators, or Simulation Snapshots.
+//
+// Deprecated. Use API Box for APIs and Web Box for web apps.
+//
+// Deprecated: Use API Box for APIs and Web Box for web apps.
 func (s *Simulators) DeleteSimulator(ctx context.Context, request operations.DeleteSimulatorRequest, opts ...operations.Option) (*operations.DeleteSimulatorResponse, error) {
 	o := operations.Options{}
 	supportedOptions := []string{
@@ -863,6 +875,10 @@ func (s *Simulators) DeleteSimulator(ctx context.Context, request operations.Del
 
 // GetSimulator - Get Simulator
 // Returns a Simulator and its current build status.
+//
+// Deprecated. Use API Box for APIs and Web Box for web apps.
+//
+// Deprecated: Use API Box for APIs and Web Box for web apps.
 func (s *Simulators) GetSimulator(ctx context.Context, request operations.GetSimulatorRequest, opts ...operations.Option) (*operations.GetSimulatorResponse, error) {
 	o := operations.Options{}
 	supportedOptions := []string{
@@ -1148,6 +1164,10 @@ func (s *Simulators) GetSimulator(ctx context.Context, request operations.GetSim
 
 // UpdateSimulator - Update Simulator
 // Renames a Simulator. Omitted fields keep their current values. Continuous catalog Simulators cannot be changed.
+//
+// Deprecated. Use API Box for APIs and Web Box for web apps.
+//
+// Deprecated: Use API Box for APIs and Web Box for web apps.
 func (s *Simulators) UpdateSimulator(ctx context.Context, request operations.UpdateSimulatorRequest, opts ...operations.Option) (*operations.UpdateSimulatorResponse, error) {
 	o := operations.Options{}
 	supportedOptions := []string{
@@ -1377,6 +1397,10 @@ func (s *Simulators) UpdateSimulator(ctx context.Context, request operations.Upd
 
 // CancelSimulator - Cancel Simulator Build
 // Requests cancellation of a pending or active Simulator build and returns the Simulator without waiting for the build to stop. Get the Simulator until its status leaves pending or building. The build can finish before cancellation takes effect. A Simulator whose build has settled is returned unchanged.
+//
+// Deprecated. Use API Box for APIs and Web Box for web apps.
+//
+// Deprecated: Use API Box for APIs and Web Box for web apps.
 func (s *Simulators) CancelSimulator(ctx context.Context, request operations.CancelSimulatorRequest, opts ...operations.Option) (*operations.CancelSimulatorResponse, error) {
 	o := operations.Options{}
 	supportedOptions := []string{
@@ -1591,6 +1615,10 @@ func (s *Simulators) CancelSimulator(ctx context.Context, request operations.Can
 
 // CloneSimulator - Clone Simulator
 // Creates a ready copy of a ready Simulator in another workspace. The clone has a new ID and the source's image digest; the source is unchanged. The source is the caller's workspace: an API key's own workspace, or X-Workspace-Id for a session. An API key may clone into any other workspace of its organization.
+//
+// Deprecated. Use API Box for APIs and Web Box for web apps.
+//
+// Deprecated: Use API Box for APIs and Web Box for web apps.
 func (s *Simulators) CloneSimulator(ctx context.Context, request operations.CloneSimulatorRequest, opts ...operations.Option) (*operations.CloneSimulatorResponse, error) {
 	o := operations.Options{}
 	supportedOptions := []string{
@@ -1824,6 +1852,10 @@ func (s *Simulators) CloneSimulator(ctx context.Context, request operations.Clon
 
 // ResumeSimulator - Resume Simulator Build
 // Resumes a build that waits at QA because its live credentials were rejected, as build.waiting reports. Refresh each credential it names with PATCH /v1/credentials/{id} first: QA then runs again with their current values, and the build goes on to finalize. Returns the Simulator, still building. The wait does not count toward the build's time limit: the build resumes with the time it had left when it began waiting. A build that is not waiting returns 409 simulator_not_waiting.
+//
+// Deprecated. Use API Box for APIs and Web Box for web apps.
+//
+// Deprecated: Use API Box for APIs and Web Box for web apps.
 func (s *Simulators) ResumeSimulator(ctx context.Context, request operations.ResumeSimulatorRequest, opts ...operations.Option) (*operations.ResumeSimulatorResponse, error) {
 	o := operations.Options{}
 	supportedOptions := []string{

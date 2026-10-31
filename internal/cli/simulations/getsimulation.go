@@ -23,7 +23,7 @@ func initGetSimulationCmd(parent *cobra.Command) error {
 	var cmd = &cobra.Command{
 		Use:     "get",
 		Short:   "Get Simulation",
-		Long:    "Returns a Simulation, its current status, and the actors a request can act as. The response does not include tokens.",
+		Long:    "DEPRECATED: Use API Box for APIs and Web Box for web apps\n\nReturns a Simulation, its current status, and the actors a request can act as. The response does not include tokens.\n\nDeprecated. Use API Box for APIs and Web Box for web apps.",
 		Example: "  continuous simulations get --id <id>",
 		RunE:    runGetSimulationCmd,
 	}

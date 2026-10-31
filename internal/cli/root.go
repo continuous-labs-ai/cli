@@ -4,10 +4,16 @@ package cli
 
 import (
 	"fmt"
+	"github.com/continuous-labs-ai/cli/internal/cli/apibox"
+	"github.com/continuous-labs-ai/cli/internal/cli/apiboxsnapshots"
 	"github.com/continuous-labs-ai/cli/internal/cli/credentials"
+	"github.com/continuous-labs-ai/cli/internal/cli/mcpbox"
+	"github.com/continuous-labs-ai/cli/internal/cli/mcpboxsnapshots"
 	"github.com/continuous-labs-ai/cli/internal/cli/simulations"
 	"github.com/continuous-labs-ai/cli/internal/cli/simulationsnapshots"
 	"github.com/continuous-labs-ai/cli/internal/cli/simulators"
+	"github.com/continuous-labs-ai/cli/internal/cli/webbox"
+	"github.com/continuous-labs-ai/cli/internal/cli/webboxsnapshots"
 	"github.com/continuous-labs-ai/cli/internal/config"
 	"github.com/continuous-labs-ai/cli/internal/explorer"
 	"github.com/continuous-labs-ai/cli/internal/output"
@@ -28,8 +34,8 @@ func NewRootCommand() (*cobra.Command, error) {
 	cobra.AddTemplateFunc("groupedGlobalFlagUsages", groupedGlobalFlagUsages)
 	rootCmd := &cobra.Command{
 		Use:           "continuous",
-		Short:         "Continuous Simulation API: Build Simulators from OpenAPI, WSDL or GraphQL documents and create Simulations from them",
-		Long:          "Continuous Simulation API: Build Simulators from OpenAPI, WSDL or GraphQL documents and create Simulations from them. Authenticate every request with an API key sent as a Bearer token.",
+		Short:         "Continuous API: Start API Boxes, Web Boxes and MCP Boxes from Snapshots",
+		Long:          "Continuous API: Start API Boxes, Web Boxes and MCP Boxes from Snapshots. Authenticate every request with an API key sent as a Bearer token.",
 		SilenceUsage:  true,
 		SilenceErrors: true,
 		RunE: func(cmd *cobra.Command, args []string) error {
@@ -49,8 +55,20 @@ func NewRootCommand() (*cobra.Command, error) {
 			return nil
 		},
 	}
+	if err := apibox.InitApiboxRoot(rootCmd); err != nil {
+		return nil, fmt.Errorf("init apibox: %w", err)
+	}
+	if err := apiboxsnapshots.InitApiboxSnapshotsRoot(rootCmd); err != nil {
+		return nil, fmt.Errorf("init apibox-snapshots: %w", err)
+	}
 	if err := credentials.InitCredentialsRoot(rootCmd); err != nil {
 		return nil, fmt.Errorf("init credentials: %w", err)
+	}
+	if err := mcpbox.InitMcpboxRoot(rootCmd); err != nil {
+		return nil, fmt.Errorf("init mcpbox: %w", err)
+	}
+	if err := mcpboxsnapshots.InitMcpboxSnapshotsRoot(rootCmd); err != nil {
+		return nil, fmt.Errorf("init mcpbox-snapshots: %w", err)
 	}
 	if err := simulationsnapshots.InitSimulationSnapshotsRoot(rootCmd); err != nil {
 		return nil, fmt.Errorf("init simulation-snapshots: %w", err)
@@ -60,6 +78,12 @@ func NewRootCommand() (*cobra.Command, error) {
 	}
 	if err := simulators.InitSimulatorsRoot(rootCmd); err != nil {
 		return nil, fmt.Errorf("init simulators: %w", err)
+	}
+	if err := webbox.InitWebboxRoot(rootCmd); err != nil {
+		return nil, fmt.Errorf("init webbox: %w", err)
+	}
+	if err := webboxsnapshots.InitWebboxSnapshotsRoot(rootCmd); err != nil {
+		return nil, fmt.Errorf("init webbox-snapshots: %w", err)
 	}
 	if err := initConfigureCmd(rootCmd); err != nil {
 		return nil, fmt.Errorf("init configure: %w", err)

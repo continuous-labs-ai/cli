@@ -23,7 +23,7 @@ func initGetSimulationSnapshotCmd(parent *cobra.Command) error {
 	var cmd = &cobra.Command{
 		Use:     "get",
 		Short:   "Get Simulation Snapshot",
-		Long:    "Returns a Snapshot.",
+		Long:    "DEPRECATED: Use API Box for APIs and Web Box for web apps\n\nReturns a Snapshot.\n\nDeprecated. Use API Box for APIs and Web Box for web apps.",
 		Example: "  continuous simulation-snapshots get --id <id>",
 		RunE:    runGetSimulationSnapshotCmd,
 	}
