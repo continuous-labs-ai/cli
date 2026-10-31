@@ -23,7 +23,7 @@ func initStopSimulationCmd(parent *cobra.Command) error {
 	var cmd = &cobra.Command{
 		Use:     "stop",
 		Short:   "Stop Simulation",
-		Long:    "Stops a Simulation and saves its state. The response returns once the stop is accepted, with status stopping; read the Simulation until it is stopped. Requests to its endpoint are refused while it stops, and return 409 simulation_stopped once it is stopped, until you start it again. A stopped or stopping Simulation is returned unchanged.",
+		Long:    "DEPRECATED: Use API Box for APIs and Web Box for web apps\n\nStops a Simulation and saves its state. The response returns once the stop is accepted, with status stopping; read the Simulation until it is stopped. Requests to its endpoint are refused while it stops, and return 409 simulation_stopped once it is stopped, until you start it again. A stopped or stopping Simulation is returned unchanged.\n\nDeprecated. Use API Box for APIs and Web Box for web apps.",
 		Example: "  continuous simulations stop --id <id>",
 		RunE:    runStopSimulationCmd,
 	}

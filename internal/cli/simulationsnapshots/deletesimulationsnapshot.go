@@ -23,7 +23,7 @@ func initDeleteSimulationSnapshotCmd(parent *cobra.Command) error {
 	var cmd = &cobra.Command{
 		Use:     "delete",
 		Short:   "Delete Simulation Snapshot",
-		Long:    "Deletes a Snapshot and its saved state. Simulations created from it keep running, and their snapshot_id becomes null. While it is creating, the response is 409 snapshot_not_ready; while a Simulation is starting from it, 409 snapshot_in_use.",
+		Long:    "DEPRECATED: Use API Box for APIs and Web Box for web apps\n\nDeletes a Snapshot and its saved state. Simulations created from it keep running, and their snapshot_id becomes null. While it is creating, the response is 409 snapshot_not_ready; while a Simulation is starting from it, 409 snapshot_in_use.\n\nDeprecated. Use API Box for APIs and Web Box for web apps.",
 		Example: "  continuous simulation-snapshots delete --id <id>",
 		RunE:    runDeleteSimulationSnapshotCmd,
 	}

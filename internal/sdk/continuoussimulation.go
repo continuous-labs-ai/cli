@@ -48,17 +48,29 @@ func Float64(f float64) *float64 { return &f }
 // Pointer provides a helper function to return a pointer to a type
 func Pointer[T any](v T) *T { return &v }
 
-// ContinuousSimulation - Continuous Simulation API: Build Simulators from OpenAPI, WSDL or GraphQL documents and create Simulations from them. Authenticate every request with an API key sent as a Bearer token.
+// ContinuousSimulation - Continuous API: Start API Boxes, Web Boxes and MCP Boxes from Snapshots. Authenticate every request with an API key sent as a Bearer token.
 type ContinuousSimulation struct {
 	SDKVersion string
+	// Start API Boxes from API Box Snapshots. Each API Box serves its Snapshot's API at its own endpoint, with its own state, in real time. Stop, start and delete them.
+	Apibox *Apibox
+	// Build API Box Snapshots from an OpenAPI, WSDL or GraphQL document, or use the catalog's. API Boxes start from a ready Snapshot.
+	ApiboxSnapshots *ApiboxSnapshots
 	// Store connections to real systems: a base URL, the header that carries the credential, and its value. The API never returns a value.
 	Credentials *Credentials
-	// Save a running Simulation's state as a Snapshot, create Simulations from it, and rename and delete it.
+	// Start MCP Boxes from MCP Box Snapshots. Each MCP Box serves its Snapshot's tools over MCP in front of an API Box. Stop, start and delete them.
+	Mcpbox *Mcpbox
+	// List, rename and delete the MCP Box Snapshots that Continuous publishes into your workspace. Each holds an MCP server's tools, built against an API Box Snapshot.
+	McpboxSnapshots *McpboxSnapshots
+	// Deprecated. Use API Box for APIs and Web Box for web apps. Save a running Simulation's state as a Snapshot, create Simulations from it, and rename and delete it.
 	SimulationSnapshots *SimulationSnapshots
-	// Create Simulations from ready Simulators or Snapshots, then rename, stop, start, and delete them.
+	// Deprecated. Use API Box for APIs and Web Box for web apps. Create Simulations from ready Simulators or Snapshots, then rename, stop, start, and delete them.
 	Simulations *Simulations
-	// Build Simulators from OpenAPI, WSDL or GraphQL documents, check or cancel a build, clone Simulators into other workspaces, and rename and delete Simulators.
+	// Deprecated. Use API Box for APIs and Web Box for web apps. Build Simulators from OpenAPI, WSDL or GraphQL documents, check or cancel a build, clone Simulators into other workspaces, and rename and delete Simulators.
 	Simulators *Simulators
+	// Start Web Boxes from Web Box Snapshots. Each Web Box serves its Snapshot's web app at a host of its own, with its own state, in real time. Stop, start and delete them.
+	Webbox *Webbox
+	// Build Web Box Snapshots from a vendor's live web app, or use the catalog's. Web Boxes start from a ready Snapshot.
+	WebboxSnapshots *WebboxSnapshots
 
 	sdkConfiguration config.SDKConfiguration
 	hooks            *hooks.Hooks
@@ -134,10 +146,10 @@ func WithTimeout(timeout time.Duration) SDKOption {
 // New creates a new instance of the SDK with the provided options
 func New(opts ...SDKOption) *ContinuousSimulation {
 	sdk := &ContinuousSimulation{
-		SDKVersion: "0.4.4",
+		SDKVersion: "0.4.5",
 		sdkConfiguration: config.SDKConfiguration{
-			UserAgent:         "speakeasy-sdk/go 0.4.4 2.935.1 v1 github.com/continuous-labs-ai/cli/internal/sdk",
-			SDKVersion:        "0.4.4",
+			UserAgent:         "speakeasy-sdk/go 0.4.5 2.935.1 v1 github.com/continuous-labs-ai/cli/internal/sdk",
+			SDKVersion:        "0.4.5",
 			GenVersion:        "2.935.1",
 			OpenAPIDocVersion: "v1",
 			ServerList:        ServerList,
@@ -155,10 +167,16 @@ func New(opts ...SDKOption) *ContinuousSimulation {
 
 	sdk.sdkConfiguration = sdk.hooks.SDKInit(sdk.sdkConfiguration)
 
+	sdk.Apibox = newApibox(sdk, sdk.sdkConfiguration, sdk.hooks)
+	sdk.ApiboxSnapshots = newApiboxSnapshots(sdk, sdk.sdkConfiguration, sdk.hooks)
 	sdk.Credentials = newCredentials(sdk, sdk.sdkConfiguration, sdk.hooks)
+	sdk.Mcpbox = newMcpbox(sdk, sdk.sdkConfiguration, sdk.hooks)
+	sdk.McpboxSnapshots = newMcpboxSnapshots(sdk, sdk.sdkConfiguration, sdk.hooks)
 	sdk.SimulationSnapshots = newSimulationSnapshots(sdk, sdk.sdkConfiguration, sdk.hooks)
 	sdk.Simulations = newSimulations(sdk, sdk.sdkConfiguration, sdk.hooks)
 	sdk.Simulators = newSimulators(sdk, sdk.sdkConfiguration, sdk.hooks)
+	sdk.Webbox = newWebbox(sdk, sdk.sdkConfiguration, sdk.hooks)
+	sdk.WebboxSnapshots = newWebboxSnapshots(sdk, sdk.sdkConfiguration, sdk.hooks)
 
 	return sdk
 }

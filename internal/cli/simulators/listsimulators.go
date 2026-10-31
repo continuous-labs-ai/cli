@@ -25,7 +25,7 @@ func initListSimulatorsCmd(parent *cobra.Command) error {
 	var cmd = &cobra.Command{
 		Use:     "list",
 		Short:   "List Simulators",
-		Long:    "Returns all Simulators that the API key can access. Results can be filtered by status.",
+		Long:    "DEPRECATED: Use API Box for APIs and Web Box for web apps\n\nReturns all Simulators that the API key can access. Results can be filtered by status.\n\nDeprecated. Use API Box for APIs and Web Box for web apps.",
 		Example: "  continuous simulators list",
 		RunE:    runListSimulatorsCmd,
 	}

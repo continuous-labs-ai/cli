@@ -24,7 +24,7 @@ func initUpdateSimulationSnapshotCmd(parent *cobra.Command) error {
 	var cmd = &cobra.Command{
 		Use:     "update",
 		Short:   "Update Simulation Snapshot",
-		Long:    "Renames a Snapshot. Omitted fields keep their current values.",
+		Long:    "DEPRECATED: Use API Box for APIs and Web Box for web apps\n\nRenames a Snapshot. Omitted fields keep their current values.\n\nDeprecated. Use API Box for APIs and Web Box for web apps.",
 		Example: "  continuous simulation-snapshots update --id <id>",
 		RunE:    runUpdateSimulationSnapshotCmd,
 	}

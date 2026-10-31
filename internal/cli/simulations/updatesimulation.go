@@ -25,7 +25,7 @@ func initUpdateSimulationCmd(parent *cobra.Command) error {
 	var cmd = &cobra.Command{
 		Use:     "update",
 		Short:   "Update Simulation",
-		Long:    "Renames a Simulation or replaces its metadata. Omitted fields keep their current values.",
+		Long:    "DEPRECATED: Use API Box for APIs and Web Box for web apps\n\nRenames a Simulation or replaces its metadata. Omitted fields keep their current values.\n\nDeprecated. Use API Box for APIs and Web Box for web apps.",
 		Example: "  continuous simulations update --id <id>",
 		RunE:    runUpdateSimulationCmd,
 	}

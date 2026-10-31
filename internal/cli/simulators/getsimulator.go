@@ -23,7 +23,7 @@ func initGetSimulatorCmd(parent *cobra.Command) error {
 	var cmd = &cobra.Command{
 		Use:     "get",
 		Short:   "Get Simulator",
-		Long:    "Returns a Simulator and its current build status.",
+		Long:    "DEPRECATED: Use API Box for APIs and Web Box for web apps\n\nReturns a Simulator and its current build status.\n\nDeprecated. Use API Box for APIs and Web Box for web apps.",
 		Example: "  continuous simulators get --id <id>",
 		RunE:    runGetSimulatorCmd,
 	}

@@ -25,7 +25,7 @@ func initCreateSimulationSnapshotCmd(parent *cobra.Command) error {
 	var cmd = &cobra.Command{
 		Use:     "create",
 		Short:   "Create Simulation Snapshot",
-		Long:    "Starts saving a running Simulation's current state and returns the Snapshot with status creating. Poll it until it is ready, or failed with an error. Saving closes the Simulation's open event streams and WebSockets and does not change its state; while it saves, an advance returns 409 clock_conflict, and a stop waits for it. Create Simulations from a ready Snapshot with snapshot_id; it outlives its Simulation. A stopped Simulation returns 409 simulation_stopped. Reuse the Idempotency-Key to retry safely.",
+		Long:    "DEPRECATED: Use API Box for APIs and Web Box for web apps\n\nStarts saving a running Simulation's current state and returns the Snapshot with status creating. Poll it until it is ready, or failed with an error. Saving closes the Simulation's open event streams and WebSockets and does not change its state; while it saves, an advance returns 409 clock_conflict, and a stop waits for it. Create Simulations from a ready Snapshot with snapshot_id; it outlives its Simulation. A stopped Simulation returns 409 simulation_stopped. Reuse the Idempotency-Key to retry safely.\n\nDeprecated. Use API Box for APIs and Web Box for web apps.",
 		Example: "  continuous simulation-snapshots create --name before-refund --simulation-id sim_01J8Z5X4K7M2N9P0Q1R2S3T4V6",
 		RunE:    runCreateSimulationSnapshotCmd,
 	}

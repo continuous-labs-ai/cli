@@ -24,7 +24,7 @@ func initUpdateSimulatorCmd(parent *cobra.Command) error {
 	var cmd = &cobra.Command{
 		Use:     "update",
 		Short:   "Update Simulator",
-		Long:    "Renames a Simulator. Omitted fields keep their current values. Continuous catalog Simulators cannot be changed.",
+		Long:    "DEPRECATED: Use API Box for APIs and Web Box for web apps\n\nRenames a Simulator. Omitted fields keep their current values. Continuous catalog Simulators cannot be changed.\n\nDeprecated. Use API Box for APIs and Web Box for web apps.",
 		Example: "  continuous simulators update --id <id>",
 		RunE:    runUpdateSimulatorCmd,
 	}

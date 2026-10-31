@@ -26,7 +26,7 @@ func initListSimulationAdvanceEventsCmd(parent *cobra.Command) error {
 	var cmd = &cobra.Command{
 		Use:     "list-simulation-advance-events",
 		Short:   "List Clock Advance Events",
-		Long:    "Returns the ordered event trace for a committed advance. The Simulation must be running. A Simulation created from a Snapshot keeps the traces in the state it started from.",
+		Long:    "DEPRECATED: Use API Box for APIs and Web Box for web apps\n\nReturns the ordered event trace for a committed advance. The Simulation must be running. A Simulation created from a Snapshot keeps the traces in the state it started from.\n\nDeprecated. Use API Box for APIs and Web Box for web apps.",
 		Example: "  continuous simulations list-simulation-advance-events --id <id> --advance-id <id>",
 		RunE:    runListSimulationAdvanceEventsCmd,
 		Aliases: []string{"lsae"},

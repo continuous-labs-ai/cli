@@ -29,7 +29,7 @@ func initListSimulationsCmd(parent *cobra.Command) error {
 	var cmd = &cobra.Command{
 		Use:     "list",
 		Short:   "List Simulations",
-		Long:    "Returns all Simulations that the API key can access. Results can be filtered by status, Simulator ID, pinned Simulator digest, or the Snapshot they started from.",
+		Long:    "DEPRECATED: Use API Box for APIs and Web Box for web apps\n\nReturns all Simulations that the API key can access. Results can be filtered by status, Simulator ID, pinned Simulator digest, or the Snapshot they started from.\n\nDeprecated. Use API Box for APIs and Web Box for web apps.",
 		Example: "  continuous simulations list",
 		RunE:    runListSimulationsCmd,
 	}

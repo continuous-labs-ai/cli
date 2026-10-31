@@ -26,7 +26,7 @@ func initCloneSimulatorCmd(parent *cobra.Command) error {
 	var cmd = &cobra.Command{
 		Use:     "clone",
 		Short:   "Clone Simulator",
-		Long:    "Creates a ready copy of a ready Simulator in another workspace. The clone has a new ID and the source's image digest; the source is unchanged. The source is the caller's workspace: an API key's own workspace, or X-Workspace-Id for a session. An API key may clone into any other workspace of its organization.",
+		Long:    "DEPRECATED: Use API Box for APIs and Web Box for web apps\n\nCreates a ready copy of a ready Simulator in another workspace. The clone has a new ID and the source's image digest; the source is unchanged. The source is the caller's workspace: an API key's own workspace, or X-Workspace-Id for a session. An API key may clone into any other workspace of its organization.\n\nDeprecated. Use API Box for APIs and Web Box for web apps.",
 		Example: "  continuous simulators clone --id <id> --target-workspace-id <id>",
 		RunE:    runCloneSimulatorCmd,
 	}

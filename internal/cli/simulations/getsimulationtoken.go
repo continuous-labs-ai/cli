@@ -23,7 +23,7 @@ func initGetSimulationTokenCmd(parent *cobra.Command) error {
 	var cmd = &cobra.Command{
 		Use:     "get-simulation-token",
 		Short:   "Get Current Simulation Token",
-		Long:    "Returns the Simulation's current token without rotating it, including while the Simulation is stopped.",
+		Long:    "DEPRECATED: Use API Box for APIs and Web Box for web apps\n\nReturns the Simulation's current token without rotating it, including while the Simulation is stopped.\n\nDeprecated. Use API Box for APIs and Web Box for web apps.",
 		Example: "  continuous simulations get-simulation-token --id <id>",
 		RunE:    runGetSimulationTokenCmd,
 		Aliases: []string{"gst"},

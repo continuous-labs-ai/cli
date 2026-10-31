@@ -125,6 +125,8 @@ type SimulatorBuildProgress struct {
 	Submissions int64 `json:"submissions"`
 	// Tool calls the coding loop executed.
 	ToolCalls int64 `json:"tool_calls"`
+	// Total seconds of the build's ended waits for its live credentials, which do not count toward its time limit. 0 when none has ended. The current wait, from waiting.since, is not included.
+	WaitedSeconds int64 `json:"waited_seconds"`
 	// Set while the build waits at QA because the live systems rejected its credentials; refresh them, then resume the build with its resource's resume operation, such as POST /v1/simulators/{id}/resume. Null otherwise.
 	Waiting *SimulatorBuildWaiting `json:"waiting"`
 	// Specification defects the build tolerated without changing the specification, set when the build prepares its specification. Empty when none.
@@ -206,6 +208,13 @@ func (s *SimulatorBuildProgress) GetToolCalls() int64 {
 		return 0
 	}
 	return s.ToolCalls
+}
+
+func (s *SimulatorBuildProgress) GetWaitedSeconds() int64 {
+	if s == nil {
+		return 0
+	}
+	return s.WaitedSeconds
 }
 
 func (s *SimulatorBuildProgress) GetWaiting() *SimulatorBuildWaiting {

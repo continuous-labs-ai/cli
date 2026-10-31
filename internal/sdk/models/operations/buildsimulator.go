@@ -7,50 +7,50 @@ import (
 	"github.com/continuous-labs-ai/cli/internal/sdk/sdkinternal/utils"
 )
 
-type Document struct {
+type BuildSimulatorDocument struct {
 	FileName string `multipartForm:"name=fileName"`
 	Content  []byte `multipartForm:"content"`
 }
 
-func (d *Document) GetFileName() string {
-	if d == nil {
+func (b *BuildSimulatorDocument) GetFileName() string {
+	if b == nil {
 		return ""
 	}
-	return d.FileName
+	return b.FileName
 }
 
-func (d *Document) GetContent() []byte {
-	if d == nil {
+func (b *BuildSimulatorDocument) GetContent() []byte {
+	if b == nil {
 		return []byte{}
 	}
-	return d.Content
+	return b.Content
 }
 
-type Spec struct {
+type BuildSimulatorSpec struct {
 	FileName string `multipartForm:"name=fileName"`
 	Content  []byte `multipartForm:"content"`
 }
 
-func (s *Spec) GetFileName() string {
-	if s == nil {
+func (b *BuildSimulatorSpec) GetFileName() string {
+	if b == nil {
 		return ""
 	}
-	return s.FileName
+	return b.FileName
 }
 
-func (s *Spec) GetContent() []byte {
-	if s == nil {
+func (b *BuildSimulatorSpec) GetContent() []byte {
+	if b == nil {
 		return []byte{}
 	}
-	return s.Content
+	return b.Content
 }
 
 type BuildSimulatorRequestBody struct {
 	// Vendor documentation the builder and reviewer read before they start, as repeated file parts: UTF-8 text (.md, .txt, .html, .json, .yaml, .xml, .csv) or PDF (.pdf). The documents share the request body limit with the spec. An incremental build inherits its parent's documents; a document sent with the same name replaces the parent's.
-	Document []Document                       `multipartForm:"file,name=document"`
+	Document []BuildSimulatorDocument         `multipartForm:"file,name=document"`
 	Request  components.BuildSimulatorRequest `multipartForm:"name=request,json"`
 	// OpenAPI, WSDL or GraphQL document, UTF-8 encoded, at most 64 MiB. Required unless the request is an incremental build (parent_id and instructions, no spec).
-	Spec *Spec `multipartForm:"file,name=spec"`
+	Spec *BuildSimulatorSpec `multipartForm:"file,name=spec"`
 }
 
 func (b BuildSimulatorRequestBody) MarshalJSON() ([]byte, error) {
@@ -64,7 +64,7 @@ func (b *BuildSimulatorRequestBody) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-func (b *BuildSimulatorRequestBody) GetDocument() []Document {
+func (b *BuildSimulatorRequestBody) GetDocument() []BuildSimulatorDocument {
 	if b == nil {
 		return nil
 	}
@@ -78,7 +78,7 @@ func (b *BuildSimulatorRequestBody) GetRequest() components.BuildSimulatorReques
 	return b.Request
 }
 
-func (b *BuildSimulatorRequestBody) GetSpec() *Spec {
+func (b *BuildSimulatorRequestBody) GetSpec() *BuildSimulatorSpec {
 	if b == nil {
 		return nil
 	}

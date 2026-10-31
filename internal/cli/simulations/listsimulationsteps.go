@@ -25,7 +25,7 @@ func initListSimulationStepsCmd(parent *cobra.Command) error {
 	var cmd = &cobra.Command{
 		Use:     "list-simulation-steps",
 		Short:   "List Simulation Steps",
-		Long:    "Lists the Simulation's steps in order. Each request that changed state is one step; a request that only reads registers none. A stopped Simulation returns 409 simulation_stopped; start it first.",
+		Long:    "DEPRECATED: Use API Box for APIs and Web Box for web apps\n\nLists the Simulation's steps in order. Each request that changed state is one step; a request that only reads registers none. A stopped Simulation returns 409 simulation_stopped; start it first.\n\nDeprecated. Use API Box for APIs and Web Box for web apps.",
 		Example: "  continuous simulations list-simulation-steps --id <id>",
 		RunE:    runListSimulationStepsCmd,
 		Aliases: []string{"lss"},

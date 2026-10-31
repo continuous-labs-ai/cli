@@ -24,7 +24,7 @@ func initGetSimulationAdvanceCmd(parent *cobra.Command) error {
 	var cmd = &cobra.Command{
 		Use:     "get-simulation-advance",
 		Short:   "Get Simulation Clock Advance",
-		Long:    "Returns durable clock progress, the event count, and the committed step or failure.",
+		Long:    "DEPRECATED: Use API Box for APIs and Web Box for web apps\n\nReturns durable clock progress, the event count, and the committed step or failure.\n\nDeprecated. Use API Box for APIs and Web Box for web apps.",
 		Example: "  continuous simulations get-simulation-advance --id <id> --advance-id <id>",
 		RunE:    runGetSimulationAdvanceCmd,
 		Aliases: []string{"gsa"},

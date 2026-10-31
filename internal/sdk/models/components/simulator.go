@@ -30,20 +30,20 @@ func (e *SimulatorMode) IsExact() bool {
 	return false
 }
 
-// Source - workspace for a Simulator your workspace built; catalog for a read-only Simulator that Continuous publishes.
-type Source string
+// SimulatorSource - workspace for a Simulator your workspace built; catalog for a read-only Simulator that Continuous publishes.
+type SimulatorSource string
 
 const (
-	SourceWorkspace Source = "workspace"
-	SourceCatalog   Source = "catalog"
+	SimulatorSourceWorkspace SimulatorSource = "workspace"
+	SimulatorSourceCatalog   SimulatorSource = "catalog"
 )
 
-func (e Source) ToPointer() *Source {
+func (e SimulatorSource) ToPointer() *SimulatorSource {
 	return &e
 }
 
 // IsExact returns true if the value matches a known enum value, false otherwise.
-func (e *Source) IsExact() bool {
+func (e *SimulatorSource) IsExact() bool {
 	if e != nil {
 		switch *e {
 		case "workspace", "catalog":
@@ -127,7 +127,7 @@ type Simulator struct {
 	// The build's research stage, or null for a Simulator built before research ran on every build.
 	Research *SimulatorResearch `json:"research"`
 	// workspace for a Simulator your workspace built; catalog for a read-only Simulator that Continuous publishes.
-	Source Source `json:"source"`
+	Source SimulatorSource `json:"source"`
 	// The specification the Simulator was built from, or null until a build has read it. recorded is a Web App Simulator's: the app's origin.
 	SpecKind *SimulatorSpecKind `json:"spec_kind"`
 	// pending while waiting for capacity; building while the build runs; ready when Simulations and incremental builds can use it; failed when the build failed; canceled when a cancel request took effect.
@@ -222,9 +222,9 @@ func (s *Simulator) GetResearch() *SimulatorResearch {
 	return s.Research
 }
 
-func (s *Simulator) GetSource() Source {
+func (s *Simulator) GetSource() SimulatorSource {
 	if s == nil {
-		return Source("")
+		return SimulatorSource("")
 	}
 	return s.Source
 }

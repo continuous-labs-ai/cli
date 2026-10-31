@@ -25,7 +25,7 @@ func initListSimulationSnapshotsCmd(parent *cobra.Command) error {
 	var cmd = &cobra.Command{
 		Use:     "list",
 		Short:   "List Simulation Snapshots",
-		Long:    "Returns the workspace's Snapshots, newest first. Filter by simulation_id for the Snapshots of one Simulation.",
+		Long:    "DEPRECATED: Use API Box for APIs and Web Box for web apps\n\nReturns the workspace's Snapshots, newest first. Filter by simulation_id for the Snapshots of one Simulation.\n\nDeprecated. Use API Box for APIs and Web Box for web apps.",
 		Example: "  continuous simulation-snapshots list",
 		RunE:    runListSimulationSnapshotsCmd,
 	}

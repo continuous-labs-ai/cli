@@ -10,8 +10,8 @@ import (
 func InitSimulationsRoot(parent *cobra.Command) error {
 	var SimulationsCmd = &cobra.Command{
 		Use:   "simulations",
-		Short: "Create Simulations from ready Simulators or Snapshots, then rename, stop, start, and delete them",
-		Long:  "Create Simulations from ready Simulators or Snapshots, then rename, stop, start, and delete them.",
+		Short: "Deprecated",
+		Long:  "Deprecated. Use API Box for APIs and Web Box for web apps. Create Simulations from ready Simulators or Snapshots, then rename, stop, start, and delete them.",
 		RunE: func(cmd *cobra.Command, args []string) error {
 			if usage.UsageRequested(cmd) {
 				return usage.EmitSchema(cmd, cmd.OutOrStdout())
