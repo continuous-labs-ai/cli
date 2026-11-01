@@ -8,8 +8,20 @@ import (
 )
 
 type ResumeMcpboxSnapshotRequest struct {
-	// MCP Box Snapshot ID.
-	ID string `pathParam:"style=simple,explode=false,name=id"`
+	// Snapshot ID.
+	ID   string                         `pathParam:"style=simple,explode=false,name=id"`
+	Body *components.ResumeBuildRequest `request:"mediaType=application/json"`
+}
+
+func (r ResumeMcpboxSnapshotRequest) MarshalJSON() ([]byte, error) {
+	return utils.MarshalJSON(r, "", false)
+}
+
+func (r *ResumeMcpboxSnapshotRequest) UnmarshalJSON(data []byte) error {
+	if err := utils.UnmarshalJSON(data, &r, "", false, nil); err != nil {
+		return err
+	}
+	return nil
 }
 
 func (r *ResumeMcpboxSnapshotRequest) GetID() string {
@@ -17,6 +29,13 @@ func (r *ResumeMcpboxSnapshotRequest) GetID() string {
 		return ""
 	}
 	return r.ID
+}
+
+func (r *ResumeMcpboxSnapshotRequest) GetBody() *components.ResumeBuildRequest {
+	if r == nil {
+		return nil
+	}
+	return r.Body
 }
 
 type ResumeMcpboxSnapshotResponse struct {

@@ -24,7 +24,7 @@ var listWebboxStepsCmdMeta = []flagutil.FlagMeta{
 func initListWebboxStepsCmd(parent *cobra.Command) error {
 	var cmd = &cobra.Command{
 		Use:     "list-webbox-steps",
-		Short:   "List Web Box Steps",
+		Short:   "List Web Box steps",
 		Long:    "Lists the Web Box's steps in order. Each request that changed state is one step; a request that only reads registers none. A Web Box that is not running returns 409 webbox_stopped.",
 		Example: "  continuous webbox list-webbox-steps --id <id>",
 		RunE:    runListWebboxStepsCmd,
@@ -76,7 +76,7 @@ func runListWebboxStepsCmd(cmd *cobra.Command, args []string) error {
 		if err != nil {
 			return output.Error(cmd, err)
 		}
-		return output.PaginatedResult(cmd, res, "ListAPIBoxStepsResponse", "", maxPages)
+		return output.PaginatedResult(cmd, res, "ListBoxStepsResponse", "", maxPages)
 	}
 	if output.WantsRawJSON(cmd) {
 		sdkOpts = append(sdkOpts, operations.WithSkipDeserialization())

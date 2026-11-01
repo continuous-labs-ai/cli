@@ -34,12 +34,14 @@ func (e *WebBoxStatus) IsExact() bool {
 
 type WebBox struct {
 	// Web Box creation time.
-	CreatedAt time.Time       `json:"created_at"`
-	Error     *SimulatorError `json:"error"`
+	CreatedAt time.Time `json:"created_at"`
+	Error     *BoxError `json:"error"`
 	// Web Box ID.
 	ID string `json:"id"`
 	// Whether the Web Box started with the Snapshot's sample data.
 	IncludeSampleData bool `json:"include_sample_data"`
+	// Time of the Box's last data-plane activity.
+	LastActiveAt time.Time `json:"last_active_at"`
 	// Customer JSON metadata, or null.
 	Metadata any `json:"metadata"`
 	// Web Box name. The ID is its identity, and names need not be unique.
@@ -48,6 +50,8 @@ type WebBox struct {
 	SnapshotID string `json:"snapshot_id"`
 	// starting while its runtime boots; running while it serves its app; stopping while it saves its state; stopped when it holds no runtime. A start resumes the saved state.
 	Status WebBoxStatus `json:"status"`
+	// When the Box entered its current status, such as how long it has been starting.
+	StatusChangedAt time.Time `json:"status_changed_at"`
 	// URL that opens the Web Box's app, at a host of its own.
 	URL string `json:"url"`
 }
@@ -70,7 +74,7 @@ func (w *WebBox) GetCreatedAt() time.Time {
 	return w.CreatedAt
 }
 
-func (w *WebBox) GetError() *SimulatorError {
+func (w *WebBox) GetError() *BoxError {
 	if w == nil {
 		return nil
 	}
@@ -89,6 +93,13 @@ func (w *WebBox) GetIncludeSampleData() bool {
 		return false
 	}
 	return w.IncludeSampleData
+}
+
+func (w *WebBox) GetLastActiveAt() time.Time {
+	if w == nil {
+		return time.Time{}
+	}
+	return w.LastActiveAt
 }
 
 func (w *WebBox) GetMetadata() any {
@@ -117,6 +128,13 @@ func (w *WebBox) GetStatus() WebBoxStatus {
 		return WebBoxStatus("")
 	}
 	return w.Status
+}
+
+func (w *WebBox) GetStatusChangedAt() time.Time {
+	if w == nil {
+		return time.Time{}
+	}
+	return w.StatusChangedAt
 }
 
 func (w *WebBox) GetURL() string {

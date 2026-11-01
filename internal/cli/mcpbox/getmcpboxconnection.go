@@ -23,7 +23,7 @@ func initGetMcpboxConnectionCmd(parent *cobra.Command) error {
 	var cmd = &cobra.Command{
 		Use:     "get-mcpbox-connection",
 		Short:   "Get MCP Box connection",
-		Long:    "Returns the MCP Box's endpoint and token, whether it is running or stopped. Requests reach it only while it is running. An MCP Box with no stored token returns 409 mcpbox_token_unavailable; its next start issues one.",
+		Long:    "DEPRECATED: This will be removed in a future release, please migrate away from it as soon as possible\n\nDeprecated: get the MCP Box, whose connection this returns. Returns the MCP Box's endpoint and token, whether it is running or stopped. An MCP Box with no stored token returns 409 mcpbox_token_unavailable; its next start issues one.",
 		Example: "  continuous mcpbox get-mcpbox-connection --id <id>",
 		RunE:    runGetMcpboxConnectionCmd,
 		Aliases: []string{"gmc"},

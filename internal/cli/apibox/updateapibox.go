@@ -17,7 +17,7 @@ import (
 var updateApiboxCmdMeta = []flagutil.FlagMeta{
 	{FlagName: "id", Shorthand: "i", FieldPath: "ID", Kind: flagutil.FlagKindString, Required: true, Description: "API Box ID. [required]"},
 	{FlagName: "metadata", Shorthand: "m", FieldPath: "Body.Metadata", Kind: flagutil.FlagKindJSON, Optional: true, Annotations: `json:"metadata,omitempty"`, Description: "Replacement customer JSON metadata, up to 16 KiB and 64 nesting levels, or null to clear it."},
-	{FlagName: "name", Shorthand: "n", FieldPath: "Body.Name", Kind: flagutil.FlagKindString, Optional: true, Description: "New API Box name."},
+	{FlagName: "name", Shorthand: "n", FieldPath: "Body.Name", Kind: flagutil.FlagKindString, Optional: true, Description: "New name."},
 }
 
 // initUpdateApiboxCmd initializes the update-apibox command.

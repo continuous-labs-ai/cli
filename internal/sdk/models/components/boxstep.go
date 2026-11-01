@@ -7,7 +7,7 @@ import (
 	"time"
 )
 
-type ApiboxStep struct {
+type BoxStep struct {
 	// The request that made the step.
 	Label string `json:"label"`
 	// Step number, from 1 in order.
@@ -16,34 +16,34 @@ type ApiboxStep struct {
 	Time *time.Time `json:"time"`
 }
 
-func (a ApiboxStep) MarshalJSON() ([]byte, error) {
-	return utils.MarshalJSON(a, "", false)
+func (b BoxStep) MarshalJSON() ([]byte, error) {
+	return utils.MarshalJSON(b, "", false)
 }
 
-func (a *ApiboxStep) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &a, "", false, nil); err != nil {
+func (b *BoxStep) UnmarshalJSON(data []byte) error {
+	if err := utils.UnmarshalJSON(data, &b, "", false, nil); err != nil {
 		return err
 	}
 	return nil
 }
 
-func (a *ApiboxStep) GetLabel() string {
-	if a == nil {
+func (b *BoxStep) GetLabel() string {
+	if b == nil {
 		return ""
 	}
-	return a.Label
+	return b.Label
 }
 
-func (a *ApiboxStep) GetStep() int64 {
-	if a == nil {
+func (b *BoxStep) GetStep() int64 {
+	if b == nil {
 		return 0
 	}
-	return a.Step
+	return b.Step
 }
 
-func (a *ApiboxStep) GetTime() *time.Time {
-	if a == nil {
+func (b *BoxStep) GetTime() *time.Time {
+	if b == nil {
 		return nil
 	}
-	return a.Time
+	return b.Time
 }

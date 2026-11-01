@@ -36,12 +36,14 @@ type APIBox struct {
 	// API Box creation time.
 	CreatedAt time.Time `json:"created_at"`
 	// Base URL of the API Box's API. Send the API Box's token in X-Continuous-Token.
-	Endpoint string          `json:"endpoint"`
-	Error    *SimulatorError `json:"error"`
+	Endpoint string    `json:"endpoint"`
+	Error    *BoxError `json:"error"`
 	// API Box ID.
 	ID string `json:"id"`
 	// Whether the API Box started with the Snapshot's sample data.
 	IncludeSampleData bool `json:"include_sample_data"`
+	// Time of the Box's last data-plane activity.
+	LastActiveAt time.Time `json:"last_active_at"`
 	// Customer JSON metadata, or null.
 	Metadata any `json:"metadata"`
 	// API Box name. The ID is its identity, and names need not be unique.
@@ -50,6 +52,8 @@ type APIBox struct {
 	SnapshotID string `json:"snapshot_id"`
 	// starting while its runtime boots; running while it serves requests; stopping while it saves its state; stopped when it holds no runtime. A start resumes the saved state.
 	Status APIBoxStatus `json:"status"`
+	// When the Box entered its current status, such as how long it has been starting.
+	StatusChangedAt time.Time `json:"status_changed_at"`
 }
 
 func (a APIBox) MarshalJSON() ([]byte, error) {
@@ -77,7 +81,7 @@ func (a *APIBox) GetEndpoint() string {
 	return a.Endpoint
 }
 
-func (a *APIBox) GetError() *SimulatorError {
+func (a *APIBox) GetError() *BoxError {
 	if a == nil {
 		return nil
 	}
@@ -96,6 +100,13 @@ func (a *APIBox) GetIncludeSampleData() bool {
 		return false
 	}
 	return a.IncludeSampleData
+}
+
+func (a *APIBox) GetLastActiveAt() time.Time {
+	if a == nil {
+		return time.Time{}
+	}
+	return a.LastActiveAt
 }
 
 func (a *APIBox) GetMetadata() any {
@@ -124,4 +135,11 @@ func (a *APIBox) GetStatus() APIBoxStatus {
 		return APIBoxStatus("")
 	}
 	return a.Status
+}
+
+func (a *APIBox) GetStatusChangedAt() time.Time {
+	if a == nil {
+		return time.Time{}
+	}
+	return a.StatusChangedAt
 }

@@ -30,7 +30,7 @@ func (c *CreateWebboxRequest) GetBody() components.CreateWebBoxRequest {
 type CreateWebboxResponse struct {
 	HTTPMeta components.HTTPMetadata `json:"-"`
 	// Accepted
-	WebBox *components.WebBox
+	CreateWebBoxResponse *components.CreateWebBoxResponse
 }
 
 func (c CreateWebboxResponse) MarshalJSON() ([]byte, error) {
@@ -51,9 +51,9 @@ func (c *CreateWebboxResponse) GetHTTPMeta() components.HTTPMetadata {
 	return c.HTTPMeta
 }
 
-func (c *CreateWebboxResponse) GetWebBox() *components.WebBox {
+func (c *CreateWebboxResponse) GetCreateWebBoxResponse() *components.CreateWebBoxResponse {
 	if c == nil {
 		return nil
 	}
-	return c.WebBox
+	return c.CreateWebBoxResponse
 }

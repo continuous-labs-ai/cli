@@ -2,12 +2,12 @@
 
 package components
 
-type WebboxConnection struct {
+type WebBoxConnection struct {
 	// URL that opens the Web Box's app.
 	URL string `json:"url"`
 }
 
-func (w *WebboxConnection) GetURL() string {
+func (w *WebBoxConnection) GetURL() string {
 	if w == nil {
 		return ""
 	}

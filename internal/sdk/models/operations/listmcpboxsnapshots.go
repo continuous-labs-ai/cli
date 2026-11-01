@@ -3,15 +3,87 @@
 package operations
 
 import (
+	"encoding/json"
+	"fmt"
 	"github.com/continuous-labs-ai/cli/internal/sdk/models/components"
 	"github.com/continuous-labs-ai/cli/internal/sdk/sdkinternal/utils"
 )
 
+// ListMcpboxSnapshotsStatus - Optional build status filter.
+type ListMcpboxSnapshotsStatus string
+
+const (
+	ListMcpboxSnapshotsStatusPending  ListMcpboxSnapshotsStatus = "pending"
+	ListMcpboxSnapshotsStatusBuilding ListMcpboxSnapshotsStatus = "building"
+	ListMcpboxSnapshotsStatusReady    ListMcpboxSnapshotsStatus = "ready"
+	ListMcpboxSnapshotsStatusFailed   ListMcpboxSnapshotsStatus = "failed"
+	ListMcpboxSnapshotsStatusCanceled ListMcpboxSnapshotsStatus = "canceled"
+)
+
+func (e ListMcpboxSnapshotsStatus) ToPointer() *ListMcpboxSnapshotsStatus {
+	return &e
+}
+func (e *ListMcpboxSnapshotsStatus) UnmarshalJSON(data []byte) error {
+	var v string
+	if err := json.Unmarshal(data, &v); err != nil {
+		return err
+	}
+	switch v {
+	case "pending":
+		fallthrough
+	case "building":
+		fallthrough
+	case "ready":
+		fallthrough
+	case "failed":
+		fallthrough
+	case "canceled":
+		*e = ListMcpboxSnapshotsStatus(v)
+		return nil
+	default:
+		return fmt.Errorf("invalid value for ListMcpboxSnapshotsStatus: %v", v)
+	}
+}
+
+// ListMcpboxSnapshotsSource - Optional source filter.
+type ListMcpboxSnapshotsSource string
+
+const (
+	ListMcpboxSnapshotsSourceCatalog ListMcpboxSnapshotsSource = "catalog"
+	ListMcpboxSnapshotsSourceBuild   ListMcpboxSnapshotsSource = "build"
+	ListMcpboxSnapshotsSourceBox     ListMcpboxSnapshotsSource = "box"
+)
+
+func (e ListMcpboxSnapshotsSource) ToPointer() *ListMcpboxSnapshotsSource {
+	return &e
+}
+func (e *ListMcpboxSnapshotsSource) UnmarshalJSON(data []byte) error {
+	var v string
+	if err := json.Unmarshal(data, &v); err != nil {
+		return err
+	}
+	switch v {
+	case "catalog":
+		fallthrough
+	case "build":
+		fallthrough
+	case "box":
+		*e = ListMcpboxSnapshotsSource(v)
+		return nil
+	default:
+		return fmt.Errorf("invalid value for ListMcpboxSnapshotsSource: %v", v)
+	}
+}
+
 type ListMcpboxSnapshotsRequest struct {
+	// Optional build status filter.
+	Status *ListMcpboxSnapshotsStatus `queryParam:"style=form,explode=false,name=status"`
 	// Page size. Values below 1 use 50. Values above 200 use 200.
 	Limit *int64 `default:"50" queryParam:"style=form,explode=false,name=limit"`
 	// Opaque next_cursor value from a previous page.
 	Cursor *string `queryParam:"style=form,explode=false,name=cursor"`
+	// Optional source filter.
+	Source *ListMcpboxSnapshotsSource `queryParam:"style=form,explode=false,name=source"`
 }
 
 func (l ListMcpboxSnapshotsRequest) MarshalJSON() ([]byte, error) {
@@ -23,6 +95,13 @@ func (l *ListMcpboxSnapshotsRequest) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	return nil
+}
+
+func (l *ListMcpboxSnapshotsRequest) GetStatus() *ListMcpboxSnapshotsStatus {
+	if l == nil {
+		return nil
+	}
+	return l.Status
 }
 
 func (l *ListMcpboxSnapshotsRequest) GetLimit() *int64 {
@@ -37,6 +116,13 @@ func (l *ListMcpboxSnapshotsRequest) GetCursor() *string {
 		return nil
 	}
 	return l.Cursor
+}
+
+func (l *ListMcpboxSnapshotsRequest) GetSource() *ListMcpboxSnapshotsSource {
+	if l == nil {
+		return nil
+	}
+	return l.Source
 }
 
 type ListMcpboxSnapshotsResponse struct {

@@ -2,20 +2,20 @@
 
 package components
 
-type McpboxTokenResponse struct {
+type MCPBoxTokenResponse struct {
 	Mcpbox MCPBox `json:"mcpbox"`
-	// The MCP Box's token, which lasts until the MCP Box is deleted. It is null only on a retried create whose first attempt stored no token; a start then issues one.
+	// The MCP Box's token, which lasts until the MCP Box is deleted. It is null only on a retried create whose first attempt stored no token; a start then issues one, which the MCP Box's get returns.
 	Token *string `json:"token"`
 }
 
-func (m *McpboxTokenResponse) GetMcpbox() MCPBox {
+func (m *MCPBoxTokenResponse) GetMcpbox() MCPBox {
 	if m == nil {
 		return MCPBox{}
 	}
 	return m.Mcpbox
 }
 
-func (m *McpboxTokenResponse) GetToken() *string {
+func (m *MCPBoxTokenResponse) GetToken() *string {
 	if m == nil {
 		return nil
 	}

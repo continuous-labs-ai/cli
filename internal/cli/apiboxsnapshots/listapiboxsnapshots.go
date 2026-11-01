@@ -18,7 +18,7 @@ var listApiboxSnapshotsCmdMeta = []flagutil.FlagMeta{
 	{FlagName: "status", FieldPath: "Status", Kind: flagutil.FlagKindEnum, Optional: true, EnumValues: []string{"pending", "building", "ready", "failed", "canceled"}, Description: "Optional build status filter. (options: pending, building, ready, failed, canceled)"},
 	{FlagName: "limit", Shorthand: "l", FieldPath: "Limit", Kind: flagutil.FlagKindInt64, Optional: true, HasDefault: true, DefaultInt: 50, Description: "Page size. Values below 1 use 50. Values above 200 use 200."},
 	{FlagName: "cursor", Shorthand: "c", FieldPath: "Cursor", Kind: flagutil.FlagKindString, Optional: true, Description: "Opaque next_cursor value from a previous page."},
-	{FlagName: "source", FieldPath: "Source", Kind: flagutil.FlagKindEnum, Optional: true, EnumValues: []string{"catalog", "build"}, Description: "Optional source filter. (options: catalog, build)"},
+	{FlagName: "source", FieldPath: "Source", Kind: flagutil.FlagKindEnum, Optional: true, EnumValues: []string{"catalog", "build", "box"}, Description: "Optional source filter. (options: catalog, build, box)"},
 }
 
 // initListApiboxSnapshotsCmd initializes the list-apibox-snapshots command.

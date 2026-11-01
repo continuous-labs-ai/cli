@@ -23,7 +23,7 @@ func initGetWebboxCmd(parent *cobra.Command) error {
 	var cmd = &cobra.Command{
 		Use:     "get",
 		Short:   "Get Web Box",
-		Long:    "Returns a Web Box and its status.",
+		Long:    "Returns a Web Box, its status and its connection: the URL that opens its app, whether it is running or stopped. The app answers only while the Web Box is running.",
 		Example: "  continuous webbox get --id <id>",
 		RunE:    runGetWebboxCmd,
 	}

@@ -1267,6 +1267,8 @@ func (s *ApiboxSnapshots) UpdateApiboxSnapshot(ctx context.Context, request oper
 	case httpRes.StatusCode == 413:
 		fallthrough
 	case httpRes.StatusCode == 415:
+		fallthrough
+	case httpRes.StatusCode == 422:
 		switch {
 		case utils.MatchContentType(httpRes.Header.Get("Content-Type"), `application/problem+json`):
 			rawBody, err := utils.ConsumeRawBody(httpRes)
@@ -1342,7 +1344,7 @@ func (s *ApiboxSnapshots) UpdateApiboxSnapshot(ctx context.Context, request oper
 
 }
 
-// CancelApiboxSnapshot - Cancel Snapshot build
+// CancelApiboxSnapshot - Cancel API Box Snapshot build
 // Requests cancellation of a pending or active build and returns the Snapshot without waiting for the build to stop. Get the Snapshot until its status leaves pending or building. The build can finish before cancellation takes effect. A Snapshot whose build has settled is returned unchanged.
 func (s *ApiboxSnapshots) CancelApiboxSnapshot(ctx context.Context, request operations.CancelApiboxSnapshotRequest, opts ...operations.Option) (*operations.CancelApiboxSnapshotResponse, error) {
 	o := operations.Options{}
@@ -1554,8 +1556,8 @@ func (s *ApiboxSnapshots) CancelApiboxSnapshot(ctx context.Context, request oper
 
 }
 
-// ResumeApiboxSnapshot - Resume Snapshot build
-// Resumes a build that waits at QA because its live credentials were rejected, as build.waiting reports. Refresh each credential it names with PATCH /v1/credentials/{id} first: QA then runs again with their current values, and the build goes on to finalize. Returns the Snapshot, still building. The wait does not count toward the build's time limit: the build resumes with the time it had left when it began waiting. A build that is not waiting returns 409 simulator_not_waiting.
+// ResumeApiboxSnapshot - Resume API Box Snapshot build
+// Resumes a build that waits, as build.waiting reports: at QA because its live credentials were rejected, or for more time after it used its time limit. For a credential wait, refresh each credential it names with PATCH /v1/credentials/{id} first: QA then runs again with their current values, and the build goes on to finalize. For a wait for more time, send add_seconds: the build continues where it stopped, with that much time from the resume. Returns the Snapshot, still building. A wait does not count toward the build's time limit: a build resumed from a credential wait has the time it had left when it began waiting. A build that is not waiting returns 409 apibox_snapshot_not_waiting.
 func (s *ApiboxSnapshots) ResumeApiboxSnapshot(ctx context.Context, request operations.ResumeApiboxSnapshotRequest, opts ...operations.Option) (*operations.ResumeApiboxSnapshotResponse, error) {
 	o := operations.Options{}
 	supportedOptions := []string{
@@ -1589,6 +1591,10 @@ func (s *ApiboxSnapshots) ResumeApiboxSnapshot(ctx context.Context, request oper
 		OAuth2Scopes:     nil,
 		SecuritySource:   s.sdkConfiguration.Security,
 	}
+	bodyReader, reqContentType, err := utils.SerializeRequestBody(ctx, request, false, true, "Body", "json", `request:"mediaType=application/json"`)
+	if err != nil {
+		return nil, err
+	}
 
 	timeout := o.Timeout
 	if timeout == nil {
@@ -1608,12 +1614,15 @@ func (s *ApiboxSnapshots) ResumeApiboxSnapshot(ctx context.Context, request oper
 		}()
 	}
 
-	req, err := http.NewRequestWithContext(ctx, "POST", opURL, nil)
+	req, err := http.NewRequestWithContext(ctx, "POST", opURL, bodyReader)
 	if err != nil {
 		return nil, fmt.Errorf("error creating request: %w", err)
 	}
 	req.Header.Set("Accept", "application/json")
 	req.Header.Set("User-Agent", s.sdkConfiguration.UserAgent)
+	if reqContentType != "" {
+		req.Header.Set("Content-Type", reqContentType)
+	}
 
 	if err := utils.PopulateSecurity(ctx, req, s.sdkConfiguration.Security); err != nil {
 		return nil, err
@@ -1686,13 +1695,21 @@ func (s *ApiboxSnapshots) ResumeApiboxSnapshot(ctx context.Context, request oper
 			}
 			return nil, sdkerrors.NewSDKDefaultError(fmt.Sprintf("unknown content-type received: %s", httpRes.Header.Get("Content-Type")), httpRes.StatusCode, string(rawBody), httpRes)
 		}
+	case httpRes.StatusCode == 400:
+		fallthrough
 	case httpRes.StatusCode == 401:
 		fallthrough
 	case httpRes.StatusCode == 403:
 		fallthrough
 	case httpRes.StatusCode == 404:
 		fallthrough
+	case httpRes.StatusCode == 408:
+		fallthrough
 	case httpRes.StatusCode == 409:
+		fallthrough
+	case httpRes.StatusCode == 413:
+		fallthrough
+	case httpRes.StatusCode == 415:
 		switch {
 		case utils.MatchContentType(httpRes.Header.Get("Content-Type"), `application/problem+json`):
 			rawBody, err := utils.ConsumeRawBody(httpRes)

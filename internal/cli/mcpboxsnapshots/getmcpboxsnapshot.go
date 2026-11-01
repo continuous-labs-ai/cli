@@ -23,7 +23,7 @@ func initGetMcpboxSnapshotCmd(parent *cobra.Command) error {
 	var cmd = &cobra.Command{
 		Use:     "get",
 		Short:   "Get MCP Box Snapshot",
-		Long:    "Returns an MCP Box Snapshot of the workspace.",
+		Long:    "Returns an MCP Box Snapshot of the workspace or the catalog, and its build status.",
 		Example: "  continuous mcpbox-snapshots get --id <id>",
 		RunE:    runGetMcpboxSnapshotCmd,
 	}

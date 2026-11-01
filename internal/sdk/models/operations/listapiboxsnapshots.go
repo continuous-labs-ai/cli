@@ -51,6 +51,7 @@ type ListApiboxSnapshotsSource string
 const (
 	ListApiboxSnapshotsSourceCatalog ListApiboxSnapshotsSource = "catalog"
 	ListApiboxSnapshotsSourceBuild   ListApiboxSnapshotsSource = "build"
+	ListApiboxSnapshotsSourceBox     ListApiboxSnapshotsSource = "box"
 )
 
 func (e ListApiboxSnapshotsSource) ToPointer() *ListApiboxSnapshotsSource {
@@ -65,6 +66,8 @@ func (e *ListApiboxSnapshotsSource) UnmarshalJSON(data []byte) error {
 	case "catalog":
 		fallthrough
 	case "build":
+		fallthrough
+	case "box":
 		*e = ListApiboxSnapshotsSource(v)
 		return nil
 	default:

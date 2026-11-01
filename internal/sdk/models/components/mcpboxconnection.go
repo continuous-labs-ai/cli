@@ -2,21 +2,21 @@
 
 package components
 
-type McpboxConnection struct {
+type MCPBoxConnection struct {
 	// Base URL of the MCP Box; its MCP endpoint is this URL followed by /mcp.
 	Endpoint string `json:"endpoint"`
 	// The MCP Box's token. Send it in X-Continuous-Token on each request.
 	Token string `json:"token"`
 }
 
-func (m *McpboxConnection) GetEndpoint() string {
+func (m *MCPBoxConnection) GetEndpoint() string {
 	if m == nil {
 		return ""
 	}
 	return m.Endpoint
 }
 
-func (m *McpboxConnection) GetToken() string {
+func (m *MCPBoxConnection) GetToken() string {
 	if m == nil {
 		return ""
 	}

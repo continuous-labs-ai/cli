@@ -22,7 +22,7 @@ func (g *GetWebboxConnectionRequest) GetID() string {
 type GetWebboxConnectionResponse struct {
 	HTTPMeta components.HTTPMetadata `json:"-"`
 	// OK
-	WebboxConnection *components.WebboxConnection
+	WebBoxConnection *components.WebBoxConnection
 }
 
 func (g GetWebboxConnectionResponse) MarshalJSON() ([]byte, error) {
@@ -43,9 +43,9 @@ func (g *GetWebboxConnectionResponse) GetHTTPMeta() components.HTTPMetadata {
 	return g.HTTPMeta
 }
 
-func (g *GetWebboxConnectionResponse) GetWebboxConnection() *components.WebboxConnection {
+func (g *GetWebboxConnectionResponse) GetWebBoxConnection() *components.WebBoxConnection {
 	if g == nil {
 		return nil
 	}
-	return g.WebboxConnection
+	return g.WebBoxConnection
 }

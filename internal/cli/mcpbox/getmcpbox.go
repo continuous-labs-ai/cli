@@ -23,7 +23,7 @@ func initGetMcpboxCmd(parent *cobra.Command) error {
 	var cmd = &cobra.Command{
 		Use:     "get",
 		Short:   "Get MCP Box",
-		Long:    "Returns an MCP Box and its status.",
+		Long:    "Returns an MCP Box, its status and its connection: its endpoint and token, whether it is running or stopped. Requests reach it only while it is running.",
 		Example: "  continuous mcpbox get --id <id>",
 		RunE:    runGetMcpboxCmd,
 	}

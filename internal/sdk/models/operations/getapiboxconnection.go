@@ -22,7 +22,7 @@ func (g *GetApiboxConnectionRequest) GetID() string {
 type GetApiboxConnectionResponse struct {
 	HTTPMeta components.HTTPMetadata `json:"-"`
 	// OK
-	ApiboxConnection *components.ApiboxConnection
+	APIBoxConnection *components.APIBoxConnection
 }
 
 func (g GetApiboxConnectionResponse) MarshalJSON() ([]byte, error) {
@@ -43,9 +43,9 @@ func (g *GetApiboxConnectionResponse) GetHTTPMeta() components.HTTPMetadata {
 	return g.HTTPMeta
 }
 
-func (g *GetApiboxConnectionResponse) GetApiboxConnection() *components.ApiboxConnection {
+func (g *GetApiboxConnectionResponse) GetAPIBoxConnection() *components.APIBoxConnection {
 	if g == nil {
 		return nil
 	}
-	return g.ApiboxConnection
+	return g.APIBoxConnection
 }

@@ -23,7 +23,7 @@ func initGetApiboxConnectionCmd(parent *cobra.Command) error {
 	var cmd = &cobra.Command{
 		Use:     "get-apibox-connection",
 		Short:   "Get API Box connection",
-		Long:    "Returns the API Box's endpoint and token, whether it is running or stopped. Requests reach it only while it is running. An API Box with no stored token returns 409 apibox_token_unavailable; its next start issues one.",
+		Long:    "DEPRECATED: This will be removed in a future release, please migrate away from it as soon as possible\n\nDeprecated: get the API Box, whose connection this returns. Returns the API Box's endpoint and token, whether it is running or stopped. An API Box with no stored token returns 409 apibox_token_unavailable; its next start issues one.",
 		Example: "  continuous apibox get-apibox-connection --id <id>",
 		RunE:    runGetApiboxConnectionCmd,
 		Aliases: []string{"gac"},

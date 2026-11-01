@@ -7,15 +7,40 @@ import (
 	"time"
 )
 
+// Type - live_credentials while QA waits for the credentials it names to be refreshed; time_limit while the build waits for a resume that adds time with add_seconds.
+type Type string
+
+const (
+	TypeLiveCredentials Type = "live_credentials"
+	TypeTimeLimit       Type = "time_limit"
+)
+
+func (e Type) ToPointer() *Type {
+	return &e
+}
+
+// IsExact returns true if the value matches a known enum value, false otherwise.
+func (e *Type) IsExact() bool {
+	if e != nil {
+		switch *e {
+		case "live_credentials", "time_limit":
+			return true
+		}
+	}
+	return false
+}
+
 type SimulatorBuildWaiting struct {
-	// The credentials to refresh with PATCH /v1/credentials/{id} before resuming the build.
+	// The credentials to refresh with PATCH /v1/credentials/{id} before resuming the build. Empty for time_limit.
 	CredentialIds []string `json:"credential_ids"`
-	// When the wait ends, 7 days after it began: a build not resumed by then fails with error code live_credential_rejected. The wait does not count toward the build's time limit.
+	// When the wait ends, 7 days after it began: a build not resumed by then fails, with error code live_credential_rejected for live_credentials and for its time limit for time_limit. The wait does not count toward the build's time limit.
 	Deadline time.Time `json:"deadline"`
-	// Why the build waits: the status and detail of the live reply that rejected QA's authenticated read.
+	// Why the build waits: for live_credentials, the status and detail of the live reply that rejected QA's authenticated read.
 	Reason string `json:"reason"`
 	// When the build started waiting.
 	Since time.Time `json:"since"`
+	// live_credentials while QA waits for the credentials it names to be refreshed; time_limit while the build waits for a resume that adds time with add_seconds.
+	Type Type `json:"type"`
 }
 
 func (s SimulatorBuildWaiting) MarshalJSON() ([]byte, error) {
@@ -55,4 +80,11 @@ func (s *SimulatorBuildWaiting) GetSince() time.Time {
 		return time.Time{}
 	}
 	return s.Since
+}
+
+func (s *SimulatorBuildWaiting) GetType() Type {
+	if s == nil {
+		return Type("")
+	}
+	return s.Type
 }

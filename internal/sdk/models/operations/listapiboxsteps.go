@@ -51,7 +51,7 @@ func (l *ListApiboxStepsRequest) GetLimit() *int64 {
 type ListApiboxStepsResponse struct {
 	HTTPMeta components.HTTPMetadata `json:"-"`
 	// OK
-	ListAPIBoxStepsResponse *components.ListAPIBoxStepsResponse
+	ListBoxStepsResponse *components.ListBoxStepsResponse
 
 	Next func() (*ListApiboxStepsResponse, error)
 }
@@ -74,9 +74,9 @@ func (l *ListApiboxStepsResponse) GetHTTPMeta() components.HTTPMetadata {
 	return l.HTTPMeta
 }
 
-func (l *ListApiboxStepsResponse) GetListAPIBoxStepsResponse() *components.ListAPIBoxStepsResponse {
+func (l *ListApiboxStepsResponse) GetListBoxStepsResponse() *components.ListBoxStepsResponse {
 	if l == nil {
 		return nil
 	}
-	return l.ListAPIBoxStepsResponse
+	return l.ListBoxStepsResponse
 }

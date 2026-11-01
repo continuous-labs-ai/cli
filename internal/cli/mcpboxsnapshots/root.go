@@ -10,8 +10,8 @@ import (
 func InitMcpboxSnapshotsRoot(parent *cobra.Command) error {
 	var McpboxSnapshotsCmd = &cobra.Command{
 		Use:   "mcpbox-snapshots",
-		Short: "List, rename and delete the MCP Box Snapshots that Continuous publishes into your workspace",
-		Long:  "List, rename and delete the MCP Box Snapshots that Continuous publishes into your workspace. Each holds an MCP server's tools, built against an API Box Snapshot.",
+		Short: "Build MCP Box Snapshots of an MCP server's tools against a ready API Box Snapshot",
+		Long:  "Build MCP Box Snapshots of an MCP server's tools against a ready API Box Snapshot. MCP Boxes serve a ready Snapshot.",
 		RunE: func(cmd *cobra.Command, args []string) error {
 			if usage.UsageRequested(cmd) {
 				return usage.EmitSchema(cmd, cmd.OutOrStdout())

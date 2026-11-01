@@ -5,7 +5,7 @@ package components
 type UpdateAPIBoxRequest struct {
 	// Replacement customer JSON metadata, up to 16 KiB and 64 nesting levels, or null to clear it.
 	Metadata any `json:"metadata,omitzero"`
-	// New API Box name.
+	// New name.
 	Name *string `json:"name,omitzero"`
 }
 

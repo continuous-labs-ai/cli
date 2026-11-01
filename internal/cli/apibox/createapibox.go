@@ -27,7 +27,7 @@ func initCreateApiboxCmd(parent *cobra.Command) error {
 	var cmd = &cobra.Command{
 		Use:     "create",
 		Short:   "Create API Box",
-		Long:    "Creates an API Box from a ready API Box Snapshot and starts it. It returns at once with status starting and the API Box's token; get the API Box until it is running. Send the token in X-Continuous-Token on each request to the API Box's endpoint. The token lasts as long as the API Box, and its connection returns it again. Each API Box has its own state, and runs in real time.",
+		Long:    "Creates an API Box from a ready API Box Snapshot and starts it. It returns at once with status starting and the API Box's token; get the API Box until it is running. Send the token in X-Continuous-Token on each request to the API Box's endpoint. The token lasts as long as the API Box, and its get returns it again. Each API Box has its own state, and runs in real time.",
 		Example: "  continuous apibox create --snapshot-id abs_01J8Z5X4K70000000000000002",
 		RunE:    runCreateApiboxCmd,
 	}

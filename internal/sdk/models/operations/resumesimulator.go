@@ -9,7 +9,19 @@ import (
 
 type ResumeSimulatorRequest struct {
 	// Simulator ID.
-	ID string `pathParam:"style=simple,explode=false,name=id"`
+	ID   string                         `pathParam:"style=simple,explode=false,name=id"`
+	Body *components.ResumeBuildRequest `request:"mediaType=application/json"`
+}
+
+func (r ResumeSimulatorRequest) MarshalJSON() ([]byte, error) {
+	return utils.MarshalJSON(r, "", false)
+}
+
+func (r *ResumeSimulatorRequest) UnmarshalJSON(data []byte) error {
+	if err := utils.UnmarshalJSON(data, &r, "", false, nil); err != nil {
+		return err
+	}
+	return nil
 }
 
 func (r *ResumeSimulatorRequest) GetID() string {
@@ -17,6 +29,13 @@ func (r *ResumeSimulatorRequest) GetID() string {
 		return ""
 	}
 	return r.ID
+}
+
+func (r *ResumeSimulatorRequest) GetBody() *components.ResumeBuildRequest {
+	if r == nil {
+		return nil
+	}
+	return r.Body
 }
 
 type ResumeSimulatorResponse struct {

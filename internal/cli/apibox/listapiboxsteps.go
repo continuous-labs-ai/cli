@@ -24,7 +24,7 @@ var listApiboxStepsCmdMeta = []flagutil.FlagMeta{
 func initListApiboxStepsCmd(parent *cobra.Command) error {
 	var cmd = &cobra.Command{
 		Use:     "list-apibox-steps",
-		Short:   "List API Box Steps",
+		Short:   "List API Box steps",
 		Long:    "Lists the API Box's steps in order. Each request that changed state is one step; a request that only reads registers none. An API Box that is not running returns 409 apibox_stopped.",
 		Example: "  continuous apibox list-apibox-steps --id <id>",
 		RunE:    runListApiboxStepsCmd,
@@ -76,7 +76,7 @@ func runListApiboxStepsCmd(cmd *cobra.Command, args []string) error {
 		if err != nil {
 			return output.Error(cmd, err)
 		}
-		return output.PaginatedResult(cmd, res, "ListAPIBoxStepsResponse", "", maxPages)
+		return output.PaginatedResult(cmd, res, "ListBoxStepsResponse", "", maxPages)
 	}
 	if output.WantsRawJSON(cmd) {
 		sdkOpts = append(sdkOpts, operations.WithSkipDeserialization())

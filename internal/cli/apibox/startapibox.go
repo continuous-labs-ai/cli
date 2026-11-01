@@ -23,7 +23,7 @@ func initStartApiboxCmd(parent *cobra.Command) error {
 	var cmd = &cobra.Command{
 		Use:     "start",
 		Short:   "Start API Box",
-		Long:    "Starts a stopped API Box from the state its stop saved, and returns at once with status starting and the API Box's token, the same one each start. A running, starting or stopping API Box returns 409 apibox_not_stopped.",
+		Long:    "Starts a stopped API Box from the state its stop saved, and returns at once with status starting; get the API Box until it is running. Its token stays the same; its get returns it. A running, starting or stopping API Box returns 409 apibox_not_stopped.",
 		Example: "  continuous apibox start --id <id>",
 		RunE:    runStartApiboxCmd,
 	}
