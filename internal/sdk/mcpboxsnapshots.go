@@ -20,7 +20,7 @@ import (
 	"strings"
 )
 
-// McpboxSnapshots - List, rename and delete the MCP Box Snapshots that Continuous publishes into your workspace. Each holds an MCP server's tools, built against an API Box Snapshot.
+// McpboxSnapshots - Build MCP Box Snapshots of an MCP server's tools against a ready API Box Snapshot. MCP Boxes serve a ready Snapshot.
 type McpboxSnapshots struct {
 	rootSDK          *ContinuousSimulation
 	sdkConfiguration config.SDKConfiguration
@@ -36,7 +36,7 @@ func newMcpboxSnapshots(rootSDK *ContinuousSimulation, sdkConfig config.SDKConfi
 }
 
 // ListMcpboxSnapshots - List MCP Box Snapshots
-// Returns the workspace's MCP Box Snapshots, newest first.
+// Returns the workspace's MCP Box Snapshots and the catalog's, newest first. Results can be filtered by status and source.
 func (s *McpboxSnapshots) ListMcpboxSnapshots(ctx context.Context, request *operations.ListMcpboxSnapshotsRequest, opts ...operations.Option) (*operations.ListMcpboxSnapshotsResponse, error) {
 	o := operations.Options{}
 	supportedOptions := []string{
@@ -758,6 +758,8 @@ func (s *McpboxSnapshots) DeleteMcpboxSnapshot(ctx context.Context, request oper
 		}
 	case httpRes.StatusCode == 401:
 		fallthrough
+	case httpRes.StatusCode == 403:
+		fallthrough
 	case httpRes.StatusCode == 404:
 		fallthrough
 	case httpRes.StatusCode == 409:
@@ -837,7 +839,7 @@ func (s *McpboxSnapshots) DeleteMcpboxSnapshot(ctx context.Context, request oper
 }
 
 // GetMcpboxSnapshot - Get MCP Box Snapshot
-// Returns an MCP Box Snapshot of the workspace.
+// Returns an MCP Box Snapshot of the workspace or the catalog, and its build status.
 func (s *McpboxSnapshots) GetMcpboxSnapshot(ctx context.Context, request operations.GetMcpboxSnapshotRequest, opts ...operations.Option) (*operations.GetMcpboxSnapshotResponse, error) {
 	o := operations.Options{}
 	supportedOptions := []string{
@@ -1260,6 +1262,8 @@ func (s *McpboxSnapshots) UpdateMcpboxSnapshot(ctx context.Context, request oper
 		fallthrough
 	case httpRes.StatusCode == 401:
 		fallthrough
+	case httpRes.StatusCode == 403:
+		fallthrough
 	case httpRes.StatusCode == 404:
 		fallthrough
 	case httpRes.StatusCode == 408:
@@ -1267,6 +1271,8 @@ func (s *McpboxSnapshots) UpdateMcpboxSnapshot(ctx context.Context, request oper
 	case httpRes.StatusCode == 413:
 		fallthrough
 	case httpRes.StatusCode == 415:
+		fallthrough
+	case httpRes.StatusCode == 422:
 		switch {
 		case utils.MatchContentType(httpRes.Header.Get("Content-Type"), `application/problem+json`):
 			rawBody, err := utils.ConsumeRawBody(httpRes)
@@ -1342,7 +1348,7 @@ func (s *McpboxSnapshots) UpdateMcpboxSnapshot(ctx context.Context, request oper
 
 }
 
-// CancelMcpboxSnapshot - Cancel Snapshot build
+// CancelMcpboxSnapshot - Cancel MCP Box Snapshot build
 // Requests cancellation of a pending or active build and returns the Snapshot without waiting for the build to stop. Get the Snapshot until its status leaves pending or building. The build can finish before cancellation takes effect. A Snapshot whose build has settled is returned unchanged.
 func (s *McpboxSnapshots) CancelMcpboxSnapshot(ctx context.Context, request operations.CancelMcpboxSnapshotRequest, opts ...operations.Option) (*operations.CancelMcpboxSnapshotResponse, error) {
 	o := operations.Options{}
@@ -1476,6 +1482,8 @@ func (s *McpboxSnapshots) CancelMcpboxSnapshot(ctx context.Context, request oper
 		}
 	case httpRes.StatusCode == 401:
 		fallthrough
+	case httpRes.StatusCode == 403:
+		fallthrough
 	case httpRes.StatusCode == 404:
 		switch {
 		case utils.MatchContentType(httpRes.Header.Get("Content-Type"), `application/problem+json`):
@@ -1552,8 +1560,8 @@ func (s *McpboxSnapshots) CancelMcpboxSnapshot(ctx context.Context, request oper
 
 }
 
-// ResumeMcpboxSnapshot - Resume Snapshot build
-// Resumes a build that waits at QA because its live credential was rejected, as build.waiting reports. Refresh the credential it names with PATCH /v1/credentials/{id} first: QA then runs again with its current value, and the build goes on to finalize. Returns the Snapshot, still building. The wait does not count toward the build's time limit: the build resumes with the time it had left when it began waiting. A build that is not waiting returns 409 simulator_not_waiting.
+// ResumeMcpboxSnapshot - Resume MCP Box Snapshot build
+// Resumes a build that waits, as build.waiting reports: at QA because its live credential was rejected, or for more time after it used its time limit. For a credential wait, refresh the credential it names with PATCH /v1/credentials/{id} first: QA then runs again with its current value, and the build goes on to finalize. For a wait for more time, send add_seconds: the build continues where it stopped, with that much time from the resume. Returns the Snapshot, still building. A wait does not count toward the build's time limit: a build resumed from a credential wait has the time it had left when it began waiting. A build that is not waiting returns 409 mcpbox_snapshot_not_waiting.
 func (s *McpboxSnapshots) ResumeMcpboxSnapshot(ctx context.Context, request operations.ResumeMcpboxSnapshotRequest, opts ...operations.Option) (*operations.ResumeMcpboxSnapshotResponse, error) {
 	o := operations.Options{}
 	supportedOptions := []string{
@@ -1587,6 +1595,10 @@ func (s *McpboxSnapshots) ResumeMcpboxSnapshot(ctx context.Context, request oper
 		OAuth2Scopes:     nil,
 		SecuritySource:   s.sdkConfiguration.Security,
 	}
+	bodyReader, reqContentType, err := utils.SerializeRequestBody(ctx, request, false, true, "Body", "json", `request:"mediaType=application/json"`)
+	if err != nil {
+		return nil, err
+	}
 
 	timeout := o.Timeout
 	if timeout == nil {
@@ -1606,12 +1618,15 @@ func (s *McpboxSnapshots) ResumeMcpboxSnapshot(ctx context.Context, request oper
 		}()
 	}
 
-	req, err := http.NewRequestWithContext(ctx, "POST", opURL, nil)
+	req, err := http.NewRequestWithContext(ctx, "POST", opURL, bodyReader)
 	if err != nil {
 		return nil, fmt.Errorf("error creating request: %w", err)
 	}
 	req.Header.Set("Accept", "application/json")
 	req.Header.Set("User-Agent", s.sdkConfiguration.UserAgent)
+	if reqContentType != "" {
+		req.Header.Set("Content-Type", reqContentType)
+	}
 
 	if err := utils.PopulateSecurity(ctx, req, s.sdkConfiguration.Security); err != nil {
 		return nil, err
@@ -1684,11 +1699,21 @@ func (s *McpboxSnapshots) ResumeMcpboxSnapshot(ctx context.Context, request oper
 			}
 			return nil, sdkerrors.NewSDKDefaultError(fmt.Sprintf("unknown content-type received: %s", httpRes.Header.Get("Content-Type")), httpRes.StatusCode, string(rawBody), httpRes)
 		}
+	case httpRes.StatusCode == 400:
+		fallthrough
 	case httpRes.StatusCode == 401:
+		fallthrough
+	case httpRes.StatusCode == 403:
 		fallthrough
 	case httpRes.StatusCode == 404:
 		fallthrough
+	case httpRes.StatusCode == 408:
+		fallthrough
 	case httpRes.StatusCode == 409:
+		fallthrough
+	case httpRes.StatusCode == 413:
+		fallthrough
+	case httpRes.StatusCode == 415:
 		switch {
 		case utils.MatchContentType(httpRes.Header.Get("Content-Type"), `application/problem+json`):
 			rawBody, err := utils.ConsumeRawBody(httpRes)

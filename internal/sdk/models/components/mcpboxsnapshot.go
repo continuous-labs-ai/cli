@@ -7,7 +7,31 @@ import (
 	"time"
 )
 
-// MCPBoxSnapshotStatus - pending while waiting for capacity; building while the build runs; ready when MCP Boxes can serve it; failed when the build failed; canceled when a cancel request took effect.
+// MCPBoxSnapshotSource - catalog for a Snapshot Continuous publishes, build for one built or published into the workspace, box for one saved from an MCP Box.
+type MCPBoxSnapshotSource string
+
+const (
+	MCPBoxSnapshotSourceCatalog MCPBoxSnapshotSource = "catalog"
+	MCPBoxSnapshotSourceBuild   MCPBoxSnapshotSource = "build"
+	MCPBoxSnapshotSourceBox     MCPBoxSnapshotSource = "box"
+)
+
+func (e MCPBoxSnapshotSource) ToPointer() *MCPBoxSnapshotSource {
+	return &e
+}
+
+// IsExact returns true if the value matches a known enum value, false otherwise.
+func (e *MCPBoxSnapshotSource) IsExact() bool {
+	if e != nil {
+		switch *e {
+		case "catalog", "build", "box":
+			return true
+		}
+	}
+	return false
+}
+
+// MCPBoxSnapshotStatus - pending while waiting for capacity; building while the build runs; ready when boxes can start from it; failed when the build failed; canceled when a cancel request took effect.
 type MCPBoxSnapshotStatus string
 
 const (
@@ -36,26 +60,34 @@ func (e *MCPBoxSnapshotStatus) IsExact() bool {
 type MCPBoxSnapshot struct {
 	// The API Box Snapshot the MCP Box was built against, whose API it calls.
 	ApiboxSnapshotID string `json:"apibox_snapshot_id"`
-	// The build's latest progress report, or null before the first report. A settled Snapshot keeps its last report. A build waiting for its live credentials resumes with POST /v1/mcpbox-snapshots/{id}/resume.
+	// The build's latest progress report, or null before the first report. A settled Snapshot keeps its last report. A build waiting for its live credentials resumes when the Snapshot's resume is requested.
 	Build *SimulatorBuildProgress `json:"build"`
+	// What a ready Snapshot serves, or null.
+	Composition *SimulatorComposition `json:"composition"`
 	// Snapshot creation time.
 	CreatedAt time.Time `json:"created_at"`
-	// Workspace credentials the build was allowed to call real systems with. Empty when none.
+	// Workspace credentials the build used, such as a web app login or credentials it was allowed to call real systems with. Empty when none.
 	CredentialIds []string        `json:"credential_ids"`
 	Error         *SimulatorError `json:"error"`
+	// Limitations the Snapshot records beyond those listed in limitations.
+	HiddenLimitations int64 `json:"hidden_limitations"`
 	// MCP Box Snapshot ID.
 	ID string `json:"id"`
 	// The instructions the build followed, or empty when none were given.
 	Instructions string `json:"instructions"`
+	// Behavior the Snapshot does not serve like the real system, most important first. Empty when none.
+	Limitations []Limitation `json:"limitations"`
 	// Customer JSON metadata, or null.
 	Metadata any `json:"metadata"`
 	// Snapshot name. The ID is its identity, and names need not be unique.
 	Name string `json:"name"`
 	// The build's research stage, or null when research did not run.
 	Research *SimulatorResearch `json:"research"`
+	// catalog for a Snapshot Continuous publishes, build for one built or published into the workspace, box for one saved from an MCP Box.
+	Source MCPBoxSnapshotSource `json:"source"`
 	// The source MCP server whose tools the MCP Box serves, or empty when the build called no live source.
 	SourceURL string `json:"source_url"`
-	// pending while waiting for capacity; building while the build runs; ready when MCP Boxes can serve it; failed when the build failed; canceled when a cancel request took effect.
+	// pending while waiting for capacity; building while the build runs; ready when boxes can start from it; failed when the build failed; canceled when a cancel request took effect.
 	Status MCPBoxSnapshotStatus `json:"status"`
 }
 
@@ -84,6 +116,13 @@ func (m *MCPBoxSnapshot) GetBuild() *SimulatorBuildProgress {
 	return m.Build
 }
 
+func (m *MCPBoxSnapshot) GetComposition() *SimulatorComposition {
+	if m == nil {
+		return nil
+	}
+	return m.Composition
+}
+
 func (m *MCPBoxSnapshot) GetCreatedAt() time.Time {
 	if m == nil {
 		return time.Time{}
@@ -105,6 +144,13 @@ func (m *MCPBoxSnapshot) GetError() *SimulatorError {
 	return m.Error
 }
 
+func (m *MCPBoxSnapshot) GetHiddenLimitations() int64 {
+	if m == nil {
+		return 0
+	}
+	return m.HiddenLimitations
+}
+
 func (m *MCPBoxSnapshot) GetID() string {
 	if m == nil {
 		return ""
@@ -117,6 +163,13 @@ func (m *MCPBoxSnapshot) GetInstructions() string {
 		return ""
 	}
 	return m.Instructions
+}
+
+func (m *MCPBoxSnapshot) GetLimitations() []Limitation {
+	if m == nil {
+		return []Limitation{}
+	}
+	return m.Limitations
 }
 
 func (m *MCPBoxSnapshot) GetMetadata() any {
@@ -138,6 +191,13 @@ func (m *MCPBoxSnapshot) GetResearch() *SimulatorResearch {
 		return nil
 	}
 	return m.Research
+}
+
+func (m *MCPBoxSnapshot) GetSource() MCPBoxSnapshotSource {
+	if m == nil {
+		return MCPBoxSnapshotSource("")
+	}
+	return m.Source
 }
 
 func (m *MCPBoxSnapshot) GetSourceURL() string {

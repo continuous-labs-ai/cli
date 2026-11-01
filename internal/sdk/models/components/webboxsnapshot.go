@@ -7,12 +7,13 @@ import (
 	"time"
 )
 
-// WebBoxSnapshotSource - catalog for a Snapshot Continuous publishes, build for one built into the workspace.
+// WebBoxSnapshotSource - catalog for a Snapshot Continuous publishes, build for one built into the workspace, box for one saved from a Web Box.
 type WebBoxSnapshotSource string
 
 const (
 	WebBoxSnapshotSourceCatalog WebBoxSnapshotSource = "catalog"
 	WebBoxSnapshotSourceBuild   WebBoxSnapshotSource = "build"
+	WebBoxSnapshotSourceBox     WebBoxSnapshotSource = "box"
 )
 
 func (e WebBoxSnapshotSource) ToPointer() *WebBoxSnapshotSource {
@@ -23,14 +24,14 @@ func (e WebBoxSnapshotSource) ToPointer() *WebBoxSnapshotSource {
 func (e *WebBoxSnapshotSource) IsExact() bool {
 	if e != nil {
 		switch *e {
-		case "catalog", "build":
+		case "catalog", "build", "box":
 			return true
 		}
 	}
 	return false
 }
 
-// WebBoxSnapshotStatus - pending while waiting for capacity; building while the build runs; ready when Web Boxes can start from it; failed when the build failed; canceled when a cancel request took effect.
+// WebBoxSnapshotStatus - pending while waiting for capacity; building while the build runs; ready when boxes can start from it; failed when the build failed; canceled when a cancel request took effect.
 type WebBoxSnapshotStatus string
 
 const (
@@ -57,13 +58,13 @@ func (e *WebBoxSnapshotStatus) IsExact() bool {
 }
 
 type WebBoxSnapshot struct {
-	// The build's latest progress report, or null before the first report. A settled Snapshot keeps its last report. A build waiting for its live credentials resumes with POST /v1/webbox-snapshots/{id}/resume.
+	// The build's latest progress report, or null before the first report. A settled Snapshot keeps its last report. A build waiting for its live credentials resumes when the Snapshot's resume is requested.
 	Build *SimulatorBuildProgress `json:"build"`
 	// What a ready Snapshot serves, or null.
 	Composition *SimulatorComposition `json:"composition"`
 	// Snapshot creation time.
 	CreatedAt time.Time `json:"created_at"`
-	// Workspace credentials the build used: the Web App login, and any credentials it was allowed to call real systems with.
+	// Workspace credentials the build used, such as a web app login or credentials it was allowed to call real systems with. Empty when none.
 	CredentialIds []string        `json:"credential_ids"`
 	Error         *SimulatorError `json:"error"`
 	// Limitations the Snapshot records beyond those listed in limitations.
@@ -72,7 +73,7 @@ type WebBoxSnapshot struct {
 	ID string `json:"id"`
 	// The instructions the build followed, or empty when none were given.
 	Instructions string `json:"instructions"`
-	// Behavior the Snapshot does not serve like the real system, most important first, whether it was built or published. Empty when none.
+	// Behavior the Snapshot does not serve like the real system, most important first. Empty when none.
 	Limitations []Limitation `json:"limitations"`
 	// Customer JSON metadata, or null.
 	Metadata any `json:"metadata"`
@@ -80,9 +81,9 @@ type WebBoxSnapshot struct {
 	Name string `json:"name"`
 	// The build's research stage, or null when research did not run.
 	Research *SimulatorResearch `json:"research"`
-	// catalog for a Snapshot Continuous publishes, build for one built into the workspace.
+	// catalog for a Snapshot Continuous publishes, build for one built into the workspace, box for one saved from a Web Box.
 	Source WebBoxSnapshotSource `json:"source"`
-	// pending while waiting for capacity; building while the build runs; ready when Web Boxes can start from it; failed when the build failed; canceled when a cancel request took effect.
+	// pending while waiting for capacity; building while the build runs; ready when boxes can start from it; failed when the build failed; canceled when a cancel request took effect.
 	Status WebBoxSnapshotStatus `json:"status"`
 }
 

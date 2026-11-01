@@ -23,7 +23,7 @@ func initGetWebboxConnectionCmd(parent *cobra.Command) error {
 	var cmd = &cobra.Command{
 		Use:     "get-webbox-connection",
 		Short:   "Get Web Box connection",
-		Long:    "Returns the URL that opens the Web Box's app, whether it is running or stopped. The app answers only while the Web Box is running.",
+		Long:    "DEPRECATED: This will be removed in a future release, please migrate away from it as soon as possible\n\nDeprecated: get the Web Box, whose connection this returns. Returns the URL that opens the Web Box's app, whether it is running or stopped.",
 		Example: "  continuous webbox get-webbox-connection --id <id>",
 		RunE:    runGetWebboxConnectionCmd,
 		Aliases: []string{"gwc"},

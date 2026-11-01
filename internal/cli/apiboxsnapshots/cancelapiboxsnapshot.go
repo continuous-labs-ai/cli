@@ -22,7 +22,7 @@ var cancelApiboxSnapshotCmdMeta = []flagutil.FlagMeta{
 func initCancelApiboxSnapshotCmd(parent *cobra.Command) error {
 	var cmd = &cobra.Command{
 		Use:     "cancel",
-		Short:   "Cancel Snapshot build",
+		Short:   "Cancel API Box Snapshot build",
 		Long:    "Requests cancellation of a pending or active build and returns the Snapshot without waiting for the build to stop. Get the Snapshot until its status leaves pending or building. The build can finish before cancellation takes effect. A Snapshot whose build has settled is returned unchanged.",
 		Example: "  continuous apibox-snapshots cancel --id <id>",
 		RunE:    runCancelApiboxSnapshotCmd,

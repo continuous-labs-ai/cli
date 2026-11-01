@@ -371,7 +371,7 @@ func (s *Apibox) ListApiboxes(ctx context.Context, request *operations.ListApibo
 }
 
 // CreateApibox - Create API Box
-// Creates an API Box from a ready API Box Snapshot and starts it. It returns at once with status starting and the API Box's token; get the API Box until it is running. Send the token in X-Continuous-Token on each request to the API Box's endpoint. The token lasts as long as the API Box, and its connection returns it again. Each API Box has its own state, and runs in real time.
+// Creates an API Box from a ready API Box Snapshot and starts it. It returns at once with status starting and the API Box's token; get the API Box until it is running. Send the token in X-Continuous-Token on each request to the API Box's endpoint. The token lasts as long as the API Box, and its get returns it again. Each API Box has its own state, and runs in real time.
 func (s *Apibox) CreateApibox(ctx context.Context, request operations.CreateApiboxRequest, opts ...operations.Option) (*operations.CreateApiboxResponse, error) {
 	o := operations.Options{}
 	supportedOptions := []string{
@@ -497,12 +497,12 @@ func (s *Apibox) CreateApibox(ctx context.Context, request operations.CreateApib
 					return nil, err
 				}
 
-				var out components.ApiboxTokenResponse
+				var out components.APIBoxTokenResponse
 				if err := utils.UnmarshalJsonFromResponseBody(bytes.NewBuffer(rawBody), &out, ""); err != nil {
 					return nil, err
 				}
 
-				res.ApiboxTokenResponse = &out
+				res.APIBoxTokenResponse = &out
 			}
 		default:
 			rawBody, err := utils.ConsumeRawBody(httpRes)
@@ -524,6 +524,8 @@ func (s *Apibox) CreateApibox(ctx context.Context, request operations.CreateApib
 	case httpRes.StatusCode == 413:
 		fallthrough
 	case httpRes.StatusCode == 415:
+		fallthrough
+	case httpRes.StatusCode == 422:
 		fallthrough
 	case httpRes.StatusCode == 429:
 		switch {
@@ -602,7 +604,7 @@ func (s *Apibox) CreateApibox(ctx context.Context, request operations.CreateApib
 }
 
 // DeleteApibox - Delete API Box
-// Deletes an API Box, running or stopped, with its state. Its runtime is released after the response.
+// Deletes an API Box, running or stopped, with its state. Its runtime is released after the response. An API Box that MCP Boxes front returns 409 apibox_in_use; delete them first.
 func (s *Apibox) DeleteApibox(ctx context.Context, request operations.DeleteApiboxRequest, opts ...operations.Option) (*operations.DeleteApiboxResponse, error) {
 	o := operations.Options{}
 	supportedOptions := []string{
@@ -707,6 +709,8 @@ func (s *Apibox) DeleteApibox(ctx context.Context, request operations.DeleteApib
 	case httpRes.StatusCode == 401:
 		fallthrough
 	case httpRes.StatusCode == 404:
+		fallthrough
+	case httpRes.StatusCode == 409:
 		switch {
 		case utils.MatchContentType(httpRes.Header.Get("Content-Type"), `application/problem+json`):
 			rawBody, err := utils.ConsumeRawBody(httpRes)
@@ -783,7 +787,7 @@ func (s *Apibox) DeleteApibox(ctx context.Context, request operations.DeleteApib
 }
 
 // GetApibox - Get API Box
-// Returns an API Box and its status.
+// Returns an API Box, its status and its connection: its endpoint and token, whether it is running or stopped. Requests reach it only while it is running.
 func (s *Apibox) GetApibox(ctx context.Context, request operations.GetApiboxRequest, opts ...operations.Option) (*operations.GetApiboxResponse, error) {
 	o := operations.Options{}
 	supportedOptions := []string{
@@ -971,12 +975,12 @@ func (s *Apibox) GetApibox(ctx context.Context, request operations.GetApiboxRequ
 					return nil, err
 				}
 
-				var out components.APIBox
+				var out components.GetAPIBoxResponse
 				if err := utils.UnmarshalJsonFromResponseBody(bytes.NewBuffer(rawBody), &out, ""); err != nil {
 					return nil, err
 				}
 
-				res.APIBox = &out
+				res.GetAPIBoxResponse = &out
 			}
 		default:
 			rawBody, err := utils.ConsumeRawBody(httpRes)
@@ -1213,6 +1217,8 @@ func (s *Apibox) UpdateApibox(ctx context.Context, request operations.UpdateApib
 	case httpRes.StatusCode == 413:
 		fallthrough
 	case httpRes.StatusCode == 415:
+		fallthrough
+	case httpRes.StatusCode == 422:
 		switch {
 		case utils.MatchContentType(httpRes.Header.Get("Content-Type"), `application/problem+json`):
 			rawBody, err := utils.ConsumeRawBody(httpRes)
@@ -1289,7 +1295,9 @@ func (s *Apibox) UpdateApibox(ctx context.Context, request operations.UpdateApib
 }
 
 // GetApiboxConnection - Get API Box connection
-// Returns the API Box's endpoint and token, whether it is running or stopped. Requests reach it only while it is running. An API Box with no stored token returns 409 apibox_token_unavailable; its next start issues one.
+// Deprecated: get the API Box, whose connection this returns. Returns the API Box's endpoint and token, whether it is running or stopped. An API Box with no stored token returns 409 apibox_token_unavailable; its next start issues one.
+//
+// Deprecated: This will be removed in a future release, please migrate away from it as soon as possible.
 func (s *Apibox) GetApiboxConnection(ctx context.Context, request operations.GetApiboxConnectionRequest, opts ...operations.Option) (*operations.GetApiboxConnectionResponse, error) {
 	o := operations.Options{}
 	supportedOptions := []string{
@@ -1477,12 +1485,12 @@ func (s *Apibox) GetApiboxConnection(ctx context.Context, request operations.Get
 					return nil, err
 				}
 
-				var out components.ApiboxConnection
+				var out components.APIBoxConnection
 				if err := utils.UnmarshalJsonFromResponseBody(bytes.NewBuffer(rawBody), &out, ""); err != nil {
 					return nil, err
 				}
 
-				res.ApiboxConnection = &out
+				res.APIBoxConnection = &out
 			}
 		default:
 			rawBody, err := utils.ConsumeRawBody(httpRes)
@@ -1571,8 +1579,239 @@ func (s *Apibox) GetApiboxConnection(ctx context.Context, request operations.Get
 
 }
 
+// SaveApiboxSnapshot - Save API Box as Snapshot
+// Saves a running API Box's service and current state as an API Box Snapshot, ready when the response returns. The API Box keeps running, and a paused one is woken. API Boxes created from the Snapshot start with the saved state instead of a new workspace, so they refuse include_sample_data. The Snapshot outlives the API Box. A starting API Box returns 409 apibox_starting; a stopping or stopped one returns 409 apibox_stopped; one whose runtime cannot save its state returns 409 apibox_rebuild_required.
+func (s *Apibox) SaveApiboxSnapshot(ctx context.Context, request operations.SaveApiboxSnapshotRequest, opts ...operations.Option) (*operations.SaveApiboxSnapshotResponse, error) {
+	o := operations.Options{}
+	supportedOptions := []string{
+		operations.SupportedOptionTimeout,
+		operations.SupportedOptionSkipDeserialization,
+	}
+
+	for _, opt := range opts {
+		if err := opt(&o, supportedOptions...); err != nil {
+			return nil, fmt.Errorf("error applying option: %w", err)
+		}
+	}
+
+	var baseURL string
+	if o.ServerURL == nil {
+		baseURL = utils.ReplaceParameters(s.sdkConfiguration.GetServerDetails())
+	} else {
+		baseURL = *o.ServerURL
+	}
+	opURL, err := utils.GenerateURL(ctx, baseURL, "/v1/apibox/{id}/snapshot", request, nil)
+	if err != nil {
+		return nil, fmt.Errorf("error generating URL: %w", err)
+	}
+
+	hookCtx := hooks.HookContext{
+		SDK:              s.rootSDK,
+		SDKConfiguration: s.sdkConfiguration,
+		BaseURL:          baseURL,
+		Context:          ctx,
+		OperationID:      "save-apibox-snapshot",
+		OAuth2Scopes:     nil,
+		SecuritySource:   s.sdkConfiguration.Security,
+	}
+	bodyReader, reqContentType, err := utils.SerializeRequestBody(ctx, request, false, true, "Body", "json", `request:"mediaType=application/json"`)
+	if err != nil {
+		return nil, err
+	}
+
+	timeout := o.Timeout
+	if timeout == nil {
+		timeout = s.sdkConfiguration.Timeout
+	}
+
+	var streamCancel context.CancelFunc
+
+	if timeout != nil {
+		var cancel context.CancelFunc
+		ctx, cancel = context.WithTimeout(ctx, *timeout)
+		streamCancel = cancel
+		defer func() {
+			if streamCancel != nil {
+				streamCancel()
+			}
+		}()
+	}
+
+	req, err := http.NewRequestWithContext(ctx, "POST", opURL, bodyReader)
+	if err != nil {
+		return nil, fmt.Errorf("error creating request: %w", err)
+	}
+	req.Header.Set("Accept", "application/json")
+	req.Header.Set("User-Agent", s.sdkConfiguration.UserAgent)
+	if reqContentType != "" {
+		req.Header.Set("Content-Type", reqContentType)
+	}
+
+	utils.PopulateHeaders(ctx, req, request, nil)
+
+	if err := utils.PopulateSecurity(ctx, req, s.sdkConfiguration.Security); err != nil {
+		return nil, err
+	}
+
+	for k, v := range o.SetHeaders {
+		req.Header.Set(k, v)
+	}
+
+	req, err = s.hooks.BeforeRequest(hooks.BeforeRequestContext{HookContext: hookCtx}, req)
+	if err != nil {
+		return nil, err
+	}
+
+	httpRes, err := s.sdkConfiguration.Client.Do(req)
+	if err != nil || httpRes == nil {
+		if err != nil {
+			err = fmt.Errorf("error sending request: %w", err)
+		} else {
+			err = fmt.Errorf("error sending request: no response")
+		}
+
+		_, err = s.hooks.AfterError(hooks.AfterErrorContext{HookContext: hookCtx}, nil, err)
+		return nil, err
+	} else if utils.MatchStatusCodes([]string{"4XX", "5XX"}, httpRes.StatusCode) {
+		_httpRes, err := s.hooks.AfterError(hooks.AfterErrorContext{HookContext: hookCtx}, httpRes, nil)
+		if err != nil {
+			return nil, err
+		} else if _httpRes != nil {
+			httpRes = _httpRes
+		}
+	} else {
+		httpRes, err = s.hooks.AfterSuccess(hooks.AfterSuccessContext{HookContext: hookCtx}, httpRes)
+		if err != nil {
+			return nil, err
+		}
+	}
+
+	res := &operations.SaveApiboxSnapshotResponse{
+		HTTPMeta: components.HTTPMetadata{
+			Request:  req,
+			Response: httpRes,
+		},
+	}
+
+	switch {
+	case httpRes.StatusCode == 201:
+		switch {
+		case utils.MatchContentType(httpRes.Header.Get("Content-Type"), `application/json`):
+			if o.SkipDeserialization != nil && *o.SkipDeserialization {
+				httpRes.Body = utils.BodyWithCancel(httpRes.Body, streamCancel)
+				streamCancel = nil
+			} else {
+				rawBody, err := utils.ConsumeRawBody(httpRes)
+				if err != nil {
+					return nil, err
+				}
+
+				var out components.APIBoxSnapshot
+				if err := utils.UnmarshalJsonFromResponseBody(bytes.NewBuffer(rawBody), &out, ""); err != nil {
+					return nil, err
+				}
+
+				res.APIBoxSnapshot = &out
+			}
+		default:
+			rawBody, err := utils.ConsumeRawBody(httpRes)
+			if err != nil {
+				return nil, err
+			}
+			return nil, sdkerrors.NewSDKDefaultError(fmt.Sprintf("unknown content-type received: %s", httpRes.Header.Get("Content-Type")), httpRes.StatusCode, string(rawBody), httpRes)
+		}
+	case httpRes.StatusCode == 400:
+		fallthrough
+	case httpRes.StatusCode == 401:
+		fallthrough
+	case httpRes.StatusCode == 404:
+		fallthrough
+	case httpRes.StatusCode == 408:
+		fallthrough
+	case httpRes.StatusCode == 409:
+		fallthrough
+	case httpRes.StatusCode == 413:
+		fallthrough
+	case httpRes.StatusCode == 415:
+		fallthrough
+	case httpRes.StatusCode == 422:
+		switch {
+		case utils.MatchContentType(httpRes.Header.Get("Content-Type"), `application/problem+json`):
+			rawBody, err := utils.ConsumeRawBody(httpRes)
+			if err != nil {
+				return nil, err
+			}
+
+			var out sdkerrors.Error
+			if err := utils.UnmarshalJsonFromResponseBody(bytes.NewBuffer(rawBody), &out, ""); err != nil {
+				return nil, err
+			}
+
+			out.HTTPMeta = components.HTTPMetadata{
+				Request:  req,
+				Response: httpRes,
+			}
+			return nil, &out
+		default:
+			rawBody, err := utils.ConsumeRawBody(httpRes)
+			if err != nil {
+				return nil, err
+			}
+			return nil, sdkerrors.NewSDKDefaultError(fmt.Sprintf("unknown content-type received: %s", httpRes.Header.Get("Content-Type")), httpRes.StatusCode, string(rawBody), httpRes)
+		}
+	case httpRes.StatusCode == 500:
+		fallthrough
+	case httpRes.StatusCode == 503:
+		switch {
+		case utils.MatchContentType(httpRes.Header.Get("Content-Type"), `application/problem+json`):
+			rawBody, err := utils.ConsumeRawBody(httpRes)
+			if err != nil {
+				return nil, err
+			}
+
+			var out sdkerrors.Error
+			if err := utils.UnmarshalJsonFromResponseBody(bytes.NewBuffer(rawBody), &out, ""); err != nil {
+				return nil, err
+			}
+
+			out.HTTPMeta = components.HTTPMetadata{
+				Request:  req,
+				Response: httpRes,
+			}
+			return nil, &out
+		default:
+			rawBody, err := utils.ConsumeRawBody(httpRes)
+			if err != nil {
+				return nil, err
+			}
+			return nil, sdkerrors.NewSDKDefaultError(fmt.Sprintf("unknown content-type received: %s", httpRes.Header.Get("Content-Type")), httpRes.StatusCode, string(rawBody), httpRes)
+		}
+	case httpRes.StatusCode >= 400 && httpRes.StatusCode < 500:
+		rawBody, err := utils.ConsumeRawBody(httpRes)
+		if err != nil {
+			return nil, err
+		}
+		return nil, sdkerrors.NewSDKDefaultError("API error occurred", httpRes.StatusCode, string(rawBody), httpRes)
+	case httpRes.StatusCode >= 500 && httpRes.StatusCode < 600:
+		rawBody, err := utils.ConsumeRawBody(httpRes)
+		if err != nil {
+			return nil, err
+		}
+		return nil, sdkerrors.NewSDKDefaultError("API error occurred", httpRes.StatusCode, string(rawBody), httpRes)
+	default:
+		rawBody, err := utils.ConsumeRawBody(httpRes)
+		if err != nil {
+			return nil, err
+		}
+		return nil, sdkerrors.NewSDKDefaultError("unknown status code returned", httpRes.StatusCode, string(rawBody), httpRes)
+	}
+
+	return res, nil
+
+}
+
 // StartApibox - Start API Box
-// Starts a stopped API Box from the state its stop saved, and returns at once with status starting and the API Box's token, the same one each start. A running, starting or stopping API Box returns 409 apibox_not_stopped.
+// Starts a stopped API Box from the state its stop saved, and returns at once with status starting; get the API Box until it is running. Its token stays the same; its get returns it. A running, starting or stopping API Box returns 409 apibox_not_stopped.
 func (s *Apibox) StartApibox(ctx context.Context, request operations.StartApiboxRequest, opts ...operations.Option) (*operations.StartApiboxResponse, error) {
 	o := operations.Options{}
 	supportedOptions := []string{
@@ -1689,12 +1928,12 @@ func (s *Apibox) StartApibox(ctx context.Context, request operations.StartApibox
 					return nil, err
 				}
 
-				var out components.ApiboxTokenResponse
+				var out components.APIBox
 				if err := utils.UnmarshalJsonFromResponseBody(bytes.NewBuffer(rawBody), &out, ""); err != nil {
 					return nil, err
 				}
 
-				res.ApiboxTokenResponse = &out
+				res.APIBox = &out
 			}
 		default:
 			rawBody, err := utils.ConsumeRawBody(httpRes)
@@ -1785,7 +2024,7 @@ func (s *Apibox) StartApibox(ctx context.Context, request operations.StartApibox
 
 }
 
-// ListApiboxSteps - List API Box Steps
+// ListApiboxSteps - List API Box steps
 // Lists the API Box's steps in order. Each request that changed state is one step; a request that only reads registers none. An API Box that is not running returns 409 apibox_stopped.
 func (s *Apibox) ListApiboxSteps(ctx context.Context, request operations.ListApiboxStepsRequest, opts ...operations.Option) (*operations.ListApiboxStepsResponse, error) {
 	o := operations.Options{}
@@ -2023,12 +2262,12 @@ func (s *Apibox) ListApiboxSteps(ctx context.Context, request operations.ListApi
 					return nil, err
 				}
 
-				var out components.ListAPIBoxStepsResponse
+				var out components.ListBoxStepsResponse
 				if err := utils.UnmarshalJsonFromResponseBody(bytes.NewBuffer(rawBody), &out, ""); err != nil {
 					return nil, err
 				}
 
-				res.ListAPIBoxStepsResponse = &out
+				res.ListBoxStepsResponse = &out
 			}
 		default:
 			rawBody, err := utils.ConsumeRawBody(httpRes)

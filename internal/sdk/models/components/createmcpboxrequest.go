@@ -9,7 +9,7 @@ type CreateMCPBoxRequest struct {
 	Metadata any `json:"metadata,omitzero"`
 	// Name for the MCP Box. Omission generates a name.
 	Name *string `json:"name,omitzero"`
-	// An MCP Box Snapshot of the workspace.
+	// A ready MCP Box Snapshot of the workspace or the catalog.
 	SnapshotID string `json:"snapshot_id"`
 }
 

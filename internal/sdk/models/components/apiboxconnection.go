@@ -2,21 +2,21 @@
 
 package components
 
-type ApiboxConnection struct {
+type APIBoxConnection struct {
 	// Base URL of the API Box's API.
 	Endpoint string `json:"endpoint"`
 	// The API Box's token. Send it in X-Continuous-Token on each request to the endpoint.
 	Token string `json:"token"`
 }
 
-func (a *ApiboxConnection) GetEndpoint() string {
+func (a *APIBoxConnection) GetEndpoint() string {
 	if a == nil {
 		return ""
 	}
 	return a.Endpoint
 }
 
-func (a *ApiboxConnection) GetToken() string {
+func (a *APIBoxConnection) GetToken() string {
 	if a == nil {
 		return ""
 	}

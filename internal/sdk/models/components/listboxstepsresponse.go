@@ -2,23 +2,23 @@
 
 package components
 
-type ListAPIBoxStepsResponse struct {
+type ListBoxStepsResponse struct {
 	// Cursor for the next page, or null.
 	NextCursor *string `json:"next_cursor"`
 	// Steps in this page.
-	Steps []ApiboxStep `json:"steps"`
+	Steps []BoxStep `json:"steps"`
 }
 
-func (l *ListAPIBoxStepsResponse) GetNextCursor() *string {
+func (l *ListBoxStepsResponse) GetNextCursor() *string {
 	if l == nil {
 		return nil
 	}
 	return l.NextCursor
 }
 
-func (l *ListAPIBoxStepsResponse) GetSteps() []ApiboxStep {
+func (l *ListBoxStepsResponse) GetSteps() []BoxStep {
 	if l == nil {
-		return []ApiboxStep{}
+		return []BoxStep{}
 	}
 	return l.Steps
 }

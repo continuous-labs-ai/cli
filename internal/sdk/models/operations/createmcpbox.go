@@ -30,7 +30,7 @@ func (c *CreateMcpboxRequest) GetBody() components.CreateMCPBoxRequest {
 type CreateMcpboxResponse struct {
 	HTTPMeta components.HTTPMetadata `json:"-"`
 	// Accepted
-	McpboxTokenResponse *components.McpboxTokenResponse
+	MCPBoxTokenResponse *components.MCPBoxTokenResponse
 }
 
 func (c CreateMcpboxResponse) MarshalJSON() ([]byte, error) {
@@ -51,9 +51,9 @@ func (c *CreateMcpboxResponse) GetHTTPMeta() components.HTTPMetadata {
 	return c.HTTPMeta
 }
 
-func (c *CreateMcpboxResponse) GetMcpboxTokenResponse() *components.McpboxTokenResponse {
+func (c *CreateMcpboxResponse) GetMCPBoxTokenResponse() *components.MCPBoxTokenResponse {
 	if c == nil {
 		return nil
 	}
-	return c.McpboxTokenResponse
+	return c.MCPBoxTokenResponse
 }

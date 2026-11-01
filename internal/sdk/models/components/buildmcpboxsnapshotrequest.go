@@ -19,7 +19,7 @@ type BuildMCPBoxSnapshotRequest struct {
 	Name *string `json:"name,omitzero"`
 	// Review rounds, from 1 to 10. Defaults to 1. Each round is a review and a repair of its findings, by the same builder and reviewer. The rounds stop early when the reviewer reports no findings.
 	ReviewRounds *int64 `default:"1" json:"review_rounds"`
-	// Time limit for generation and validation in seconds, from 1 to 72000. Defaults to 28800 (eight hours). Excludes queue wait, finalization, and any wait for live credentials. Retries share the same deadline.
+	// Time limit for generation and validation in seconds, from 1 to 172800. Defaults to 28800 (eight hours). Excludes queue wait, finalization, and any wait for live credentials. Retries share the same deadline.
 	TimeoutSeconds *int64 `default:"28800" json:"timeout_seconds"`
 }
 

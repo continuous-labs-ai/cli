@@ -19,7 +19,7 @@ var createMcpboxCmdMeta = []flagutil.FlagMeta{
 	{FlagName: "apibox-id", Shorthand: "a", FieldPath: "Body.ApiboxID", Kind: flagutil.FlagKindString, Required: true, Description: "An API Box of the workspace, started from the API Box Snapshot the MCP Box Snapshot was built against. [required]"},
 	{FlagName: "metadata", Shorthand: "m", FieldPath: "Body.Metadata", Kind: flagutil.FlagKindJSON, Optional: true, Annotations: `json:"metadata,omitempty"`, Description: "Customer JSON metadata, up to 16 KiB and 64 nesting levels."},
 	{FlagName: "name", Shorthand: "n", FieldPath: "Body.Name", Kind: flagutil.FlagKindString, Optional: true, Description: "Name for the MCP Box. Omission generates a name."},
-	{FlagName: "snapshot-id", Shorthand: "s", FieldPath: "Body.SnapshotID", Kind: flagutil.FlagKindString, Required: true, Description: "An MCP Box Snapshot of the workspace. [required]"},
+	{FlagName: "snapshot-id", Shorthand: "s", FieldPath: "Body.SnapshotID", Kind: flagutil.FlagKindString, Required: true, Description: "A ready MCP Box Snapshot of the workspace or the catalog. [required]"},
 }
 
 // initCreateMcpboxCmd initializes the create-mcpbox command.

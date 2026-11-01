@@ -7,7 +7,7 @@ import (
 )
 
 type BuildWebBoxSnapshotRequest struct {
-	// Workspace credentials: exactly one Web App login, whose saved sign-in the builder and QA use on the live app, and up to four others with a base_url that they can call real systems with. Each must belong to the workspace. QA may create test objects in the live app; use a sandbox or test account.
+	// Workspace credentials: exactly one login for the vendor's web app, whose saved sign-in the builder and QA use on the live app, and up to four others with a base_url that they can call real systems with. Each must belong to the workspace. QA may create test objects in the live app; use a sandbox or test account.
 	CredentialIds []string `json:"credential_ids"`
 	// Instructions for the builder. At most 16,384 characters and 65,536 UTF-8 bytes; must not be blank or contain U+0000.
 	Instructions *string `json:"instructions,omitzero"`
@@ -17,7 +17,7 @@ type BuildWebBoxSnapshotRequest struct {
 	Name *string `json:"name,omitzero"`
 	// Review rounds, from 1 to 10. Defaults to 1. Each round is a review and a repair of its findings, by the same builder and reviewer. The rounds stop early when the reviewer reports no findings.
 	ReviewRounds *int64 `default:"1" json:"review_rounds"`
-	// Time limit for generation and validation in seconds, from 1 to 72000. Defaults to 28800 (eight hours). Excludes queue wait, finalization, and any wait for live credentials. Retries share the same deadline.
+	// Time limit for generation and validation in seconds, from 1 to 172800. Defaults to 28800 (eight hours). Excludes queue wait, finalization, and any wait for live credentials. Retries share the same deadline.
 	TimeoutSeconds *int64 `default:"28800" json:"timeout_seconds"`
 }
 

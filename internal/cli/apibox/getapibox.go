@@ -23,7 +23,7 @@ func initGetApiboxCmd(parent *cobra.Command) error {
 	var cmd = &cobra.Command{
 		Use:     "get",
 		Short:   "Get API Box",
-		Long:    "Returns an API Box and its status.",
+		Long:    "Returns an API Box, its status and its connection: its endpoint and token, whether it is running or stopped. Requests reach it only while it is running.",
 		Example: "  continuous apibox get --id <id>",
 		RunE:    runGetApiboxCmd,
 	}

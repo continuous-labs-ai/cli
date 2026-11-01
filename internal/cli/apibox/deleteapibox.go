@@ -23,7 +23,7 @@ func initDeleteApiboxCmd(parent *cobra.Command) error {
 	var cmd = &cobra.Command{
 		Use:     "delete",
 		Short:   "Delete API Box",
-		Long:    "Deletes an API Box, running or stopped, with its state. Its runtime is released after the response.",
+		Long:    "Deletes an API Box, running or stopped, with its state. Its runtime is released after the response. An API Box that MCP Boxes front returns 409 apibox_in_use; delete them first.",
 		Example: "  continuous apibox delete --id <id>",
 		RunE:    runDeleteApiboxCmd,
 	}

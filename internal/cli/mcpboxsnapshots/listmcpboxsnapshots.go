@@ -15,8 +15,10 @@ import (
 )
 
 var listMcpboxSnapshotsCmdMeta = []flagutil.FlagMeta{
+	{FlagName: "status", FieldPath: "Status", Kind: flagutil.FlagKindEnum, Optional: true, EnumValues: []string{"pending", "building", "ready", "failed", "canceled"}, Description: "Optional build status filter. (options: pending, building, ready, failed, canceled)"},
 	{FlagName: "limit", Shorthand: "l", FieldPath: "Limit", Kind: flagutil.FlagKindInt64, Optional: true, HasDefault: true, DefaultInt: 50, Description: "Page size. Values below 1 use 50. Values above 200 use 200."},
 	{FlagName: "cursor", Shorthand: "c", FieldPath: "Cursor", Kind: flagutil.FlagKindString, Optional: true, Description: "Opaque next_cursor value from a previous page."},
+	{FlagName: "source", FieldPath: "Source", Kind: flagutil.FlagKindEnum, Optional: true, EnumValues: []string{"catalog", "build", "box"}, Description: "Optional source filter. (options: catalog, build, box)"},
 }
 
 // initListMcpboxSnapshotsCmd initializes the list-mcpbox-snapshots command.
@@ -24,7 +26,7 @@ func initListMcpboxSnapshotsCmd(parent *cobra.Command) error {
 	var cmd = &cobra.Command{
 		Use:     "list",
 		Short:   "List MCP Box Snapshots",
-		Long:    "Returns the workspace's MCP Box Snapshots, newest first.",
+		Long:    "Returns the workspace's MCP Box Snapshots and the catalog's, newest first. Results can be filtered by status and source.",
 		Example: "  continuous mcpbox-snapshots list",
 		RunE:    runListMcpboxSnapshotsCmd,
 	}

@@ -38,10 +38,12 @@ type MCPBox struct {
 	// MCP Box creation time.
 	CreatedAt time.Time `json:"created_at"`
 	// Base URL of the MCP Box. Send MCP Streamable HTTP requests to it followed by /mcp, with the MCP Box's token in X-Continuous-Token.
-	Endpoint string          `json:"endpoint"`
-	Error    *SimulatorError `json:"error"`
+	Endpoint string    `json:"endpoint"`
+	Error    *BoxError `json:"error"`
 	// MCP Box ID.
 	ID string `json:"id"`
+	// Time of the Box's last data-plane activity.
+	LastActiveAt time.Time `json:"last_active_at"`
 	// Customer JSON metadata, or null.
 	Metadata any `json:"metadata"`
 	// MCP Box name. The ID is its identity, and names need not be unique.
@@ -50,6 +52,8 @@ type MCPBox struct {
 	SnapshotID string `json:"snapshot_id"`
 	// starting while its runtime boots; running while it serves MCP; stopping while it releases its runtime; stopped when it holds no runtime.
 	Status MCPBoxStatus `json:"status"`
+	// When the Box entered its current status, such as how long it has been starting.
+	StatusChangedAt time.Time `json:"status_changed_at"`
 }
 
 func (m MCPBox) MarshalJSON() ([]byte, error) {
@@ -84,7 +88,7 @@ func (m *MCPBox) GetEndpoint() string {
 	return m.Endpoint
 }
 
-func (m *MCPBox) GetError() *SimulatorError {
+func (m *MCPBox) GetError() *BoxError {
 	if m == nil {
 		return nil
 	}
@@ -96,6 +100,13 @@ func (m *MCPBox) GetID() string {
 		return ""
 	}
 	return m.ID
+}
+
+func (m *MCPBox) GetLastActiveAt() time.Time {
+	if m == nil {
+		return time.Time{}
+	}
+	return m.LastActiveAt
 }
 
 func (m *MCPBox) GetMetadata() any {
@@ -124,4 +135,11 @@ func (m *MCPBox) GetStatus() MCPBoxStatus {
 		return MCPBoxStatus("")
 	}
 	return m.Status
+}
+
+func (m *MCPBox) GetStatusChangedAt() time.Time {
+	if m == nil {
+		return time.Time{}
+	}
+	return m.StatusChangedAt
 }

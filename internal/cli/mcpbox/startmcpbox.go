@@ -23,7 +23,7 @@ func initStartMcpboxCmd(parent *cobra.Command) error {
 	var cmd = &cobra.Command{
 		Use:     "start",
 		Short:   "Start MCP Box",
-		Long:    "Starts a stopped MCP Box in front of its API Box, and returns at once with status starting and the MCP Box's token, the same one each start. A running, starting or stopping MCP Box returns 409 mcpbox_not_stopped.",
+		Long:    "Starts a stopped MCP Box in front of its API Box, and returns at once with status starting; get the MCP Box until it is running. Its token stays the same; its get returns it. A running, starting or stopping MCP Box returns 409 mcpbox_not_stopped, and one whose API Box was deleted 409 mcpbox_apibox_gone.",
 		Example: "  continuous mcpbox start --id <id>",
 		RunE:    runStartMcpboxCmd,
 	}

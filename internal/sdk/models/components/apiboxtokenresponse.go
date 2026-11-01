@@ -2,20 +2,20 @@
 
 package components
 
-type ApiboxTokenResponse struct {
+type APIBoxTokenResponse struct {
 	Apibox APIBox `json:"apibox"`
-	// The API Box's token, which lasts until the API Box is deleted. It is null only on a retried create whose first attempt stored no token; a start then issues one.
+	// The API Box's token, which lasts until the API Box is deleted. It is null only on a retried create whose first attempt stored no token; a start then issues one, which the API Box's get returns.
 	Token *string `json:"token"`
 }
 
-func (a *ApiboxTokenResponse) GetApibox() APIBox {
+func (a *APIBoxTokenResponse) GetApibox() APIBox {
 	if a == nil {
 		return APIBox{}
 	}
 	return a.Apibox
 }
 
-func (a *ApiboxTokenResponse) GetToken() *string {
+func (a *APIBoxTokenResponse) GetToken() *string {
 	if a == nil {
 		return nil
 	}
