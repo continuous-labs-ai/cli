@@ -7,7 +7,7 @@ import (
 )
 
 type BuildMCPBoxSnapshotRequest struct {
-	// The ready API Box Snapshot of the workspace or the catalog whose API the MCP Box calls. Its spec is the build's.
+	// The ready API Box Snapshot of the workspace or the catalog whose API the MCP Box calls. Its spec is the build's, and must be OpenAPI or GraphQL.
 	ApiboxSnapshotID string `json:"apibox_snapshot_id"`
 	// At most one workspace credential of the source MCP server: its base_url is the server's endpoint. With it, the build captures the live server's tools and QA compares the MCP Box with it. It must belong to the workspace. QA calls only tools the source marks read-only. Use a sandbox or test account.
 	CredentialIds []string `json:"credential_ids,omitzero"`

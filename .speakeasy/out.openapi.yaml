@@ -55,11 +55,6 @@ components:
         code: apibox_stopped
         detail: The API Box with ID "abx_01J8Z5X4K70000000000000001" is not running. Start it before you retry this request.
         validation: null
-    apibox_token_unavailable:
-      value:
-        code: apibox_token_unavailable
-        detail: The API Box with ID "abx_01J8Z5X4K70000000000000001" has no stored token. Stop and start it to issue one.
-        validation: null
     artifact_invalid:
       value:
         code: artifact_invalid
@@ -244,11 +239,6 @@ components:
       value:
         code: mcpbox_starting
         detail: The MCP Box with ID "mbx_01J8Z5X4K70000000000000006" is starting. Retry once it is running.
-        validation: null
-    mcpbox_token_unavailable:
-      value:
-        code: mcpbox_token_unavailable
-        detail: The MCP Box with ID "mbx_01J8Z5X4K70000000000000006" has no stored token. Stop and start it to issue one.
         validation: null
     payload_too_large:
       value:
@@ -859,7 +849,7 @@ components:
       additionalProperties: false
       properties:
         apibox_snapshot_id:
-          description: The ready API Box Snapshot of the workspace or the catalog whose API the MCP Box calls. Its spec is the build's.
+          description: The ready API Box Snapshot of the workspace or the catalog whose API the MCP Box calls. Its spec is the build's, and must be OpenAPI or GraphQL.
           maxLength: 30
           pattern: ^abs_[0-9A-HJKMNP-TV-Z]{26}$
           type: string
@@ -4405,76 +4395,6 @@ paths:
       summary: Update API Box
       tags:
         - apibox
-  /v1/apibox/{id}/connection:
-    get:
-      deprecated: true
-      description: "Deprecated: get the API Box, whose connection this returns. Returns the API Box's endpoint and token, whether it is running or stopped. An API Box with no stored token returns 409 apibox_token_unavailable; its next start issues one."
-      operationId: get-apibox-connection
-      parameters:
-        - description: API Box ID.
-          in: path
-          name: id
-          required: true
-          schema:
-            pattern: ^abx_[0-9A-HJKMNP-TV-Z]{26}$
-            type: string
-      responses:
-        "200":
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/APIBoxConnection"
-          description: OK
-        "401":
-          $ref: "#/components/responses/Unauthorized"
-        "404":
-          content:
-            application/problem+json:
-              examples:
-                apibox_not_found:
-                  $ref: "#/components/examples/apibox_not_found"
-              schema:
-                $ref: "#/components/schemas/Error"
-          description: Not Found
-        "409":
-          content:
-            application/problem+json:
-              examples:
-                apibox_token_unavailable:
-                  $ref: "#/components/examples/apibox_token_unavailable"
-              schema:
-                $ref: "#/components/schemas/Error"
-          description: Conflict
-        "500":
-          $ref: "#/components/responses/InternalServerError"
-        "503":
-          content:
-            application/problem+json:
-              examples:
-                auth_provider_unavailable:
-                  $ref: "#/components/examples/auth_provider_unavailable"
-                internal_unavailable:
-                  $ref: "#/components/examples/internal_unavailable"
-              schema:
-                $ref: "#/components/schemas/Error"
-          description: Service Unavailable
-      security:
-        - apiKeyAuth: []
-      summary: Get API Box connection
-      tags:
-        - apibox
-      x-speakeasy-retries:
-        backoff:
-          exponent: 1.5
-          initialInterval: 500
-          maxElapsedTime: 60000
-          maxInterval: 5000
-        retryConnectionErrors: true
-        statusCodes:
-          - "502"
-          - "503"
-          - "504"
-        strategy: backoff
   /v1/apibox/{id}/snapshot:
     post:
       description: Saves a running API Box's service and current state as an API Box Snapshot, ready when the response returns. The API Box keeps running, and a paused one is woken. API Boxes created from the Snapshot start with the saved state instead of a new workspace, so they refuse include_sample_data. The Snapshot outlives the API Box. A starting API Box returns 409 apibox_starting; a stopping or stopped one returns 409 apibox_stopped; one whose runtime cannot save its state returns 409 apibox_rebuild_required.
@@ -5709,7 +5629,7 @@ paths:
           - "504"
         strategy: backoff
     patch:
-      description: Renames an MCP Box Snapshot or replaces its metadata. Omitted fields keep their current values. Its tools do not change.
+      description: Renames an MCP Box Snapshot or replaces its metadata. Omitted fields keep their current values. Its tools do not change. Catalog Snapshots cannot be updated.
       operationId: update-mcpbox-snapshot
       parameters:
         - description: MCP Box Snapshot ID.
@@ -6123,76 +6043,6 @@ paths:
       summary: Update MCP Box
       tags:
         - mcpbox
-  /v1/mcpbox/{id}/connection:
-    get:
-      deprecated: true
-      description: "Deprecated: get the MCP Box, whose connection this returns. Returns the MCP Box's endpoint and token, whether it is running or stopped. An MCP Box with no stored token returns 409 mcpbox_token_unavailable; its next start issues one."
-      operationId: get-mcpbox-connection
-      parameters:
-        - description: MCP Box ID.
-          in: path
-          name: id
-          required: true
-          schema:
-            pattern: ^mbx_[0-9A-HJKMNP-TV-Z]{26}$
-            type: string
-      responses:
-        "200":
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/MCPBoxConnection"
-          description: OK
-        "401":
-          $ref: "#/components/responses/Unauthorized"
-        "404":
-          content:
-            application/problem+json:
-              examples:
-                mcpbox_not_found:
-                  $ref: "#/components/examples/mcpbox_not_found"
-              schema:
-                $ref: "#/components/schemas/Error"
-          description: Not Found
-        "409":
-          content:
-            application/problem+json:
-              examples:
-                mcpbox_token_unavailable:
-                  $ref: "#/components/examples/mcpbox_token_unavailable"
-              schema:
-                $ref: "#/components/schemas/Error"
-          description: Conflict
-        "500":
-          $ref: "#/components/responses/InternalServerError"
-        "503":
-          content:
-            application/problem+json:
-              examples:
-                auth_provider_unavailable:
-                  $ref: "#/components/examples/auth_provider_unavailable"
-                internal_unavailable:
-                  $ref: "#/components/examples/internal_unavailable"
-              schema:
-                $ref: "#/components/schemas/Error"
-          description: Service Unavailable
-      security:
-        - apiKeyAuth: []
-      summary: Get MCP Box connection
-      tags:
-        - mcpbox
-      x-speakeasy-retries:
-        backoff:
-          exponent: 1.5
-          initialInterval: 500
-          maxElapsedTime: 60000
-          maxInterval: 5000
-        retryConnectionErrors: true
-        statusCodes:
-          - "502"
-          - "503"
-          - "504"
-        strategy: backoff
   /v1/mcpbox/{id}/snapshot:
     post:
       description: Saves an MCP Box and the API Box it fronts as a new MCP Box Snapshot and a new API Box Snapshot, both ready when the response returns, or neither. The API Box must be running; a paused one is woken, and it keeps running. The MCP Box Snapshot serves the MCP Box's tools and is built against the API Box Snapshot, which holds the API Box's service and current state. Create an API Box from apibox_snapshot_id, then an MCP Box from the MCP Box Snapshot in front of it. Both Snapshots outlive the Boxes. An MCP Box whose API Box was deleted returns 409 mcpbox_apibox_gone; a starting API Box returns 409 apibox_starting; a stopping or stopped one returns 409 apibox_stopped; one whose runtime cannot save its state returns 409 mcpbox_rebuild_required.
@@ -9880,67 +9730,6 @@ paths:
       summary: Update Web Box
       tags:
         - webbox
-  /v1/webbox/{id}/connection:
-    get:
-      deprecated: true
-      description: "Deprecated: get the Web Box, whose connection this returns. Returns the URL that opens the Web Box's app, whether it is running or stopped."
-      operationId: get-webbox-connection
-      parameters:
-        - description: Web Box ID.
-          in: path
-          name: id
-          required: true
-          schema:
-            pattern: ^wbx_[0-9A-HJKMNP-TV-Z]{26}$
-            type: string
-      responses:
-        "200":
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/WebBoxConnection"
-          description: OK
-        "401":
-          $ref: "#/components/responses/Unauthorized"
-        "404":
-          content:
-            application/problem+json:
-              examples:
-                webbox_not_found:
-                  $ref: "#/components/examples/webbox_not_found"
-              schema:
-                $ref: "#/components/schemas/Error"
-          description: Not Found
-        "500":
-          $ref: "#/components/responses/InternalServerError"
-        "503":
-          content:
-            application/problem+json:
-              examples:
-                auth_provider_unavailable:
-                  $ref: "#/components/examples/auth_provider_unavailable"
-                internal_unavailable:
-                  $ref: "#/components/examples/internal_unavailable"
-              schema:
-                $ref: "#/components/schemas/Error"
-          description: Service Unavailable
-      security:
-        - apiKeyAuth: []
-      summary: Get Web Box connection
-      tags:
-        - webbox
-      x-speakeasy-retries:
-        backoff:
-          exponent: 1.5
-          initialInterval: 500
-          maxElapsedTime: 60000
-          maxInterval: 5000
-        retryConnectionErrors: true
-        statusCodes:
-          - "502"
-          - "503"
-          - "504"
-        strategy: backoff
   /v1/webbox/{id}/snapshot:
     post:
       description: Saves a running Web Box's app and current state as a Web Box Snapshot, ready when the response returns. The Web Box keeps running, and a paused one is woken. Web Boxes created from the Snapshot start with the saved state instead of a new workspace, so they refuse include_sample_data. The Snapshot outlives the Web Box. A starting Web Box returns 409 webbox_starting; a stopping or stopped one returns 409 webbox_stopped; one whose runtime cannot save its state returns 409 webbox_rebuild_required.

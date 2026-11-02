@@ -1120,7 +1120,7 @@ func (s *McpboxSnapshots) GetMcpboxSnapshot(ctx context.Context, request operati
 }
 
 // UpdateMcpboxSnapshot - Update MCP Box Snapshot
-// Renames an MCP Box Snapshot or replaces its metadata. Omitted fields keep their current values. Its tools do not change.
+// Renames an MCP Box Snapshot or replaces its metadata. Omitted fields keep their current values. Its tools do not change. Catalog Snapshots cannot be updated.
 func (s *McpboxSnapshots) UpdateMcpboxSnapshot(ctx context.Context, request operations.UpdateMcpboxSnapshotRequest, opts ...operations.Option) (*operations.UpdateMcpboxSnapshotResponse, error) {
 	o := operations.Options{}
 	supportedOptions := []string{
