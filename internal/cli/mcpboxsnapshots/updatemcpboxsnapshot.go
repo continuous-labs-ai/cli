@@ -25,7 +25,7 @@ func initUpdateMcpboxSnapshotCmd(parent *cobra.Command) error {
 	var cmd = &cobra.Command{
 		Use:     "update",
 		Short:   "Update MCP Box Snapshot",
-		Long:    "Renames an MCP Box Snapshot or replaces its metadata. Omitted fields keep their current values. Its tools do not change.",
+		Long:    "Renames an MCP Box Snapshot or replaces its metadata. Omitted fields keep their current values. Its tools do not change. Catalog Snapshots cannot be updated.",
 		Example: "  continuous mcpbox-snapshots update --id <id>",
 		RunE:    runUpdateMcpboxSnapshotCmd,
 	}

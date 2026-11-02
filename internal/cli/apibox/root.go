@@ -40,10 +40,6 @@ func InitApiboxRoot(parent *cobra.Command) error {
 		return err
 	}
 
-	if err := initGetApiboxConnectionCmd(ApiboxCmd); err != nil {
-		return err
-	}
-
 	if err := initSaveApiboxSnapshotCmd(ApiboxCmd); err != nil {
 		return err
 	}

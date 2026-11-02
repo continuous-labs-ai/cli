@@ -40,10 +40,6 @@ func InitWebboxRoot(parent *cobra.Command) error {
 		return err
 	}
 
-	if err := initGetWebboxConnectionCmd(WebboxCmd); err != nil {
-		return err
-	}
-
 	if err := initSaveWebboxSnapshotCmd(WebboxCmd); err != nil {
 		return err
 	}

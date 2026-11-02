@@ -40,10 +40,6 @@ func InitMcpboxRoot(parent *cobra.Command) error {
 		return err
 	}
 
-	if err := initGetMcpboxConnectionCmd(McpboxCmd); err != nil {
-		return err
-	}
-
 	if err := initSaveMcpboxSnapshotCmd(McpboxCmd); err != nil {
 		return err
 	}
