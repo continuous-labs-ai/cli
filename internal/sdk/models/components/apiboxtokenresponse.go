@@ -4,7 +4,7 @@ package components
 
 type APIBoxTokenResponse struct {
 	Apibox APIBox `json:"apibox"`
-	// The API Box's token, which lasts until the API Box is deleted. It is null only on a retried create whose first attempt stored no token; a start then issues one, which the API Box's get returns.
+	// The API Box's token, which lasts until the API Box is deleted. It is null only for a box created before boxes stored their tokens.
 	Token *string `json:"token"`
 }
 

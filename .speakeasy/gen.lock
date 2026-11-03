@@ -1,19 +1,19 @@
 lockVersion: 2.0.0
 id: ad7b08dc-357d-414c-9f26-16cfbc099767
 management:
-  docChecksum: c4905b7bacdfbc41b36c0dbce9f5653b
+  docChecksum: dfba60fb111767ff63222ed4db3651b4
   docVersion: v1
   speakeasyVersion: 1.796.4
   generationVersion: 2.935.1
-  releaseVersion: 0.4.7
-  configChecksum: 3657c0b8df32920dca5c1328f7742556
+  releaseVersion: 0.4.8
+  configChecksum: 1fe328a2ea2ae24f8987f9606147942a
   repoURL: https://github.com/continuous-labs-ai/cli.git
   installationURL: https://github.com/continuous-labs-ai/cli
   published: true
 persistentEdits:
-  generation_id: 48cb0352-59c9-4473-8933-dba7cf66a5d7
-  pristine_commit_hash: 416603b4b2fc8e8347a00bc5ab67274dd9db516e
-  pristine_tree_hash: 6d4c044a2d9fda0f178e586506d8b6b611a3e09b
+  generation_id: 4a302d64-5fb3-4cb5-831a-c1d601807091
+  pristine_commit_hash: 8d97bb4249be28d4f5f9358f44b1d495b60a63d1
+  pristine_tree_hash: 5b158c991b4324a60bc9a713b2786175caea5cb6
 features:
   cli:
     constsAndDefaults: 0.0.0
@@ -344,8 +344,8 @@ trackedFiles:
     pristine_git_object: c21cdde541e0462a40f9836488f38198e4a06275
   internal/cli/version.go:
     id: 7b0665492f72
-    last_write_checksum: sha1:1780b3aa3ffed5994c0197ba75a684809575bca2
-    pristine_git_object: 9d1d9772a606d2d88fefc2c54ced0c167e43a8c7
+    last_write_checksum: sha1:fb8264ddcdbed14c7a8c28b179d7b9ce57b2ca52
+    pristine_git_object: fc14f8ce25c2108c74afccf5c67ba1475df123c1
   internal/cli/webbox/createwebbox.go:
     id: 859f2e6e3262
     last_write_checksum: sha1:8e0671a676794982f16a91f0245e13694db40fa3
@@ -504,8 +504,8 @@ trackedFiles:
     pristine_git_object: e1de4c532e410f37c95becab07f8318081d74851
   internal/sdk/continuoussimulation.go:
     id: af3aeba7b54c
-    last_write_checksum: sha1:f91cbd3ce7743bce3b222222ae1b6894b9bd600b
-    pristine_git_object: 55625d10272003e3bdcfff674e63b56e5288245d
+    last_write_checksum: sha1:0b076be6aa1abf7b409b1696eb0bac5419ee5727
+    pristine_git_object: e3f9152d2ad35733bc7fcba2acb3eac7ee46aae8
   internal/sdk/credentials.go:
     id: 67c2f2d273f9
     last_write_checksum: sha1:11efd46dbcdb219370bf9f92ef97e205918c9a38
@@ -540,8 +540,8 @@ trackedFiles:
     pristine_git_object: c24cf5e752254f87ad26c77b58c24a718b611310
   internal/sdk/models/components/apiboxtokenresponse.go:
     id: 007e8197eaef
-    last_write_checksum: sha1:5135a0f1e4a2faa5d7d371abc33c43794aa82871
-    pristine_git_object: 84e4f7a2bdd29afba576f40273fc0ffaa33ebc51
+    last_write_checksum: sha1:218e39ce39cc19b6dd077fdf342c5aed87dbdf6b
+    pristine_git_object: 5e893046db8ea3d3dd41858c9499a8fc52e2a8c8
   internal/sdk/models/components/boxerror.go:
     id: f09bc625a581
     last_write_checksum: sha1:421bb0c221cbeac30502f2782a6c0ff61189a9c5
@@ -648,12 +648,12 @@ trackedFiles:
     pristine_git_object: 27abdc1806b3f3f489d62e9726c5b9ea9f5dae00
   internal/sdk/models/components/getapiboxresponse.go:
     id: d71f9877cf75
-    last_write_checksum: sha1:170cbe30c4ef864b28121edcfc7768a250ac0bb3
-    pristine_git_object: ee6e81440048c267b1cf72d213bf255f658e3db9
+    last_write_checksum: sha1:723ef40f316b7edb4ef2bb2aa5d7ab021d63d050
+    pristine_git_object: 57ef8579df24023fd7c8c3a72073f45e827363e8
   internal/sdk/models/components/getmcpboxresponse.go:
     id: 616e3275ecf1
-    last_write_checksum: sha1:37b77a6dfbdaaa91d0b3d87323beafa35684e74c
-    pristine_git_object: 7f6ce72c5507aae1ff5608c099f34b18fe772cdb
+    last_write_checksum: sha1:dfdd254ee56d03588f7bc11b48d11c56245b8587
+    pristine_git_object: a5c2d6e3400b8e13f84fa926f1a7392f9d699819
   internal/sdk/models/components/getwebboxresponse.go:
     id: b50330b8b630
     last_write_checksum: sha1:551e5c5528a1aafbb2a334f57633b06fe435dc30
@@ -732,8 +732,8 @@ trackedFiles:
     pristine_git_object: a26e4ae27c1796adae1e0f03c31130f73da367ee
   internal/sdk/models/components/mcpboxtokenresponse.go:
     id: 34f37eb69ee8
-    last_write_checksum: sha1:529837d2086dc4f30b4b8181a5eb39c38be0814f
-    pristine_git_object: 48bedb4a9ea32112c73de53f75d88ea6d98ec22c
+    last_write_checksum: sha1:fe6810f12c92a254efc1b2a8e057cd10536315ec
+    pristine_git_object: a4f8204491a1872d61beda5e578d679c93a0ebe7
   internal/sdk/models/components/resourceerror.go:
     id: 9c32e98b4d1d
     last_write_checksum: sha1:8eb52f3a4ef2f41f3f4655a811d655da61a85269
@@ -1300,8 +1300,8 @@ trackedFiles:
     pristine_git_object: 159a87ec97aba99e4edd132f69652e123434303e
   internal/usage/schema.go:
     id: 0f40f4612437
-    last_write_checksum: sha1:32e2bfeeb5f6e9d925574571ff804be4c521369e
-    pristine_git_object: 67ac9505cc6b5d370165c1a02b6c81155230bd2f
+    last_write_checksum: sha1:d69d13a7828ab20fb3c15b90ed3cb16680dc2613
+    pristine_git_object: 9b7fd5156bdb3dda98172303f3db185bbd486d4e
   scripts/install.ps1:
     id: fee0853709e9
     last_write_checksum: sha1:2da33f25afaa301dc2a22ac12654c585cef5c572
@@ -4291,8 +4291,3 @@ examples:
         "500":
           application/problem+json: {"code": "<value>", "detail": "<value>", "validation": {"issues": [{"code": "<value>", "kind": "invalid", "location": "<value>", "message": "<value>", "operation": "<value>", "suggestion": "<value>"}]}}
 examplesVersion: 1.0.2
-releaseNotes: |
-  ## Cli SDK Changes:
-  * `ContinuousSimulation.Apibox.GetApiboxConnection()`: **Removed** (Breaking ⚠️)
-  * `ContinuousSimulation.Mcpbox.GetMcpboxConnection()`: **Removed** (Breaking ⚠️)
-  * `ContinuousSimulation.Webbox.GetWebboxConnection()`: **Removed** (Breaking ⚠️)

@@ -33,7 +33,7 @@ func (e *GetAPIBoxResponseStatus) IsExact() bool {
 }
 
 type GetAPIBoxResponse struct {
-	// The API Box's endpoint and token, or null while it has no stored token; its next start issues one.
+	// The API Box's endpoint and token, or null for a box created before boxes stored their tokens.
 	Connection *APIBoxConnection `json:"connection"`
 	// API Box creation time.
 	CreatedAt time.Time `json:"created_at"`
