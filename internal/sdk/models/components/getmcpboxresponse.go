@@ -35,7 +35,7 @@ func (e *GetMCPBoxResponseStatus) IsExact() bool {
 type GetMCPBoxResponse struct {
 	// The API Box it fronts, whose state its tools read and change.
 	ApiboxID string `json:"apibox_id"`
-	// The MCP Box's endpoint and token, or null while it has no stored token; its next start issues one.
+	// The MCP Box's endpoint and token, or null for a box created before boxes stored their tokens.
 	Connection *MCPBoxConnection `json:"connection"`
 	// MCP Box creation time.
 	CreatedAt time.Time `json:"created_at"`

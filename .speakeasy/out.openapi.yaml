@@ -731,7 +731,7 @@ components:
           $ref: "#/components/schemas/APIBox"
           description: The API Box.
         token:
-          description: The API Box's token, which lasts until the API Box is deleted. It is null only on a retried create whose first attempt stored no token; a start then issues one, which the API Box's get returns.
+          description: The API Box's token, which lasts until the API Box is deleted. It is null only for a box created before boxes stored their tokens.
           type:
             - string
             - "null"
@@ -1632,7 +1632,7 @@ components:
       additionalProperties: false
       properties:
         connection:
-          description: The API Box's endpoint and token, or null while it has no stored token; its next start issues one.
+          description: The API Box's endpoint and token, or null for a box created before boxes stored their tokens.
           oneOf:
             - $ref: "#/components/schemas/APIBoxConnection"
             - type: "null"
@@ -1702,7 +1702,7 @@ components:
           pattern: ^abx_[0-9A-HJKMNP-TV-Z]{26}$
           type: string
         connection:
-          description: The MCP Box's endpoint and token, or null while it has no stored token; its next start issues one.
+          description: The MCP Box's endpoint and token, or null for a box created before boxes stored their tokens.
           oneOf:
             - $ref: "#/components/schemas/MCPBoxConnection"
             - type: "null"
@@ -2249,7 +2249,7 @@ components:
           $ref: "#/components/schemas/MCPBox"
           description: The MCP Box.
         token:
-          description: The MCP Box's token, which lasts until the MCP Box is deleted. It is null only on a retried create whose first attempt stored no token; a start then issues one, which the MCP Box's get returns.
+          description: The MCP Box's token, which lasts until the MCP Box is deleted. It is null only for a box created before boxes stored their tokens.
           type:
             - string
             - "null"
