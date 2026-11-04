@@ -45,6 +45,10 @@ func InitMcpboxSnapshotsRoot(parent *cobra.Command) error {
 		return err
 	}
 
+	if err := initCloneMcpboxSnapshotCmd(McpboxSnapshotsCmd); err != nil {
+		return err
+	}
+
 	if err := initResumeMcpboxSnapshotCmd(McpboxSnapshotsCmd); err != nil {
 		return err
 	}

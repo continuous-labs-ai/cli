@@ -58,6 +58,8 @@ func (e *MCPBoxSnapshotStatus) IsExact() bool {
 }
 
 type MCPBoxSnapshot struct {
+	// The callers a request to a Box started from the Snapshot can act as by sending an actor's id in the X-Continuous-Actor header. Without the header, a request acts as the default actor. An MCP Box Snapshot lists its API Box Snapshot's actors. Empty before the Snapshot is ready, when its build names none, or in a list until the Snapshot's actors are first read.
+	Actors []SimulatorActor `json:"actors"`
 	// The API Box Snapshot the MCP Box was built against, whose API it calls.
 	ApiboxSnapshotID string `json:"apibox_snapshot_id"`
 	// The build's latest progress report, or null before the first report. A settled Snapshot keeps its last report. A build waiting for its live credentials resumes when the Snapshot's resume is requested.
@@ -81,10 +83,16 @@ type MCPBoxSnapshot struct {
 	Metadata any `json:"metadata"`
 	// Snapshot name. The ID is its identity, and names need not be unique.
 	Name string `json:"name"`
+	// The Snapshot an incremental build started from, or null for any other Snapshot or once that Snapshot is deleted.
+	ParentID *string `json:"parent_id"`
 	// The build's research stage, or null when research did not run.
 	Research *SimulatorResearch `json:"research"`
 	// catalog for a Snapshot Continuous publishes, build for one built or published into the workspace, box for one saved from an MCP Box.
 	Source MCPBoxSnapshotSource `json:"source"`
+	// The box the Snapshot was saved from, or null for a built or published Snapshot.
+	SourceBoxID *string `json:"source_box_id"`
+	// The Snapshot the box it was saved from started from, or null for a built or published Snapshot, or once that Snapshot is deleted.
+	SourceSnapshotID *string `json:"source_snapshot_id"`
 	// The source MCP server whose tools the MCP Box serves, or empty when the build called no live source.
 	SourceURL string `json:"source_url"`
 	// pending while waiting for capacity; building while the build runs; ready when boxes can start from it; failed when the build failed; canceled when a cancel request took effect.
@@ -100,6 +108,13 @@ func (m *MCPBoxSnapshot) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	return nil
+}
+
+func (m *MCPBoxSnapshot) GetActors() []SimulatorActor {
+	if m == nil {
+		return []SimulatorActor{}
+	}
+	return m.Actors
 }
 
 func (m *MCPBoxSnapshot) GetApiboxSnapshotID() string {
@@ -186,6 +201,13 @@ func (m *MCPBoxSnapshot) GetName() string {
 	return m.Name
 }
 
+func (m *MCPBoxSnapshot) GetParentID() *string {
+	if m == nil {
+		return nil
+	}
+	return m.ParentID
+}
+
 func (m *MCPBoxSnapshot) GetResearch() *SimulatorResearch {
 	if m == nil {
 		return nil
@@ -198,6 +220,20 @@ func (m *MCPBoxSnapshot) GetSource() MCPBoxSnapshotSource {
 		return MCPBoxSnapshotSource("")
 	}
 	return m.Source
+}
+
+func (m *MCPBoxSnapshot) GetSourceBoxID() *string {
+	if m == nil {
+		return nil
+	}
+	return m.SourceBoxID
+}
+
+func (m *MCPBoxSnapshot) GetSourceSnapshotID() *string {
+	if m == nil {
+		return nil
+	}
+	return m.SourceSnapshotID
 }
 
 func (m *MCPBoxSnapshot) GetSourceURL() string {

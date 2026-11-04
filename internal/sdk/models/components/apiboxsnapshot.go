@@ -82,6 +82,8 @@ func (e *APIBoxSnapshotStatus) IsExact() bool {
 }
 
 type APIBoxSnapshot struct {
+	// The callers a request to a Box started from the Snapshot can act as by sending an actor's id in the X-Continuous-Actor header. Without the header, a request acts as the default actor. An MCP Box Snapshot lists its API Box Snapshot's actors. Empty before the Snapshot is ready, when its build names none, or in a list until the Snapshot's actors are first read.
+	Actors []SimulatorActor `json:"actors"`
 	// The build's latest progress report, or null before the first report. A settled Snapshot keeps its last report. A build waiting for its live credentials resumes when the Snapshot's resume is requested.
 	Build *SimulatorBuildProgress `json:"build"`
 	// What a ready Snapshot serves, or null.
@@ -103,10 +105,16 @@ type APIBoxSnapshot struct {
 	Metadata any `json:"metadata"`
 	// Snapshot name. The ID is its identity, and names need not be unique.
 	Name string `json:"name"`
+	// The Snapshot an incremental build started from, or null for any other Snapshot or once that Snapshot is deleted.
+	ParentID *string `json:"parent_id"`
 	// The build's research stage, or null when research did not run.
 	Research *SimulatorResearch `json:"research"`
 	// catalog for a Snapshot Continuous publishes, build for one built or published into the workspace, box for one saved from an API Box.
 	Source APIBoxSnapshotSource `json:"source"`
+	// The box the Snapshot was saved from, or null for a built or published Snapshot.
+	SourceBoxID *string `json:"source_box_id"`
+	// The Snapshot the box it was saved from started from, or null for a built or published Snapshot, or once that Snapshot is deleted.
+	SourceSnapshotID *string `json:"source_snapshot_id"`
 	// The specification the Snapshot was built from, or null until the build has read it.
 	SpecKind *APIBoxSnapshotSpecKind `json:"spec_kind"`
 	// pending while waiting for capacity; building while the build runs; ready when boxes can start from it; failed when the build failed; canceled when a cancel request took effect.
@@ -122,6 +130,13 @@ func (a *APIBoxSnapshot) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	return nil
+}
+
+func (a *APIBoxSnapshot) GetActors() []SimulatorActor {
+	if a == nil {
+		return []SimulatorActor{}
+	}
+	return a.Actors
 }
 
 func (a *APIBoxSnapshot) GetBuild() *SimulatorBuildProgress {
@@ -201,6 +216,13 @@ func (a *APIBoxSnapshot) GetName() string {
 	return a.Name
 }
 
+func (a *APIBoxSnapshot) GetParentID() *string {
+	if a == nil {
+		return nil
+	}
+	return a.ParentID
+}
+
 func (a *APIBoxSnapshot) GetResearch() *SimulatorResearch {
 	if a == nil {
 		return nil
@@ -213,6 +235,20 @@ func (a *APIBoxSnapshot) GetSource() APIBoxSnapshotSource {
 		return APIBoxSnapshotSource("")
 	}
 	return a.Source
+}
+
+func (a *APIBoxSnapshot) GetSourceBoxID() *string {
+	if a == nil {
+		return nil
+	}
+	return a.SourceBoxID
+}
+
+func (a *APIBoxSnapshot) GetSourceSnapshotID() *string {
+	if a == nil {
+		return nil
+	}
+	return a.SourceSnapshotID
 }
 
 func (a *APIBoxSnapshot) GetSpecKind() *APIBoxSnapshotSpecKind {

@@ -7,14 +7,16 @@ import (
 )
 
 type BuildWebBoxSnapshotRequest struct {
-	// Workspace credentials: exactly one login for the vendor's web app, whose saved sign-in the builder and QA use on the live app, and up to four others with a base_url that they can call real systems with. Each must belong to the workspace. QA may create test objects in the live app; use a sandbox or test account.
-	CredentialIds []string `json:"credential_ids"`
+	// Workspace credentials: exactly one login for the vendor's web app, whose saved sign-in the builder and QA use on the live app, and up to four others with a base_url that they can call real systems with. Each must belong to the workspace. Required without parent_id. QA may create test objects in the live app; use a sandbox or test account.
+	CredentialIds []string `json:"credential_ids,omitzero"`
 	// Instructions for the builder. At most 16,384 characters and 65,536 UTF-8 bytes; must not be blank or contain U+0000.
 	Instructions *string `json:"instructions,omitzero"`
 	// Model that builds and reviews the Snapshot: a Claude model or combined, the default. combined currently builds, reviews, and runs QA exactly as claude-opus-5-5 does.
 	Model *string `json:"model,omitzero"`
 	// Name for the Snapshot. Omission generates a name. Names must not contain U+0000. The ID stays its identity, and names need not be unique.
 	Name *string `json:"name,omitzero"`
+	// A ready Web Box Snapshot of the workspace or the catalog to build on. The build starts from its source, documents and tests. What the request does not set comes from the parent: its documents, which an upload of the same name replaces, its model, its review rounds, and those of its credentials the workspace still has, which must include its login. timeout_seconds keeps its default.
+	ParentID *string `json:"parent_id,omitzero"`
 	// Review rounds, from 1 to 10. Defaults to 1. Each round is a review and a repair of its findings, by the same builder and reviewer. The rounds stop early when the reviewer reports no findings.
 	ReviewRounds *int64 `default:"1" json:"review_rounds"`
 	// Time limit for generation and validation in seconds, from 1 to 172800. Defaults to 28800 (eight hours). Excludes queue wait, finalization, and any wait for live credentials. Retries share the same deadline.
@@ -34,7 +36,7 @@ func (b *BuildWebBoxSnapshotRequest) UnmarshalJSON(data []byte) error {
 
 func (b *BuildWebBoxSnapshotRequest) GetCredentialIds() []string {
 	if b == nil {
-		return []string{}
+		return nil
 	}
 	return b.CredentialIds
 }
@@ -58,6 +60,13 @@ func (b *BuildWebBoxSnapshotRequest) GetName() *string {
 		return nil
 	}
 	return b.Name
+}
+
+func (b *BuildWebBoxSnapshotRequest) GetParentID() *string {
+	if b == nil {
+		return nil
+	}
+	return b.ParentID
 }
 
 func (b *BuildWebBoxSnapshotRequest) GetReviewRounds() *int64 {
