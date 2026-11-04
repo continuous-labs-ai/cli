@@ -2,7 +2,8 @@
 # at v15 (68f3bfef): its CLI job pins a goreleaser-action commit that does not
 # exist. Deliberate differences: the corrected pin, the setup-go version comment
 # corrected to the tag its SHA carries, the action called directly instead of
-# checked out into _speakeasy, no Slack steps, and the reusable inputs inlined.
+# checked out into _speakeasy, no Slack steps, the reusable inputs inlined, and
+# the owned dispatch-reference job.
 # Return to the reusable workflow call once upstream fixes the pin.
 name: Publish
 permissions:
@@ -111,3 +112,26 @@ jobs:
           GH_ACTION_VERSION: fa50f4813201c6f919c74c25196b17c070ec4ac1
           GH_ACTION_STEP: ${{ github.job }}
           TARGET_TYPE: "sdk"
+  dispatch-reference:
+    name: Update the Continuous CLI reference
+    runs-on: ubuntu-22.04
+    needs: [release, publish-cli]
+    permissions: {}
+    steps:
+      - name: Mint a contents token for continuous-labs-ai/continuous
+        id: token
+        uses: actions/create-github-app-token@64ab729a6294000f5aa4a4bc0b73d1f32bc45510 # v3.3.0
+        with:
+          client-id: ${{ vars.PINS_APP_CLIENT_ID }}
+          private-key: ${{ secrets.PINS_APP_PRIVATE_KEY }}
+          owner: continuous-labs-ai
+          repositories: continuous
+          permission-contents: write
+      - name: Dispatch cli-release
+        env:
+          GH_TOKEN: ${{ steps.token.outputs.token }}
+          TAG: ${{ needs.release.outputs.cli_goreleaser_current_tag }}
+        run: |
+          [[ -n $TAG ]] || { echo "::error::The release job reported no CLI tag."; exit 1; }
+          gh api repos/continuous-labs-ai/continuous/dispatches \
+            -f event_type=cli-release -f "client_payload[tag]=$TAG"
