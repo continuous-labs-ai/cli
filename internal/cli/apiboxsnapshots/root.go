@@ -45,6 +45,10 @@ func InitApiboxSnapshotsRoot(parent *cobra.Command) error {
 		return err
 	}
 
+	if err := initCloneApiboxSnapshotCmd(ApiboxSnapshotsCmd); err != nil {
+		return err
+	}
+
 	if err := initResumeApiboxSnapshotCmd(ApiboxSnapshotsCmd); err != nil {
 		return err
 	}

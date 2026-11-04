@@ -1,19 +1,19 @@
 lockVersion: 2.0.0
 id: ad7b08dc-357d-414c-9f26-16cfbc099767
 management:
-  docChecksum: dfba60fb111767ff63222ed4db3651b4
+  docChecksum: df9d703402b85ef84cc59d5b8ee79295
   docVersion: v1
   speakeasyVersion: 1.796.4
   generationVersion: 2.935.1
-  releaseVersion: 0.4.8
-  configChecksum: 1fe328a2ea2ae24f8987f9606147942a
+  releaseVersion: 0.4.9
+  configChecksum: ed583d3c0e3685aea8927a310120e2c3
   repoURL: https://github.com/continuous-labs-ai/cli.git
   installationURL: https://github.com/continuous-labs-ai/cli
   published: true
 persistentEdits:
-  generation_id: 4a302d64-5fb3-4cb5-831a-c1d601807091
-  pristine_commit_hash: 8d97bb4249be28d4f5f9358f44b1d495b60a63d1
-  pristine_tree_hash: 5b158c991b4324a60bc9a713b2786175caea5cb6
+  generation_id: 8d43f94b-df12-4161-9b87-d217f190f400
+  pristine_commit_hash: 7c623a39039a4ee7a2eb227fa2979a97dbdb166f
+  pristine_tree_hash: ff151a11b328b8e4fd1e81324b48c709c43c122f
 features:
   cli:
     constsAndDefaults: 0.0.0
@@ -90,10 +90,14 @@ trackedFiles:
     id: 6aa648c0952b
     last_write_checksum: sha1:7eee184c5f36fdcf13ba290128b6f6fcde9d78ce
     pristine_git_object: 0de60d3e0dff7daff64791414e5f0c7d7752ed2b
+  internal/cli/apiboxsnapshots/cloneapiboxsnapshot.go:
+    id: 047a71cdba3e
+    last_write_checksum: sha1:66bfe1b832c368d21efc5ab6000edb9d786effe2
+    pristine_git_object: e4cfdf01393fdcceecef0f9e036ca0c97e56eed4
   internal/cli/apiboxsnapshots/createapiboxsnapshot.go:
     id: d3c6796a32c7
-    last_write_checksum: sha1:df8dd6b9d6dfb77e00abff0cd793103d37061d44
-    pristine_git_object: 4c9767ac0ce81b459c914cdabad816601119165e
+    last_write_checksum: sha1:83c0bdc321551aa0e3c878529784f5fffa76696e
+    pristine_git_object: fb64d397b8da2c4473091a147b56046216fc1a43
   internal/cli/apiboxsnapshots/deleteapiboxsnapshot.go:
     id: 5febe18d323a
     last_write_checksum: sha1:c0728fb908e9a6de098cf5c98f61fb30bca3ac92
@@ -112,8 +116,8 @@ trackedFiles:
     pristine_git_object: 5b601641f99263dd6bd8816d974198a259dd2051
   internal/cli/apiboxsnapshots/root.go:
     id: f02934704c8d
-    last_write_checksum: sha1:cde5bfc03ffbdb7ede4b62c5e127117759783800
-    pristine_git_object: 8634ec2d200c03723bc36f946ccd824b083ef41f
+    last_write_checksum: sha1:39271aadf6d353fce208360099fde48cafb42942
+    pristine_git_object: c06696eeef9d7a2aa4990001f6400ec888963ac3
   internal/cli/apiboxsnapshots/updateapiboxsnapshot.go:
     id: f790bcf718ae
     last_write_checksum: sha1:51f4c1e1d1af4d5e9ef831c321a7209de7d6fee6
@@ -194,10 +198,14 @@ trackedFiles:
     id: f293a0d1c770
     last_write_checksum: sha1:a085ee765759c63c1d6d8f5f8d41f4a6d14d3de7
     pristine_git_object: 69b3b127b5aaa6d0d213e3ba6391f385b5cf74c2
+  internal/cli/mcpboxsnapshots/clonemcpboxsnapshot.go:
+    id: 77814235dee1
+    last_write_checksum: sha1:93e4f5863e4eb823431696db74e89d621f72b14d
+    pristine_git_object: e9e6f37b460b0c6a3aebd14d59be19d6f88fbfc1
   internal/cli/mcpboxsnapshots/createmcpboxsnapshot.go:
     id: 7364a3971899
-    last_write_checksum: sha1:c609035f006837219c0d6b94d32a1f52fae06e20
-    pristine_git_object: ecf84cefad19d11334b1468d6a7e47c136c50536
+    last_write_checksum: sha1:82e0393b87a75a22c1ea39c36effbf1e5b39667c
+    pristine_git_object: f71b31172efa44a94d72d61bfffd6d55c7d9a8fb
   internal/cli/mcpboxsnapshots/deletemcpboxsnapshot.go:
     id: 004ab20df0ed
     last_write_checksum: sha1:0af9c59cdf3e225226a5d0496681801390c2580f
@@ -216,8 +224,8 @@ trackedFiles:
     pristine_git_object: 9cb09143367c4983c4c16b2a482546b576fe751f
   internal/cli/mcpboxsnapshots/root.go:
     id: 95e88f016969
-    last_write_checksum: sha1:641984d941f3be375b5e23da24cacf6188009a6e
-    pristine_git_object: 262067196d113de17f5eed0a99a67f093d1a47e8
+    last_write_checksum: sha1:f2899ac32fb339c67a0aef24b836d8243b3ace94
+    pristine_git_object: b593daed04dd1b0a0e7da585e9652c6736efb9d0
   internal/cli/mcpboxsnapshots/updatemcpboxsnapshot.go:
     id: c20eabc4cc85
     last_write_checksum: sha1:ddb8e96fb34e0799d19a0bdbdd10b1374c7a23d0
@@ -344,8 +352,8 @@ trackedFiles:
     pristine_git_object: c21cdde541e0462a40f9836488f38198e4a06275
   internal/cli/version.go:
     id: 7b0665492f72
-    last_write_checksum: sha1:fb8264ddcdbed14c7a8c28b179d7b9ce57b2ca52
-    pristine_git_object: fc14f8ce25c2108c74afccf5c67ba1475df123c1
+    last_write_checksum: sha1:3a25a20093500547a1528f2604c227b17732edb9
+    pristine_git_object: e1145ae995ab747412e5969ad24f5a14ba7bb8eb
   internal/cli/webbox/createwebbox.go:
     id: 859f2e6e3262
     last_write_checksum: sha1:8e0671a676794982f16a91f0245e13694db40fa3
@@ -390,10 +398,14 @@ trackedFiles:
     id: f68c7fbc028f
     last_write_checksum: sha1:56cd5e5e94120c946aa48b4f6a0f627f932428b7
     pristine_git_object: 5347543f8ea46cb7c1a6753ebd1aee07edcacdd7
+  internal/cli/webboxsnapshots/clonewebboxsnapshot.go:
+    id: b3b0c736e5b2
+    last_write_checksum: sha1:0fce4b78a86697c84d8bef14e4daab7c05c2a95a
+    pristine_git_object: d10c8ef1023d9a65c1bdd441149e2e944aace6fe
   internal/cli/webboxsnapshots/createwebboxsnapshot.go:
     id: 488fd3522b97
-    last_write_checksum: sha1:c81d8acb015563df466536ef6db74e7ef90d2b7a
-    pristine_git_object: df2609885b09955ecee153c95e6522153b263045
+    last_write_checksum: sha1:56378e18707629e1769deae26063ad746f10f973
+    pristine_git_object: a1198109aeef8574ecd23247f2b4d955533a735a
   internal/cli/webboxsnapshots/deletewebboxsnapshot.go:
     id: a8098ecda2ba
     last_write_checksum: sha1:64bc8cf072823b71f9e5fd363416f520eb2339f0
@@ -412,8 +424,8 @@ trackedFiles:
     pristine_git_object: f72e41649cc1dca2f572d9e828c80f70249495dd
   internal/cli/webboxsnapshots/root.go:
     id: 717d0b82df33
-    last_write_checksum: sha1:4809c8a6afefe8ed0f19ae7fb6196b8456c855a0
-    pristine_git_object: 174c51131e991b9637a21024160da0c7c8b3f4ba
+    last_write_checksum: sha1:e02bb08107d42495f75d46a660b718e7d872a547
+    pristine_git_object: 021fc17602bc98d8378c1b5506e9ec524295ead2
   internal/cli/webboxsnapshots/updatewebboxsnapshot.go:
     id: 71409c20f5cb
     last_write_checksum: sha1:504151474c3096a26b8cf1e54fd7494a45aec43c
@@ -500,12 +512,12 @@ trackedFiles:
     pristine_git_object: 54a1db8b89f3d4bf3407ab4f4b172575f4339971
   internal/sdk/apiboxsnapshots.go:
     id: 977378330b70
-    last_write_checksum: sha1:6698047b939b5f3bfc60ee612c26ccaf6d38c0d3
-    pristine_git_object: e1de4c532e410f37c95becab07f8318081d74851
+    last_write_checksum: sha1:e8218a1f63e3f21187a8b23ce31b8ced988fcfa5
+    pristine_git_object: cc55fad4de675e4cc6b85a0ce95e9a2c13d160f4
   internal/sdk/continuoussimulation.go:
     id: af3aeba7b54c
-    last_write_checksum: sha1:0b076be6aa1abf7b409b1696eb0bac5419ee5727
-    pristine_git_object: e3f9152d2ad35733bc7fcba2acb3eac7ee46aae8
+    last_write_checksum: sha1:0d15f83258e21dbff45abbc94678fb0dbb4e54a3
+    pristine_git_object: ac8439ffa1936f6e09d9ae55aaf6ddfb968448bc
   internal/sdk/credentials.go:
     id: 67c2f2d273f9
     last_write_checksum: sha1:11efd46dbcdb219370bf9f92ef97e205918c9a38
@@ -520,8 +532,8 @@ trackedFiles:
     pristine_git_object: ef785e8bb84aa79ddc957d6a06afd9ecaac7e7cc
   internal/sdk/mcpboxsnapshots.go:
     id: 2924aca22b73
-    last_write_checksum: sha1:42a68ce794cf675997765563e65b2f86890d8104
-    pristine_git_object: 7c36e0f90ec0e590b264135daf7fe106051b24e8
+    last_write_checksum: sha1:2fa06295ccb17a9447f1f12b52ba119023c9cbf4
+    pristine_git_object: c5c91312b21ccfb5bb6cd4165a0b99a2f8e98b63
   internal/sdk/models/components/advancetimerequest.go:
     id: 9b1d48d35e1b
     last_write_checksum: sha1:2a73952206733d4ba2e16b49d418a9a655d4f502
@@ -536,8 +548,8 @@ trackedFiles:
     pristine_git_object: ab8daf176be6fc411d4d4762f7014a1b78ada4d3
   internal/sdk/models/components/apiboxsnapshot.go:
     id: 49e692a277cc
-    last_write_checksum: sha1:0f6b501616176f13b592625718e1d2f9142b5893
-    pristine_git_object: c24cf5e752254f87ad26c77b58c24a718b611310
+    last_write_checksum: sha1:a963ed0cc482643164b0385fd6762f1e11fc5827
+    pristine_git_object: 12d05c214f2b2245675d6eb966275ceddcb869ed
   internal/sdk/models/components/apiboxtokenresponse.go:
     id: 007e8197eaef
     last_write_checksum: sha1:218e39ce39cc19b6dd077fdf342c5aed87dbdf6b
@@ -552,20 +564,20 @@ trackedFiles:
     pristine_git_object: 2961fbd9d22e600b4c751cbf7d316707bee811e5
   internal/sdk/models/components/buildapiboxsnapshotrequest.go:
     id: 231e9c1e9f54
-    last_write_checksum: sha1:e4abd31fdb72fbb97ec7695d5c595ec8134eb243
-    pristine_git_object: b837a2911d8a45280a32abc6e41296abf5f9172c
+    last_write_checksum: sha1:8139857e91c58c31424fa41a78954b06c66614e6
+    pristine_git_object: 3ba0a71ab08d3ecbf5f38a39fb815437633ddf68
   internal/sdk/models/components/buildmcpboxsnapshotrequest.go:
     id: 48a77240a503
-    last_write_checksum: sha1:acbdd109e73c1d232b73837fcf91f5b2ba2e3a00
-    pristine_git_object: 47e7b982ddc83d2f4971f55d497e640e826dc6c8
+    last_write_checksum: sha1:6f2b4c07eae7cabfb8119706c5c0e963c163ab9c
+    pristine_git_object: 0efaeb6f2e282c0c18f50277b532d4c00235cb15
   internal/sdk/models/components/buildsimulatorrequest.go:
     id: 510b20fc8bb2
     last_write_checksum: sha1:7750a5ed3b81b49aab0d9842d0e231be1804bf1e
     pristine_git_object: 5e071fd0f9597f4030837b478572da93557122bc
   internal/sdk/models/components/buildwebboxsnapshotrequest.go:
     id: e63ad22daa84
-    last_write_checksum: sha1:10033ecfdcfb07b9d5f47b8e1faf3100a840d694
-    pristine_git_object: 7ee0fb570a7136b7382c6aa781857c652af92090
+    last_write_checksum: sha1:ae6c9a18966fc65f82fde6b5ad8737cd876b6b4f
+    pristine_git_object: 7159525e427099634756f22cefe47afaf1b52385
   internal/sdk/models/components/clockadvance.go:
     id: dc688562ec2d
     last_write_checksum: sha1:4026d7d2cb3971c7ec48d296a69f5e8149673783
@@ -578,6 +590,10 @@ trackedFiles:
     id: 0bf0c6252039
     last_write_checksum: sha1:0a7f05699c181de4df6c787b82aea3248346c3f9
     pristine_git_object: dbd5bd59b49b46660453cfc8a3cc7f9e1055d1a7
+  internal/sdk/models/components/cloneboxsnapshotrequest.go:
+    id: 986dc8fae990
+    last_write_checksum: sha1:101aa19965f9a17bed96e3c60345547d08a14deb
+    pristine_git_object: 28e78ebd9e86ecdb0bba0b94334662566f068ad3
   internal/sdk/models/components/clonesimulatorrequest.go:
     id: e6dee3a85d6c
     last_write_checksum: sha1:313c267204dca6f14d5aec6cb5cd67a8aa9af6b0
@@ -596,8 +612,8 @@ trackedFiles:
     pristine_git_object: 05b2a5461c8061de8fa56d3c158ce30c6a9322f1
   internal/sdk/models/components/createdsimulation.go:
     id: 4b3913365b48
-    last_write_checksum: sha1:99531d0e0be9da57c13ffb2adfa57ccd26eb4920
-    pristine_git_object: 5cd5c95b0e4371918fa6a73cb43bde49e1d0d8be
+    last_write_checksum: sha1:8ad288ceeb483711e851c7fb9ea36b5cccb332c3
+    pristine_git_object: 677abe139019675385c448fcab9284c179917c69
   internal/sdk/models/components/createmcpboxrequest.go:
     id: 6c6b06b15b00
     last_write_checksum: sha1:d509d6dd56928e49c44cb6d6f950f6283cf6ec3b
@@ -728,8 +744,8 @@ trackedFiles:
     pristine_git_object: bdb4b8c3b0f85ec89a7dc787209beec33f51fb64
   internal/sdk/models/components/mcpboxsnapshot.go:
     id: 10e617259103
-    last_write_checksum: sha1:24ba17c0359c7d54819ab654feba7b7e8f1f7635
-    pristine_git_object: a26e4ae27c1796adae1e0f03c31130f73da367ee
+    last_write_checksum: sha1:a9a3ee9b5a379fbbd8a468b54ad9cd3107d4758a
+    pristine_git_object: 2509df9fcd5882c10e4673be94bae32a8adc15f2
   internal/sdk/models/components/mcpboxtokenresponse.go:
     id: 34f37eb69ee8
     last_write_checksum: sha1:fe6810f12c92a254efc1b2a8e057cd10536315ec
@@ -752,12 +768,12 @@ trackedFiles:
     pristine_git_object: eca801da09061c06c8ca5a5c1229134922c4e601
   internal/sdk/models/components/simulation.go:
     id: c8c8df785fde
-    last_write_checksum: sha1:bf378f7912599a1248a58b3e448a9b722c25a894
-    pristine_git_object: 01bd65e9454abe5b0f77a28e7551d812d2c28618
+    last_write_checksum: sha1:32789155313098f53c30421fedd26a07fdc29005
+    pristine_git_object: 680066af14209bedd48fe65ff7638e4bc4a9f830
   internal/sdk/models/components/simulationdetail.go:
     id: b1b84d664a21
-    last_write_checksum: sha1:d22ebcc867ff6d2cf4b12384312122d802faebf1
-    pristine_git_object: 4c99a216ec9c969e52ad5940ae50779f74cc59fe
+    last_write_checksum: sha1:bb1127965d34e12f2276359b69bff858ff753c1f
+    pristine_git_object: 25ebbb2ba70819161ebc02b5360b02fa82e30aeb
   internal/sdk/models/components/simulationsnapshot.go:
     id: d22fb69a926a
     last_write_checksum: sha1:095053f3b8db6448dbd31090795a0ed56eaccbad
@@ -864,8 +880,8 @@ trackedFiles:
     pristine_git_object: dfec595adccb3f45b4850839503b5abf324626f8
   internal/sdk/models/components/webboxsnapshot.go:
     id: dfda2795e816
-    last_write_checksum: sha1:b6b977eed4067ca0b64afe51781267fa7855d075
-    pristine_git_object: 3d4ee676591562e241c8aa41956759759c4d00ff
+    last_write_checksum: sha1:ed9db9b07b2807fe14cedde80e26f872d99ebacc
+    pristine_git_object: 2de3a5d30ab5ebfc6777c5a1a59bbcbb6e411b6e
   internal/sdk/models/operations/buildsimulator.go:
     id: 0ead813b1137
     last_write_checksum: sha1:aae34c18608ec821f769a729cf9f15675470c695
@@ -886,10 +902,22 @@ trackedFiles:
     id: 2803457fd341
     last_write_checksum: sha1:be589ed0d729ab52d00b46b169532618dca0574b
     pristine_git_object: da73ccaaf3ac700021fde9fb7106462e98946084
+  internal/sdk/models/operations/cloneapiboxsnapshot.go:
+    id: 5dfb380729dd
+    last_write_checksum: sha1:bfe7b9734951121deb7efff5dd2aca778a79e05e
+    pristine_git_object: 73fca9c8314202f3d881deb4d1f6c4b6ba197b31
+  internal/sdk/models/operations/clonemcpboxsnapshot.go:
+    id: 73aff071e75c
+    last_write_checksum: sha1:a2558f08e25b6837dc30b658391923663991355c
+    pristine_git_object: 82de7bdf7977cdfd097fb71c3dce13091e57d6cc
   internal/sdk/models/operations/clonesimulator.go:
     id: c289d8cde8a7
     last_write_checksum: sha1:7d1461a731079e220f784bdb430470a1d8393fa6
     pristine_git_object: 2a1c3b3093038398781393bcbc05ce57fb63f151
+  internal/sdk/models/operations/clonewebboxsnapshot.go:
+    id: d01c254f272c
+    last_write_checksum: sha1:69154f03c9fc0d2789fbec21322876e05254eb28
+    pristine_git_object: a1a1555c86ee7fd5f26f8081c135a7d86f6df4c9
   internal/sdk/models/operations/createapibox.go:
     id: 56ae6d4f692d
     last_write_checksum: sha1:e5651931b36261a83e46746d0167c3f017489a5a
@@ -1292,16 +1320,16 @@ trackedFiles:
     pristine_git_object: bb97efd76b31ef4872fda794d45096198f392eef
   internal/sdk/webboxsnapshots.go:
     id: 3a97e9be55d9
-    last_write_checksum: sha1:d569bffc47d5d4b960024ee64ef61350fc39c79e
-    pristine_git_object: f139250088169000fe5ec399136f6fb7a82e8e3f
+    last_write_checksum: sha1:02b984ae122d49e9a1e9caaab213436fd473821e
+    pristine_git_object: e7b6a82d342b5c38d4836aba552183c018ff8f0d
   internal/testclient/testclient.go:
     id: 20fc511b8b00
     last_write_checksum: sha1:7107e59d336235c44af152c5a61ee3896a7841fa
     pristine_git_object: 159a87ec97aba99e4edd132f69652e123434303e
   internal/usage/schema.go:
     id: 0f40f4612437
-    last_write_checksum: sha1:d69d13a7828ab20fb3c15b90ed3cb16680dc2613
-    pristine_git_object: 9b7fd5156bdb3dda98172303f3db185bbd486d4e
+    last_write_checksum: sha1:e3c1594f9a0265eaac49841f42527978051c99bc
+    pristine_git_object: 0ad20770f0b5a12bfb49aa97f81ce82f376f65e9
   scripts/install.ps1:
     id: fee0853709e9
     last_write_checksum: sha1:2da33f25afaa301dc2a22ac12654c585cef5c572
@@ -3182,7 +3210,7 @@ examples:
         multipart/form-data: {"request": {"review_rounds": 1, "timeout_seconds": 28800}}
       responses:
         "202":
-          application/json: {"build": {"hidden_limitations": 848274, "last_submission": null, "last_tool": "<value>", "limitations": [{"location": "<value>", "message": "<value>", "operations": ["<value 1>", "<value 2>"], "reviewed": false}], "model": "claude-opus-5-5", "phase": "review", "review_round": 132479, "review_rounds": 275550, "stage": "derive", "submissions": 995961, "tool_calls": 180750, "waited_seconds": 121407, "waiting": {"credential_ids": ["<value 1>", "<value 2>"], "deadline": "2025-03-13T17:04:42.031Z", "reason": "<value>", "since": "2024-11-13T22:02:31.552Z", "type": "time_limit"}, "warnings": []}, "composition": {"entities": 26097, "operations": 27093, "sample": false}, "created_at": "2026-01-02T09:15:33.916Z", "credential_ids": ["<value 1>"], "error": {"agent_message": "<value>", "code": "build_failed", "detail": "<value>", "reason": "time_limit", "validation": {"issues": []}}, "hidden_limitations": 67986, "id": "<id>", "instructions": "<value>", "limitations": [], "metadata": "<value>", "name": "<value>", "research": {"bytes": 504376, "pages": 407090, "status": "running"}, "source": "catalog", "spec_kind": "graphql", "status": "pending"}
+          application/json: {"actors": [{"default": false, "entity": "<value>", "id": "<id>", "name": "<value>", "role": "<value>"}], "build": {"hidden_limitations": 848274, "last_submission": null, "last_tool": "<value>", "limitations": [{"location": "<value>", "message": "<value>", "operations": ["<value 1>", "<value 2>"], "reviewed": false}], "model": "claude-opus-5-5", "phase": "review", "review_round": 132479, "review_rounds": 275550, "stage": "derive", "submissions": 995961, "tool_calls": 180750, "waited_seconds": 121407, "waiting": {"credential_ids": ["<value 1>", "<value 2>"], "deadline": "2025-03-13T17:04:42.031Z", "reason": "<value>", "since": "2024-11-13T22:02:31.552Z", "type": "time_limit"}, "warnings": []}, "composition": {"entities": 26097, "operations": 27093, "sample": false}, "created_at": "2026-01-02T09:15:33.916Z", "credential_ids": ["<value 1>"], "error": {"agent_message": "<value>", "code": "build_failed", "detail": "<value>", "reason": "time_limit", "validation": {"issues": []}}, "hidden_limitations": 67986, "id": "<id>", "instructions": "<value>", "limitations": [], "metadata": "<value>", "name": "<value>", "parent_id": null, "research": {"bytes": 504376, "pages": 407090, "status": "running"}, "source": "catalog", "source_box_id": "<id>", "source_snapshot_id": "<id>", "spec_kind": "graphql", "status": "pending"}
         "400":
           application/problem+json: {"code": "<value>", "detail": "<value>", "validation": {"issues": []}}
         "429":
@@ -3244,7 +3272,7 @@ examples:
           id: "<id>"
       responses:
         "200":
-          application/json: {"build": {"hidden_limitations": 572730, "last_submission": "rejected", "last_tool": "<value>", "limitations": [{"location": "<value>", "message": "<value>", "operations": ["<value 1>", "<value 2>", "<value 3>"], "reviewed": false}], "model": "claude-fable-5-1", "phase": "qa", "review_round": 958108, "review_rounds": 954301, "stage": "derive", "submissions": 787879, "tool_calls": 313673, "waited_seconds": 24106, "waiting": {"credential_ids": ["<value 1>", "<value 2>"], "deadline": "2024-10-26T11:15:18.060Z", "reason": "<value>", "since": "2024-06-15T00:46:52.554Z", "type": "time_limit"}, "warnings": [{"code": "spec.response_untyped", "location": "<value>", "message": "<value>", "operations": ["<value 1>", "<value 2>", "<value 3>"]}]}, "composition": {"entities": 378974, "operations": 318763, "sample": true}, "created_at": "2026-05-14T17:48:17.691Z", "credential_ids": ["<value 1>"], "error": {"agent_message": "<value>", "code": "build_canceled", "detail": "<value>", "reason": "service_unavailable", "validation": {"issues": []}}, "hidden_limitations": 386771, "id": "<id>", "instructions": "<value>", "limitations": [], "metadata": "<value>", "name": "<value>", "research": {"bytes": 76014, "pages": 58309, "status": "provided"}, "source": "build", "spec_kind": "wsdl", "status": "pending"}
+          application/json: {"actors": [{"default": false, "entity": "<value>", "id": "<id>", "name": "<value>", "role": "<value>"}], "build": {"hidden_limitations": 572730, "last_submission": "rejected", "last_tool": "<value>", "limitations": [{"location": "<value>", "message": "<value>", "operations": ["<value 1>", "<value 2>", "<value 3>"], "reviewed": false}], "model": "claude-fable-5-1", "phase": "qa", "review_round": 958108, "review_rounds": 954301, "stage": "derive", "submissions": 787879, "tool_calls": 313673, "waited_seconds": 24106, "waiting": {"credential_ids": ["<value 1>", "<value 2>"], "deadline": "2024-10-26T11:15:18.060Z", "reason": "<value>", "since": "2024-06-15T00:46:52.554Z", "type": "time_limit"}, "warnings": [{"code": "spec.response_untyped", "location": "<value>", "message": "<value>", "operations": ["<value 1>", "<value 2>", "<value 3>"]}]}, "composition": {"entities": 378974, "operations": 318763, "sample": true}, "created_at": "2026-05-14T17:48:17.691Z", "credential_ids": ["<value 1>"], "error": {"agent_message": "<value>", "code": "build_canceled", "detail": "<value>", "reason": "service_unavailable", "validation": {"issues": []}}, "hidden_limitations": 386771, "id": "<id>", "instructions": "<value>", "limitations": [], "metadata": "<value>", "name": "<value>", "parent_id": "<id>", "research": {"bytes": 76014, "pages": 58309, "status": "provided"}, "source": "build", "source_box_id": "<id>", "source_snapshot_id": "<id>", "spec_kind": "wsdl", "status": "pending"}
         "401":
           application/problem+json: {"code": "<value>", "detail": "<value>", "validation": {"issues": []}}
         "500":
@@ -3269,7 +3297,7 @@ examples:
         application/json: {}
       responses:
         "200":
-          application/json: {"build": {"hidden_limitations": 905406, "last_submission": "accepted", "last_tool": "<value>", "limitations": [{"location": "<value>", "message": "<value>", "operations": ["<value 1>", "<value 2>", "<value 3>"], "reviewed": true}], "model": "combined", "phase": "review", "review_round": 999719, "review_rounds": 991039, "stage": "derive", "submissions": 189402, "tool_calls": 430488, "waited_seconds": 68581, "waiting": {"credential_ids": ["<value 1>", "<value 2>"], "deadline": "2026-12-05T16:36:01.484Z", "reason": "<value>", "since": "2024-05-15T02:51:42.790Z", "type": "time_limit"}, "warnings": [{"code": "spec.response_untyped", "location": "<value>", "message": "<value>", "operations": ["<value 1>"]}]}, "composition": {"entities": 376304, "operations": 26866, "sample": true}, "created_at": "2026-09-05T07:30:26.413Z", "credential_ids": [], "error": {"agent_message": "<value>", "code": "build_canceled", "detail": "<value>", "reason": "build_failed", "validation": {"issues": [{"code": "<value>", "kind": "invalid", "location": "<value>", "message": "<value>", "operation": "<value>", "suggestion": "<value>"}]}}, "hidden_limitations": 308705, "id": "<id>", "instructions": "<value>", "limitations": [], "metadata": "<value>", "name": "<value>", "research": null, "source": "catalog", "spec_kind": "openapi", "status": "canceled"}
+          application/json: {"actors": [{"default": false, "entity": "<value>", "id": "<id>", "name": "<value>", "role": "<value>"}], "build": {"hidden_limitations": 905406, "last_submission": "accepted", "last_tool": "<value>", "limitations": [{"location": "<value>", "message": "<value>", "operations": ["<value 1>", "<value 2>", "<value 3>"], "reviewed": true}], "model": "combined", "phase": "review", "review_round": 999719, "review_rounds": 991039, "stage": "derive", "submissions": 189402, "tool_calls": 430488, "waited_seconds": 68581, "waiting": {"credential_ids": ["<value 1>", "<value 2>"], "deadline": "2026-12-05T16:36:01.484Z", "reason": "<value>", "since": "2024-05-15T02:51:42.790Z", "type": "time_limit"}, "warnings": [{"code": "spec.response_untyped", "location": "<value>", "message": "<value>", "operations": ["<value 1>"]}]}, "composition": {"entities": 376304, "operations": 26866, "sample": true}, "created_at": "2026-09-05T07:30:26.413Z", "credential_ids": [], "error": {"agent_message": "<value>", "code": "build_canceled", "detail": "<value>", "reason": "build_failed", "validation": {"issues": [{"code": "<value>", "kind": "invalid", "location": "<value>", "message": "<value>", "operation": "<value>", "suggestion": "<value>"}]}}, "hidden_limitations": 308705, "id": "<id>", "instructions": "<value>", "limitations": [], "metadata": "<value>", "name": "<value>", "parent_id": "<id>", "research": null, "source": "catalog", "source_box_id": null, "source_snapshot_id": "<id>", "spec_kind": "openapi", "status": "canceled"}
         "400":
           application/problem+json: {"code": "<value>", "detail": "<value>", "validation": {"issues": [{"code": "<value>", "kind": "invalid", "location": "<value>", "message": "<value>", "operation": "<value>", "suggestion": "<value>"}]}}
         "500":
@@ -3299,7 +3327,7 @@ examples:
           id: "<id>"
       responses:
         "202":
-          application/json: {"build": {"hidden_limitations": 824912, "last_submission": "accepted", "last_tool": "<value>", "limitations": [], "model": "claude-opus-5-5", "phase": "finalize", "review_round": 772058, "review_rounds": 502781, "stage": "build", "submissions": 809825, "tool_calls": 672398, "waited_seconds": 866645, "waiting": {"credential_ids": ["<value 1>"], "deadline": "2024-12-27T22:26:00.508Z", "reason": "<value>", "since": "2025-08-01T18:15:03.714Z", "type": "live_credentials"}, "warnings": []}, "composition": {"entities": 464177, "operations": 923035, "sample": false}, "created_at": "2024-10-31T11:17:28.722Z", "credential_ids": ["<value 1>", "<value 2>"], "error": {"agent_message": "<value>", "code": "live_credential_rejected", "detail": "<value>", "reason": "canceled", "validation": {"issues": []}}, "hidden_limitations": 83866, "id": "<id>", "instructions": "<value>", "limitations": [{"location": "<value>", "message": "<value>", "operations": ["<value 1>", "<value 2>", "<value 3>"], "reviewed": false}], "metadata": "<value>", "name": "<value>", "research": {"bytes": 931596, "pages": 370110, "status": "pending"}, "source": "catalog", "spec_kind": "openapi", "status": "failed"}
+          application/json: {"actors": [], "build": {"hidden_limitations": 824912, "last_submission": "accepted", "last_tool": "<value>", "limitations": [], "model": "claude-opus-5-5", "phase": "finalize", "review_round": 772058, "review_rounds": 502781, "stage": "build", "submissions": 809825, "tool_calls": 672398, "waited_seconds": 866645, "waiting": {"credential_ids": ["<value 1>"], "deadline": "2024-12-27T22:26:00.508Z", "reason": "<value>", "since": "2025-08-01T18:15:03.714Z", "type": "live_credentials"}, "warnings": []}, "composition": {"entities": 464177, "operations": 923035, "sample": false}, "created_at": "2024-10-31T11:17:28.722Z", "credential_ids": ["<value 1>", "<value 2>"], "error": {"agent_message": "<value>", "code": "live_credential_rejected", "detail": "<value>", "reason": "canceled", "validation": {"issues": []}}, "hidden_limitations": 83866, "id": "<id>", "instructions": "<value>", "limitations": [{"location": "<value>", "message": "<value>", "operations": ["<value 1>", "<value 2>", "<value 3>"], "reviewed": false}], "metadata": "<value>", "name": "<value>", "parent_id": "<id>", "research": {"bytes": 931596, "pages": 370110, "status": "pending"}, "source": "catalog", "source_box_id": "<id>", "source_snapshot_id": "<id>", "spec_kind": "openapi", "status": "failed"}
         "401":
           application/problem+json: {"code": "<value>", "detail": "<value>", "validation": {"issues": []}}
         "500":
@@ -3329,7 +3357,7 @@ examples:
           id: "<id>"
       responses:
         "202":
-          application/json: {"build": {"hidden_limitations": 113889, "last_submission": "accepted", "last_tool": "<value>", "limitations": [], "model": "combined", "phase": "review", "review_round": 426502, "review_rounds": 411846, "stage": "assemble", "submissions": 446666, "tool_calls": 736934, "waited_seconds": 792328, "waiting": {"credential_ids": ["<value 1>"], "deadline": "2024-05-07T10:25:12.502Z", "reason": "<value>", "since": "2024-02-01T02:02:24.052Z", "type": "live_credentials"}, "warnings": []}, "composition": {"entities": 168714, "operations": 831426, "sample": true}, "created_at": "2025-06-10T15:19:06.250Z", "credential_ids": ["<value 1>", "<value 2>"], "error": {"agent_message": "<value>", "code": "live_credential_rejected", "detail": "<value>", "reason": null, "validation": {"issues": [{"code": "<value>", "kind": "limit", "location": "<value>", "message": "<value>", "operation": "<value>", "suggestion": "<value>"}]}}, "hidden_limitations": 442518, "id": "<id>", "instructions": "<value>", "limitations": [{"location": "<value>", "message": "<value>", "operations": ["<value 1>"], "reviewed": false}], "metadata": "<value>", "name": "<value>", "research": {"bytes": 119915, "pages": 887729, "status": "provided"}, "source": "build", "spec_kind": "openapi", "status": "canceled"}
+          application/json: {"actors": [], "build": {"hidden_limitations": 113889, "last_submission": "accepted", "last_tool": "<value>", "limitations": [], "model": "combined", "phase": "review", "review_round": 426502, "review_rounds": 411846, "stage": "assemble", "submissions": 446666, "tool_calls": 736934, "waited_seconds": 792328, "waiting": {"credential_ids": ["<value 1>"], "deadline": "2024-05-07T10:25:12.502Z", "reason": "<value>", "since": "2024-02-01T02:02:24.052Z", "type": "live_credentials"}, "warnings": []}, "composition": {"entities": 168714, "operations": 831426, "sample": true}, "created_at": "2025-06-10T15:19:06.250Z", "credential_ids": ["<value 1>", "<value 2>"], "error": {"agent_message": "<value>", "code": "live_credential_rejected", "detail": "<value>", "reason": null, "validation": {"issues": [{"code": "<value>", "kind": "limit", "location": "<value>", "message": "<value>", "operation": "<value>", "suggestion": "<value>"}]}}, "hidden_limitations": 442518, "id": "<id>", "instructions": "<value>", "limitations": [{"location": "<value>", "message": "<value>", "operations": ["<value 1>"], "reviewed": false}], "metadata": "<value>", "name": "<value>", "parent_id": "<id>", "research": {"bytes": 119915, "pages": 887729, "status": "provided"}, "source": "build", "source_box_id": "<id>", "source_snapshot_id": null, "spec_kind": "openapi", "status": "canceled"}
         "401":
           application/problem+json: {"code": "<value>", "detail": "<value>", "validation": null}
         "500":
@@ -3591,7 +3619,7 @@ examples:
   create-mcpbox-snapshot:
     bad_request_body:
       requestBody:
-        multipart/form-data: {"request": {"apibox_snapshot_id": "<id>", "review_rounds": 1, "timeout_seconds": 28800}}
+        multipart/form-data: {"request": {"review_rounds": 1, "timeout_seconds": 28800}}
       responses:
         "400":
           application/problem+json: {"code": "bad_request", "detail": "request body is invalid", "validation": null}
@@ -3603,10 +3631,10 @@ examples:
           application/problem+json: {"code": "bad_request", "detail": "request body is invalid", "validation": null}
     speakeasy-default-create-mcpbox-snapshot:
       requestBody:
-        multipart/form-data: {"request": {"apibox_snapshot_id": "<id>", "review_rounds": 1, "timeout_seconds": 28800}}
+        multipart/form-data: {"request": {"review_rounds": 1, "timeout_seconds": 28800}}
       responses:
         "202":
-          application/json: {"apibox_snapshot_id": "<id>", "build": {"hidden_limitations": 741990, "last_submission": "accepted", "last_tool": "<value>", "limitations": [{"location": "<value>", "message": "<value>", "operations": ["<value 1>", "<value 2>"], "reviewed": true}], "model": "combined", "phase": "review", "review_round": 392293, "review_rounds": 958047, "stage": "build", "submissions": 475968, "tool_calls": 953993, "waited_seconds": 949523, "waiting": {"credential_ids": ["<value 1>", "<value 2>", "<value 3>"], "deadline": "2024-11-29T07:13:28.056Z", "reason": "<value>", "since": "2026-06-22T11:38:11.258Z", "type": "time_limit"}, "warnings": [{"code": "spec.default_invalid", "location": "<value>", "message": "<value>", "operations": ["<value 1>"]}]}, "composition": {"entities": 718593, "operations": 8144, "sample": true}, "created_at": "2024-06-10T12:49:50.134Z", "credential_ids": ["<value 1>", "<value 2>", "<value 3>"], "error": {"agent_message": "<value>", "code": "specification_validation_failed", "detail": "<value>", "reason": "canceled", "validation": null}, "hidden_limitations": 585313, "id": "<id>", "instructions": "<value>", "limitations": [{"location": "<value>", "message": "<value>", "operations": ["<value 1>"], "reviewed": false}], "metadata": "<value>", "name": "<value>", "research": {"bytes": 353810, "pages": 538370, "status": "running"}, "source": "build", "source_url": "https://sticky-harp.name/", "status": "ready"}
+          application/json: {"actors": [{"default": false, "entity": "<value>", "id": "<id>", "name": "<value>", "role": "<value>"}], "apibox_snapshot_id": "<id>", "build": {"hidden_limitations": 741990, "last_submission": "accepted", "last_tool": "<value>", "limitations": [{"location": "<value>", "message": "<value>", "operations": ["<value 1>", "<value 2>"], "reviewed": true}], "model": "combined", "phase": "review", "review_round": 392293, "review_rounds": 958047, "stage": "build", "submissions": 475968, "tool_calls": 953993, "waited_seconds": 949523, "waiting": {"credential_ids": ["<value 1>", "<value 2>", "<value 3>"], "deadline": "2024-11-29T07:13:28.056Z", "reason": "<value>", "since": "2026-06-22T11:38:11.258Z", "type": "time_limit"}, "warnings": [{"code": "spec.default_invalid", "location": "<value>", "message": "<value>", "operations": ["<value 1>"]}]}, "composition": {"entities": 718593, "operations": 8144, "sample": true}, "created_at": "2024-06-10T12:49:50.134Z", "credential_ids": ["<value 1>", "<value 2>", "<value 3>"], "error": {"agent_message": "<value>", "code": "specification_validation_failed", "detail": "<value>", "reason": "canceled", "validation": null}, "hidden_limitations": 585313, "id": "<id>", "instructions": "<value>", "limitations": [{"location": "<value>", "message": "<value>", "operations": ["<value 1>"], "reviewed": false}], "metadata": "<value>", "name": "<value>", "parent_id": "<id>", "research": {"bytes": 353810, "pages": 538370, "status": "running"}, "source": "build", "source_box_id": null, "source_snapshot_id": "<id>", "source_url": "https://sticky-harp.name/", "status": "ready"}
         "400":
           application/problem+json: {"code": "<value>", "detail": "<value>", "validation": {"issues": []}}
         "429":
@@ -3668,7 +3696,7 @@ examples:
           id: "<id>"
       responses:
         "200":
-          application/json: {"apibox_snapshot_id": "<id>", "build": {"hidden_limitations": 655164, "last_submission": "accepted", "last_tool": null, "limitations": [], "model": "gpt-6-sol", "phase": null, "review_round": 659172, "review_rounds": 330766, "stage": "build", "submissions": 501097, "tool_calls": 104558, "waited_seconds": 671426, "waiting": {"credential_ids": ["<value 1>", "<value 2>"], "deadline": "2024-10-25T06:16:06.956Z", "reason": "<value>", "since": "2024-11-25T02:00:36.387Z", "type": "time_limit"}, "warnings": [{"code": "spec.example_null", "location": "<value>", "message": "<value>", "operations": ["<value 1>", "<value 2>", "<value 3>"]}]}, "composition": {"entities": 778551, "operations": 17394, "sample": true}, "created_at": "2024-07-12T17:21:14.400Z", "credential_ids": ["<value 1>", "<value 2>", "<value 3>"], "error": {"agent_message": "<value>", "code": "live_credential_rejected", "detail": "<value>", "reason": "specification_invalid", "validation": {"issues": [{"code": "<value>", "kind": "unknown", "location": "<value>", "message": "<value>", "operation": "<value>", "suggestion": "<value>"}]}}, "hidden_limitations": 335163, "id": "<id>", "instructions": "<value>", "limitations": [{"location": "<value>", "message": "<value>", "operations": [], "reviewed": false}], "metadata": "<value>", "name": "<value>", "research": {"bytes": 427258, "pages": 809391, "status": "running"}, "source": "catalog", "source_url": "https://cultivated-humor.com/", "status": "building"}
+          application/json: {"actors": [{"default": false, "entity": "<value>", "id": "<id>", "name": "<value>", "role": "<value>"}], "apibox_snapshot_id": "<id>", "build": {"hidden_limitations": 655164, "last_submission": "accepted", "last_tool": null, "limitations": [], "model": "gpt-6-sol", "phase": null, "review_round": 659172, "review_rounds": 330766, "stage": "build", "submissions": 501097, "tool_calls": 104558, "waited_seconds": 671426, "waiting": {"credential_ids": ["<value 1>", "<value 2>"], "deadline": "2024-10-25T06:16:06.956Z", "reason": "<value>", "since": "2024-11-25T02:00:36.387Z", "type": "time_limit"}, "warnings": [{"code": "spec.example_null", "location": "<value>", "message": "<value>", "operations": ["<value 1>", "<value 2>", "<value 3>"]}]}, "composition": {"entities": 778551, "operations": 17394, "sample": true}, "created_at": "2024-07-12T17:21:14.400Z", "credential_ids": ["<value 1>", "<value 2>", "<value 3>"], "error": {"agent_message": "<value>", "code": "live_credential_rejected", "detail": "<value>", "reason": "specification_invalid", "validation": {"issues": [{"code": "<value>", "kind": "unknown", "location": "<value>", "message": "<value>", "operation": "<value>", "suggestion": "<value>"}]}}, "hidden_limitations": 335163, "id": "<id>", "instructions": "<value>", "limitations": [{"location": "<value>", "message": "<value>", "operations": [], "reviewed": false}], "metadata": "<value>", "name": "<value>", "parent_id": "<id>", "research": {"bytes": 427258, "pages": 809391, "status": "running"}, "source": "catalog", "source_box_id": null, "source_snapshot_id": null, "source_url": "https://cultivated-humor.com/", "status": "building"}
         "401":
           application/problem+json: {"code": "<value>", "detail": "<value>", "validation": {"issues": [{"code": "<value>", "kind": "unknown", "location": "<value>", "message": "<value>", "operation": "<value>", "suggestion": "<value>"}]}}
         "500":
@@ -3693,7 +3721,7 @@ examples:
         application/json: {}
       responses:
         "200":
-          application/json: {"apibox_snapshot_id": "<id>", "build": {"hidden_limitations": 46013, "last_submission": "accepted", "last_tool": "<value>", "limitations": [{"location": "<value>", "message": "<value>", "operations": ["<value 1>", "<value 2>"], "reviewed": false}], "model": "gpt-6-sol", "phase": null, "review_round": 633758, "review_rounds": 949957, "stage": "build", "submissions": 265086, "tool_calls": 429360, "waited_seconds": 490838, "waiting": {"credential_ids": [], "deadline": "2024-10-22T09:26:10.632Z", "reason": "<value>", "since": "2024-05-26T21:00:30.855Z", "type": "live_credentials"}, "warnings": [{"code": "spec.response_untyped", "location": "<value>", "message": "<value>", "operations": ["<value 1>", "<value 2>", "<value 3>"]}]}, "composition": null, "created_at": "2026-06-18T11:02:14.504Z", "credential_ids": ["<value 1>", "<value 2>", "<value 3>"], "error": {"agent_message": "<value>", "code": "specification_validation_failed", "detail": "<value>", "reason": "specification_invalid", "validation": {"issues": []}}, "hidden_limitations": 284886, "id": "<id>", "instructions": "<value>", "limitations": [], "metadata": "<value>", "name": "<value>", "research": null, "source": "box", "source_url": "https://interesting-ceramic.info/", "status": "building"}
+          application/json: {"actors": [], "apibox_snapshot_id": "<id>", "build": {"hidden_limitations": 46013, "last_submission": "accepted", "last_tool": "<value>", "limitations": [{"location": "<value>", "message": "<value>", "operations": ["<value 1>", "<value 2>"], "reviewed": false}], "model": "gpt-6-sol", "phase": null, "review_round": 633758, "review_rounds": 949957, "stage": "build", "submissions": 265086, "tool_calls": 429360, "waited_seconds": 490838, "waiting": {"credential_ids": [], "deadline": "2024-10-22T09:26:10.632Z", "reason": "<value>", "since": "2024-05-26T21:00:30.855Z", "type": "live_credentials"}, "warnings": [{"code": "spec.response_untyped", "location": "<value>", "message": "<value>", "operations": ["<value 1>", "<value 2>", "<value 3>"]}]}, "composition": null, "created_at": "2026-06-18T11:02:14.504Z", "credential_ids": ["<value 1>", "<value 2>", "<value 3>"], "error": {"agent_message": "<value>", "code": "specification_validation_failed", "detail": "<value>", "reason": "specification_invalid", "validation": {"issues": []}}, "hidden_limitations": 284886, "id": "<id>", "instructions": "<value>", "limitations": [], "metadata": "<value>", "name": "<value>", "parent_id": null, "research": null, "source": "box", "source_box_id": "<id>", "source_snapshot_id": null, "source_url": "https://interesting-ceramic.info/", "status": "building"}
         "400":
           application/problem+json: {"code": "<value>", "detail": "<value>", "validation": {"issues": []}}
         "500":
@@ -3723,7 +3751,7 @@ examples:
           id: "<id>"
       responses:
         "202":
-          application/json: {"apibox_snapshot_id": "<id>", "build": {"hidden_limitations": 754708, "last_submission": "rejected", "last_tool": "<value>", "limitations": [], "model": "combined", "phase": null, "review_round": 556321, "review_rounds": 153929, "stage": "assemble", "submissions": 687062, "tool_calls": 820610, "waited_seconds": 255190, "waiting": null, "warnings": []}, "composition": {"entities": 754708, "operations": 886578, "sample": false}, "created_at": "2024-04-09T02:05:02.182Z", "credential_ids": ["<value 1>", "<value 2>", "<value 3>"], "error": {"agent_message": "<value>", "code": "build_canceled", "detail": "<value>", "reason": "specification_invalid", "validation": null}, "hidden_limitations": 976587, "id": "<id>", "instructions": "<value>", "limitations": [], "metadata": "<value>", "name": "<value>", "research": {"bytes": 747569, "pages": 959600, "status": "pending"}, "source": "box", "source_url": "https://lively-role.net/", "status": "canceled"}
+          application/json: {"actors": [{"default": false, "entity": "<value>", "id": "<id>", "name": "<value>", "role": "<value>"}], "apibox_snapshot_id": "<id>", "build": {"hidden_limitations": 754708, "last_submission": "rejected", "last_tool": "<value>", "limitations": [], "model": "combined", "phase": null, "review_round": 556321, "review_rounds": 153929, "stage": "assemble", "submissions": 687062, "tool_calls": 820610, "waited_seconds": 255190, "waiting": null, "warnings": []}, "composition": {"entities": 754708, "operations": 886578, "sample": false}, "created_at": "2024-04-09T02:05:02.182Z", "credential_ids": ["<value 1>", "<value 2>", "<value 3>"], "error": {"agent_message": "<value>", "code": "build_canceled", "detail": "<value>", "reason": "specification_invalid", "validation": null}, "hidden_limitations": 976587, "id": "<id>", "instructions": "<value>", "limitations": [], "metadata": "<value>", "name": "<value>", "parent_id": "<id>", "research": {"bytes": 747569, "pages": 959600, "status": "pending"}, "source": "box", "source_box_id": "<id>", "source_snapshot_id": "<id>", "source_url": "https://lively-role.net/", "status": "canceled"}
         "401":
           application/problem+json: {"code": "<value>", "detail": "<value>", "validation": {"issues": []}}
         "500":
@@ -3753,7 +3781,7 @@ examples:
           id: "<id>"
       responses:
         "202":
-          application/json: {"apibox_snapshot_id": "<id>", "build": {"hidden_limitations": 219389, "last_submission": "accepted", "last_tool": "<value>", "limitations": [], "model": "gpt-6-astra", "phase": "research", "review_round": 952336, "review_rounds": 49085, "stage": "assemble", "submissions": 807477, "tool_calls": 609485, "waited_seconds": 465729, "waiting": {"credential_ids": ["<value 1>"], "deadline": "2026-07-05T07:38:47.865Z", "reason": "<value>", "since": "2024-10-13T18:06:47.139Z", "type": "time_limit"}, "warnings": [{"code": "spec.example_null", "location": "<value>", "message": "<value>", "operations": []}]}, "composition": {"entities": 271411, "operations": 400441, "sample": true}, "created_at": "2026-09-18T01:54:06.227Z", "credential_ids": ["<value 1>", "<value 2>"], "error": {"agent_message": "<value>", "code": "specification_validation_failed", "detail": "<value>", "reason": "service_unavailable", "validation": {"issues": [{"code": "<value>", "kind": "incomplete", "location": "<value>", "message": "<value>", "operation": "<value>", "suggestion": "<value>"}]}}, "hidden_limitations": 212996, "id": "<id>", "instructions": "<value>", "limitations": [], "metadata": "<value>", "name": "<value>", "research": null, "source": "build", "source_url": "https://authorized-shoulder.info/", "status": "pending"}
+          application/json: {"actors": [{"default": true, "entity": "<value>", "id": "<id>", "name": "<value>", "role": "<value>"}], "apibox_snapshot_id": "<id>", "build": {"hidden_limitations": 219389, "last_submission": "accepted", "last_tool": "<value>", "limitations": [], "model": "gpt-6-astra", "phase": "research", "review_round": 952336, "review_rounds": 49085, "stage": "assemble", "submissions": 807477, "tool_calls": 609485, "waited_seconds": 465729, "waiting": {"credential_ids": ["<value 1>"], "deadline": "2026-07-05T07:38:47.865Z", "reason": "<value>", "since": "2024-10-13T18:06:47.139Z", "type": "time_limit"}, "warnings": [{"code": "spec.example_null", "location": "<value>", "message": "<value>", "operations": []}]}, "composition": {"entities": 271411, "operations": 400441, "sample": true}, "created_at": "2026-09-18T01:54:06.227Z", "credential_ids": ["<value 1>", "<value 2>"], "error": {"agent_message": "<value>", "code": "specification_validation_failed", "detail": "<value>", "reason": "service_unavailable", "validation": {"issues": [{"code": "<value>", "kind": "incomplete", "location": "<value>", "message": "<value>", "operation": "<value>", "suggestion": "<value>"}]}}, "hidden_limitations": 212996, "id": "<id>", "instructions": "<value>", "limitations": [], "metadata": "<value>", "name": "<value>", "parent_id": "<id>", "research": null, "source": "build", "source_box_id": "<id>", "source_snapshot_id": "<id>", "source_url": "https://authorized-shoulder.info/", "status": "pending"}
         "401":
           application/problem+json: {"code": "<value>", "detail": "<value>", "validation": {"issues": [{"code": "<value>", "kind": "incomplete", "location": "<value>", "message": "<value>", "operation": "<value>", "suggestion": "<value>"}]}}
         "500":
@@ -4040,7 +4068,7 @@ examples:
   create-webbox-snapshot:
     bad_request_body:
       requestBody:
-        multipart/form-data: {"request": {"credential_ids": ["<value 1>", "<value 2>", "<value 3>"], "review_rounds": 1, "timeout_seconds": 28800}}
+        multipart/form-data: {"request": {"review_rounds": 1, "timeout_seconds": 28800}}
       responses:
         "400":
           application/problem+json: {"code": "bad_request", "detail": "request body is invalid", "validation": null}
@@ -4052,10 +4080,10 @@ examples:
           application/problem+json: {"code": "bad_request", "detail": "request body is invalid", "validation": null}
     speakeasy-default-create-webbox-snapshot:
       requestBody:
-        multipart/form-data: {"request": {"credential_ids": ["<value 1>", "<value 2>", "<value 3>"], "review_rounds": 1, "timeout_seconds": 28800}}
+        multipart/form-data: {"request": {"review_rounds": 1, "timeout_seconds": 28800}}
       responses:
         "202":
-          application/json: {"build": null, "composition": {"entities": 612094, "operations": 173088, "sample": true}, "created_at": "2025-07-20T04:18:20.874Z", "credential_ids": [], "error": {"agent_message": "<value>", "code": "specification_validation_failed", "detail": "<value>", "reason": "time_limit", "validation": {"issues": [{"code": "<value>", "kind": "limit", "location": "<value>", "message": "<value>", "operation": "<value>", "suggestion": "<value>"}]}}, "hidden_limitations": 187300, "id": "<id>", "instructions": "<value>", "limitations": [{"location": "<value>", "message": "<value>", "operations": ["<value 1>"], "reviewed": false}], "metadata": "<value>", "name": "<value>", "research": {"bytes": 859524, "pages": 193083, "status": "failed"}, "source": "catalog", "status": "failed"}
+          application/json: {"actors": [{"default": true, "entity": "<value>", "id": "<id>", "name": "<value>", "role": "<value>"}], "build": null, "composition": {"entities": 612094, "operations": 173088, "sample": true}, "created_at": "2025-07-20T04:18:20.874Z", "credential_ids": [], "error": {"agent_message": "<value>", "code": "specification_validation_failed", "detail": "<value>", "reason": "time_limit", "validation": {"issues": [{"code": "<value>", "kind": "limit", "location": "<value>", "message": "<value>", "operation": "<value>", "suggestion": "<value>"}]}}, "hidden_limitations": 187300, "id": "<id>", "instructions": "<value>", "limitations": [{"location": "<value>", "message": "<value>", "operations": ["<value 1>"], "reviewed": false}], "metadata": "<value>", "name": "<value>", "parent_id": "<id>", "research": {"bytes": 859524, "pages": 193083, "status": "failed"}, "source": "catalog", "source_box_id": "<id>", "source_snapshot_id": "<id>", "status": "failed"}
         "400":
           application/problem+json: {"code": "<value>", "detail": "<value>", "validation": {"issues": [{"code": "<value>", "kind": "limit", "location": "<value>", "message": "<value>", "operation": "<value>", "suggestion": "<value>"}]}}
         "429":
@@ -4117,7 +4145,7 @@ examples:
           id: "<id>"
       responses:
         "200":
-          application/json: {"build": {"hidden_limitations": 274990, "last_submission": "accepted", "last_tool": "<value>", "limitations": [], "model": "claude-fable-5-1", "phase": "finalize", "review_round": 201325, "review_rounds": 376128, "stage": "build", "submissions": 555331, "tool_calls": 216313, "waited_seconds": 931441, "waiting": {"credential_ids": ["<value 1>", "<value 2>"], "deadline": "2024-01-24T06:18:51.778Z", "reason": "<value>", "since": "2026-10-12T23:14:16.042Z", "type": "time_limit"}, "warnings": []}, "composition": {"entities": 913012, "operations": 905337, "sample": true}, "created_at": "2026-01-11T01:58:04.589Z", "credential_ids": ["<value 1>"], "error": {"agent_message": "<value>", "code": "build_canceled", "detail": "<value>", "reason": "service_unavailable", "validation": {"issues": [{"code": "<value>", "kind": "invalid", "location": "<value>", "message": "<value>", "operation": "<value>", "suggestion": "<value>"}]}}, "hidden_limitations": 43874, "id": "<id>", "instructions": "<value>", "limitations": [{"location": "<value>", "message": "<value>", "operations": ["<value 1>"], "reviewed": false}], "metadata": "<value>", "name": "<value>", "research": {"bytes": 944345, "pages": 855128, "status": "provided"}, "source": "build", "status": "building"}
+          application/json: {"actors": [{"default": true, "entity": "<value>", "id": "<id>", "name": "<value>", "role": "<value>"}], "build": {"hidden_limitations": 274990, "last_submission": "accepted", "last_tool": "<value>", "limitations": [], "model": "claude-fable-5-1", "phase": "finalize", "review_round": 201325, "review_rounds": 376128, "stage": "build", "submissions": 555331, "tool_calls": 216313, "waited_seconds": 931441, "waiting": {"credential_ids": ["<value 1>", "<value 2>"], "deadline": "2024-01-24T06:18:51.778Z", "reason": "<value>", "since": "2026-10-12T23:14:16.042Z", "type": "time_limit"}, "warnings": []}, "composition": {"entities": 913012, "operations": 905337, "sample": true}, "created_at": "2026-01-11T01:58:04.589Z", "credential_ids": ["<value 1>"], "error": {"agent_message": "<value>", "code": "build_canceled", "detail": "<value>", "reason": "service_unavailable", "validation": {"issues": [{"code": "<value>", "kind": "invalid", "location": "<value>", "message": "<value>", "operation": "<value>", "suggestion": "<value>"}]}}, "hidden_limitations": 43874, "id": "<id>", "instructions": "<value>", "limitations": [{"location": "<value>", "message": "<value>", "operations": ["<value 1>"], "reviewed": false}], "metadata": "<value>", "name": "<value>", "parent_id": "<id>", "research": {"bytes": 944345, "pages": 855128, "status": "provided"}, "source": "build", "source_box_id": "<id>", "source_snapshot_id": "<id>", "status": "building"}
         "401":
           application/problem+json: {"code": "<value>", "detail": "<value>", "validation": {"issues": [{"code": "<value>", "kind": "invalid", "location": "<value>", "message": "<value>", "operation": "<value>", "suggestion": "<value>"}]}}
         "500":
@@ -4142,7 +4170,7 @@ examples:
         application/json: {}
       responses:
         "200":
-          application/json: {"build": {"hidden_limitations": 505615, "last_submission": "accepted", "last_tool": "<value>", "limitations": [{"location": "<value>", "message": "<value>", "operations": ["<value 1>"], "reviewed": true}], "model": "gpt-6-astra", "phase": "review", "review_round": 528940, "review_rounds": 892022, "stage": "derive", "submissions": 630384, "tool_calls": 529798, "waited_seconds": 729072, "waiting": null, "warnings": [{"code": "spec.default_invalid", "location": "<value>", "message": "<value>", "operations": ["<value 1>"]}]}, "composition": {"entities": 782736, "operations": 205545, "sample": false}, "created_at": "2025-10-06T09:27:11.733Z", "credential_ids": ["<value 1>", "<value 2>", "<value 3>"], "error": {"agent_message": "<value>", "code": "build_failed", "detail": "<value>", "reason": "time_limit", "validation": {"issues": [{"code": "<value>", "kind": "incomplete", "location": "<value>", "message": "<value>", "operation": "<value>", "suggestion": "<value>"}]}}, "hidden_limitations": 582869, "id": "<id>", "instructions": "<value>", "limitations": [{"location": "<value>", "message": "<value>", "operations": ["<value 1>"], "reviewed": true}], "metadata": "<value>", "name": "<value>", "research": {"bytes": 573766, "pages": 554828, "status": "complete"}, "source": "catalog", "status": "canceled"}
+          application/json: {"actors": [], "build": {"hidden_limitations": 505615, "last_submission": "accepted", "last_tool": "<value>", "limitations": [{"location": "<value>", "message": "<value>", "operations": ["<value 1>"], "reviewed": true}], "model": "gpt-6-astra", "phase": "review", "review_round": 528940, "review_rounds": 892022, "stage": "derive", "submissions": 630384, "tool_calls": 529798, "waited_seconds": 729072, "waiting": null, "warnings": [{"code": "spec.default_invalid", "location": "<value>", "message": "<value>", "operations": ["<value 1>"]}]}, "composition": {"entities": 782736, "operations": 205545, "sample": false}, "created_at": "2025-10-06T09:27:11.733Z", "credential_ids": ["<value 1>", "<value 2>", "<value 3>"], "error": {"agent_message": "<value>", "code": "build_failed", "detail": "<value>", "reason": "time_limit", "validation": {"issues": [{"code": "<value>", "kind": "incomplete", "location": "<value>", "message": "<value>", "operation": "<value>", "suggestion": "<value>"}]}}, "hidden_limitations": 582869, "id": "<id>", "instructions": "<value>", "limitations": [{"location": "<value>", "message": "<value>", "operations": ["<value 1>"], "reviewed": true}], "metadata": "<value>", "name": "<value>", "parent_id": "<id>", "research": {"bytes": 573766, "pages": 554828, "status": "complete"}, "source": "catalog", "source_box_id": "<id>", "source_snapshot_id": "<id>", "status": "canceled"}
         "400":
           application/problem+json: {"code": "<value>", "detail": "<value>", "validation": null}
         "500":
@@ -4172,7 +4200,7 @@ examples:
           id: "<id>"
       responses:
         "202":
-          application/json: {"build": {"hidden_limitations": 701435, "last_submission": null, "last_tool": "<value>", "limitations": [{"location": "<value>", "message": "<value>", "operations": ["<value 1>", "<value 2>", "<value 3>"], "reviewed": true}], "model": "claude-opus-5-5", "phase": "review", "review_round": 783619, "review_rounds": 115693, "stage": "assemble", "submissions": 976451, "tool_calls": 192244, "waited_seconds": 878838, "waiting": null, "warnings": [{"code": "spec.enum_duplicate", "location": "<value>", "message": "<value>", "operations": ["<value 1>", "<value 2>"]}]}, "composition": {"entities": 134882, "operations": 665100, "sample": false}, "created_at": "2024-07-27T05:47:37.047Z", "credential_ids": ["<value 1>", "<value 2>", "<value 3>"], "error": {"agent_message": null, "code": "specification_validation_failed", "detail": "<value>", "reason": "time_limit", "validation": {"issues": [{"code": "<value>", "kind": "limit", "location": "<value>", "message": "<value>", "operation": "<value>", "suggestion": "<value>"}]}}, "hidden_limitations": 816904, "id": "<id>", "instructions": "<value>", "limitations": [], "metadata": "<value>", "name": "<value>", "research": {"bytes": 487724, "pages": 384341, "status": "pending"}, "source": "build", "status": "pending"}
+          application/json: {"actors": [{"default": false, "entity": "<value>", "id": "<id>", "name": "<value>", "role": "<value>"}], "build": {"hidden_limitations": 701435, "last_submission": null, "last_tool": "<value>", "limitations": [{"location": "<value>", "message": "<value>", "operations": ["<value 1>", "<value 2>", "<value 3>"], "reviewed": true}], "model": "claude-opus-5-5", "phase": "review", "review_round": 783619, "review_rounds": 115693, "stage": "assemble", "submissions": 976451, "tool_calls": 192244, "waited_seconds": 878838, "waiting": null, "warnings": [{"code": "spec.enum_duplicate", "location": "<value>", "message": "<value>", "operations": ["<value 1>", "<value 2>"]}]}, "composition": {"entities": 134882, "operations": 665100, "sample": false}, "created_at": "2024-07-27T05:47:37.047Z", "credential_ids": ["<value 1>", "<value 2>", "<value 3>"], "error": {"agent_message": null, "code": "specification_validation_failed", "detail": "<value>", "reason": "time_limit", "validation": {"issues": [{"code": "<value>", "kind": "limit", "location": "<value>", "message": "<value>", "operation": "<value>", "suggestion": "<value>"}]}}, "hidden_limitations": 816904, "id": "<id>", "instructions": "<value>", "limitations": [], "metadata": "<value>", "name": "<value>", "parent_id": null, "research": {"bytes": 487724, "pages": 384341, "status": "pending"}, "source": "build", "source_box_id": "<id>", "source_snapshot_id": "<id>", "status": "pending"}
         "401":
           application/problem+json: {"code": "<value>", "detail": "<value>", "validation": {"issues": [{"code": "<value>", "kind": "limit", "location": "<value>", "message": "<value>", "operation": "<value>", "suggestion": "<value>"}]}}
         "500":
@@ -4202,7 +4230,7 @@ examples:
           id: "<id>"
       responses:
         "202":
-          application/json: {"build": {"hidden_limitations": 752500, "last_submission": "rejected", "last_tool": "<value>", "limitations": [], "model": "gpt-6.1-sol", "phase": "research", "review_round": 557212, "review_rounds": 90708, "stage": "derive", "submissions": 336555, "tool_calls": 304990, "waited_seconds": 674324, "waiting": {"credential_ids": ["<value 1>", "<value 2>", "<value 3>"], "deadline": "2025-10-10T20:01:24.830Z", "reason": "<value>", "since": "2026-02-18T14:46:45.311Z", "type": "time_limit"}, "warnings": [{"code": "spec.schema_limit", "location": "<value>", "message": "<value>", "operations": ["<value 1>"]}]}, "composition": {"entities": 332625, "operations": 931837, "sample": false}, "created_at": "2024-01-25T05:52:01.646Z", "credential_ids": ["<value 1>"], "error": {"agent_message": "<value>", "code": "live_credential_rejected", "detail": "<value>", "reason": "time_limit", "validation": {"issues": []}}, "hidden_limitations": 688621, "id": "<id>", "instructions": "<value>", "limitations": [{"location": "<value>", "message": "<value>", "operations": [], "reviewed": true}], "metadata": "<value>", "name": "<value>", "research": {"bytes": 790931, "pages": 410596, "status": "complete"}, "source": "catalog", "status": "building"}
+          application/json: {"actors": [{"default": false, "entity": "<value>", "id": "<id>", "name": "<value>", "role": "<value>"}], "build": {"hidden_limitations": 752500, "last_submission": "rejected", "last_tool": "<value>", "limitations": [], "model": "gpt-6.1-sol", "phase": "research", "review_round": 557212, "review_rounds": 90708, "stage": "derive", "submissions": 336555, "tool_calls": 304990, "waited_seconds": 674324, "waiting": {"credential_ids": ["<value 1>", "<value 2>", "<value 3>"], "deadline": "2025-10-10T20:01:24.830Z", "reason": "<value>", "since": "2026-02-18T14:46:45.311Z", "type": "time_limit"}, "warnings": [{"code": "spec.schema_limit", "location": "<value>", "message": "<value>", "operations": ["<value 1>"]}]}, "composition": {"entities": 332625, "operations": 931837, "sample": false}, "created_at": "2024-01-25T05:52:01.646Z", "credential_ids": ["<value 1>"], "error": {"agent_message": "<value>", "code": "live_credential_rejected", "detail": "<value>", "reason": "time_limit", "validation": {"issues": []}}, "hidden_limitations": 688621, "id": "<id>", "instructions": "<value>", "limitations": [{"location": "<value>", "message": "<value>", "operations": [], "reviewed": true}], "metadata": "<value>", "name": "<value>", "parent_id": "<id>", "research": {"bytes": 790931, "pages": 410596, "status": "complete"}, "source": "catalog", "source_box_id": "<id>", "source_snapshot_id": "<id>", "status": "building"}
         "401":
           application/problem+json: {"code": "<value>", "detail": "<value>", "validation": {"issues": []}}
         "500":
@@ -4243,7 +4271,7 @@ examples:
           id: "<id>"
       responses:
         "201":
-          application/json: {"build": {"hidden_limitations": 898674, "last_submission": "accepted", "last_tool": "<value>", "limitations": [{"location": "<value>", "message": "<value>", "operations": ["<value 1>", "<value 2>"], "reviewed": true}], "model": "gpt-6-astra", "phase": "finalize", "review_round": 275836, "review_rounds": 158664, "stage": "build", "submissions": 672512, "tool_calls": 609689, "waited_seconds": 699591, "waiting": {"credential_ids": [], "deadline": "2024-11-03T06:09:14.813Z", "reason": "<value>", "since": "2025-04-28T18:16:32.373Z", "type": "time_limit"}, "warnings": [{"code": "spec.operation_unservable", "location": "<value>", "message": "<value>", "operations": ["<value 1>"]}]}, "composition": {"entities": 634199, "operations": 828029, "sample": true}, "created_at": "2026-08-23T15:45:35.787Z", "credential_ids": ["<value 1>"], "error": {"agent_message": "<value>", "code": "specification_validation_failed", "detail": "<value>", "reason": "build_failed", "validation": {"issues": [{"code": "<value>", "kind": "incomplete", "location": "<value>", "message": "<value>", "operation": "<value>", "suggestion": "<value>"}]}}, "hidden_limitations": 282999, "id": "<id>", "instructions": "<value>", "limitations": [{"location": "<value>", "message": "<value>", "operations": ["<value 1>", "<value 2>"], "reviewed": true}], "metadata": "<value>", "name": "<value>", "research": {"bytes": 382324, "pages": 170313, "status": "pending"}, "source": "build", "spec_kind": "openapi", "status": "canceled"}
+          application/json: {"actors": [{"default": false, "entity": "<value>", "id": "<id>", "name": "<value>", "role": "<value>"}], "build": {"hidden_limitations": 898674, "last_submission": "accepted", "last_tool": "<value>", "limitations": [{"location": "<value>", "message": "<value>", "operations": ["<value 1>", "<value 2>"], "reviewed": true}], "model": "gpt-6-astra", "phase": "finalize", "review_round": 275836, "review_rounds": 158664, "stage": "build", "submissions": 672512, "tool_calls": 609689, "waited_seconds": 699591, "waiting": {"credential_ids": [], "deadline": "2024-11-03T06:09:14.813Z", "reason": "<value>", "since": "2025-04-28T18:16:32.373Z", "type": "time_limit"}, "warnings": [{"code": "spec.operation_unservable", "location": "<value>", "message": "<value>", "operations": ["<value 1>"]}]}, "composition": {"entities": 634199, "operations": 828029, "sample": true}, "created_at": "2026-08-23T15:45:35.787Z", "credential_ids": ["<value 1>"], "error": {"agent_message": "<value>", "code": "specification_validation_failed", "detail": "<value>", "reason": "build_failed", "validation": {"issues": [{"code": "<value>", "kind": "incomplete", "location": "<value>", "message": "<value>", "operation": "<value>", "suggestion": "<value>"}]}}, "hidden_limitations": 282999, "id": "<id>", "instructions": "<value>", "limitations": [{"location": "<value>", "message": "<value>", "operations": ["<value 1>", "<value 2>"], "reviewed": true}], "metadata": "<value>", "name": "<value>", "parent_id": "<id>", "research": {"bytes": 382324, "pages": 170313, "status": "pending"}, "source": "build", "source_box_id": "<id>", "source_snapshot_id": "<id>", "spec_kind": "openapi", "status": "canceled"}
         "400":
           application/problem+json: {"code": "<value>", "detail": "<value>", "validation": null}
         "500":
@@ -4264,7 +4292,7 @@ examples:
           id: "<id>"
       responses:
         "201":
-          application/json: {"apibox_snapshot_id": "<id>", "build": {"hidden_limitations": 676111, "last_submission": "rejected", "last_tool": "<value>", "limitations": [], "model": "gpt-6-astra", "phase": "finalize", "review_round": 257210, "review_rounds": 122778, "stage": "derive", "submissions": 156660, "tool_calls": 564194, "waited_seconds": 861641, "waiting": {"credential_ids": [], "deadline": "2025-02-10T20:41:03.871Z", "reason": "<value>", "since": "2025-08-17T09:56:19.309Z", "type": "live_credentials"}, "warnings": []}, "composition": {"entities": 11609, "operations": 505464, "sample": true}, "created_at": "2025-02-13T11:24:27.062Z", "credential_ids": ["<value 1>", "<value 2>"], "error": {"agent_message": "<value>", "code": "live_credential_rejected", "detail": "<value>", "reason": "service_unavailable", "validation": {"issues": []}}, "hidden_limitations": 849934, "id": "<id>", "instructions": "<value>", "limitations": [], "metadata": "<value>", "name": "<value>", "research": {"bytes": 781750, "pages": 235294, "status": "pending"}, "source": "box", "source_url": "https://soggy-expansion.info", "status": "failed"}
+          application/json: {"actors": [], "apibox_snapshot_id": "<id>", "build": {"hidden_limitations": 676111, "last_submission": "rejected", "last_tool": "<value>", "limitations": [], "model": "gpt-6-astra", "phase": "finalize", "review_round": 257210, "review_rounds": 122778, "stage": "derive", "submissions": 156660, "tool_calls": 564194, "waited_seconds": 861641, "waiting": {"credential_ids": [], "deadline": "2025-02-10T20:41:03.871Z", "reason": "<value>", "since": "2025-08-17T09:56:19.309Z", "type": "live_credentials"}, "warnings": []}, "composition": {"entities": 11609, "operations": 505464, "sample": true}, "created_at": "2025-02-13T11:24:27.062Z", "credential_ids": ["<value 1>", "<value 2>"], "error": {"agent_message": "<value>", "code": "live_credential_rejected", "detail": "<value>", "reason": "service_unavailable", "validation": {"issues": []}}, "hidden_limitations": 849934, "id": "<id>", "instructions": "<value>", "limitations": [], "metadata": "<value>", "name": "<value>", "parent_id": "<id>", "research": {"bytes": 781750, "pages": 235294, "status": "pending"}, "source": "box", "source_box_id": "<id>", "source_snapshot_id": "<id>", "source_url": "https://soggy-expansion.info", "status": "failed"}
         "400":
           application/problem+json: {"code": "<value>", "detail": "<value>", "validation": {"issues": []}}
         "500":
@@ -4285,9 +4313,118 @@ examples:
           id: "<id>"
       responses:
         "201":
-          application/json: {"build": {"hidden_limitations": 673245, "last_submission": null, "last_tool": "<value>", "limitations": [{"location": "<value>", "message": "<value>", "operations": ["<value 1>", "<value 2>", "<value 3>"], "reviewed": true}], "model": "gpt-6.1-sol", "phase": "build", "review_round": 837291, "review_rounds": 833393, "stage": "build", "submissions": 616355, "tool_calls": 939890, "waited_seconds": 23234, "waiting": {"credential_ids": ["<value 1>"], "deadline": "2026-08-29T11:39:49.433Z", "reason": "<value>", "since": "2026-10-08T14:05:59.508Z", "type": "live_credentials"}, "warnings": [{"code": "spec.path_parameter_optional", "location": "<value>", "message": "<value>", "operations": ["<value 1>"]}]}, "composition": {"entities": 106658, "operations": 560897, "sample": true}, "created_at": "2024-04-16T21:30:45.687Z", "credential_ids": ["<value 1>", "<value 2>"], "error": {"agent_message": "<value>", "code": "build_failed", "detail": "<value>", "reason": "build_failed", "validation": {"issues": [{"code": "<value>", "kind": "invalid", "location": "<value>", "message": "<value>", "operation": "<value>", "suggestion": "<value>"}]}}, "hidden_limitations": 293696, "id": "<id>", "instructions": "<value>", "limitations": [], "metadata": "<value>", "name": "<value>", "research": {"bytes": 255994, "pages": 898749, "status": "failed"}, "source": "build", "status": "canceled"}
+          application/json: {"actors": [], "build": {"hidden_limitations": 673245, "last_submission": null, "last_tool": "<value>", "limitations": [{"location": "<value>", "message": "<value>", "operations": ["<value 1>", "<value 2>", "<value 3>"], "reviewed": true}], "model": "gpt-6.1-sol", "phase": "build", "review_round": 837291, "review_rounds": 833393, "stage": "build", "submissions": 616355, "tool_calls": 939890, "waited_seconds": 23234, "waiting": {"credential_ids": ["<value 1>"], "deadline": "2026-08-29T11:39:49.433Z", "reason": "<value>", "since": "2026-10-08T14:05:59.508Z", "type": "live_credentials"}, "warnings": [{"code": "spec.path_parameter_optional", "location": "<value>", "message": "<value>", "operations": ["<value 1>"]}]}, "composition": {"entities": 106658, "operations": 560897, "sample": true}, "created_at": "2024-04-16T21:30:45.687Z", "credential_ids": ["<value 1>", "<value 2>"], "error": {"agent_message": "<value>", "code": "build_failed", "detail": "<value>", "reason": "build_failed", "validation": {"issues": [{"code": "<value>", "kind": "invalid", "location": "<value>", "message": "<value>", "operation": "<value>", "suggestion": "<value>"}]}}, "hidden_limitations": 293696, "id": "<id>", "instructions": "<value>", "limitations": [], "metadata": "<value>", "name": "<value>", "parent_id": "<id>", "research": {"bytes": 255994, "pages": 898749, "status": "failed"}, "source": "build", "source_box_id": null, "source_snapshot_id": "<id>", "status": "canceled"}
+        "400":
+          application/problem+json: {"code": "<value>", "detail": "<value>", "validation": {"issues": [{"code": "<value>", "kind": "invalid", "location": "<value>", "message": "<value>", "operation": "<value>", "suggestion": "<value>"}]}}
+        "500":
+          application/problem+json: {"code": "<value>", "detail": "<value>", "validation": {"issues": [{"code": "<value>", "kind": "invalid", "location": "<value>", "message": "<value>", "operation": "<value>", "suggestion": "<value>"}]}}
+  clone-apibox-snapshot:
+    bad_request_body:
+      parameters:
+        path:
+          id: "<id>"
+      requestBody:
+        application/json: {"target_workspace_id": "<id>"}
+      responses:
+        "400":
+          application/problem+json: {"code": "bad_request", "detail": "request body is invalid", "validation": null}
+        "500":
+          application/problem+json: {"code": "bad_request", "detail": "request body is invalid", "validation": null}
+    bad_request_clone_target:
+      parameters:
+        path:
+          id: "<id>"
+      requestBody:
+        application/json: {"target_workspace_id": "<id>"}
+      responses:
+        "400":
+          application/problem+json: {"code": "bad_request", "detail": "target_workspace_id must differ from the source workspace", "validation": null}
+        "500":
+          application/problem+json: {"code": "bad_request", "detail": "target_workspace_id must differ from the source workspace", "validation": null}
+    speakeasy-default-clone-apibox-snapshot:
+      parameters:
+        path:
+          id: "<id>"
+      requestBody:
+        application/json: {"target_workspace_id": "<id>"}
+      responses:
+        "201":
+          application/json: {"actors": [], "build": {"hidden_limitations": 462152, "last_submission": "accepted", "last_tool": "<value>", "limitations": [{"location": "<value>", "message": "<value>", "operations": ["<value 1>", "<value 2>"], "reviewed": false}], "model": "gpt-6.1-sol", "phase": "research", "review_round": 648980, "review_rounds": 256864, "stage": "build", "submissions": 894443, "tool_calls": 470439, "waited_seconds": 827010, "waiting": {"credential_ids": ["<value 1>", "<value 2>", "<value 3>"], "deadline": "2026-07-29T05:51:53.646Z", "reason": "<value>", "since": "2026-07-09T02:06:51.436Z", "type": "time_limit"}, "warnings": [{"code": "spec.operation_unservable", "location": "<value>", "message": "<value>", "operations": ["<value 1>"]}]}, "composition": {"entities": 585217, "operations": 834758, "sample": true}, "created_at": "2025-05-25T18:00:10.053Z", "credential_ids": [], "error": null, "hidden_limitations": 987823, "id": "<id>", "instructions": "<value>", "limitations": [], "metadata": "<value>", "name": "<value>", "parent_id": null, "research": {"bytes": 679637, "pages": 774532, "status": "complete"}, "source": "build", "source_box_id": "<id>", "source_snapshot_id": "<id>", "spec_kind": null, "status": "pending"}
+        "400":
+          application/problem+json: {"code": "<value>", "detail": "<value>", "validation": {"issues": []}}
+        "500":
+          application/problem+json: {"code": "<value>", "detail": "<value>", "validation": {"issues": []}}
+  clone-mcpbox-snapshot:
+    bad_request_body:
+      parameters:
+        path:
+          id: "<id>"
+      requestBody:
+        application/json: {"target_workspace_id": "<id>"}
+      responses:
+        "400":
+          application/problem+json: {"code": "bad_request", "detail": "request body is invalid", "validation": null}
+        "500":
+          application/problem+json: {"code": "bad_request", "detail": "request body is invalid", "validation": null}
+    bad_request_clone_target:
+      parameters:
+        path:
+          id: "<id>"
+      requestBody:
+        application/json: {"target_workspace_id": "<id>"}
+      responses:
+        "400":
+          application/problem+json: {"code": "bad_request", "detail": "target_workspace_id must differ from the source workspace", "validation": null}
+        "500":
+          application/problem+json: {"code": "bad_request", "detail": "target_workspace_id must differ from the source workspace", "validation": null}
+    speakeasy-default-clone-mcpbox-snapshot:
+      parameters:
+        path:
+          id: "<id>"
+      requestBody:
+        application/json: {"target_workspace_id": "<id>"}
+      responses:
+        "201":
+          application/json: {"actors": [], "apibox_snapshot_id": "<id>", "build": {"hidden_limitations": 149772, "last_submission": "accepted", "last_tool": "<value>", "limitations": [], "model": "combined", "phase": "review", "review_round": 874727, "review_rounds": 27582, "stage": "build", "submissions": 850970, "tool_calls": 414180, "waited_seconds": 986470, "waiting": {"credential_ids": ["<value 1>"], "deadline": "2024-06-13T00:27:51.286Z", "reason": "<value>", "since": "2026-06-10T04:36:28.743Z", "type": "live_credentials"}, "warnings": [{"code": "spec.default_invalid", "location": "<value>", "message": "<value>", "operations": []}]}, "composition": {"entities": 593804, "operations": 63723, "sample": false}, "created_at": "2025-05-28T15:10:56.092Z", "credential_ids": ["<value 1>", "<value 2>", "<value 3>"], "error": null, "hidden_limitations": 913059, "id": "<id>", "instructions": "<value>", "limitations": [{"location": "<value>", "message": "<value>", "operations": [], "reviewed": false}], "metadata": "<value>", "name": "<value>", "parent_id": "<id>", "research": {"bytes": 669838, "pages": 526171, "status": "complete"}, "source": "catalog", "source_box_id": "<id>", "source_snapshot_id": "<id>", "source_url": "https://appropriate-ribbon.com/", "status": "pending"}
+        "400":
+          application/problem+json: {"code": "<value>", "detail": "<value>", "validation": {"issues": [{"code": "<value>", "kind": "invalid", "location": "<value>", "message": "<value>", "operation": "<value>", "suggestion": "<value>"}]}}
+        "500":
+          application/problem+json: {"code": "<value>", "detail": "<value>", "validation": {"issues": [{"code": "<value>", "kind": "invalid", "location": "<value>", "message": "<value>", "operation": "<value>", "suggestion": "<value>"}]}}
+  clone-webbox-snapshot:
+    bad_request_body:
+      parameters:
+        path:
+          id: "<id>"
+      requestBody:
+        application/json: {"target_workspace_id": "<id>"}
+      responses:
+        "400":
+          application/problem+json: {"code": "bad_request", "detail": "request body is invalid", "validation": null}
+        "500":
+          application/problem+json: {"code": "bad_request", "detail": "request body is invalid", "validation": null}
+    bad_request_clone_target:
+      parameters:
+        path:
+          id: "<id>"
+      requestBody:
+        application/json: {"target_workspace_id": "<id>"}
+      responses:
+        "400":
+          application/problem+json: {"code": "bad_request", "detail": "target_workspace_id must differ from the source workspace", "validation": null}
+        "500":
+          application/problem+json: {"code": "bad_request", "detail": "target_workspace_id must differ from the source workspace", "validation": null}
+    speakeasy-default-clone-webbox-snapshot:
+      parameters:
+        path:
+          id: "<id>"
+      requestBody:
+        application/json: {"target_workspace_id": "<id>"}
+      responses:
+        "201":
+          application/json: {"actors": [{"default": false, "entity": "<value>", "id": "<id>", "name": "<value>", "role": "<value>"}], "build": {"hidden_limitations": 676797, "last_submission": "accepted", "last_tool": "<value>", "limitations": [], "model": "combined", "phase": "qa", "review_round": 245752, "review_rounds": 560689, "stage": "build", "submissions": 757537, "tool_calls": 292781, "waited_seconds": 515826, "waiting": {"credential_ids": ["<value 1>", "<value 2>", "<value 3>"], "deadline": "2025-12-19T09:03:38.566Z", "reason": "<value>", "since": "2025-10-23T07:16:40.280Z", "type": "time_limit"}, "warnings": []}, "composition": {"entities": 740533, "operations": 222825, "sample": false}, "created_at": "2025-10-17T02:48:29.707Z", "credential_ids": ["<value 1>"], "error": null, "hidden_limitations": 811168, "id": "<id>", "instructions": "<value>", "limitations": [{"location": "<value>", "message": "<value>", "operations": ["<value 1>", "<value 2>", "<value 3>"], "reviewed": false}], "metadata": "<value>", "name": "<value>", "parent_id": null, "research": {"bytes": 310415, "pages": 376632, "status": "running"}, "source": "box", "source_box_id": "<id>", "source_snapshot_id": "<id>", "status": "pending"}
         "400":
           application/problem+json: {"code": "<value>", "detail": "<value>", "validation": {"issues": [{"code": "<value>", "kind": "invalid", "location": "<value>", "message": "<value>", "operation": "<value>", "suggestion": "<value>"}]}}
         "500":
           application/problem+json: {"code": "<value>", "detail": "<value>", "validation": {"issues": [{"code": "<value>", "kind": "invalid", "location": "<value>", "message": "<value>", "operation": "<value>", "suggestion": "<value>"}]}}
 examplesVersion: 1.0.2
+releaseNotes: "## Cli SDK Changes:\n* `ContinuousSimulation.ApiboxSnapshots.CloneApiboxSnapshot()`: **Added**\n* `ContinuousSimulation.McpboxSnapshots.CloneMcpboxSnapshot()`: **Added**\n* `ContinuousSimulation.WebboxSnapshots.CloneWebboxSnapshot()`: **Added**\n* `ContinuousSimulation.Apibox.SaveApiboxSnapshot()`:  `response` **Changed**\n* `ContinuousSimulation.ApiboxSnapshots.ListApiboxSnapshots()`:  `response.Snapshots[]` **Changed**\n* `ContinuousSimulation.ApiboxSnapshots.CreateApiboxSnapshot()`: \n  *  `request.Request.Body.Request` **Changed**\n  *  `response` **Changed**\n* `ContinuousSimulation.ApiboxSnapshots.GetApiboxSnapshot()`:  `response` **Changed**\n* `ContinuousSimulation.ApiboxSnapshots.UpdateApiboxSnapshot()`:  `response` **Changed**\n* `ContinuousSimulation.ApiboxSnapshots.CancelApiboxSnapshot()`:  `response` **Changed**\n* `ContinuousSimulation.ApiboxSnapshots.ResumeApiboxSnapshot()`:  `response` **Changed**\n* `ContinuousSimulation.Mcpbox.SaveMcpboxSnapshot()`:  `response` **Changed**\n* `ContinuousSimulation.McpboxSnapshots.ListMcpboxSnapshots()`:  `response.Snapshots[]` **Changed**\n* `ContinuousSimulation.McpboxSnapshots.CreateMcpboxSnapshot()`: \n  *  `request.Request.Body.Request` **Changed**\n  *  `response` **Changed**\n* `ContinuousSimulation.McpboxSnapshots.GetMcpboxSnapshot()`:  `response` **Changed**\n* `ContinuousSimulation.McpboxSnapshots.UpdateMcpboxSnapshot()`:  `response` **Changed**\n* `ContinuousSimulation.McpboxSnapshots.CancelMcpboxSnapshot()`:  `response` **Changed**\n* `ContinuousSimulation.McpboxSnapshots.ResumeMcpboxSnapshot()`:  `response` **Changed**\n* `ContinuousSimulation.Webbox.SaveWebboxSnapshot()`:  `response` **Changed**\n* `ContinuousSimulation.WebboxSnapshots.ListWebboxSnapshots()`:  `response.Snapshots[]` **Changed**\n* `ContinuousSimulation.WebboxSnapshots.CreateWebboxSnapshot()`: \n  *  `request.Request.Body.Request` **Changed**\n  *  `response` **Changed**\n* `ContinuousSimulation.WebboxSnapshots.GetWebboxSnapshot()`:  `response` **Changed**\n* `ContinuousSimulation.WebboxSnapshots.UpdateWebboxSnapshot()`:  `response` **Changed**\n* `ContinuousSimulation.WebboxSnapshots.CancelWebboxSnapshot()`:  `response` **Changed**\n* `ContinuousSimulation.WebboxSnapshots.ResumeWebboxSnapshot()`:  `response` **Changed**\n"
