@@ -84,6 +84,8 @@ type ListApiboxSnapshotsRequest struct {
 	Cursor *string `queryParam:"style=form,explode=false,name=cursor"`
 	// Optional source filter.
 	Source *ListApiboxSnapshotsSource `queryParam:"style=form,explode=false,name=source"`
+	// Optional filter for the Snapshots saved from this Box.
+	BoxID *string `queryParam:"style=form,explode=false,name=box_id"`
 }
 
 func (l ListApiboxSnapshotsRequest) MarshalJSON() ([]byte, error) {
@@ -123,6 +125,13 @@ func (l *ListApiboxSnapshotsRequest) GetSource() *ListApiboxSnapshotsSource {
 		return nil
 	}
 	return l.Source
+}
+
+func (l *ListApiboxSnapshotsRequest) GetBoxID() *string {
+	if l == nil {
+		return nil
+	}
+	return l.BoxID
 }
 
 type ListApiboxSnapshotsResponse struct {

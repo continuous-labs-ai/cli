@@ -36,7 +36,7 @@ func newApiboxSnapshots(rootSDK *ContinuousSimulation, sdkConfig config.SDKConfi
 }
 
 // ListApiboxSnapshots - List API Box Snapshots
-// Returns the workspace's API Box Snapshots and the catalog's, newest first. Results can be filtered by source and status.
+// Returns the workspace's API Box Snapshots and the catalog's, newest first. Results can be filtered by source and status, and by the API Box a Snapshot was saved from.
 func (s *ApiboxSnapshots) ListApiboxSnapshots(ctx context.Context, request *operations.ListApiboxSnapshotsRequest, opts ...operations.Option) (*operations.ListApiboxSnapshotsResponse, error) {
 	o := operations.Options{}
 	supportedOptions := []string{
@@ -650,7 +650,7 @@ func (s *ApiboxSnapshots) CreateApiboxSnapshot(ctx context.Context, request oper
 }
 
 // DeleteApiboxSnapshot - Delete API Box Snapshot
-// Deletes an API Box Snapshot. A build that is still pending or building is canceled first. A Snapshot that API Boxes started from or MCP Box Snapshots were built against returns 409 apibox_snapshot_in_use; delete those first. Catalog Snapshots cannot be deleted.
+// Deletes an API Box Snapshot. A build that is still pending or building is canceled first. A Snapshot that API Boxes started from or MCP Box Snapshots were built against returns 409 apibox_snapshot_in_use; delete those first. While a build that names it as parent_id is pending or building, it returns 409 apibox_snapshot_parent_in_use; retry after the build finishes. Catalog Snapshots cannot be deleted.
 func (s *ApiboxSnapshots) DeleteApiboxSnapshot(ctx context.Context, request operations.DeleteApiboxSnapshotRequest, opts ...operations.Option) (*operations.DeleteApiboxSnapshotResponse, error) {
 	o := operations.Options{}
 	supportedOptions := []string{

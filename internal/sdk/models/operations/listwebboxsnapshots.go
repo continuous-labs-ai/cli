@@ -84,6 +84,8 @@ type ListWebboxSnapshotsRequest struct {
 	Cursor *string `queryParam:"style=form,explode=false,name=cursor"`
 	// Optional source filter.
 	Source *ListWebboxSnapshotsSource `queryParam:"style=form,explode=false,name=source"`
+	// Optional filter for the Snapshots saved from this Box.
+	BoxID *string `queryParam:"style=form,explode=false,name=box_id"`
 }
 
 func (l ListWebboxSnapshotsRequest) MarshalJSON() ([]byte, error) {
@@ -123,6 +125,13 @@ func (l *ListWebboxSnapshotsRequest) GetSource() *ListWebboxSnapshotsSource {
 		return nil
 	}
 	return l.Source
+}
+
+func (l *ListWebboxSnapshotsRequest) GetBoxID() *string {
+	if l == nil {
+		return nil
+	}
+	return l.BoxID
 }
 
 type ListWebboxSnapshotsResponse struct {

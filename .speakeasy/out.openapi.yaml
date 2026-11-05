@@ -45,6 +45,11 @@ components:
         code: apibox_snapshot_not_waiting
         detail: The build of the API Box Snapshot with ID "abs_01J8Z5X4K70000000000000002" is not waiting.
         validation: null
+    apibox_snapshot_parent_in_use:
+      value:
+        code: apibox_snapshot_parent_in_use
+        detail: A build that starts from the API Box Snapshot with ID "abs_01J8Z5X4K70000000000000002" is pending or building. Retry after it finishes, or cancel it.
+        validation: null
     apibox_snapshot_parent_not_ready:
       value:
         code: validation
@@ -244,6 +249,11 @@ components:
       value:
         code: mcpbox_snapshot_not_waiting
         detail: The build of the MCP Box Snapshot with ID "mbs_01J8Z5X4K70000000000000007" is not waiting.
+        validation: null
+    mcpbox_snapshot_parent_in_use:
+      value:
+        code: mcpbox_snapshot_parent_in_use
+        detail: A build that starts from the MCP Box Snapshot with ID "mbs_01J8Z5X4K70000000000000007" is pending or building. Retry after it finishes, or cancel it.
         validation: null
     mcpbox_snapshot_parent_not_ready:
       value:
@@ -510,6 +520,11 @@ components:
         code: webbox_snapshot_not_waiting
         detail: The build of the Web Box Snapshot with ID "wbs_01J8Z5X4K70000000000000005" is not waiting.
         validation: null
+    webbox_snapshot_parent_in_use:
+      value:
+        code: webbox_snapshot_parent_in_use
+        detail: A build that starts from the Web Box Snapshot with ID "wbs_01J8Z5X4K70000000000000005" is pending or building. Retry after it finishes, or cancel it.
+        validation: null
     webbox_snapshot_parent_not_ready:
       value:
         code: validation
@@ -662,7 +677,7 @@ components:
       additionalProperties: false
       properties:
         actors:
-          description: The callers a request to a Box started from the Snapshot can act as by sending an actor's id in the X-Continuous-Actor header. Without the header, a request acts as the default actor. An MCP Box Snapshot lists its API Box Snapshot's actors. Empty before the Snapshot is ready, when its build names none, or in a list until the Snapshot's actors are first read.
+          description: The callers a request to a Box started from the Snapshot can act as by sending an actor's id in the X-Continuous-Actor header. Without the header, a request acts as the default actor. An MCP Box Snapshot lists its API Box Snapshot's actors. A Web Box Snapshot lists its one actor, the account every page is served as, which no header selects. Empty before the Snapshot is ready, when its build names none, or in a list until the Snapshot's actors are first read.
           items:
             $ref: "#/components/schemas/SimulatorActor"
           type: array
@@ -831,7 +846,7 @@ components:
       additionalProperties: false
       properties:
         label:
-          description: The request that made the step.
+          description: The request that made the step, or "Handle async events" for events the app scheduled.
           type: string
         step:
           description: Step number, from 1 in order.
@@ -2230,7 +2245,7 @@ components:
       additionalProperties: false
       properties:
         actors:
-          description: The callers a request to a Box started from the Snapshot can act as by sending an actor's id in the X-Continuous-Actor header. Without the header, a request acts as the default actor. An MCP Box Snapshot lists its API Box Snapshot's actors. Empty before the Snapshot is ready, when its build names none, or in a list until the Snapshot's actors are first read.
+          description: The callers a request to a Box started from the Snapshot can act as by sending an actor's id in the X-Continuous-Actor header. Without the header, a request acts as the default actor. An MCP Box Snapshot lists its API Box Snapshot's actors. A Web Box Snapshot lists its one actor, the account every page is served as, which no header selects. Empty before the Snapshot is ready, when its build names none, or in a list until the Snapshot's actors are first read.
           items:
             $ref: "#/components/schemas/SimulatorActor"
           type: array
@@ -2852,19 +2867,19 @@ components:
             - combined
           type: string
         phase:
-          description: "Agent phase: research while the research agent indexes the documents and saves the vendor pages they lack; build for generation, review for the separate reviewer, qa while QA tests the running Simulator from outside, after the last review round of a build with credential_ids, finalize for author repair after review or QA. Null when not recorded."
+          description: "Agent phase: research while the research agent indexes the documents and saves the vendor pages they lack; build for generation, review for the separate reviewer, qa while QA tests the running Simulator from outside, after the last review round of a build with credential_ids, repair while the author fixes the findings of a review or QA. Null when not recorded."
           enum:
             - research
             - build
             - review
             - qa
-            - finalize
+            - repair
             - null
           type:
             - string
             - "null"
         review_round:
-          description: Review round that phase review, qa, or finalize belongs to, from 1. In a build with credential_ids, QA and the repair after it are in round review_rounds + 1. 0 before the first review.
+          description: Review round that phase review, qa, or repair belongs to, from 1. In a build with credential_ids, QA and the repair after it are in round review_rounds + 1. 0 before the first review.
           format: int64
           maximum: 11
           minimum: 0
@@ -3441,7 +3456,7 @@ components:
       additionalProperties: false
       properties:
         actors:
-          description: The callers a request to a Box started from the Snapshot can act as by sending an actor's id in the X-Continuous-Actor header. Without the header, a request acts as the default actor. An MCP Box Snapshot lists its API Box Snapshot's actors. Empty before the Snapshot is ready, when its build names none, or in a list until the Snapshot's actors are first read.
+          description: The callers a request to a Box started from the Snapshot can act as by sending an actor's id in the X-Continuous-Actor header. Without the header, a request acts as the default actor. An MCP Box Snapshot lists its API Box Snapshot's actors. A Web Box Snapshot lists its one actor, the account every page is served as, which no header selects. Empty before the Snapshot is ready, when its build names none, or in a list until the Snapshot's actors are first read.
           items:
             $ref: "#/components/schemas/SimulatorActor"
           type: array
@@ -3756,7 +3771,7 @@ paths:
         - apibox
   /v1/apibox-snapshots:
     get:
-      description: Returns the workspace's API Box Snapshots and the catalog's, newest first. Results can be filtered by source and status.
+      description: Returns the workspace's API Box Snapshots and the catalog's, newest first. Results can be filtered by source and status, and by the API Box a Snapshot was saved from.
       operationId: list-apibox-snapshots
       parameters:
         - description: Optional build status filter.
@@ -3794,6 +3809,12 @@ paths:
               - catalog
               - build
               - box
+            type: string
+        - description: Optional filter for the Snapshots saved from this Box.
+          explode: false
+          in: query
+          name: box_id
+          schema:
             type: string
       responses:
         "200":
@@ -3982,7 +4003,7 @@ paths:
         - apibox-snapshots
   /v1/apibox-snapshots/{id}:
     delete:
-      description: Deletes an API Box Snapshot. A build that is still pending or building is canceled first. A Snapshot that API Boxes started from or MCP Box Snapshots were built against returns 409 apibox_snapshot_in_use; delete those first. Catalog Snapshots cannot be deleted.
+      description: Deletes an API Box Snapshot. A build that is still pending or building is canceled first. A Snapshot that API Boxes started from or MCP Box Snapshots were built against returns 409 apibox_snapshot_in_use; delete those first. While a build that names it as parent_id is pending or building, it returns 409 apibox_snapshot_parent_in_use; retry after the build finishes. Catalog Snapshots cannot be deleted.
       operationId: delete-apibox-snapshot
       parameters:
         - description: API Box Snapshot ID.
@@ -4021,6 +4042,8 @@ paths:
               examples:
                 apibox_snapshot_in_use:
                   $ref: "#/components/examples/apibox_snapshot_in_use"
+                apibox_snapshot_parent_in_use:
+                  $ref: "#/components/examples/apibox_snapshot_parent_in_use"
               schema:
                 $ref: "#/components/schemas/Error"
           description: Conflict
@@ -5515,7 +5538,7 @@ paths:
         - mcpbox
   /v1/mcpbox-snapshots:
     get:
-      description: Returns the workspace's MCP Box Snapshots and the catalog's, newest first. Results can be filtered by status and source.
+      description: Returns the workspace's MCP Box Snapshots and the catalog's, newest first. Results can be filtered by status and source, and by the MCP Box a Snapshot was saved from.
       operationId: list-mcpbox-snapshots
       parameters:
         - description: Optional build status filter.
@@ -5553,6 +5576,12 @@ paths:
               - catalog
               - build
               - box
+            type: string
+        - description: Optional filter for the Snapshots saved from this Box.
+          explode: false
+          in: query
+          name: box_id
+          schema:
             type: string
       responses:
         "200":
@@ -5751,7 +5780,7 @@ paths:
         - mcpbox-snapshots
   /v1/mcpbox-snapshots/{id}:
     delete:
-      description: Deletes an MCP Box Snapshot. A build that is still pending or building is canceled first. The API Box Snapshot it was built against stays. A Snapshot that MCP Boxes serve returns 409 mcpbox_snapshot_in_use; delete those MCP Boxes first.
+      description: Deletes an MCP Box Snapshot. A build that is still pending or building is canceled first. The API Box Snapshot it was built against stays. A Snapshot that MCP Boxes serve returns 409 mcpbox_snapshot_in_use; delete those MCP Boxes first. While a build that names it as parent_id is pending or building, it returns 409 mcpbox_snapshot_parent_in_use; retry after the build finishes.
       operationId: delete-mcpbox-snapshot
       parameters:
         - description: MCP Box Snapshot ID.
@@ -5790,6 +5819,8 @@ paths:
               examples:
                 mcpbox_snapshot_in_use:
                   $ref: "#/components/examples/mcpbox_snapshot_in_use"
+                mcpbox_snapshot_parent_in_use:
+                  $ref: "#/components/examples/mcpbox_snapshot_parent_in_use"
               schema:
                 $ref: "#/components/schemas/Error"
           description: Conflict
@@ -9332,7 +9363,7 @@ paths:
         - webbox
   /v1/webbox-snapshots:
     get:
-      description: Returns the workspace's Web Box Snapshots and the catalog's, newest first. Results can be filtered by source and status.
+      description: Returns the workspace's Web Box Snapshots and the catalog's, newest first. Results can be filtered by source and status, and by the Web Box a Snapshot was saved from.
       operationId: list-webbox-snapshots
       parameters:
         - description: Optional build status filter.
@@ -9370,6 +9401,12 @@ paths:
               - catalog
               - build
               - box
+            type: string
+        - description: Optional filter for the Snapshots saved from this Box.
+          explode: false
+          in: query
+          name: box_id
+          schema:
             type: string
       responses:
         "200":
@@ -9550,7 +9587,7 @@ paths:
         - webbox-snapshots
   /v1/webbox-snapshots/{id}:
     delete:
-      description: Deletes a Web Box Snapshot. A build that is still pending or building is canceled first. A Snapshot that Web Boxes started from returns 409 webbox_snapshot_in_use; delete those Web Boxes first. Catalog Snapshots cannot be deleted.
+      description: Deletes a Web Box Snapshot. A build that is still pending or building is canceled first. A Snapshot that Web Boxes started from returns 409 webbox_snapshot_in_use; delete those Web Boxes first. While a build that names it as parent_id is pending or building, it returns 409 webbox_snapshot_parent_in_use; retry after the build finishes. Catalog Snapshots cannot be deleted.
       operationId: delete-webbox-snapshot
       parameters:
         - description: Web Box Snapshot ID.
@@ -9589,6 +9626,8 @@ paths:
               examples:
                 webbox_snapshot_in_use:
                   $ref: "#/components/examples/webbox_snapshot_in_use"
+                webbox_snapshot_parent_in_use:
+                  $ref: "#/components/examples/webbox_snapshot_parent_in_use"
               schema:
                 $ref: "#/components/schemas/Error"
           description: Conflict

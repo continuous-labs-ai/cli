@@ -8,7 +8,7 @@ import (
 )
 
 type BoxStep struct {
-	// The request that made the step.
+	// The request that made the step, or "Handle async events" for events the app scheduled.
 	Label string `json:"label"`
 	// Step number, from 1 in order.
 	Step int64 `json:"step"`

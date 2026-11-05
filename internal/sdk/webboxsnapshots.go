@@ -36,7 +36,7 @@ func newWebboxSnapshots(rootSDK *ContinuousSimulation, sdkConfig config.SDKConfi
 }
 
 // ListWebboxSnapshots - List Web Box Snapshots
-// Returns the workspace's Web Box Snapshots and the catalog's, newest first. Results can be filtered by source and status.
+// Returns the workspace's Web Box Snapshots and the catalog's, newest first. Results can be filtered by source and status, and by the Web Box a Snapshot was saved from.
 func (s *WebboxSnapshots) ListWebboxSnapshots(ctx context.Context, request *operations.ListWebboxSnapshotsRequest, opts ...operations.Option) (*operations.ListWebboxSnapshotsResponse, error) {
 	o := operations.Options{}
 	supportedOptions := []string{
@@ -650,7 +650,7 @@ func (s *WebboxSnapshots) CreateWebboxSnapshot(ctx context.Context, request oper
 }
 
 // DeleteWebboxSnapshot - Delete Web Box Snapshot
-// Deletes a Web Box Snapshot. A build that is still pending or building is canceled first. A Snapshot that Web Boxes started from returns 409 webbox_snapshot_in_use; delete those Web Boxes first. Catalog Snapshots cannot be deleted.
+// Deletes a Web Box Snapshot. A build that is still pending or building is canceled first. A Snapshot that Web Boxes started from returns 409 webbox_snapshot_in_use; delete those Web Boxes first. While a build that names it as parent_id is pending or building, it returns 409 webbox_snapshot_parent_in_use; retry after the build finishes. Catalog Snapshots cannot be deleted.
 func (s *WebboxSnapshots) DeleteWebboxSnapshot(ctx context.Context, request operations.DeleteWebboxSnapshotRequest, opts ...operations.Option) (*operations.DeleteWebboxSnapshotResponse, error) {
 	o := operations.Options{}
 	supportedOptions := []string{
