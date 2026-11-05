@@ -52,7 +52,7 @@ func (e *SimulatorBuildProgressModel) IsExact() bool {
 	return false
 }
 
-// Phase - Agent phase: research while the research agent indexes the documents and saves the vendor pages they lack; build for generation, review for the separate reviewer, qa while QA tests the running Simulator from outside, after the last review round of a build with credential_ids, finalize for author repair after review or QA. Null when not recorded.
+// Phase - Agent phase: research while the research agent indexes the documents and saves the vendor pages they lack; build for generation, review for the separate reviewer, qa while QA tests the running Simulator from outside, after the last review round of a build with credential_ids, repair while the author fixes the findings of a review or QA. Null when not recorded.
 type Phase string
 
 const (
@@ -60,7 +60,7 @@ const (
 	PhaseBuild    Phase = "build"
 	PhaseReview   Phase = "review"
 	PhaseQa       Phase = "qa"
-	PhaseFinalize Phase = "finalize"
+	PhaseRepair   Phase = "repair"
 )
 
 func (e Phase) ToPointer() *Phase {
@@ -71,7 +71,7 @@ func (e Phase) ToPointer() *Phase {
 func (e *Phase) IsExact() bool {
 	if e != nil {
 		switch *e {
-		case "research", "build", "review", "qa", "finalize":
+		case "research", "build", "review", "qa", "repair":
 			return true
 		}
 	}
@@ -113,9 +113,9 @@ type SimulatorBuildProgress struct {
 	Limitations []Limitation `json:"limitations"`
 	// The model the builder and reviewer run on, or combined, which currently runs as claude-opus-5-5. A build recorded before model selection reports its provider's default.
 	Model SimulatorBuildProgressModel `json:"model"`
-	// Agent phase: research while the research agent indexes the documents and saves the vendor pages they lack; build for generation, review for the separate reviewer, qa while QA tests the running Simulator from outside, after the last review round of a build with credential_ids, finalize for author repair after review or QA. Null when not recorded.
+	// Agent phase: research while the research agent indexes the documents and saves the vendor pages they lack; build for generation, review for the separate reviewer, qa while QA tests the running Simulator from outside, after the last review round of a build with credential_ids, repair while the author fixes the findings of a review or QA. Null when not recorded.
 	Phase *Phase `json:"phase"`
-	// Review round that phase review, qa, or finalize belongs to, from 1. In a build with credential_ids, QA and the repair after it are in round review_rounds + 1. 0 before the first review.
+	// Review round that phase review, qa, or repair belongs to, from 1. In a build with credential_ids, QA and the repair after it are in round review_rounds + 1. 0 before the first review.
 	ReviewRound int64 `json:"review_round"`
 	// Review rounds the build runs at most. Fewer run when the reviewer agrees early.
 	ReviewRounds int64 `json:"review_rounds"`

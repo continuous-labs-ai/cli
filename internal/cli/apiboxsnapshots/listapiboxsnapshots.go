@@ -19,6 +19,7 @@ var listApiboxSnapshotsCmdMeta = []flagutil.FlagMeta{
 	{FlagName: "limit", Shorthand: "l", FieldPath: "Limit", Kind: flagutil.FlagKindInt64, Optional: true, HasDefault: true, DefaultInt: 50, Description: "Page size. Values below 1 use 50. Values above 200 use 200."},
 	{FlagName: "cursor", Shorthand: "c", FieldPath: "Cursor", Kind: flagutil.FlagKindString, Optional: true, Description: "Opaque next_cursor value from a previous page."},
 	{FlagName: "source", FieldPath: "Source", Kind: flagutil.FlagKindEnum, Optional: true, EnumValues: []string{"catalog", "build", "box"}, Description: "Optional source filter. (options: catalog, build, box)"},
+	{FlagName: "box-id", Shorthand: "b", FieldPath: "BoxID", Kind: flagutil.FlagKindString, Optional: true, Description: "Optional filter for the Snapshots saved from this Box."},
 }
 
 // initListApiboxSnapshotsCmd initializes the list-apibox-snapshots command.
@@ -26,7 +27,7 @@ func initListApiboxSnapshotsCmd(parent *cobra.Command) error {
 	var cmd = &cobra.Command{
 		Use:     "list",
 		Short:   "List API Box Snapshots",
-		Long:    "Returns the workspace's API Box Snapshots and the catalog's, newest first. Results can be filtered by source and status.",
+		Long:    "Returns the workspace's API Box Snapshots and the catalog's, newest first. Results can be filtered by source and status, and by the API Box a Snapshot was saved from.",
 		Example: "  continuous apibox-snapshots list",
 		RunE:    runListApiboxSnapshotsCmd,
 	}

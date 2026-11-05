@@ -19,6 +19,7 @@ var listWebboxSnapshotsCmdMeta = []flagutil.FlagMeta{
 	{FlagName: "limit", Shorthand: "l", FieldPath: "Limit", Kind: flagutil.FlagKindInt64, Optional: true, HasDefault: true, DefaultInt: 50, Description: "Page size. Values below 1 use 50. Values above 200 use 200."},
 	{FlagName: "cursor", Shorthand: "c", FieldPath: "Cursor", Kind: flagutil.FlagKindString, Optional: true, Description: "Opaque next_cursor value from a previous page."},
 	{FlagName: "source", FieldPath: "Source", Kind: flagutil.FlagKindEnum, Optional: true, EnumValues: []string{"catalog", "build", "box"}, Description: "Optional source filter. (options: catalog, build, box)"},
+	{FlagName: "box-id", Shorthand: "b", FieldPath: "BoxID", Kind: flagutil.FlagKindString, Optional: true, Description: "Optional filter for the Snapshots saved from this Box."},
 }
 
 // initListWebboxSnapshotsCmd initializes the list-webbox-snapshots command.
@@ -26,7 +27,7 @@ func initListWebboxSnapshotsCmd(parent *cobra.Command) error {
 	var cmd = &cobra.Command{
 		Use:     "list",
 		Short:   "List Web Box Snapshots",
-		Long:    "Returns the workspace's Web Box Snapshots and the catalog's, newest first. Results can be filtered by source and status.",
+		Long:    "Returns the workspace's Web Box Snapshots and the catalog's, newest first. Results can be filtered by source and status, and by the Web Box a Snapshot was saved from.",
 		Example: "  continuous webbox-snapshots list",
 		RunE:    runListWebboxSnapshotsCmd,
 	}
