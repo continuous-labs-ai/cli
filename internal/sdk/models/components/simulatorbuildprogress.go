@@ -2,6 +2,35 @@
 
 package components
 
+import (
+	"github.com/continuous-labs-ai/cli/internal/sdk/sdkinternal/utils"
+	"time"
+)
+
+// AgentState - What the build's agent was doing when the build last checked on it, every few minutes: working while it thinks or runs a command, idle when its turn ended without a tool call, waiting_for_limit while a subscription model waits for its usage limit to reset. Null when the build is not running, while it waits for the requester, or for a build recorded before agents reported it.
+type AgentState string
+
+const (
+	AgentStateWorking         AgentState = "working"
+	AgentStateIdle            AgentState = "idle"
+	AgentStateWaitingForLimit AgentState = "waiting_for_limit"
+)
+
+func (e AgentState) ToPointer() *AgentState {
+	return &e
+}
+
+// IsExact returns true if the value matches a known enum value, false otherwise.
+func (e *AgentState) IsExact() bool {
+	if e != nil {
+		switch *e {
+		case "working", "idle", "waiting_for_limit":
+			return true
+		}
+	}
+	return false
+}
+
 // LastSubmission - Outcome of the most recent submit attempt, or null.
 type LastSubmission string
 
@@ -103,8 +132,12 @@ func (e *Stage) IsExact() bool {
 }
 
 type SimulatorBuildProgress struct {
+	// What the build's agent was doing when the build last checked on it, every few minutes: working while it thinks or runs a command, idle when its turn ended without a tool call, waiting_for_limit while a subscription model waits for its usage limit to reset. Null when the build is not running, while it waits for the requester, or for a build recorded before agents reported it.
+	AgentState *AgentState `json:"agent_state"`
 	// Limitations the accepted build records beyond those listed in limitations.
 	HiddenLimitations int64 `json:"hidden_limitations"`
+	// When the build last saw its agent act, with or without a tool call. Null when agent_state is null or no activity was seen.
+	LastActivityAt *time.Time `json:"last_activity_at"`
 	// Outcome of the most recent submit attempt, or null.
 	LastSubmission *LastSubmission `json:"last_submission"`
 	// Name of the most recent tool call, or null. Tool arguments and output are private.
@@ -129,8 +162,28 @@ type SimulatorBuildProgress struct {
 	WaitedSeconds int64 `json:"waited_seconds"`
 	// Set while the build waits for the requester: at QA because the live systems rejected its credentials, or for more time after it used its time limit. Resume it with its resource's resume operation, such as POST /v1/simulators/{id}/resume. Null otherwise.
 	Waiting *SimulatorBuildWaiting `json:"waiting"`
+	// When the usage limit resets while agent_state is waiting_for_limit. The agent continues then, within the build's time limit. Null otherwise.
+	WaitingUntil *time.Time `json:"waiting_until"`
 	// Specification defects the build tolerated without changing the specification, set when the build prepares its specification. Empty when none.
 	Warnings []SpecificationWarning `json:"warnings"`
+}
+
+func (s SimulatorBuildProgress) MarshalJSON() ([]byte, error) {
+	return utils.MarshalJSON(s, "", false)
+}
+
+func (s *SimulatorBuildProgress) UnmarshalJSON(data []byte) error {
+	if err := utils.UnmarshalJSON(data, &s, "", false, nil); err != nil {
+		return err
+	}
+	return nil
+}
+
+func (s *SimulatorBuildProgress) GetAgentState() *AgentState {
+	if s == nil {
+		return nil
+	}
+	return s.AgentState
 }
 
 func (s *SimulatorBuildProgress) GetHiddenLimitations() int64 {
@@ -138,6 +191,13 @@ func (s *SimulatorBuildProgress) GetHiddenLimitations() int64 {
 		return 0
 	}
 	return s.HiddenLimitations
+}
+
+func (s *SimulatorBuildProgress) GetLastActivityAt() *time.Time {
+	if s == nil {
+		return nil
+	}
+	return s.LastActivityAt
 }
 
 func (s *SimulatorBuildProgress) GetLastSubmission() *LastSubmission {
@@ -222,6 +282,13 @@ func (s *SimulatorBuildProgress) GetWaiting() *SimulatorBuildWaiting {
 		return nil
 	}
 	return s.Waiting
+}
+
+func (s *SimulatorBuildProgress) GetWaitingUntil() *time.Time {
+	if s == nil {
+		return nil
+	}
+	return s.WaitingUntil
 }
 
 func (s *SimulatorBuildProgress) GetWarnings() []SpecificationWarning {

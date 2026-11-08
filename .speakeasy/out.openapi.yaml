@@ -2683,7 +2683,9 @@ components:
       additionalProperties: false
       examples:
         - build:
+            agent_state: working
             hidden_limitations: 0
+            last_activity_at: "2026-01-15T12:09:30Z"
             last_submission: rejected
             last_tool: test
             limitations: []
@@ -2696,6 +2698,7 @@ components:
             tool_calls: 7
             waited_seconds: 0
             waiting: null
+            waiting_until: null
             warnings: []
           created_at: "2026-01-15T12:00:00Z"
           credential_ids: []
@@ -2831,11 +2834,27 @@ components:
     SimulatorBuildProgress:
       additionalProperties: false
       properties:
+        agent_state:
+          description: "What the build's agent was doing when the build last checked on it, every few minutes: working while it thinks or runs a command, idle when its turn ended without a tool call, waiting_for_limit while a subscription model waits for its usage limit to reset. Null when the build is not running, while it waits for the requester, or for a build recorded before agents reported it."
+          enum:
+            - working
+            - idle
+            - waiting_for_limit
+            - null
+          type:
+            - string
+            - "null"
         hidden_limitations:
           description: Limitations the accepted build records beyond those listed in limitations.
           format: int64
           minimum: 0
           type: integer
+        last_activity_at:
+          description: When the build last saw its agent act, with or without a tool call. Null when agent_state is null or no activity was seen.
+          format: date-time
+          type:
+            - string
+            - "null"
         last_submission:
           description: Outcome of the most recent submit attempt, or null.
           enum:
@@ -2917,6 +2936,12 @@ components:
           oneOf:
             - $ref: "#/components/schemas/SimulatorBuildWaiting"
             - type: "null"
+        waiting_until:
+          description: When the usage limit resets while agent_state is waiting_for_limit. The agent continues then, within the build's time limit. Null otherwise.
+          format: date-time
+          type:
+            - string
+            - "null"
         warnings:
           description: Specification defects the build tolerated without changing the specification, set when the build prepares its specification. Empty when none.
           items:
@@ -2938,6 +2963,9 @@ components:
         - hidden_limitations
         - waited_seconds
         - waiting
+        - agent_state
+        - last_activity_at
+        - waiting_until
       type: object
     SimulatorBuildWaiting:
       additionalProperties: false
