@@ -3,7 +3,7 @@
 package components
 
 type ResumeBuildRequest struct {
-	// Seconds to add to a build that waits for more time, from 1 to the largest timeout_seconds a build request accepts. Required for a build whose build.waiting.type is time_limit, and refused for one waiting for live credentials. The build's time limit with every addition is at most 259200 seconds (72 hours).
+	// Seconds to add to a build that waits for more time, from 1 to the largest timeout_seconds a build request accepts. Required for a build whose build.waiting.type is time_limit, and refused for any other wait. The build's time limit with every addition is at most 259200 seconds (72 hours).
 	AddSeconds *int64 `json:"add_seconds,omitzero"`
 }
 

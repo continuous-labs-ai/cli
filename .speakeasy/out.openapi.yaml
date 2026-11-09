@@ -682,7 +682,7 @@ components:
             $ref: "#/components/schemas/SimulatorActor"
           type: array
         build:
-          description: The build's latest progress report, or null before the first report. A settled Snapshot keeps its last report. A build waiting for its live credentials resumes when the Snapshot's resume is requested.
+          description: The build's latest progress report, or null before the first report. A settled Snapshot keeps its last report. A waiting build resumes when the Snapshot's resume is requested.
           oneOf:
             - $ref: "#/components/schemas/SimulatorBuildProgress"
             - type: "null"
@@ -913,7 +913,7 @@ components:
           type: string
         timeout_seconds:
           default: 28800
-          description: Time limit for generation and validation in seconds, from 1 to 172800. Defaults to 28800 (eight hours). Excludes queue wait, finalization, and any wait for live credentials. Retries share the same deadline.
+          description: Time limit for generation and validation in seconds, from 1 to 172800. Defaults to 28800 (eight hours). Excludes queue wait, finalization, and any wait for the requester. Retries share the same deadline.
           format: int64
           maximum: 172800
           minimum: 1
@@ -960,7 +960,7 @@ components:
           type: integer
         timeout_seconds:
           default: 28800
-          description: Time limit for generation and validation in seconds, from 1 to 172800. Defaults to 28800 (eight hours). Excludes queue wait, finalization, and any wait for live credentials. Retries share the same deadline.
+          description: Time limit for generation and validation in seconds, from 1 to 172800. Defaults to 28800 (eight hours). Excludes queue wait, finalization, and any wait for the requester. Retries share the same deadline.
           format: int64
           maximum: 172800
           minimum: 1
@@ -1037,7 +1037,7 @@ components:
           type: string
         timeout_seconds:
           default: 28800
-          description: Time limit for generation and validation in seconds, from 1 to 172800. Defaults to 28800 (eight hours). Excludes queue wait, finalization, and any wait for live credentials. Retries share the same deadline.
+          description: Time limit for generation and validation in seconds, from 1 to 172800. Defaults to 28800 (eight hours). Excludes queue wait, finalization, and any wait for the requester. Retries share the same deadline.
           format: int64
           maximum: 172800
           minimum: 1
@@ -1079,7 +1079,7 @@ components:
           type: integer
         timeout_seconds:
           default: 28800
-          description: Time limit for generation and validation in seconds, from 1 to 172800. Defaults to 28800 (eight hours). Excludes queue wait, finalization, and any wait for live credentials. Retries share the same deadline.
+          description: Time limit for generation and validation in seconds, from 1 to 172800. Defaults to 28800 (eight hours). Excludes queue wait, finalization, and any wait for the requester. Retries share the same deadline.
           format: int64
           maximum: 172800
           minimum: 1
@@ -2254,7 +2254,7 @@ components:
           pattern: ^abs_[0-9A-HJKMNP-TV-Z]{26}$
           type: string
         build:
-          description: The build's latest progress report, or null before the first report. A settled Snapshot keeps its last report. A build waiting for its live credentials resumes when the Snapshot's resume is requested.
+          description: The build's latest progress report, or null before the first report. A settled Snapshot keeps its last report. A waiting build resumes when the Snapshot's resume is requested.
           oneOf:
             - $ref: "#/components/schemas/SimulatorBuildProgress"
             - type: "null"
@@ -2393,7 +2393,7 @@ components:
       additionalProperties: false
       properties:
         add_seconds:
-          description: Seconds to add to a build that waits for more time, from 1 to the largest timeout_seconds a build request accepts. Required for a build whose build.waiting.type is time_limit, and refused for one waiting for live credentials. The build's time limit with every addition is at most 259200 seconds (72 hours).
+          description: Seconds to add to a build that waits for more time, from 1 to the largest timeout_seconds a build request accepts. Required for a build whose build.waiting.type is time_limit, and refused for any other wait. The build's time limit with every addition is at most 259200 seconds (72 hours).
           format: int64
           type: integer
       type: object
@@ -2932,7 +2932,7 @@ components:
           minimum: 0
           type: integer
         waiting:
-          description: "Set while the build waits for the requester: at QA because the live systems rejected its credentials, or for more time after it used its time limit. Resume it with its resource's resume operation, such as POST /v1/simulators/{id}/resume. Null otherwise."
+          description: "Set while the build waits for the requester: at QA because the live systems rejected its credentials or rate limited its calls, or for more time after it used its time limit. Resume it with its resource's resume operation, such as POST /v1/simulators/{id}/resume. Null otherwise."
           oneOf:
             - $ref: "#/components/schemas/SimulatorBuildWaiting"
             - type: "null"
@@ -2971,25 +2971,26 @@ components:
       additionalProperties: false
       properties:
         credential_ids:
-          description: The credentials to refresh with PATCH /v1/credentials/{id} before resuming the build. Empty for time_limit.
+          description: The credentials to refresh with PATCH /v1/credentials/{id} before resuming the build. Empty for live_rate_limit and time_limit.
           items:
             type: string
           type: array
         deadline:
-          description: "When the wait ends, 7 days after it began: a build not resumed by then fails, with error code live_credential_rejected for live_credentials and for its time limit for time_limit. The wait does not count toward the build's time limit."
+          description: "When the wait ends, 7 days after it began: a build not resumed by then fails, with error code live_credential_rejected for live_credentials, live_rate_limited for live_rate_limit, and for its time limit for time_limit. The wait does not count toward the build's time limit."
           format: date-time
           type: string
         reason:
-          description: "Why the build waits: for live_credentials, the status and detail of the live reply that rejected QA's authenticated read."
+          description: "Why the build waits: for live_credentials, the status and detail of the live reply that rejected QA's authenticated read; for live_rate_limit, of the reply that rate limited QA's calls."
           type: string
         since:
           description: When the build started waiting.
           format: date-time
           type: string
         type:
-          description: live_credentials while QA waits for the credentials it names to be refreshed; time_limit while the build waits for a resume that adds time with add_seconds.
+          description: live_credentials while QA waits for the credentials it names to be refreshed; live_rate_limit while QA waits for the live systems' rate limit to reset; time_limit while the build waits for a resume that adds time with add_seconds.
           enum:
             - live_credentials
+            - live_rate_limit
             - time_limit
           type: string
       required:
@@ -3074,12 +3075,13 @@ components:
             - string
             - "null"
         code:
-          description: Stable Simulator build error code. live_credential_rejected is a build that waited at QA for its rejected live credentials and was not resumed within 7 days.
+          description: Stable Simulator build error code. live_credential_rejected is a build that waited at QA for its rejected live credentials and was not resumed within 7 days; live_rate_limited is one that waited at QA for the live systems' rate limit and was not resumed within 7 days.
           enum:
             - build_failed
             - build_canceled
             - specification_validation_failed
             - live_credential_rejected
+            - live_rate_limited
           type: string
         detail:
           description: Safe human-readable error detail.
@@ -3489,7 +3491,7 @@ components:
             $ref: "#/components/schemas/SimulatorActor"
           type: array
         build:
-          description: The build's latest progress report, or null before the first report. A settled Snapshot keeps its last report. A build waiting for its live credentials resumes when the Snapshot's resume is requested.
+          description: The build's latest progress report, or null before the first report. A settled Snapshot keeps its last report. A waiting build resumes when the Snapshot's resume is requested.
           oneOf:
             - $ref: "#/components/schemas/SimulatorBuildProgress"
             - type: "null"
@@ -4407,7 +4409,7 @@ paths:
         - apibox-snapshots
   /v1/apibox-snapshots/{id}/resume:
     post:
-      description: "Resumes a build that waits, as build.waiting reports: at QA because its live credentials were rejected, or for more time after it used its time limit. For a credential wait, refresh each credential it names with PATCH /v1/credentials/{id} first: QA then runs again with their current values, and the build goes on to finalize. For a wait for more time, send add_seconds: the build continues where it stopped, with that much time from the resume. Returns the Snapshot, still building. A wait does not count toward the build's time limit: a build resumed from a credential wait has the time it had left when it began waiting. A build that is not waiting returns 409 apibox_snapshot_not_waiting."
+      description: "Resumes a build that waits, as build.waiting reports: at QA because its live credentials were rejected or the live systems rate limited its calls, or for more time after it used its time limit. For a credential wait, refresh each credential it names with PATCH /v1/credentials/{id} first: QA then runs again with their current values, and the build goes on to finalize. For a rate-limit wait, resume once the rate limit resets: QA then runs again. For a wait for more time, send add_seconds: the build continues where it stopped, with that much time from the resume. Returns the Snapshot, still building. A wait does not count toward the build's time limit: a build resumed from a QA wait has the time it had left when it began waiting. A build that is not waiting returns 409 apibox_snapshot_not_waiting."
       operationId: resume-apibox-snapshot
       parameters:
         - description: Snapshot ID.
@@ -6184,7 +6186,7 @@ paths:
         - mcpbox-snapshots
   /v1/mcpbox-snapshots/{id}/resume:
     post:
-      description: "Resumes a build that waits, as build.waiting reports: at QA because its live credential was rejected, or for more time after it used its time limit. For a credential wait, refresh the credential it names with PATCH /v1/credentials/{id} first: QA then runs again with its current value, and the build goes on to finalize. For a wait for more time, send add_seconds: the build continues where it stopped, with that much time from the resume. Returns the Snapshot, still building. A wait does not count toward the build's time limit: a build resumed from a credential wait has the time it had left when it began waiting. A build that is not waiting returns 409 mcpbox_snapshot_not_waiting."
+      description: "Resumes a build that waits, as build.waiting reports: at QA because its live credential was rejected or the live source rate limited its calls, or for more time after it used its time limit. For a credential wait, refresh the credential it names with PATCH /v1/credentials/{id} first: QA then runs again with its current value, and the build goes on to finalize. For a rate-limit wait, resume once the rate limit resets: QA then runs again. For a wait for more time, send add_seconds: the build continues where it stopped, with that much time from the resume. Returns the Snapshot, still building. A wait does not count toward the build's time limit: a build resumed from a QA wait has the time it had left when it began waiting. A build that is not waiting returns 409 mcpbox_snapshot_not_waiting."
       operationId: resume-mcpbox-snapshot
       parameters:
         - description: Snapshot ID.
@@ -9093,7 +9095,7 @@ paths:
     post:
       deprecated: true
       description: |-
-        Resumes a build that waits, as build.waiting reports: at QA because its live credentials were rejected, or for more time after it used its time limit. For a credential wait, refresh each credential it names with PATCH /v1/credentials/{id} first: QA then runs again with their current values, and the build goes on to finalize. For a wait for more time, send add_seconds: the build continues where it stopped, with that much time from the resume. Returns the Simulator, still building. A wait does not count toward the build's time limit: a build resumed from a credential wait has the time it had left when it began waiting. A build that is not waiting returns 409 simulator_not_waiting.
+        Resumes a build that waits, as build.waiting reports: at QA because its live credentials were rejected or the live systems rate limited its calls, or for more time after it used its time limit. For a credential wait, refresh each credential it names with PATCH /v1/credentials/{id} first: QA then runs again with their current values, and the build goes on to finalize. For a rate-limit wait, resume once the rate limit resets: QA then runs again. For a wait for more time, send add_seconds: the build continues where it stopped, with that much time from the resume. Returns the Simulator, still building. A wait does not count toward the build's time limit: a build resumed from a QA wait has the time it had left when it began waiting. A build that is not waiting returns 409 simulator_not_waiting.
 
         Deprecated. Use API Box for APIs and Web Box for web apps.
       operationId: resume-simulator
@@ -9991,7 +9993,7 @@ paths:
         - webbox-snapshots
   /v1/webbox-snapshots/{id}/resume:
     post:
-      description: "Resumes a build that waits, as build.waiting reports: at QA because its live credentials were rejected, or for more time after it used its time limit. For a credential wait, refresh each credential it names with PATCH /v1/credentials/{id} first: QA then runs again with their current values, and the build goes on to finalize. For a wait for more time, send add_seconds: the build continues where it stopped, with that much time from the resume. Returns the Snapshot, still building. A wait does not count toward the build's time limit: a build resumed from a credential wait has the time it had left when it began waiting. A build that is not waiting returns 409 webbox_snapshot_not_waiting."
+      description: "Resumes a build that waits, as build.waiting reports: at QA because its live credentials were rejected or the live systems rate limited its calls, or for more time after it used its time limit. For a credential wait, refresh each credential it names with PATCH /v1/credentials/{id} first: QA then runs again with their current values, and the build goes on to finalize. For a rate-limit wait, resume once the rate limit resets: QA then runs again. For a wait for more time, send add_seconds: the build continues where it stopped, with that much time from the resume. Returns the Snapshot, still building. A wait does not count toward the build's time limit: a build resumed from a QA wait has the time it had left when it began waiting. A build that is not waiting returns 409 webbox_snapshot_not_waiting."
       operationId: resume-webbox-snapshot
       parameters:
         - description: Snapshot ID.
