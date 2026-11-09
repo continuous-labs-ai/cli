@@ -160,7 +160,7 @@ type SimulatorBuildProgress struct {
 	ToolCalls int64 `json:"tool_calls"`
 	// Total seconds of the build's ended waits, which do not count toward its time limit. 0 when none has ended. The current wait, from waiting.since, is not included.
 	WaitedSeconds int64 `json:"waited_seconds"`
-	// Set while the build waits for the requester: at QA because the live systems rejected its credentials, or for more time after it used its time limit. Resume it with its resource's resume operation, such as POST /v1/simulators/{id}/resume. Null otherwise.
+	// Set while the build waits for the requester: at QA because the live systems rejected its credentials or rate limited its calls, or for more time after it used its time limit. Resume it with its resource's resume operation, such as POST /v1/simulators/{id}/resume. Null otherwise.
 	Waiting *SimulatorBuildWaiting `json:"waiting"`
 	// When the usage limit resets while agent_state is waiting_for_limit. The agent continues then, within the build's time limit. Null otherwise.
 	WaitingUntil *time.Time `json:"waiting_until"`

@@ -62,7 +62,7 @@ type MCPBoxSnapshot struct {
 	Actors []SimulatorActor `json:"actors"`
 	// The API Box Snapshot the MCP Box was built against, whose API it calls.
 	ApiboxSnapshotID string `json:"apibox_snapshot_id"`
-	// The build's latest progress report, or null before the first report. A settled Snapshot keeps its last report. A build waiting for its live credentials resumes when the Snapshot's resume is requested.
+	// The build's latest progress report, or null before the first report. A settled Snapshot keeps its last report. A waiting build resumes when the Snapshot's resume is requested.
 	Build *SimulatorBuildProgress `json:"build"`
 	// What a ready Snapshot serves, or null.
 	Composition *SimulatorComposition `json:"composition"`

@@ -16,7 +16,7 @@ import (
 
 var resumeApiboxSnapshotCmdMeta = []flagutil.FlagMeta{
 	{FlagName: "id", Shorthand: "i", FieldPath: "ID", Kind: flagutil.FlagKindString, Required: true, Description: "Snapshot ID. [required]"},
-	{FlagName: "add-seconds", Shorthand: "a", FieldPath: "Body.AddSeconds", Kind: flagutil.FlagKindInt64, Optional: true, Description: "Seconds to add to a build that waits for more time, from 1 to the largest timeout_seconds a build request accepts. Required for a build whose build.waiting.type is time_limit, and refused for one waiting for live credentials. The build's time limit with every addition is at most 259200 seconds (72 hours)."},
+	{FlagName: "add-seconds", Shorthand: "a", FieldPath: "Body.AddSeconds", Kind: flagutil.FlagKindInt64, Optional: true, Description: "Seconds to add to a build that waits for more time, from 1 to the largest timeout_seconds a build request accepts. Required for a build whose build.waiting.type is time_limit, and refused for any other wait. The build's time limit with every addition is at most 259200 seconds (72 hours)."},
 }
 
 // initResumeApiboxSnapshotCmd initializes the resume-apibox-snapshot command.
@@ -24,7 +24,7 @@ func initResumeApiboxSnapshotCmd(parent *cobra.Command) error {
 	var cmd = &cobra.Command{
 		Use:     "resume",
 		Short:   "Resume API Box Snapshot build",
-		Long:    "Resumes a build that waits, as build.waiting reports: at QA because its live credentials were rejected, or for more time after it used its time limit. For a credential wait, refresh each credential it names with PATCH /v1/credentials/{id} first: QA then runs again with their current values, and the build goes on to finalize. For a wait for more time, send add_seconds: the build continues where it stopped, with that much time from the resume. Returns the Snapshot, still building. A wait does not count toward the build's time limit: a build resumed from a credential wait has the time it had left when it began waiting. A build that is not waiting returns 409 apibox_snapshot_not_waiting.",
+		Long:    "Resumes a build that waits, as build.waiting reports: at QA because its live credentials were rejected or the live systems rate limited its calls, or for more time after it used its time limit. For a credential wait, refresh each credential it names with PATCH /v1/credentials/{id} first: QA then runs again with their current values, and the build goes on to finalize. For a rate-limit wait, resume once the rate limit resets: QA then runs again. For a wait for more time, send add_seconds: the build continues where it stopped, with that much time from the resume. Returns the Snapshot, still building. A wait does not count toward the build's time limit: a build resumed from a QA wait has the time it had left when it began waiting. A build that is not waiting returns 409 apibox_snapshot_not_waiting.",
 		Example: "  continuous apibox-snapshots resume --id <id>",
 		RunE:    runResumeApiboxSnapshotCmd,
 	}

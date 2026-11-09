@@ -120,7 +120,7 @@ type BuildSimulatorRequest struct {
 	ReviewRounds *int64 `default:"1" json:"review_rounds"`
 	// Source specification format. Omission detects the format; GraphQL SDL needs graphql, and a GraphQL introspection result is stored as SDL.
 	SpecKind *BuildSimulatorRequestSpecKind `json:"spec_kind,omitzero"`
-	// Time limit for generation and validation in seconds, from 1 to 172800. Defaults to 28800 (eight hours). Excludes queue wait, finalization, and any wait for live credentials. Retries share the same deadline.
+	// Time limit for generation and validation in seconds, from 1 to 172800. Defaults to 28800 (eight hours). Excludes queue wait, finalization, and any wait for the requester. Retries share the same deadline.
 	TimeoutSeconds *int64 `default:"28800" json:"timeout_seconds"`
 }
 

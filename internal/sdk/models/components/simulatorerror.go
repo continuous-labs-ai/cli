@@ -2,7 +2,7 @@
 
 package components
 
-// SimulatorErrorCode - Stable Simulator build error code. live_credential_rejected is a build that waited at QA for its rejected live credentials and was not resumed within 7 days.
+// SimulatorErrorCode - Stable Simulator build error code. live_credential_rejected is a build that waited at QA for its rejected live credentials and was not resumed within 7 days; live_rate_limited is one that waited at QA for the live systems' rate limit and was not resumed within 7 days.
 type SimulatorErrorCode string
 
 const (
@@ -10,6 +10,7 @@ const (
 	SimulatorErrorCodeBuildCanceled                 SimulatorErrorCode = "build_canceled"
 	SimulatorErrorCodeSpecificationValidationFailed SimulatorErrorCode = "specification_validation_failed"
 	SimulatorErrorCodeLiveCredentialRejected        SimulatorErrorCode = "live_credential_rejected"
+	SimulatorErrorCodeLiveRateLimited               SimulatorErrorCode = "live_rate_limited"
 )
 
 func (e SimulatorErrorCode) ToPointer() *SimulatorErrorCode {
@@ -20,7 +21,7 @@ func (e SimulatorErrorCode) ToPointer() *SimulatorErrorCode {
 func (e *SimulatorErrorCode) IsExact() bool {
 	if e != nil {
 		switch *e {
-		case "build_failed", "build_canceled", "specification_validation_failed", "live_credential_rejected":
+		case "build_failed", "build_canceled", "specification_validation_failed", "live_credential_rejected", "live_rate_limited":
 			return true
 		}
 	}
@@ -56,7 +57,7 @@ func (e *Reason) IsExact() bool {
 type SimulatorError struct {
 	// Plain-text explanation from the build agent when it could not continue, or the problems the check of the build's index found. At most 4096 UTF-8 bytes.
 	AgentMessage *string `json:"agent_message"`
-	// Stable Simulator build error code. live_credential_rejected is a build that waited at QA for its rejected live credentials and was not resumed within 7 days.
+	// Stable Simulator build error code. live_credential_rejected is a build that waited at QA for its rejected live credentials and was not resumed within 7 days; live_rate_limited is one that waited at QA for the live systems' rate limit and was not resumed within 7 days.
 	Code SimulatorErrorCode `json:"code"`
 	// Safe human-readable error detail.
 	Detail string `json:"detail"`

@@ -7,11 +7,12 @@ import (
 	"time"
 )
 
-// Type - live_credentials while QA waits for the credentials it names to be refreshed; time_limit while the build waits for a resume that adds time with add_seconds.
+// Type - live_credentials while QA waits for the credentials it names to be refreshed; live_rate_limit while QA waits for the live systems' rate limit to reset; time_limit while the build waits for a resume that adds time with add_seconds.
 type Type string
 
 const (
 	TypeLiveCredentials Type = "live_credentials"
+	TypeLiveRateLimit   Type = "live_rate_limit"
 	TypeTimeLimit       Type = "time_limit"
 )
 
@@ -23,7 +24,7 @@ func (e Type) ToPointer() *Type {
 func (e *Type) IsExact() bool {
 	if e != nil {
 		switch *e {
-		case "live_credentials", "time_limit":
+		case "live_credentials", "live_rate_limit", "time_limit":
 			return true
 		}
 	}
@@ -31,15 +32,15 @@ func (e *Type) IsExact() bool {
 }
 
 type SimulatorBuildWaiting struct {
-	// The credentials to refresh with PATCH /v1/credentials/{id} before resuming the build. Empty for time_limit.
+	// The credentials to refresh with PATCH /v1/credentials/{id} before resuming the build. Empty for live_rate_limit and time_limit.
 	CredentialIds []string `json:"credential_ids"`
-	// When the wait ends, 7 days after it began: a build not resumed by then fails, with error code live_credential_rejected for live_credentials and for its time limit for time_limit. The wait does not count toward the build's time limit.
+	// When the wait ends, 7 days after it began: a build not resumed by then fails, with error code live_credential_rejected for live_credentials, live_rate_limited for live_rate_limit, and for its time limit for time_limit. The wait does not count toward the build's time limit.
 	Deadline time.Time `json:"deadline"`
-	// Why the build waits: for live_credentials, the status and detail of the live reply that rejected QA's authenticated read.
+	// Why the build waits: for live_credentials, the status and detail of the live reply that rejected QA's authenticated read; for live_rate_limit, of the reply that rate limited QA's calls.
 	Reason string `json:"reason"`
 	// When the build started waiting.
 	Since time.Time `json:"since"`
-	// live_credentials while QA waits for the credentials it names to be refreshed; time_limit while the build waits for a resume that adds time with add_seconds.
+	// live_credentials while QA waits for the credentials it names to be refreshed; live_rate_limit while QA waits for the live systems' rate limit to reset; time_limit while the build waits for a resume that adds time with add_seconds.
 	Type Type `json:"type"`
 }
 
