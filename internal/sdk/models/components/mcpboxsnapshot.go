@@ -59,18 +59,18 @@ func (e *MCPBoxSnapshotStatus) IsExact() bool {
 
 type MCPBoxSnapshot struct {
 	// The callers a request to a Box started from the Snapshot can act as by sending an actor's id in the X-Continuous-Actor header. Without the header, a request acts as the default actor. An MCP Box Snapshot lists its API Box Snapshot's actors. A Web Box Snapshot lists its one actor, the account every page is served as, which no header selects. Empty before the Snapshot is ready, when its build names none, or in a list until the Snapshot's actors are first read.
-	Actors []SimulatorActor `json:"actors"`
+	Actors []Actor `json:"actors"`
 	// The API Box Snapshot the MCP Box was built against, whose API it calls.
 	ApiboxSnapshotID string `json:"apibox_snapshot_id"`
 	// The build's latest progress report, or null before the first report. A settled Snapshot keeps its last report. A waiting build resumes when the Snapshot's resume is requested.
-	Build *SimulatorBuildProgress `json:"build"`
+	Build *BuildProgress `json:"build"`
 	// What a ready Snapshot serves, or null.
-	Composition *SimulatorComposition `json:"composition"`
+	Composition *SnapshotComposition `json:"composition"`
 	// Snapshot creation time.
 	CreatedAt time.Time `json:"created_at"`
 	// Workspace credentials the build used, such as a web app login or credentials it was allowed to call real systems with. Empty when none.
-	CredentialIds []string        `json:"credential_ids"`
-	Error         *SimulatorError `json:"error"`
+	CredentialIds []string    `json:"credential_ids"`
+	Error         *BuildError `json:"error"`
 	// Limitations the Snapshot records beyond those listed in limitations.
 	HiddenLimitations int64 `json:"hidden_limitations"`
 	// MCP Box Snapshot ID.
@@ -86,7 +86,7 @@ type MCPBoxSnapshot struct {
 	// The Snapshot an incremental build started from, or null for any other Snapshot or once that Snapshot is deleted.
 	ParentID *string `json:"parent_id"`
 	// The build's research stage, or null when research did not run.
-	Research *SimulatorResearch `json:"research"`
+	Research *BuildResearch `json:"research"`
 	// catalog for a Snapshot Continuous publishes, build for one built or published into the workspace, box for one saved from an MCP Box.
 	Source MCPBoxSnapshotSource `json:"source"`
 	// The box the Snapshot was saved from, or null for a built or published Snapshot.
@@ -110,9 +110,9 @@ func (m *MCPBoxSnapshot) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-func (m *MCPBoxSnapshot) GetActors() []SimulatorActor {
+func (m *MCPBoxSnapshot) GetActors() []Actor {
 	if m == nil {
-		return []SimulatorActor{}
+		return []Actor{}
 	}
 	return m.Actors
 }
@@ -124,14 +124,14 @@ func (m *MCPBoxSnapshot) GetApiboxSnapshotID() string {
 	return m.ApiboxSnapshotID
 }
 
-func (m *MCPBoxSnapshot) GetBuild() *SimulatorBuildProgress {
+func (m *MCPBoxSnapshot) GetBuild() *BuildProgress {
 	if m == nil {
 		return nil
 	}
 	return m.Build
 }
 
-func (m *MCPBoxSnapshot) GetComposition() *SimulatorComposition {
+func (m *MCPBoxSnapshot) GetComposition() *SnapshotComposition {
 	if m == nil {
 		return nil
 	}
@@ -152,7 +152,7 @@ func (m *MCPBoxSnapshot) GetCredentialIds() []string {
 	return m.CredentialIds
 }
 
-func (m *MCPBoxSnapshot) GetError() *SimulatorError {
+func (m *MCPBoxSnapshot) GetError() *BuildError {
 	if m == nil {
 		return nil
 	}
@@ -208,7 +208,7 @@ func (m *MCPBoxSnapshot) GetParentID() *string {
 	return m.ParentID
 }
 
-func (m *MCPBoxSnapshot) GetResearch() *SimulatorResearch {
+func (m *MCPBoxSnapshot) GetResearch() *BuildResearch {
 	if m == nil {
 		return nil
 	}

@@ -59,16 +59,16 @@ func (e *WebBoxSnapshotStatus) IsExact() bool {
 
 type WebBoxSnapshot struct {
 	// The callers a request to a Box started from the Snapshot can act as by sending an actor's id in the X-Continuous-Actor header. Without the header, a request acts as the default actor. An MCP Box Snapshot lists its API Box Snapshot's actors. A Web Box Snapshot lists its one actor, the account every page is served as, which no header selects. Empty before the Snapshot is ready, when its build names none, or in a list until the Snapshot's actors are first read.
-	Actors []SimulatorActor `json:"actors"`
+	Actors []Actor `json:"actors"`
 	// The build's latest progress report, or null before the first report. A settled Snapshot keeps its last report. A waiting build resumes when the Snapshot's resume is requested.
-	Build *SimulatorBuildProgress `json:"build"`
+	Build *BuildProgress `json:"build"`
 	// What a ready Snapshot serves, or null.
-	Composition *SimulatorComposition `json:"composition"`
+	Composition *SnapshotComposition `json:"composition"`
 	// Snapshot creation time.
 	CreatedAt time.Time `json:"created_at"`
 	// Workspace credentials the build used, such as a web app login or credentials it was allowed to call real systems with. Empty when none.
-	CredentialIds []string        `json:"credential_ids"`
-	Error         *SimulatorError `json:"error"`
+	CredentialIds []string    `json:"credential_ids"`
+	Error         *BuildError `json:"error"`
 	// Limitations the Snapshot records beyond those listed in limitations.
 	HiddenLimitations int64 `json:"hidden_limitations"`
 	// Web Box Snapshot ID.
@@ -84,7 +84,7 @@ type WebBoxSnapshot struct {
 	// The Snapshot an incremental build started from, or null for any other Snapshot or once that Snapshot is deleted.
 	ParentID *string `json:"parent_id"`
 	// The build's research stage, or null when research did not run.
-	Research *SimulatorResearch `json:"research"`
+	Research *BuildResearch `json:"research"`
 	// catalog for a Snapshot Continuous publishes, build for one built into the workspace, box for one saved from a Web Box.
 	Source WebBoxSnapshotSource `json:"source"`
 	// The box the Snapshot was saved from, or null for a built or published Snapshot.
@@ -106,21 +106,21 @@ func (w *WebBoxSnapshot) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-func (w *WebBoxSnapshot) GetActors() []SimulatorActor {
+func (w *WebBoxSnapshot) GetActors() []Actor {
 	if w == nil {
-		return []SimulatorActor{}
+		return []Actor{}
 	}
 	return w.Actors
 }
 
-func (w *WebBoxSnapshot) GetBuild() *SimulatorBuildProgress {
+func (w *WebBoxSnapshot) GetBuild() *BuildProgress {
 	if w == nil {
 		return nil
 	}
 	return w.Build
 }
 
-func (w *WebBoxSnapshot) GetComposition() *SimulatorComposition {
+func (w *WebBoxSnapshot) GetComposition() *SnapshotComposition {
 	if w == nil {
 		return nil
 	}
@@ -141,7 +141,7 @@ func (w *WebBoxSnapshot) GetCredentialIds() []string {
 	return w.CredentialIds
 }
 
-func (w *WebBoxSnapshot) GetError() *SimulatorError {
+func (w *WebBoxSnapshot) GetError() *BuildError {
 	if w == nil {
 		return nil
 	}
@@ -197,7 +197,7 @@ func (w *WebBoxSnapshot) GetParentID() *string {
 	return w.ParentID
 }
 
-func (w *WebBoxSnapshot) GetResearch() *SimulatorResearch {
+func (w *WebBoxSnapshot) GetResearch() *BuildResearch {
 	if w == nil {
 		return nil
 	}

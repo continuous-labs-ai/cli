@@ -153,12 +153,12 @@ components:
     box_quota_exceeded:
       value:
         code: box_quota_exceeded
-        detail: The workspace runs 5 Simulations, API Boxes, Web Boxes and MCP Boxes, which share a limit of 5. Stop or delete one, then retry.
+        detail: The workspace has 5 running Boxes, and its limit is 5. Stop or delete one, then retry.
         validation: null
     build_rate_exceeded:
       value:
         code: build_rate_exceeded
-        detail: The workspace has used 10 of its limit of 10 Simulator builds for the current UTC day. The limit resets at the next UTC midnight.
+        detail: The workspace has used 10 of its limit of 10 builds for the current UTC day. The limit resets at the next UTC midnight.
         validation: null
     build_storage_unavailable:
       value:
@@ -679,17 +679,17 @@ components:
         actors:
           description: The callers a request to a Box started from the Snapshot can act as by sending an actor's id in the X-Continuous-Actor header. Without the header, a request acts as the default actor. An MCP Box Snapshot lists its API Box Snapshot's actors. A Web Box Snapshot lists its one actor, the account every page is served as, which no header selects. Empty before the Snapshot is ready, when its build names none, or in a list until the Snapshot's actors are first read.
           items:
-            $ref: "#/components/schemas/SimulatorActor"
+            $ref: "#/components/schemas/Actor"
           type: array
         build:
           description: The build's latest progress report, or null before the first report. A settled Snapshot keeps its last report. A waiting build resumes when the Snapshot's resume is requested.
           oneOf:
-            - $ref: "#/components/schemas/SimulatorBuildProgress"
+            - $ref: "#/components/schemas/BuildProgress"
             - type: "null"
         composition:
           description: What a ready Snapshot serves, or null.
           oneOf:
-            - $ref: "#/components/schemas/SimulatorComposition"
+            - $ref: "#/components/schemas/SnapshotComposition"
             - type: "null"
         created_at:
           description: Snapshot creation time.
@@ -701,7 +701,7 @@ components:
             type: string
           type: array
         error:
-          $ref: "#/components/schemas/SimulatorError"
+          $ref: "#/components/schemas/BuildError"
           description: Why the build failed or was canceled, or null.
         hidden_limitations:
           description: Limitations the Snapshot records beyond those listed in limitations.
@@ -734,7 +734,7 @@ components:
         research:
           description: The build's research stage, or null when research did not run.
           oneOf:
-            - $ref: "#/components/schemas/SimulatorResearch"
+            - $ref: "#/components/schemas/BuildResearch"
             - type: "null"
         source:
           description: catalog for a Snapshot Continuous publishes, build for one built or published into the workspace, box for one saved from an API Box.
@@ -807,6 +807,31 @@ components:
       required:
         - apibox
         - token
+      type: object
+    Actor:
+      additionalProperties: false
+      properties:
+        default:
+          description: Whether a request without the header acts as this caller.
+          type: boolean
+        entity:
+          description: The entity whose row the id keys.
+          type: string
+        id:
+          description: "The value to send in the X-Continuous-Actor header: the key of the identity row the caller acts as."
+          type: string
+        name:
+          description: The build's name for the caller.
+          type: string
+        role:
+          description: The caller's role in the simulated service.
+          type: string
+      required:
+        - id
+        - name
+        - role
+        - entity
+        - default
       type: object
     AdvanceTimeRequest:
       additionalProperties: false
@@ -919,6 +944,51 @@ components:
           minimum: 1
           type: integer
       type: object
+    BuildError:
+      additionalProperties: false
+      properties:
+        agent_message:
+          description: Plain-text explanation from the build agent when it could not continue, or the problems the check of the build's index found. At most 4096 UTF-8 bytes.
+          maxLength: 4096
+          type:
+            - string
+            - "null"
+        code:
+          description: Stable build error code. live_credential_rejected is a build that waited at QA for its rejected live credentials and was not resumed within 7 days; live_rate_limited is one that waited at QA for the live systems' rate limit and was not resumed within 7 days.
+          enum:
+            - build_failed
+            - build_canceled
+            - specification_validation_failed
+            - live_credential_rejected
+            - live_rate_limited
+          type: string
+        detail:
+          description: Safe human-readable error detail.
+          type: string
+        reason:
+          description: Bounded failure reason for selecting recovery guidance, or null when unavailable.
+          enum:
+            - canceled
+            - specification_invalid
+            - time_limit
+            - service_unavailable
+            - build_failed
+            - null
+          type:
+            - string
+            - "null"
+        validation:
+          $ref: "#/components/schemas/SpecificationValidation"
+          description: Specification validation details. Address these issues before building again.
+      required:
+        - agent_message
+        - reason
+        - validation
+        - code
+        - detail
+      type:
+        - object
+        - "null"
     BuildMCPBoxSnapshotRequest:
       additionalProperties: false
       properties:
@@ -965,6 +1035,169 @@ components:
           maximum: 172800
           minimum: 1
           type: integer
+      type: object
+    BuildProgress:
+      additionalProperties: false
+      properties:
+        agent_state:
+          description: "What the build's agent was doing when the build last checked on it, every few minutes: working while it thinks or runs a command, idle when its turn ended without a tool call, waiting_for_limit while a subscription model waits for its usage limit to reset. Null when the build is not running, while it waits for the requester, or for a build recorded before agents reported it."
+          enum:
+            - working
+            - idle
+            - waiting_for_limit
+            - null
+          type:
+            - string
+            - "null"
+        hidden_limitations:
+          description: Limitations the accepted build records beyond those listed in limitations.
+          format: int64
+          minimum: 0
+          type: integer
+        last_activity_at:
+          description: When the build last saw its agent act, with or without a tool call. Null when agent_state is null or no activity was seen.
+          format: date-time
+          type:
+            - string
+            - "null"
+        last_submission:
+          description: Outcome of the most recent submit attempt, or null.
+          enum:
+            - accepted
+            - rejected
+            - null
+          type:
+            - string
+            - "null"
+        last_tool:
+          description: Name of the most recent tool call, or null. Tool arguments and output are private.
+          type:
+            - string
+            - "null"
+        limitations:
+          description: Behavior the accepted build does not serve like the real system, most important first, set when the build is accepted. Empty when none.
+          items:
+            $ref: "#/components/schemas/Limitation"
+          maxItems: 50
+          type: array
+        model:
+          description: The model the builder and reviewer run on, or combined, which currently runs as claude-opus-5-5. A build recorded before model selection reports its provider's default.
+          enum:
+            - gpt-6-astra
+            - gpt-6.1-sol
+            - claude-opus-5-5
+            - claude-fable-5-1
+            - gpt-6-sol
+            - combined
+          type: string
+        phase:
+          description: "Agent phase: research while the research agent indexes the documents and saves the vendor pages they lack; build for generation, review for the separate reviewer, qa while QA tests the running service from outside, after the last review round of a build with credential_ids, repair while the author fixes the findings of a review or QA. Null when not recorded."
+          enum:
+            - research
+            - build
+            - review
+            - qa
+            - repair
+            - null
+          type:
+            - string
+            - "null"
+        review_round:
+          description: Review round that phase review, qa, or repair belongs to, from 1. In a build with credential_ids, QA and the repair after it are in round review_rounds + 1. 0 before the first review.
+          format: int64
+          maximum: 11
+          minimum: 0
+          type: integer
+        review_rounds:
+          description: Review rounds the build runs at most. Fewer run when the reviewer agrees early.
+          format: int64
+          maximum: 10
+          minimum: 1
+          type: integer
+        stage:
+          description: derive while the effective spec, build skeleton, and sandbox are prepared; build while the coding loop runs; assemble while an accepted artifact publishes.
+          enum:
+            - derive
+            - build
+            - assemble
+          type: string
+        submissions:
+          description: Submit attempts.
+          format: int64
+          minimum: 0
+          type: integer
+        tool_calls:
+          description: Tool calls the coding loop executed.
+          format: int64
+          minimum: 0
+          type: integer
+        waited_seconds:
+          description: Total seconds of the build's ended waits, which do not count toward its time limit. 0 when none has ended. The current wait, from waiting.since, is not included.
+          format: int64
+          minimum: 0
+          type: integer
+        waiting:
+          description: "Set while the build waits for the requester: at QA because the live systems rejected its credentials or rate limited its calls, or for more time after it used its time limit. Resume it with its resource's resume operation, such as POST /v1/apibox-snapshots/{id}/resume. Null otherwise."
+          oneOf:
+            - $ref: "#/components/schemas/BuildWaiting"
+            - type: "null"
+        waiting_until:
+          description: When the usage limit resets while agent_state is waiting_for_limit. The agent continues then, within the build's time limit. Null otherwise.
+          format: date-time
+          type:
+            - string
+            - "null"
+        warnings:
+          description: Specification defects the build tolerated without changing the specification, set when the build prepares its specification. Empty when none.
+          items:
+            $ref: "#/components/schemas/SpecificationWarning"
+          maxItems: 20
+          type: array
+      required:
+        - model
+        - phase
+        - review_round
+        - review_rounds
+        - stage
+        - tool_calls
+        - submissions
+        - last_tool
+        - last_submission
+        - warnings
+        - limitations
+        - hidden_limitations
+        - waited_seconds
+        - waiting
+        - agent_state
+        - last_activity_at
+        - waiting_until
+      type: object
+    BuildResearch:
+      additionalProperties: false
+      properties:
+        bytes:
+          description: Total size of the saved pages in bytes.
+          format: int64
+          minimum: 0
+          type: integer
+        pages:
+          description: Vendor pages research saved for the build.
+          format: int64
+          minimum: 0
+          type: integer
+        status:
+          description: pending until the stage starts; running while the research agent indexes the documents and saves the vendor pages they lack; complete when it wrote an index that names every document; failed when it could not finish, which fails the build, or when the build ended first; provided when research did not run because the build already had an index.
+          enum:
+            - pending
+            - running
+            - complete
+            - failed
+            - provided
+          type: string
+      required:
+        - status
+        - pages
+        - bytes
       type: object
     BuildSimulatorRequest:
       additionalProperties: false
@@ -1042,6 +1275,39 @@ components:
           maximum: 172800
           minimum: 1
           type: integer
+      type: object
+    BuildWaiting:
+      additionalProperties: false
+      properties:
+        credential_ids:
+          description: The credentials to refresh with PATCH /v1/credentials/{id} before resuming the build. Empty for live_rate_limit and time_limit.
+          items:
+            type: string
+          type: array
+        deadline:
+          description: "When the wait ends, 7 days after it began: a build not resumed by then fails, with error code live_credential_rejected for live_credentials, live_rate_limited for live_rate_limit, and for its time limit for time_limit. The wait does not count toward the build's time limit."
+          format: date-time
+          type: string
+        reason:
+          description: "Why the build waits: for live_credentials, the status and detail of the live reply that rejected QA's authenticated read; for live_rate_limit, of the reply that rate limited QA's calls."
+          type: string
+        since:
+          description: When the build started waiting.
+          format: date-time
+          type: string
+        type:
+          description: live_credentials while QA waits for the credentials it names to be refreshed; live_rate_limit while QA waits for the live systems' rate limit to reset; time_limit while the build waits for a resume that adds time with add_seconds.
+          enum:
+            - live_credentials
+            - live_rate_limit
+            - time_limit
+          type: string
+      required:
+        - type
+        - reason
+        - credential_ids
+        - since
+        - deadline
       type: object
     BuildWebBoxSnapshotRequest:
       additionalProperties: false
@@ -1924,11 +2190,11 @@ components:
       additionalProperties: false
       properties:
         location:
-          description: The operations the limitation affects, readably, or Simulator when it names none.
+          description: The operations the limitation affects, readably, or Service when it names none.
           maxLength: 512
           type: string
         message:
-          description: What the Simulator does differently from the real system.
+          description: What the service does differently from the real system.
           type: string
         operations:
           description: Operation IDs the limitation affects, or empty when it names none.
@@ -2247,7 +2513,7 @@ components:
         actors:
           description: The callers a request to a Box started from the Snapshot can act as by sending an actor's id in the X-Continuous-Actor header. Without the header, a request acts as the default actor. An MCP Box Snapshot lists its API Box Snapshot's actors. A Web Box Snapshot lists its one actor, the account every page is served as, which no header selects. Empty before the Snapshot is ready, when its build names none, or in a list until the Snapshot's actors are first read.
           items:
-            $ref: "#/components/schemas/SimulatorActor"
+            $ref: "#/components/schemas/Actor"
           type: array
         apibox_snapshot_id:
           description: The API Box Snapshot the MCP Box was built against, whose API it calls.
@@ -2256,12 +2522,12 @@ components:
         build:
           description: The build's latest progress report, or null before the first report. A settled Snapshot keeps its last report. A waiting build resumes when the Snapshot's resume is requested.
           oneOf:
-            - $ref: "#/components/schemas/SimulatorBuildProgress"
+            - $ref: "#/components/schemas/BuildProgress"
             - type: "null"
         composition:
           description: What a ready Snapshot serves, or null.
           oneOf:
-            - $ref: "#/components/schemas/SimulatorComposition"
+            - $ref: "#/components/schemas/SnapshotComposition"
             - type: "null"
         created_at:
           description: Snapshot creation time.
@@ -2273,7 +2539,7 @@ components:
             type: string
           type: array
         error:
-          $ref: "#/components/schemas/SimulatorError"
+          $ref: "#/components/schemas/BuildError"
           description: Why the build failed or was canceled, or null.
         hidden_limitations:
           description: Limitations the Snapshot records beyond those listed in limitations.
@@ -2306,7 +2572,7 @@ components:
         research:
           description: The build's research stage, or null when research did not run.
           oneOf:
-            - $ref: "#/components/schemas/SimulatorResearch"
+            - $ref: "#/components/schemas/BuildResearch"
             - type: "null"
         source:
           description: catalog for a Snapshot Continuous publishes, build for one built or published into the workspace, box for one saved from an MCP Box.
@@ -2523,7 +2789,7 @@ components:
         actors:
           description: The callers a request can act as by sending an actor's id in the X-Continuous-Actor header. Without the header, a request acts as the default actor. Lists the actors the seed holds, plus actors only the sample holds when the Simulation includes sample data. Empty when the Simulator's build names none or its artifact cannot be read now.
           items:
-            $ref: "#/components/schemas/SimulatorActor"
+            $ref: "#/components/schemas/Actor"
           type: array
         created_at:
           description: Simulation creation time.
@@ -2717,7 +2983,7 @@ components:
         build:
           description: The build's latest progress report, or null before the first report. A terminal Simulator keeps its last report.
           oneOf:
-            - $ref: "#/components/schemas/SimulatorBuildProgress"
+            - $ref: "#/components/schemas/BuildProgress"
             - type: "null"
         created_at:
           description: Simulator creation time.
@@ -2729,7 +2995,7 @@ components:
             type: string
           type: array
         error:
-          $ref: "#/components/schemas/SimulatorError"
+          $ref: "#/components/schemas/BuildError"
           description: Why the build failed or was canceled, or null.
         id:
           description: Simulator ID.
@@ -2762,7 +3028,7 @@ components:
         research:
           description: The build's research stage, or null for a Simulator built before research ran on every build.
           oneOf:
-            - $ref: "#/components/schemas/SimulatorResearch"
+            - $ref: "#/components/schemas/BuildResearch"
             - type: "null"
         source:
           description: workspace for a Simulator your workspace built; catalog for a read-only Simulator that Continuous publishes.
@@ -2805,219 +3071,6 @@ components:
         - build
         - research
         - publication
-      type: object
-    SimulatorActor:
-      additionalProperties: false
-      properties:
-        default:
-          description: Whether a request without the header acts as this caller.
-          type: boolean
-        entity:
-          description: The entity whose row the id keys.
-          type: string
-        id:
-          description: "The value to send in the X-Continuous-Actor header: the key of the identity row the caller acts as."
-          type: string
-        name:
-          description: The build's name for the caller.
-          type: string
-        role:
-          description: The caller's role in the simulated service.
-          type: string
-      required:
-        - id
-        - name
-        - role
-        - entity
-        - default
-      type: object
-    SimulatorBuildProgress:
-      additionalProperties: false
-      properties:
-        agent_state:
-          description: "What the build's agent was doing when the build last checked on it, every few minutes: working while it thinks or runs a command, idle when its turn ended without a tool call, waiting_for_limit while a subscription model waits for its usage limit to reset. Null when the build is not running, while it waits for the requester, or for a build recorded before agents reported it."
-          enum:
-            - working
-            - idle
-            - waiting_for_limit
-            - null
-          type:
-            - string
-            - "null"
-        hidden_limitations:
-          description: Limitations the accepted build records beyond those listed in limitations.
-          format: int64
-          minimum: 0
-          type: integer
-        last_activity_at:
-          description: When the build last saw its agent act, with or without a tool call. Null when agent_state is null or no activity was seen.
-          format: date-time
-          type:
-            - string
-            - "null"
-        last_submission:
-          description: Outcome of the most recent submit attempt, or null.
-          enum:
-            - accepted
-            - rejected
-            - null
-          type:
-            - string
-            - "null"
-        last_tool:
-          description: Name of the most recent tool call, or null. Tool arguments and output are private.
-          type:
-            - string
-            - "null"
-        limitations:
-          description: Behavior the accepted build does not serve like the real system, most important first, set when the build is accepted. Empty when none.
-          items:
-            $ref: "#/components/schemas/Limitation"
-          maxItems: 50
-          type: array
-        model:
-          description: The model the builder and reviewer run on, or combined, which currently runs as claude-opus-5-5. A build recorded before model selection reports its provider's default.
-          enum:
-            - gpt-6-astra
-            - gpt-6.1-sol
-            - claude-opus-5-5
-            - claude-fable-5-1
-            - gpt-6-sol
-            - combined
-          type: string
-        phase:
-          description: "Agent phase: research while the research agent indexes the documents and saves the vendor pages they lack; build for generation, review for the separate reviewer, qa while QA tests the running Simulator from outside, after the last review round of a build with credential_ids, repair while the author fixes the findings of a review or QA. Null when not recorded."
-          enum:
-            - research
-            - build
-            - review
-            - qa
-            - repair
-            - null
-          type:
-            - string
-            - "null"
-        review_round:
-          description: Review round that phase review, qa, or repair belongs to, from 1. In a build with credential_ids, QA and the repair after it are in round review_rounds + 1. 0 before the first review.
-          format: int64
-          maximum: 11
-          minimum: 0
-          type: integer
-        review_rounds:
-          description: Review rounds the build runs at most. Fewer run when the reviewer agrees early.
-          format: int64
-          maximum: 10
-          minimum: 1
-          type: integer
-        stage:
-          description: derive while the effective spec, build skeleton, and sandbox are prepared; build while the coding loop runs; assemble while an accepted artifact publishes.
-          enum:
-            - derive
-            - build
-            - assemble
-          type: string
-        submissions:
-          description: Submit attempts.
-          format: int64
-          minimum: 0
-          type: integer
-        tool_calls:
-          description: Tool calls the coding loop executed.
-          format: int64
-          minimum: 0
-          type: integer
-        waited_seconds:
-          description: Total seconds of the build's ended waits, which do not count toward its time limit. 0 when none has ended. The current wait, from waiting.since, is not included.
-          format: int64
-          minimum: 0
-          type: integer
-        waiting:
-          description: "Set while the build waits for the requester: at QA because the live systems rejected its credentials or rate limited its calls, or for more time after it used its time limit. Resume it with its resource's resume operation, such as POST /v1/simulators/{id}/resume. Null otherwise."
-          oneOf:
-            - $ref: "#/components/schemas/SimulatorBuildWaiting"
-            - type: "null"
-        waiting_until:
-          description: When the usage limit resets while agent_state is waiting_for_limit. The agent continues then, within the build's time limit. Null otherwise.
-          format: date-time
-          type:
-            - string
-            - "null"
-        warnings:
-          description: Specification defects the build tolerated without changing the specification, set when the build prepares its specification. Empty when none.
-          items:
-            $ref: "#/components/schemas/SpecificationWarning"
-          maxItems: 20
-          type: array
-      required:
-        - model
-        - phase
-        - review_round
-        - review_rounds
-        - stage
-        - tool_calls
-        - submissions
-        - last_tool
-        - last_submission
-        - warnings
-        - limitations
-        - hidden_limitations
-        - waited_seconds
-        - waiting
-        - agent_state
-        - last_activity_at
-        - waiting_until
-      type: object
-    SimulatorBuildWaiting:
-      additionalProperties: false
-      properties:
-        credential_ids:
-          description: The credentials to refresh with PATCH /v1/credentials/{id} before resuming the build. Empty for live_rate_limit and time_limit.
-          items:
-            type: string
-          type: array
-        deadline:
-          description: "When the wait ends, 7 days after it began: a build not resumed by then fails, with error code live_credential_rejected for live_credentials, live_rate_limited for live_rate_limit, and for its time limit for time_limit. The wait does not count toward the build's time limit."
-          format: date-time
-          type: string
-        reason:
-          description: "Why the build waits: for live_credentials, the status and detail of the live reply that rejected QA's authenticated read; for live_rate_limit, of the reply that rate limited QA's calls."
-          type: string
-        since:
-          description: When the build started waiting.
-          format: date-time
-          type: string
-        type:
-          description: live_credentials while QA waits for the credentials it names to be refreshed; live_rate_limit while QA waits for the live systems' rate limit to reset; time_limit while the build waits for a resume that adds time with add_seconds.
-          enum:
-            - live_credentials
-            - live_rate_limit
-            - time_limit
-          type: string
-      required:
-        - type
-        - reason
-        - credential_ids
-        - since
-        - deadline
-      type: object
-    SimulatorComposition:
-      additionalProperties: false
-      properties:
-        entities:
-          description: Entities that the Simulator stores.
-          format: int64
-          type: integer
-        operations:
-          description: Operations that the Simulator routes.
-          format: int64
-          type: integer
-        sample:
-          description: Whether the Simulator carries sample data that a new Simulation can start with.
-          type: boolean
-      required:
-        - operations
-        - entities
-        - sample
       type: object
     SimulatorDeleteConflict:
       additionalProperties: false
@@ -3065,51 +3118,6 @@ components:
         - child_simulators
         - snapshots
       type: object
-    SimulatorError:
-      additionalProperties: false
-      properties:
-        agent_message:
-          description: Plain-text explanation from the build agent when it could not continue, or the problems the check of the build's index found. At most 4096 UTF-8 bytes.
-          maxLength: 4096
-          type:
-            - string
-            - "null"
-        code:
-          description: Stable Simulator build error code. live_credential_rejected is a build that waited at QA for its rejected live credentials and was not resumed within 7 days; live_rate_limited is one that waited at QA for the live systems' rate limit and was not resumed within 7 days.
-          enum:
-            - build_failed
-            - build_canceled
-            - specification_validation_failed
-            - live_credential_rejected
-            - live_rate_limited
-          type: string
-        detail:
-          description: Safe human-readable error detail.
-          type: string
-        reason:
-          description: Bounded failure reason for selecting recovery guidance, or null when unavailable.
-          enum:
-            - canceled
-            - specification_invalid
-            - time_limit
-            - service_unavailable
-            - build_failed
-            - null
-          type:
-            - string
-            - "null"
-        validation:
-          $ref: "#/components/schemas/SpecificationValidation"
-          description: Specification validation details. Address these issues before building again.
-      required:
-        - agent_message
-        - reason
-        - validation
-        - code
-        - detail
-      type:
-        - object
-        - "null"
     SimulatorPublication:
       additionalProperties: false
       properties:
@@ -3139,32 +3147,24 @@ components:
         - error
         - published_at
       type: object
-    SimulatorResearch:
+    SnapshotComposition:
       additionalProperties: false
       properties:
-        bytes:
-          description: Total size of the saved pages in bytes.
+        entities:
+          description: Entities that the service stores.
           format: int64
-          minimum: 0
           type: integer
-        pages:
-          description: Vendor pages research saved for the build.
+        operations:
+          description: Operations that the service routes.
           format: int64
-          minimum: 0
           type: integer
-        status:
-          description: pending until the stage starts; running while the research agent indexes the documents and saves the vendor pages they lack; complete when it wrote an index that names every document; failed when it could not finish, which fails the build, or when the build ended first; provided when research did not run because the build already had an index.
-          enum:
-            - pending
-            - running
-            - complete
-            - failed
-            - provided
-          type: string
+        sample:
+          description: Whether the build carries sample data that a new Box can start with.
+          type: boolean
       required:
-        - status
-        - pages
-        - bytes
+        - operations
+        - entities
+        - sample
       type: object
     SpecificationIssue:
       additionalProperties: false
@@ -3488,17 +3488,17 @@ components:
         actors:
           description: The callers a request to a Box started from the Snapshot can act as by sending an actor's id in the X-Continuous-Actor header. Without the header, a request acts as the default actor. An MCP Box Snapshot lists its API Box Snapshot's actors. A Web Box Snapshot lists its one actor, the account every page is served as, which no header selects. Empty before the Snapshot is ready, when its build names none, or in a list until the Snapshot's actors are first read.
           items:
-            $ref: "#/components/schemas/SimulatorActor"
+            $ref: "#/components/schemas/Actor"
           type: array
         build:
           description: The build's latest progress report, or null before the first report. A settled Snapshot keeps its last report. A waiting build resumes when the Snapshot's resume is requested.
           oneOf:
-            - $ref: "#/components/schemas/SimulatorBuildProgress"
+            - $ref: "#/components/schemas/BuildProgress"
             - type: "null"
         composition:
           description: What a ready Snapshot serves, or null.
           oneOf:
-            - $ref: "#/components/schemas/SimulatorComposition"
+            - $ref: "#/components/schemas/SnapshotComposition"
             - type: "null"
         created_at:
           description: Snapshot creation time.
@@ -3510,7 +3510,7 @@ components:
             type: string
           type: array
         error:
-          $ref: "#/components/schemas/SimulatorError"
+          $ref: "#/components/schemas/BuildError"
           description: Why the build failed or was canceled, or null.
         hidden_limitations:
           description: Limitations the Snapshot records beyond those listed in limitations.
@@ -3543,7 +3543,7 @@ components:
         research:
           description: The build's research stage, or null when research did not run.
           oneOf:
-            - $ref: "#/components/schemas/SimulatorResearch"
+            - $ref: "#/components/schemas/BuildResearch"
             - type: "null"
         source:
           description: catalog for a Snapshot Continuous publishes, build for one built into the workspace, box for one saved from a Web Box.
@@ -3912,7 +3912,7 @@ paths:
           - "504"
         strategy: backoff
     post:
-      description: "Starts an asynchronous build and returns the API Box Snapshot with status pending. Get the Snapshot until its status is ready, failed or canceled; API Boxes start from a ready one. The build is a Simulator build in api mode, run in real time: the built service has no simulated clock, and its scheduled work runs at the first request at or after its time. Builds queue with Simulator builds and count toward the same quotas. Send multipart/form-data with a JSON part named request, a file part named spec with the OpenAPI, WSDL or GraphQL document, and optional file parts named document with vendor documentation. To build on a ready Snapshot, set parent_id; the spec part is then optional."
+      description: "Starts an asynchronous build and returns the API Box Snapshot with status pending. Get the Snapshot until its status is ready, failed or canceled; API Boxes start from a ready one. The build runs in real time: the built service has no simulated clock, and its scheduled work runs at the first request at or after its time. Builds of every kind share one queue and the daily quota. Send multipart/form-data with a JSON part named request, a file part named spec with the OpenAPI, WSDL or GraphQL document, and optional file parts named document with vendor documentation. To build on a ready Snapshot, set parent_id; the spec part is then optional."
       operationId: create-apibox-snapshot
       parameters:
         - description: Optional key for retrying this create safely. A retry with the same key and request returns the original result with its status; the same key with a different request returns 409 idempotency_conflict. Without a key, each request creates a new resource. The key is recorded before the build starts, so a retry never starts a second build.
@@ -5679,7 +5679,7 @@ paths:
           - "504"
         strategy: backoff
     post:
-      description: "Starts an asynchronous build and returns the MCP Box Snapshot with status pending. Get the Snapshot until its status is ready, failed or canceled; MCP Boxes serve a ready one. The build makes an MCP server that answers from the API Box Snapshot it names, run in real time: with a credential, it copies the live MCP server at the credential's base_url; without one, the server its instructions or research name. Builds queue with Simulator builds and count toward the same quotas. Send multipart/form-data with a JSON part named request and optional file parts named document with vendor documentation. To build on a ready MCP Box Snapshot, set parent_id."
+      description: "Starts an asynchronous build and returns the MCP Box Snapshot with status pending. Get the Snapshot until its status is ready, failed or canceled; MCP Boxes serve a ready one. The build makes an MCP server that answers from the API Box Snapshot it names, run in real time: with a credential, it copies the live MCP server at the credential's base_url; without one, the server its instructions or research name. Builds of every kind share one queue and the daily quota. Send multipart/form-data with a JSON part named request and optional file parts named document with vendor documentation. To build on a ready MCP Box Snapshot, set parent_id."
       operationId: create-mcpbox-snapshot
       parameters:
         - description: Optional key for retrying this create safely. A retry with the same key and request returns the original result with its status; the same key with a different request returns 409 idempotency_conflict. Without a key, each request creates a new resource. The key is recorded before the build starts, so a retry never starts a second build.
@@ -9504,7 +9504,7 @@ paths:
           - "504"
         strategy: backoff
     post:
-      description: "Starts an asynchronous build and returns the Web Box Snapshot with status pending. Get the Snapshot until its status is ready, failed or canceled; Web Boxes start from a ready one. The build runs in real time: the builder and QA use the vendor's live web app through its login credential, and the built app has no simulated clock. Builds queue with Simulator builds and count toward the same quotas. Send multipart/form-data with a JSON part named request and optional file parts named document with vendor documentation. To build on a ready Snapshot, set parent_id."
+      description: "Starts an asynchronous build and returns the Web Box Snapshot with status pending. Get the Snapshot until its status is ready, failed or canceled; Web Boxes start from a ready one. The build runs in real time: the builder and QA use the vendor's live web app through its login credential, and the built app has no simulated clock. Builds of every kind share one queue and the daily quota. Send multipart/form-data with a JSON part named request and optional file parts named document with vendor documentation. To build on a ready Snapshot, set parent_id."
       operationId: create-webbox-snapshot
       parameters:
         - description: Optional key for retrying this create safely. A retry with the same key and request returns the original result with its status; the same key with a different request returns 409 idempotency_conflict. Without a key, each request creates a new resource. The key is recorded before the build starts, so a retry never starts a second build.

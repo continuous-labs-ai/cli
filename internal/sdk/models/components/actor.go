@@ -2,7 +2,7 @@
 
 package components
 
-type SimulatorActor struct {
+type Actor struct {
 	// Whether a request without the header acts as this caller.
 	Default bool `json:"default"`
 	// The entity whose row the id keys.
@@ -15,37 +15,37 @@ type SimulatorActor struct {
 	Role string `json:"role"`
 }
 
-func (s *SimulatorActor) GetDefault() bool {
-	if s == nil {
+func (a *Actor) GetDefault() bool {
+	if a == nil {
 		return false
 	}
-	return s.Default
+	return a.Default
 }
 
-func (s *SimulatorActor) GetEntity() string {
-	if s == nil {
+func (a *Actor) GetEntity() string {
+	if a == nil {
 		return ""
 	}
-	return s.Entity
+	return a.Entity
 }
 
-func (s *SimulatorActor) GetID() string {
-	if s == nil {
+func (a *Actor) GetID() string {
+	if a == nil {
 		return ""
 	}
-	return s.ID
+	return a.ID
 }
 
-func (s *SimulatorActor) GetName() string {
-	if s == nil {
+func (a *Actor) GetName() string {
+	if a == nil {
 		return ""
 	}
-	return s.Name
+	return a.Name
 }
 
-func (s *SimulatorActor) GetRole() string {
-	if s == nil {
+func (a *Actor) GetRole() string {
+	if a == nil {
 		return ""
 	}
-	return s.Role
+	return a.Role
 }

@@ -3,9 +3,9 @@
 package components
 
 type Limitation struct {
-	// The operations the limitation affects, readably, or Simulator when it names none.
+	// The operations the limitation affects, readably, or Service when it names none.
 	Location string `json:"location"`
-	// What the Simulator does differently from the real system.
+	// What the service does differently from the real system.
 	Message string `json:"message"`
 	// Operation IDs the limitation affects, or empty when it names none.
 	Operations []string `json:"operations"`

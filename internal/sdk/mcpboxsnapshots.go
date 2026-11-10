@@ -371,7 +371,7 @@ func (s *McpboxSnapshots) ListMcpboxSnapshots(ctx context.Context, request *oper
 }
 
 // CreateMcpboxSnapshot - Create MCP Box Snapshot
-// Starts an asynchronous build and returns the MCP Box Snapshot with status pending. Get the Snapshot until its status is ready, failed or canceled; MCP Boxes serve a ready one. The build makes an MCP server that answers from the API Box Snapshot it names, run in real time: with a credential, it copies the live MCP server at the credential's base_url; without one, the server its instructions or research name. Builds queue with Simulator builds and count toward the same quotas. Send multipart/form-data with a JSON part named request and optional file parts named document with vendor documentation. To build on a ready MCP Box Snapshot, set parent_id.
+// Starts an asynchronous build and returns the MCP Box Snapshot with status pending. Get the Snapshot until its status is ready, failed or canceled; MCP Boxes serve a ready one. The build makes an MCP server that answers from the API Box Snapshot it names, run in real time: with a credential, it copies the live MCP server at the credential's base_url; without one, the server its instructions or research name. Builds of every kind share one queue and the daily quota. Send multipart/form-data with a JSON part named request and optional file parts named document with vendor documentation. To build on a ready MCP Box Snapshot, set parent_id.
 func (s *McpboxSnapshots) CreateMcpboxSnapshot(ctx context.Context, request operations.CreateMcpboxSnapshotRequest, opts ...operations.Option) (*operations.CreateMcpboxSnapshotResponse, error) {
 	o := operations.Options{}
 	supportedOptions := []string{

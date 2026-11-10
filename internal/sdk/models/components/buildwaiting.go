@@ -31,7 +31,7 @@ func (e *Type) IsExact() bool {
 	return false
 }
 
-type SimulatorBuildWaiting struct {
+type BuildWaiting struct {
 	// The credentials to refresh with PATCH /v1/credentials/{id} before resuming the build. Empty for live_rate_limit and time_limit.
 	CredentialIds []string `json:"credential_ids"`
 	// When the wait ends, 7 days after it began: a build not resumed by then fails, with error code live_credential_rejected for live_credentials, live_rate_limited for live_rate_limit, and for its time limit for time_limit. The wait does not count toward the build's time limit.
@@ -44,48 +44,48 @@ type SimulatorBuildWaiting struct {
 	Type Type `json:"type"`
 }
 
-func (s SimulatorBuildWaiting) MarshalJSON() ([]byte, error) {
-	return utils.MarshalJSON(s, "", false)
+func (b BuildWaiting) MarshalJSON() ([]byte, error) {
+	return utils.MarshalJSON(b, "", false)
 }
 
-func (s *SimulatorBuildWaiting) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &s, "", false, nil); err != nil {
+func (b *BuildWaiting) UnmarshalJSON(data []byte) error {
+	if err := utils.UnmarshalJSON(data, &b, "", false, nil); err != nil {
 		return err
 	}
 	return nil
 }
 
-func (s *SimulatorBuildWaiting) GetCredentialIds() []string {
-	if s == nil {
+func (b *BuildWaiting) GetCredentialIds() []string {
+	if b == nil {
 		return []string{}
 	}
-	return s.CredentialIds
+	return b.CredentialIds
 }
 
-func (s *SimulatorBuildWaiting) GetDeadline() time.Time {
-	if s == nil {
+func (b *BuildWaiting) GetDeadline() time.Time {
+	if b == nil {
 		return time.Time{}
 	}
-	return s.Deadline
+	return b.Deadline
 }
 
-func (s *SimulatorBuildWaiting) GetReason() string {
-	if s == nil {
+func (b *BuildWaiting) GetReason() string {
+	if b == nil {
 		return ""
 	}
-	return s.Reason
+	return b.Reason
 }
 
-func (s *SimulatorBuildWaiting) GetSince() time.Time {
-	if s == nil {
+func (b *BuildWaiting) GetSince() time.Time {
+	if b == nil {
 		return time.Time{}
 	}
-	return s.Since
+	return b.Since
 }
 
-func (s *SimulatorBuildWaiting) GetType() Type {
-	if s == nil {
+func (b *BuildWaiting) GetType() Type {
+	if b == nil {
 		return Type("")
 	}
-	return s.Type
+	return b.Type
 }

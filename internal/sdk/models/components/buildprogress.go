@@ -54,24 +54,24 @@ func (e *LastSubmission) IsExact() bool {
 	return false
 }
 
-// SimulatorBuildProgressModel - The model the builder and reviewer run on, or combined, which currently runs as claude-opus-5-5. A build recorded before model selection reports its provider's default.
-type SimulatorBuildProgressModel string
+// BuildProgressModel - The model the builder and reviewer run on, or combined, which currently runs as claude-opus-5-5. A build recorded before model selection reports its provider's default.
+type BuildProgressModel string
 
 const (
-	SimulatorBuildProgressModelGpt6Astra     SimulatorBuildProgressModel = "gpt-6-astra"
-	SimulatorBuildProgressModelGpt61Sol      SimulatorBuildProgressModel = "gpt-6.1-sol"
-	SimulatorBuildProgressModelClaudeOpus55  SimulatorBuildProgressModel = "claude-opus-5-5"
-	SimulatorBuildProgressModelClaudeFable51 SimulatorBuildProgressModel = "claude-fable-5-1"
-	SimulatorBuildProgressModelGpt6Sol       SimulatorBuildProgressModel = "gpt-6-sol"
-	SimulatorBuildProgressModelCombined      SimulatorBuildProgressModel = "combined"
+	BuildProgressModelGpt6Astra     BuildProgressModel = "gpt-6-astra"
+	BuildProgressModelGpt61Sol      BuildProgressModel = "gpt-6.1-sol"
+	BuildProgressModelClaudeOpus55  BuildProgressModel = "claude-opus-5-5"
+	BuildProgressModelClaudeFable51 BuildProgressModel = "claude-fable-5-1"
+	BuildProgressModelGpt6Sol       BuildProgressModel = "gpt-6-sol"
+	BuildProgressModelCombined      BuildProgressModel = "combined"
 )
 
-func (e SimulatorBuildProgressModel) ToPointer() *SimulatorBuildProgressModel {
+func (e BuildProgressModel) ToPointer() *BuildProgressModel {
 	return &e
 }
 
 // IsExact returns true if the value matches a known enum value, false otherwise.
-func (e *SimulatorBuildProgressModel) IsExact() bool {
+func (e *BuildProgressModel) IsExact() bool {
 	if e != nil {
 		switch *e {
 		case "gpt-6-astra", "gpt-6.1-sol", "claude-opus-5-5", "claude-fable-5-1", "gpt-6-sol", "combined":
@@ -81,7 +81,7 @@ func (e *SimulatorBuildProgressModel) IsExact() bool {
 	return false
 }
 
-// Phase - Agent phase: research while the research agent indexes the documents and saves the vendor pages they lack; build for generation, review for the separate reviewer, qa while QA tests the running Simulator from outside, after the last review round of a build with credential_ids, repair while the author fixes the findings of a review or QA. Null when not recorded.
+// Phase - Agent phase: research while the research agent indexes the documents and saves the vendor pages they lack; build for generation, review for the separate reviewer, qa while QA tests the running service from outside, after the last review round of a build with credential_ids, repair while the author fixes the findings of a review or QA. Null when not recorded.
 type Phase string
 
 const (
@@ -131,7 +131,7 @@ func (e *Stage) IsExact() bool {
 	return false
 }
 
-type SimulatorBuildProgress struct {
+type BuildProgress struct {
 	// What the build's agent was doing when the build last checked on it, every few minutes: working while it thinks or runs a command, idle when its turn ended without a tool call, waiting_for_limit while a subscription model waits for its usage limit to reset. Null when the build is not running, while it waits for the requester, or for a build recorded before agents reported it.
 	AgentState *AgentState `json:"agent_state"`
 	// Limitations the accepted build records beyond those listed in limitations.
@@ -145,8 +145,8 @@ type SimulatorBuildProgress struct {
 	// Behavior the accepted build does not serve like the real system, most important first, set when the build is accepted. Empty when none.
 	Limitations []Limitation `json:"limitations"`
 	// The model the builder and reviewer run on, or combined, which currently runs as claude-opus-5-5. A build recorded before model selection reports its provider's default.
-	Model SimulatorBuildProgressModel `json:"model"`
-	// Agent phase: research while the research agent indexes the documents and saves the vendor pages they lack; build for generation, review for the separate reviewer, qa while QA tests the running Simulator from outside, after the last review round of a build with credential_ids, repair while the author fixes the findings of a review or QA. Null when not recorded.
+	Model BuildProgressModel `json:"model"`
+	// Agent phase: research while the research agent indexes the documents and saves the vendor pages they lack; build for generation, review for the separate reviewer, qa while QA tests the running service from outside, after the last review round of a build with credential_ids, repair while the author fixes the findings of a review or QA. Null when not recorded.
 	Phase *Phase `json:"phase"`
 	// Review round that phase review, qa, or repair belongs to, from 1. In a build with credential_ids, QA and the repair after it are in round review_rounds + 1. 0 before the first review.
 	ReviewRound int64 `json:"review_round"`
@@ -160,140 +160,140 @@ type SimulatorBuildProgress struct {
 	ToolCalls int64 `json:"tool_calls"`
 	// Total seconds of the build's ended waits, which do not count toward its time limit. 0 when none has ended. The current wait, from waiting.since, is not included.
 	WaitedSeconds int64 `json:"waited_seconds"`
-	// Set while the build waits for the requester: at QA because the live systems rejected its credentials or rate limited its calls, or for more time after it used its time limit. Resume it with its resource's resume operation, such as POST /v1/simulators/{id}/resume. Null otherwise.
-	Waiting *SimulatorBuildWaiting `json:"waiting"`
+	// Set while the build waits for the requester: at QA because the live systems rejected its credentials or rate limited its calls, or for more time after it used its time limit. Resume it with its resource's resume operation, such as POST /v1/apibox-snapshots/{id}/resume. Null otherwise.
+	Waiting *BuildWaiting `json:"waiting"`
 	// When the usage limit resets while agent_state is waiting_for_limit. The agent continues then, within the build's time limit. Null otherwise.
 	WaitingUntil *time.Time `json:"waiting_until"`
 	// Specification defects the build tolerated without changing the specification, set when the build prepares its specification. Empty when none.
 	Warnings []SpecificationWarning `json:"warnings"`
 }
 
-func (s SimulatorBuildProgress) MarshalJSON() ([]byte, error) {
-	return utils.MarshalJSON(s, "", false)
+func (b BuildProgress) MarshalJSON() ([]byte, error) {
+	return utils.MarshalJSON(b, "", false)
 }
 
-func (s *SimulatorBuildProgress) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &s, "", false, nil); err != nil {
+func (b *BuildProgress) UnmarshalJSON(data []byte) error {
+	if err := utils.UnmarshalJSON(data, &b, "", false, nil); err != nil {
 		return err
 	}
 	return nil
 }
 
-func (s *SimulatorBuildProgress) GetAgentState() *AgentState {
-	if s == nil {
+func (b *BuildProgress) GetAgentState() *AgentState {
+	if b == nil {
 		return nil
 	}
-	return s.AgentState
+	return b.AgentState
 }
 
-func (s *SimulatorBuildProgress) GetHiddenLimitations() int64 {
-	if s == nil {
+func (b *BuildProgress) GetHiddenLimitations() int64 {
+	if b == nil {
 		return 0
 	}
-	return s.HiddenLimitations
+	return b.HiddenLimitations
 }
 
-func (s *SimulatorBuildProgress) GetLastActivityAt() *time.Time {
-	if s == nil {
+func (b *BuildProgress) GetLastActivityAt() *time.Time {
+	if b == nil {
 		return nil
 	}
-	return s.LastActivityAt
+	return b.LastActivityAt
 }
 
-func (s *SimulatorBuildProgress) GetLastSubmission() *LastSubmission {
-	if s == nil {
+func (b *BuildProgress) GetLastSubmission() *LastSubmission {
+	if b == nil {
 		return nil
 	}
-	return s.LastSubmission
+	return b.LastSubmission
 }
 
-func (s *SimulatorBuildProgress) GetLastTool() *string {
-	if s == nil {
+func (b *BuildProgress) GetLastTool() *string {
+	if b == nil {
 		return nil
 	}
-	return s.LastTool
+	return b.LastTool
 }
 
-func (s *SimulatorBuildProgress) GetLimitations() []Limitation {
-	if s == nil {
+func (b *BuildProgress) GetLimitations() []Limitation {
+	if b == nil {
 		return []Limitation{}
 	}
-	return s.Limitations
+	return b.Limitations
 }
 
-func (s *SimulatorBuildProgress) GetModel() SimulatorBuildProgressModel {
-	if s == nil {
-		return SimulatorBuildProgressModel("")
+func (b *BuildProgress) GetModel() BuildProgressModel {
+	if b == nil {
+		return BuildProgressModel("")
 	}
-	return s.Model
+	return b.Model
 }
 
-func (s *SimulatorBuildProgress) GetPhase() *Phase {
-	if s == nil {
+func (b *BuildProgress) GetPhase() *Phase {
+	if b == nil {
 		return nil
 	}
-	return s.Phase
+	return b.Phase
 }
 
-func (s *SimulatorBuildProgress) GetReviewRound() int64 {
-	if s == nil {
+func (b *BuildProgress) GetReviewRound() int64 {
+	if b == nil {
 		return 0
 	}
-	return s.ReviewRound
+	return b.ReviewRound
 }
 
-func (s *SimulatorBuildProgress) GetReviewRounds() int64 {
-	if s == nil {
+func (b *BuildProgress) GetReviewRounds() int64 {
+	if b == nil {
 		return 0
 	}
-	return s.ReviewRounds
+	return b.ReviewRounds
 }
 
-func (s *SimulatorBuildProgress) GetStage() Stage {
-	if s == nil {
+func (b *BuildProgress) GetStage() Stage {
+	if b == nil {
 		return Stage("")
 	}
-	return s.Stage
+	return b.Stage
 }
 
-func (s *SimulatorBuildProgress) GetSubmissions() int64 {
-	if s == nil {
+func (b *BuildProgress) GetSubmissions() int64 {
+	if b == nil {
 		return 0
 	}
-	return s.Submissions
+	return b.Submissions
 }
 
-func (s *SimulatorBuildProgress) GetToolCalls() int64 {
-	if s == nil {
+func (b *BuildProgress) GetToolCalls() int64 {
+	if b == nil {
 		return 0
 	}
-	return s.ToolCalls
+	return b.ToolCalls
 }
 
-func (s *SimulatorBuildProgress) GetWaitedSeconds() int64 {
-	if s == nil {
+func (b *BuildProgress) GetWaitedSeconds() int64 {
+	if b == nil {
 		return 0
 	}
-	return s.WaitedSeconds
+	return b.WaitedSeconds
 }
 
-func (s *SimulatorBuildProgress) GetWaiting() *SimulatorBuildWaiting {
-	if s == nil {
+func (b *BuildProgress) GetWaiting() *BuildWaiting {
+	if b == nil {
 		return nil
 	}
-	return s.Waiting
+	return b.Waiting
 }
 
-func (s *SimulatorBuildProgress) GetWaitingUntil() *time.Time {
-	if s == nil {
+func (b *BuildProgress) GetWaitingUntil() *time.Time {
+	if b == nil {
 		return nil
 	}
-	return s.WaitingUntil
+	return b.WaitingUntil
 }
 
-func (s *SimulatorBuildProgress) GetWarnings() []SpecificationWarning {
-	if s == nil {
+func (b *BuildProgress) GetWarnings() []SpecificationWarning {
+	if b == nil {
 		return []SpecificationWarning{}
 	}
-	return s.Warnings
+	return b.Warnings
 }
