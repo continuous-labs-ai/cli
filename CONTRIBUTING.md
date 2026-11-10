@@ -1,6 +1,6 @@
 # Maintain the CLI
 
-Generate this CLI from the public Continuous Simulation API. Keep credentials and private API contracts out of this repository.
+Generate this CLI from the public Continuous API. Keep credentials and private API contracts out of this repository.
 
 Change the API contract in `continuous-labs-ai/continuous`. Keep Eval and Internal APIs out of this repository.
 

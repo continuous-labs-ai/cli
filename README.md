@@ -1,6 +1,6 @@
 # Continuous CLI
 
-Use `continuous` to call the public Continuous Simulation API.
+Use `continuous` to call the public Continuous API.
 
 Speakeasy generates the command implementation, the installers, and the release configuration. The repository owns generation settings, build checks, and this guide.
 
@@ -155,7 +155,7 @@ The `whoami` command shows masked credential settings and their sources. It does
 Verify API access with a read-only request:
 
 ```bash
-continuous simulators list --output-format json
+continuous apibox-snapshots list --output-format json
 ```
 
 Run `continuous auth logout` to remove stored credentials. Environment variables can still supply credentials after logout.
@@ -169,9 +169,8 @@ The CLI adds the `Bearer` prefix. It also accepts a key that already includes th
 Keep API keys out of commands, logs, and source files. Disable prompts and select JSON output in scripts:
 
 ```bash
-continuous simulations list --no-interactive --output-format json
-continuous simulators list --no-interactive --output-format json
-continuous worlds list --no-interactive --output-format json
+continuous apibox-snapshots list --no-interactive --output-format json
+continuous apibox list-apiboxes --no-interactive --output-format json
 ```
 
 Use `--server-url` to select another API endpoint. Run `continuous --help` to inspect commands.
