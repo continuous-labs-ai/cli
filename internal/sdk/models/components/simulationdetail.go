@@ -36,7 +36,7 @@ type SimulationDetail struct {
 	// Current clock advance operation ID, or null.
 	ActiveAdvanceID *string `json:"active_advance_id"`
 	// The callers a request can act as by sending an actor's id in the X-Continuous-Actor header. Without the header, a request acts as the default actor. Lists the actors the seed holds, plus actors only the sample holds when the Simulation includes sample data. Empty when the Simulator's build names none or its artifact cannot be read now.
-	Actors []SimulatorActor `json:"actors"`
+	Actors []Actor `json:"actors"`
 	// Simulation creation time.
 	CreatedAt time.Time `json:"created_at"`
 	// Current simulated time.
@@ -85,9 +85,9 @@ func (s *SimulationDetail) GetActiveAdvanceID() *string {
 	return s.ActiveAdvanceID
 }
 
-func (s *SimulationDetail) GetActors() []SimulatorActor {
+func (s *SimulationDetail) GetActors() []Actor {
 	if s == nil {
-		return []SimulatorActor{}
+		return []Actor{}
 	}
 	return s.Actors
 }

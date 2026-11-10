@@ -106,12 +106,12 @@ func (e *SimulatorStatus) IsExact() bool {
 
 type Simulator struct {
 	// The build's latest progress report, or null before the first report. A terminal Simulator keeps its last report.
-	Build *SimulatorBuildProgress `json:"build"`
+	Build *BuildProgress `json:"build"`
 	// Simulator creation time.
 	CreatedAt time.Time `json:"created_at"`
 	// Workspace credentials the build was allowed to call real systems with. Empty when none.
-	CredentialIds []string        `json:"credential_ids"`
-	Error         *SimulatorError `json:"error"`
+	CredentialIds []string    `json:"credential_ids"`
+	Error         *BuildError `json:"error"`
 	// Simulator ID.
 	ID string `json:"id"`
 	// The instructions the build followed, or empty when none were given.
@@ -125,7 +125,7 @@ type Simulator struct {
 	// The latest attempt to publish the Simulator's image into the workspace's default customer runtime environment, or null when the workspace has none, no attempt is recorded, or the response does not report it. Get and list report it.
 	Publication *SimulatorPublication `json:"publication"`
 	// The build's research stage, or null for a Simulator built before research ran on every build.
-	Research *SimulatorResearch `json:"research"`
+	Research *BuildResearch `json:"research"`
 	// workspace for a Simulator your workspace built; catalog for a read-only Simulator that Continuous publishes.
 	Source SimulatorSource `json:"source"`
 	// The specification the Simulator was built from, or null until a build has read it. recorded is a Web App Simulator's: the app's origin.
@@ -145,7 +145,7 @@ func (s *Simulator) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-func (s *Simulator) GetBuild() *SimulatorBuildProgress {
+func (s *Simulator) GetBuild() *BuildProgress {
 	if s == nil {
 		return nil
 	}
@@ -166,7 +166,7 @@ func (s *Simulator) GetCredentialIds() []string {
 	return s.CredentialIds
 }
 
-func (s *Simulator) GetError() *SimulatorError {
+func (s *Simulator) GetError() *BuildError {
 	if s == nil {
 		return nil
 	}
@@ -215,7 +215,7 @@ func (s *Simulator) GetPublication() *SimulatorPublication {
 	return s.Publication
 }
 
-func (s *Simulator) GetResearch() *SimulatorResearch {
+func (s *Simulator) GetResearch() *BuildResearch {
 	if s == nil {
 		return nil
 	}

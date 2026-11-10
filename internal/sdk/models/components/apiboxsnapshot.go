@@ -83,16 +83,16 @@ func (e *APIBoxSnapshotStatus) IsExact() bool {
 
 type APIBoxSnapshot struct {
 	// The callers a request to a Box started from the Snapshot can act as by sending an actor's id in the X-Continuous-Actor header. Without the header, a request acts as the default actor. An MCP Box Snapshot lists its API Box Snapshot's actors. A Web Box Snapshot lists its one actor, the account every page is served as, which no header selects. Empty before the Snapshot is ready, when its build names none, or in a list until the Snapshot's actors are first read.
-	Actors []SimulatorActor `json:"actors"`
+	Actors []Actor `json:"actors"`
 	// The build's latest progress report, or null before the first report. A settled Snapshot keeps its last report. A waiting build resumes when the Snapshot's resume is requested.
-	Build *SimulatorBuildProgress `json:"build"`
+	Build *BuildProgress `json:"build"`
 	// What a ready Snapshot serves, or null.
-	Composition *SimulatorComposition `json:"composition"`
+	Composition *SnapshotComposition `json:"composition"`
 	// Snapshot creation time.
 	CreatedAt time.Time `json:"created_at"`
 	// Workspace credentials the build used, such as a web app login or credentials it was allowed to call real systems with. Empty when none.
-	CredentialIds []string        `json:"credential_ids"`
-	Error         *SimulatorError `json:"error"`
+	CredentialIds []string    `json:"credential_ids"`
+	Error         *BuildError `json:"error"`
 	// Limitations the Snapshot records beyond those listed in limitations.
 	HiddenLimitations int64 `json:"hidden_limitations"`
 	// API Box Snapshot ID.
@@ -108,7 +108,7 @@ type APIBoxSnapshot struct {
 	// The Snapshot an incremental build started from, or null for any other Snapshot or once that Snapshot is deleted.
 	ParentID *string `json:"parent_id"`
 	// The build's research stage, or null when research did not run.
-	Research *SimulatorResearch `json:"research"`
+	Research *BuildResearch `json:"research"`
 	// catalog for a Snapshot Continuous publishes, build for one built or published into the workspace, box for one saved from an API Box.
 	Source APIBoxSnapshotSource `json:"source"`
 	// The box the Snapshot was saved from, or null for a built or published Snapshot.
@@ -132,21 +132,21 @@ func (a *APIBoxSnapshot) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-func (a *APIBoxSnapshot) GetActors() []SimulatorActor {
+func (a *APIBoxSnapshot) GetActors() []Actor {
 	if a == nil {
-		return []SimulatorActor{}
+		return []Actor{}
 	}
 	return a.Actors
 }
 
-func (a *APIBoxSnapshot) GetBuild() *SimulatorBuildProgress {
+func (a *APIBoxSnapshot) GetBuild() *BuildProgress {
 	if a == nil {
 		return nil
 	}
 	return a.Build
 }
 
-func (a *APIBoxSnapshot) GetComposition() *SimulatorComposition {
+func (a *APIBoxSnapshot) GetComposition() *SnapshotComposition {
 	if a == nil {
 		return nil
 	}
@@ -167,7 +167,7 @@ func (a *APIBoxSnapshot) GetCredentialIds() []string {
 	return a.CredentialIds
 }
 
-func (a *APIBoxSnapshot) GetError() *SimulatorError {
+func (a *APIBoxSnapshot) GetError() *BuildError {
 	if a == nil {
 		return nil
 	}
@@ -223,7 +223,7 @@ func (a *APIBoxSnapshot) GetParentID() *string {
 	return a.ParentID
 }
 
-func (a *APIBoxSnapshot) GetResearch() *SimulatorResearch {
+func (a *APIBoxSnapshot) GetResearch() *BuildResearch {
 	if a == nil {
 		return nil
 	}

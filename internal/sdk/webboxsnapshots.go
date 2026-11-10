@@ -371,7 +371,7 @@ func (s *WebboxSnapshots) ListWebboxSnapshots(ctx context.Context, request *oper
 }
 
 // CreateWebboxSnapshot - Create Web Box Snapshot
-// Starts an asynchronous build and returns the Web Box Snapshot with status pending. Get the Snapshot until its status is ready, failed or canceled; Web Boxes start from a ready one. The build runs in real time: the builder and QA use the vendor's live web app through its login credential, and the built app has no simulated clock. Builds queue with Simulator builds and count toward the same quotas. Send multipart/form-data with a JSON part named request and optional file parts named document with vendor documentation. To build on a ready Snapshot, set parent_id.
+// Starts an asynchronous build and returns the Web Box Snapshot with status pending. Get the Snapshot until its status is ready, failed or canceled; Web Boxes start from a ready one. The build runs in real time: the builder and QA use the vendor's live web app through its login credential, and the built app has no simulated clock. Builds of every kind share one queue and the daily quota. Send multipart/form-data with a JSON part named request and optional file parts named document with vendor documentation. To build on a ready Snapshot, set parent_id.
 func (s *WebboxSnapshots) CreateWebboxSnapshot(ctx context.Context, request operations.CreateWebboxSnapshotRequest, opts ...operations.Option) (*operations.CreateWebboxSnapshotResponse, error) {
 	o := operations.Options{}
 	supportedOptions := []string{
