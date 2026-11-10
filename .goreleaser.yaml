@@ -50,7 +50,7 @@ brews:
       name: homebrew-tap
       branch: main
     homepage: "https://github.com/continuous-labs-ai/cli"
-    description: "Build Simulators, run Simulations, and coordinate Worlds with the Continuous Simulation API."
+    description: "Build and run API, Web and MCP Boxes with the Continuous API."
     install: |
       bin.install "continuous"
 
