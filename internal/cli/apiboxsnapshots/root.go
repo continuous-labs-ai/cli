@@ -21,35 +21,35 @@ func InitApiboxSnapshotsRoot(parent *cobra.Command) error {
 		Aliases: []string{"as"},
 	}
 
-	if err := initListApiboxSnapshotsCmd(ApiboxSnapshotsCmd); err != nil {
+	if err := initListCmd(ApiboxSnapshotsCmd); err != nil {
 		return err
 	}
 
-	if err := initCreateApiboxSnapshotCmd(ApiboxSnapshotsCmd); err != nil {
+	if err := initCreateCmd(ApiboxSnapshotsCmd); err != nil {
 		return err
 	}
 
-	if err := initDeleteApiboxSnapshotCmd(ApiboxSnapshotsCmd); err != nil {
+	if err := initDeleteCmd(ApiboxSnapshotsCmd); err != nil {
 		return err
 	}
 
-	if err := initGetApiboxSnapshotCmd(ApiboxSnapshotsCmd); err != nil {
+	if err := initGetCmd(ApiboxSnapshotsCmd); err != nil {
 		return err
 	}
 
-	if err := initUpdateApiboxSnapshotCmd(ApiboxSnapshotsCmd); err != nil {
+	if err := initUpdateCmd(ApiboxSnapshotsCmd); err != nil {
 		return err
 	}
 
-	if err := initCancelApiboxSnapshotCmd(ApiboxSnapshotsCmd); err != nil {
+	if err := initCancelCmd(ApiboxSnapshotsCmd); err != nil {
 		return err
 	}
 
-	if err := initCloneApiboxSnapshotCmd(ApiboxSnapshotsCmd); err != nil {
+	if err := initCloneCmd(ApiboxSnapshotsCmd); err != nil {
 		return err
 	}
 
-	if err := initResumeApiboxSnapshotCmd(ApiboxSnapshotsCmd); err != nil {
+	if err := initResumeCmd(ApiboxSnapshotsCmd); err != nil {
 		return err
 	}
 

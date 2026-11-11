@@ -162,7 +162,7 @@ type BuildProgress struct {
 	WaitedSeconds int64 `json:"waited_seconds"`
 	// Set while the build waits for the requester: at QA because the live systems rejected its credentials or rate limited its calls, or for more time after it used its time limit. Resume it with its resource's resume operation, such as POST /v1/apibox-snapshots/{id}/resume. Null otherwise.
 	Waiting *BuildWaiting `json:"waiting"`
-	// When the usage limit resets while agent_state is waiting_for_limit. The agent continues then, within the build's time limit. Null otherwise.
+	// When the usage limit resets while agent_state is waiting_for_limit. The agent continues then, and the wait does not use the build's time limit. Null otherwise.
 	WaitingUntil *time.Time `json:"waiting_until"`
 	// Specification defects the build tolerated without changing the specification, set when the build prepares its specification. Empty when none.
 	Warnings []SpecificationWarning `json:"warnings"`

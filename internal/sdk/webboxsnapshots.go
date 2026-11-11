@@ -35,9 +35,9 @@ func newWebboxSnapshots(rootSDK *ContinuousSimulation, sdkConfig config.SDKConfi
 	}
 }
 
-// ListWebboxSnapshots - List Web Box Snapshots
+// List Web Box Snapshots
 // Returns the workspace's Web Box Snapshots and the catalog's, newest first. Results can be filtered by source and status, and by the Web Box a Snapshot was saved from.
-func (s *WebboxSnapshots) ListWebboxSnapshots(ctx context.Context, request *operations.ListWebboxSnapshotsRequest, opts ...operations.Option) (*operations.ListWebboxSnapshotsResponse, error) {
+func (s *WebboxSnapshots) List(ctx context.Context, request *operations.ListWebboxSnapshotsRequest, opts ...operations.Option) (*operations.ListWebboxSnapshotsResponse, error) {
 	o := operations.Options{}
 	supportedOptions := []string{
 		operations.SupportedOptionRetries,
@@ -256,7 +256,7 @@ func (s *WebboxSnapshots) ListWebboxSnapshots(ctx context.Context, request *oper
 		}
 		request.Cursor = &nCVal
 
-		return s.ListWebboxSnapshots(
+		return s.List(
 			paginationCtx,
 			request,
 			opts...,
@@ -302,7 +302,7 @@ func (s *WebboxSnapshots) ListWebboxSnapshots(ctx context.Context, request *oper
 				return nil, err
 			}
 
-			var out sdkerrors.Error
+			var out sdkerrors.APIError
 			if err := utils.UnmarshalJsonFromResponseBody(bytes.NewBuffer(rawBody), &out, ""); err != nil {
 				return nil, err
 			}
@@ -329,7 +329,7 @@ func (s *WebboxSnapshots) ListWebboxSnapshots(ctx context.Context, request *oper
 				return nil, err
 			}
 
-			var out sdkerrors.Error
+			var out sdkerrors.APIError
 			if err := utils.UnmarshalJsonFromResponseBody(bytes.NewBuffer(rawBody), &out, ""); err != nil {
 				return nil, err
 			}
@@ -370,9 +370,9 @@ func (s *WebboxSnapshots) ListWebboxSnapshots(ctx context.Context, request *oper
 
 }
 
-// CreateWebboxSnapshot - Create Web Box Snapshot
+// Create Web Box Snapshot
 // Starts an asynchronous build and returns the Web Box Snapshot with status pending. Get the Snapshot until its status is ready, failed or canceled; Web Boxes start from a ready one. The build runs in real time: the builder and QA use the vendor's live web app through its login credential, and the built app has no simulated clock. Builds of every kind share one queue and the daily quota. Send multipart/form-data with a JSON part named request and optional file parts named document with vendor documentation. To build on a ready Snapshot, set parent_id.
-func (s *WebboxSnapshots) CreateWebboxSnapshot(ctx context.Context, request operations.CreateWebboxSnapshotRequest, opts ...operations.Option) (*operations.CreateWebboxSnapshotResponse, error) {
+func (s *WebboxSnapshots) Create(ctx context.Context, request operations.CreateWebboxSnapshotRequest, opts ...operations.Option) (*operations.CreateWebboxSnapshotResponse, error) {
 	o := operations.Options{}
 	supportedOptions := []string{
 		operations.SupportedOptionTimeout,
@@ -531,7 +531,7 @@ func (s *WebboxSnapshots) CreateWebboxSnapshot(ctx context.Context, request oper
 				return nil, err
 			}
 
-			var out sdkerrors.Error
+			var out sdkerrors.APIError
 			if err := utils.UnmarshalJsonFromResponseBody(bytes.NewBuffer(rawBody), &out, ""); err != nil {
 				return nil, err
 			}
@@ -558,7 +558,7 @@ func (s *WebboxSnapshots) CreateWebboxSnapshot(ctx context.Context, request oper
 				return nil, err
 			}
 
-			var out sdkerrors.Error
+			var out sdkerrors.APIError
 			if err := utils.UnmarshalJsonFromResponseBody(bytes.NewBuffer(rawBody), &out, ""); err != nil {
 				return nil, err
 			}
@@ -583,7 +583,7 @@ func (s *WebboxSnapshots) CreateWebboxSnapshot(ctx context.Context, request oper
 				return nil, err
 			}
 
-			var out sdkerrors.Error
+			var out sdkerrors.APIError
 			if err := utils.UnmarshalJsonFromResponseBody(bytes.NewBuffer(rawBody), &out, ""); err != nil {
 				return nil, err
 			}
@@ -610,7 +610,7 @@ func (s *WebboxSnapshots) CreateWebboxSnapshot(ctx context.Context, request oper
 				return nil, err
 			}
 
-			var out sdkerrors.Error
+			var out sdkerrors.APIError
 			if err := utils.UnmarshalJsonFromResponseBody(bytes.NewBuffer(rawBody), &out, ""); err != nil {
 				return nil, err
 			}
@@ -651,9 +651,9 @@ func (s *WebboxSnapshots) CreateWebboxSnapshot(ctx context.Context, request oper
 
 }
 
-// DeleteWebboxSnapshot - Delete Web Box Snapshot
+// Delete Web Box Snapshot
 // Deletes a Web Box Snapshot. A build that is still pending or building is canceled first. A Snapshot that Web Boxes started from returns 409 webbox_snapshot_in_use; delete those Web Boxes first. While a build that names it as parent_id is pending or building, it returns 409 webbox_snapshot_parent_in_use; retry after the build finishes. Catalog Snapshots cannot be deleted.
-func (s *WebboxSnapshots) DeleteWebboxSnapshot(ctx context.Context, request operations.DeleteWebboxSnapshotRequest, opts ...operations.Option) (*operations.DeleteWebboxSnapshotResponse, error) {
+func (s *WebboxSnapshots) Delete(ctx context.Context, request operations.DeleteWebboxSnapshotRequest, opts ...operations.Option) (*operations.DeleteWebboxSnapshotResponse, error) {
 	o := operations.Options{}
 	supportedOptions := []string{
 		operations.SupportedOptionTimeout,
@@ -768,7 +768,7 @@ func (s *WebboxSnapshots) DeleteWebboxSnapshot(ctx context.Context, request oper
 				return nil, err
 			}
 
-			var out sdkerrors.Error
+			var out sdkerrors.APIError
 			if err := utils.UnmarshalJsonFromResponseBody(bytes.NewBuffer(rawBody), &out, ""); err != nil {
 				return nil, err
 			}
@@ -795,7 +795,7 @@ func (s *WebboxSnapshots) DeleteWebboxSnapshot(ctx context.Context, request oper
 				return nil, err
 			}
 
-			var out sdkerrors.Error
+			var out sdkerrors.APIError
 			if err := utils.UnmarshalJsonFromResponseBody(bytes.NewBuffer(rawBody), &out, ""); err != nil {
 				return nil, err
 			}
@@ -836,9 +836,9 @@ func (s *WebboxSnapshots) DeleteWebboxSnapshot(ctx context.Context, request oper
 
 }
 
-// GetWebboxSnapshot - Get Web Box Snapshot
+// Get Web Box Snapshot
 // Returns a Web Box Snapshot of the workspace or the catalog, and its build status.
-func (s *WebboxSnapshots) GetWebboxSnapshot(ctx context.Context, request operations.GetWebboxSnapshotRequest, opts ...operations.Option) (*operations.GetWebboxSnapshotResponse, error) {
+func (s *WebboxSnapshots) Get(ctx context.Context, request operations.GetWebboxSnapshotRequest, opts ...operations.Option) (*operations.GetWebboxSnapshotResponse, error) {
 	o := operations.Options{}
 	supportedOptions := []string{
 		operations.SupportedOptionRetries,
@@ -1049,7 +1049,7 @@ func (s *WebboxSnapshots) GetWebboxSnapshot(ctx context.Context, request operati
 				return nil, err
 			}
 
-			var out sdkerrors.Error
+			var out sdkerrors.APIError
 			if err := utils.UnmarshalJsonFromResponseBody(bytes.NewBuffer(rawBody), &out, ""); err != nil {
 				return nil, err
 			}
@@ -1076,7 +1076,7 @@ func (s *WebboxSnapshots) GetWebboxSnapshot(ctx context.Context, request operati
 				return nil, err
 			}
 
-			var out sdkerrors.Error
+			var out sdkerrors.APIError
 			if err := utils.UnmarshalJsonFromResponseBody(bytes.NewBuffer(rawBody), &out, ""); err != nil {
 				return nil, err
 			}
@@ -1117,9 +1117,9 @@ func (s *WebboxSnapshots) GetWebboxSnapshot(ctx context.Context, request operati
 
 }
 
-// UpdateWebboxSnapshot - Update Web Box Snapshot
+// Update Web Box Snapshot
 // Renames a Web Box Snapshot or replaces its metadata. Omitted fields keep their current values. The built app does not change. Catalog Snapshots cannot be updated.
-func (s *WebboxSnapshots) UpdateWebboxSnapshot(ctx context.Context, request operations.UpdateWebboxSnapshotRequest, opts ...operations.Option) (*operations.UpdateWebboxSnapshotResponse, error) {
+func (s *WebboxSnapshots) Update(ctx context.Context, request operations.UpdateWebboxSnapshotRequest, opts ...operations.Option) (*operations.UpdateWebboxSnapshotResponse, error) {
 	o := operations.Options{}
 	supportedOptions := []string{
 		operations.SupportedOptionTimeout,
@@ -1278,7 +1278,7 @@ func (s *WebboxSnapshots) UpdateWebboxSnapshot(ctx context.Context, request oper
 				return nil, err
 			}
 
-			var out sdkerrors.Error
+			var out sdkerrors.APIError
 			if err := utils.UnmarshalJsonFromResponseBody(bytes.NewBuffer(rawBody), &out, ""); err != nil {
 				return nil, err
 			}
@@ -1305,7 +1305,7 @@ func (s *WebboxSnapshots) UpdateWebboxSnapshot(ctx context.Context, request oper
 				return nil, err
 			}
 
-			var out sdkerrors.Error
+			var out sdkerrors.APIError
 			if err := utils.UnmarshalJsonFromResponseBody(bytes.NewBuffer(rawBody), &out, ""); err != nil {
 				return nil, err
 			}
@@ -1346,9 +1346,9 @@ func (s *WebboxSnapshots) UpdateWebboxSnapshot(ctx context.Context, request oper
 
 }
 
-// CancelWebboxSnapshot - Cancel Web Box Snapshot build
+// Cancel Web Box Snapshot build
 // Requests cancellation of a pending or active build and returns the Snapshot without waiting for the build to stop. Get the Snapshot until its status leaves pending or building. The build can finish before cancellation takes effect. A Snapshot whose build has settled is returned unchanged.
-func (s *WebboxSnapshots) CancelWebboxSnapshot(ctx context.Context, request operations.CancelWebboxSnapshotRequest, opts ...operations.Option) (*operations.CancelWebboxSnapshotResponse, error) {
+func (s *WebboxSnapshots) Cancel(ctx context.Context, request operations.CancelWebboxSnapshotRequest, opts ...operations.Option) (*operations.CancelWebboxSnapshotResponse, error) {
 	o := operations.Options{}
 	supportedOptions := []string{
 		operations.SupportedOptionTimeout,
@@ -1490,7 +1490,7 @@ func (s *WebboxSnapshots) CancelWebboxSnapshot(ctx context.Context, request oper
 				return nil, err
 			}
 
-			var out sdkerrors.Error
+			var out sdkerrors.APIError
 			if err := utils.UnmarshalJsonFromResponseBody(bytes.NewBuffer(rawBody), &out, ""); err != nil {
 				return nil, err
 			}
@@ -1517,7 +1517,7 @@ func (s *WebboxSnapshots) CancelWebboxSnapshot(ctx context.Context, request oper
 				return nil, err
 			}
 
-			var out sdkerrors.Error
+			var out sdkerrors.APIError
 			if err := utils.UnmarshalJsonFromResponseBody(bytes.NewBuffer(rawBody), &out, ""); err != nil {
 				return nil, err
 			}
@@ -1558,9 +1558,9 @@ func (s *WebboxSnapshots) CancelWebboxSnapshot(ctx context.Context, request oper
 
 }
 
-// CloneWebboxSnapshot - Clone Web Box Snapshot
+// Clone Web Box Snapshot
 // Creates a ready copy of a ready Web Box Snapshot in another workspace, without a build. The clone has a new ID and the source's artifact, documents and saved state; the source is unchanged. The clone records no credentials, since they belong to the source workspace, and no parent or source Snapshot. The source is the caller's workspace. An API key may clone into any other workspace of its organization.
-func (s *WebboxSnapshots) CloneWebboxSnapshot(ctx context.Context, request operations.CloneWebboxSnapshotRequest, opts ...operations.Option) (*operations.CloneWebboxSnapshotResponse, error) {
+func (s *WebboxSnapshots) Clone(ctx context.Context, request operations.CloneWebboxSnapshotRequest, opts ...operations.Option) (*operations.CloneWebboxSnapshotResponse, error) {
 	o := operations.Options{}
 	supportedOptions := []string{
 		operations.SupportedOptionTimeout,
@@ -1723,7 +1723,7 @@ func (s *WebboxSnapshots) CloneWebboxSnapshot(ctx context.Context, request opera
 				return nil, err
 			}
 
-			var out sdkerrors.Error
+			var out sdkerrors.APIError
 			if err := utils.UnmarshalJsonFromResponseBody(bytes.NewBuffer(rawBody), &out, ""); err != nil {
 				return nil, err
 			}
@@ -1750,7 +1750,7 @@ func (s *WebboxSnapshots) CloneWebboxSnapshot(ctx context.Context, request opera
 				return nil, err
 			}
 
-			var out sdkerrors.Error
+			var out sdkerrors.APIError
 			if err := utils.UnmarshalJsonFromResponseBody(bytes.NewBuffer(rawBody), &out, ""); err != nil {
 				return nil, err
 			}
@@ -1791,9 +1791,9 @@ func (s *WebboxSnapshots) CloneWebboxSnapshot(ctx context.Context, request opera
 
 }
 
-// ResumeWebboxSnapshot - Resume Web Box Snapshot build
+// Resume Web Box Snapshot build
 // Resumes a build that waits, as build.waiting reports: at QA because its live credentials were rejected or the live systems rate limited its calls, or for more time after it used its time limit. For a credential wait, refresh each credential it names with PATCH /v1/credentials/{id} first: QA then runs again with their current values, and the build goes on to finalize. For a rate-limit wait, resume once the rate limit resets: QA then runs again. For a wait for more time, send add_seconds: the build continues where it stopped, with that much time from the resume. Returns the Snapshot, still building. A wait does not count toward the build's time limit: a build resumed from a QA wait has the time it had left when it began waiting. A build that is not waiting returns 409 webbox_snapshot_not_waiting.
-func (s *WebboxSnapshots) ResumeWebboxSnapshot(ctx context.Context, request operations.ResumeWebboxSnapshotRequest, opts ...operations.Option) (*operations.ResumeWebboxSnapshotResponse, error) {
+func (s *WebboxSnapshots) Resume(ctx context.Context, request operations.ResumeWebboxSnapshotRequest, opts ...operations.Option) (*operations.ResumeWebboxSnapshotResponse, error) {
 	o := operations.Options{}
 	supportedOptions := []string{
 		operations.SupportedOptionTimeout,
@@ -1952,7 +1952,7 @@ func (s *WebboxSnapshots) ResumeWebboxSnapshot(ctx context.Context, request oper
 				return nil, err
 			}
 
-			var out sdkerrors.Error
+			var out sdkerrors.APIError
 			if err := utils.UnmarshalJsonFromResponseBody(bytes.NewBuffer(rawBody), &out, ""); err != nil {
 				return nil, err
 			}
@@ -1979,7 +1979,7 @@ func (s *WebboxSnapshots) ResumeWebboxSnapshot(ctx context.Context, request oper
 				return nil, err
 			}
 
-			var out sdkerrors.Error
+			var out sdkerrors.APIError
 			if err := utils.UnmarshalJsonFromResponseBody(bytes.NewBuffer(rawBody), &out, ""); err != nil {
 				return nil, err
 			}

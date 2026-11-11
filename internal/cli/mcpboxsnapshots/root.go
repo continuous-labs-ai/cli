@@ -21,35 +21,35 @@ func InitMcpboxSnapshotsRoot(parent *cobra.Command) error {
 		Aliases: []string{"ms"},
 	}
 
-	if err := initListMcpboxSnapshotsCmd(McpboxSnapshotsCmd); err != nil {
+	if err := initListCmd(McpboxSnapshotsCmd); err != nil {
 		return err
 	}
 
-	if err := initCreateMcpboxSnapshotCmd(McpboxSnapshotsCmd); err != nil {
+	if err := initCreateCmd(McpboxSnapshotsCmd); err != nil {
 		return err
 	}
 
-	if err := initDeleteMcpboxSnapshotCmd(McpboxSnapshotsCmd); err != nil {
+	if err := initDeleteCmd(McpboxSnapshotsCmd); err != nil {
 		return err
 	}
 
-	if err := initGetMcpboxSnapshotCmd(McpboxSnapshotsCmd); err != nil {
+	if err := initGetCmd(McpboxSnapshotsCmd); err != nil {
 		return err
 	}
 
-	if err := initUpdateMcpboxSnapshotCmd(McpboxSnapshotsCmd); err != nil {
+	if err := initUpdateCmd(McpboxSnapshotsCmd); err != nil {
 		return err
 	}
 
-	if err := initCancelMcpboxSnapshotCmd(McpboxSnapshotsCmd); err != nil {
+	if err := initCancelCmd(McpboxSnapshotsCmd); err != nil {
 		return err
 	}
 
-	if err := initCloneMcpboxSnapshotCmd(McpboxSnapshotsCmd); err != nil {
+	if err := initCloneCmd(McpboxSnapshotsCmd); err != nil {
 		return err
 	}
 
-	if err := initResumeMcpboxSnapshotCmd(McpboxSnapshotsCmd); err != nil {
+	if err := initResumeCmd(McpboxSnapshotsCmd); err != nil {
 		return err
 	}
 

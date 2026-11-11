@@ -85,7 +85,7 @@ type ListMcpboxSnapshotsRequest struct {
 	// Optional source filter.
 	Source *ListMcpboxSnapshotsSource `queryParam:"style=form,explode=false,name=source"`
 	// Optional filter for the Snapshots saved from this Box.
-	BoxID *string `queryParam:"style=form,explode=false,name=box_id"`
+	SourceBoxID *string `queryParam:"style=form,explode=false,name=source_box_id"`
 }
 
 func (l ListMcpboxSnapshotsRequest) MarshalJSON() ([]byte, error) {
@@ -127,11 +127,11 @@ func (l *ListMcpboxSnapshotsRequest) GetSource() *ListMcpboxSnapshotsSource {
 	return l.Source
 }
 
-func (l *ListMcpboxSnapshotsRequest) GetBoxID() *string {
+func (l *ListMcpboxSnapshotsRequest) GetSourceBoxID() *string {
 	if l == nil {
 		return nil
 	}
-	return l.BoxID
+	return l.SourceBoxID
 }
 
 type ListMcpboxSnapshotsResponse struct {

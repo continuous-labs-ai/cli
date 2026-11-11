@@ -35,9 +35,9 @@ func newMcpboxSnapshots(rootSDK *ContinuousSimulation, sdkConfig config.SDKConfi
 	}
 }
 
-// ListMcpboxSnapshots - List MCP Box Snapshots
+// List MCP Box Snapshots
 // Returns the workspace's MCP Box Snapshots and the catalog's, newest first. Results can be filtered by status and source, and by the MCP Box a Snapshot was saved from.
-func (s *McpboxSnapshots) ListMcpboxSnapshots(ctx context.Context, request *operations.ListMcpboxSnapshotsRequest, opts ...operations.Option) (*operations.ListMcpboxSnapshotsResponse, error) {
+func (s *McpboxSnapshots) List(ctx context.Context, request *operations.ListMcpboxSnapshotsRequest, opts ...operations.Option) (*operations.ListMcpboxSnapshotsResponse, error) {
 	o := operations.Options{}
 	supportedOptions := []string{
 		operations.SupportedOptionRetries,
@@ -256,7 +256,7 @@ func (s *McpboxSnapshots) ListMcpboxSnapshots(ctx context.Context, request *oper
 		}
 		request.Cursor = &nCVal
 
-		return s.ListMcpboxSnapshots(
+		return s.List(
 			paginationCtx,
 			request,
 			opts...,
@@ -302,7 +302,7 @@ func (s *McpboxSnapshots) ListMcpboxSnapshots(ctx context.Context, request *oper
 				return nil, err
 			}
 
-			var out sdkerrors.Error
+			var out sdkerrors.APIError
 			if err := utils.UnmarshalJsonFromResponseBody(bytes.NewBuffer(rawBody), &out, ""); err != nil {
 				return nil, err
 			}
@@ -329,7 +329,7 @@ func (s *McpboxSnapshots) ListMcpboxSnapshots(ctx context.Context, request *oper
 				return nil, err
 			}
 
-			var out sdkerrors.Error
+			var out sdkerrors.APIError
 			if err := utils.UnmarshalJsonFromResponseBody(bytes.NewBuffer(rawBody), &out, ""); err != nil {
 				return nil, err
 			}
@@ -370,9 +370,9 @@ func (s *McpboxSnapshots) ListMcpboxSnapshots(ctx context.Context, request *oper
 
 }
 
-// CreateMcpboxSnapshot - Create MCP Box Snapshot
+// Create MCP Box Snapshot
 // Starts an asynchronous build and returns the MCP Box Snapshot with status pending. Get the Snapshot until its status is ready, failed or canceled; MCP Boxes serve a ready one. The build makes an MCP server that answers from the API Box Snapshot it names, run in real time: with a credential, it copies the live MCP server at the credential's base_url; without one, the server its instructions or research name. Builds of every kind share one queue and the daily quota. Send multipart/form-data with a JSON part named request and optional file parts named document with vendor documentation. To build on a ready MCP Box Snapshot, set parent_id.
-func (s *McpboxSnapshots) CreateMcpboxSnapshot(ctx context.Context, request operations.CreateMcpboxSnapshotRequest, opts ...operations.Option) (*operations.CreateMcpboxSnapshotResponse, error) {
+func (s *McpboxSnapshots) Create(ctx context.Context, request operations.CreateMcpboxSnapshotRequest, opts ...operations.Option) (*operations.CreateMcpboxSnapshotResponse, error) {
 	o := operations.Options{}
 	supportedOptions := []string{
 		operations.SupportedOptionTimeout,
@@ -531,7 +531,7 @@ func (s *McpboxSnapshots) CreateMcpboxSnapshot(ctx context.Context, request oper
 				return nil, err
 			}
 
-			var out sdkerrors.Error
+			var out sdkerrors.APIError
 			if err := utils.UnmarshalJsonFromResponseBody(bytes.NewBuffer(rawBody), &out, ""); err != nil {
 				return nil, err
 			}
@@ -558,7 +558,7 @@ func (s *McpboxSnapshots) CreateMcpboxSnapshot(ctx context.Context, request oper
 				return nil, err
 			}
 
-			var out sdkerrors.Error
+			var out sdkerrors.APIError
 			if err := utils.UnmarshalJsonFromResponseBody(bytes.NewBuffer(rawBody), &out, ""); err != nil {
 				return nil, err
 			}
@@ -583,7 +583,7 @@ func (s *McpboxSnapshots) CreateMcpboxSnapshot(ctx context.Context, request oper
 				return nil, err
 			}
 
-			var out sdkerrors.Error
+			var out sdkerrors.APIError
 			if err := utils.UnmarshalJsonFromResponseBody(bytes.NewBuffer(rawBody), &out, ""); err != nil {
 				return nil, err
 			}
@@ -610,7 +610,7 @@ func (s *McpboxSnapshots) CreateMcpboxSnapshot(ctx context.Context, request oper
 				return nil, err
 			}
 
-			var out sdkerrors.Error
+			var out sdkerrors.APIError
 			if err := utils.UnmarshalJsonFromResponseBody(bytes.NewBuffer(rawBody), &out, ""); err != nil {
 				return nil, err
 			}
@@ -651,9 +651,9 @@ func (s *McpboxSnapshots) CreateMcpboxSnapshot(ctx context.Context, request oper
 
 }
 
-// DeleteMcpboxSnapshot - Delete MCP Box Snapshot
+// Delete MCP Box Snapshot
 // Deletes an MCP Box Snapshot. A build that is still pending or building is canceled first. The API Box Snapshot it was built against stays. A Snapshot that MCP Boxes serve returns 409 mcpbox_snapshot_in_use; delete those MCP Boxes first. While a build that names it as parent_id is pending or building, it returns 409 mcpbox_snapshot_parent_in_use; retry after the build finishes.
-func (s *McpboxSnapshots) DeleteMcpboxSnapshot(ctx context.Context, request operations.DeleteMcpboxSnapshotRequest, opts ...operations.Option) (*operations.DeleteMcpboxSnapshotResponse, error) {
+func (s *McpboxSnapshots) Delete(ctx context.Context, request operations.DeleteMcpboxSnapshotRequest, opts ...operations.Option) (*operations.DeleteMcpboxSnapshotResponse, error) {
 	o := operations.Options{}
 	supportedOptions := []string{
 		operations.SupportedOptionTimeout,
@@ -768,7 +768,7 @@ func (s *McpboxSnapshots) DeleteMcpboxSnapshot(ctx context.Context, request oper
 				return nil, err
 			}
 
-			var out sdkerrors.Error
+			var out sdkerrors.APIError
 			if err := utils.UnmarshalJsonFromResponseBody(bytes.NewBuffer(rawBody), &out, ""); err != nil {
 				return nil, err
 			}
@@ -795,7 +795,7 @@ func (s *McpboxSnapshots) DeleteMcpboxSnapshot(ctx context.Context, request oper
 				return nil, err
 			}
 
-			var out sdkerrors.Error
+			var out sdkerrors.APIError
 			if err := utils.UnmarshalJsonFromResponseBody(bytes.NewBuffer(rawBody), &out, ""); err != nil {
 				return nil, err
 			}
@@ -836,9 +836,9 @@ func (s *McpboxSnapshots) DeleteMcpboxSnapshot(ctx context.Context, request oper
 
 }
 
-// GetMcpboxSnapshot - Get MCP Box Snapshot
+// Get MCP Box Snapshot
 // Returns an MCP Box Snapshot of the workspace or the catalog, and its build status.
-func (s *McpboxSnapshots) GetMcpboxSnapshot(ctx context.Context, request operations.GetMcpboxSnapshotRequest, opts ...operations.Option) (*operations.GetMcpboxSnapshotResponse, error) {
+func (s *McpboxSnapshots) Get(ctx context.Context, request operations.GetMcpboxSnapshotRequest, opts ...operations.Option) (*operations.GetMcpboxSnapshotResponse, error) {
 	o := operations.Options{}
 	supportedOptions := []string{
 		operations.SupportedOptionRetries,
@@ -1049,7 +1049,7 @@ func (s *McpboxSnapshots) GetMcpboxSnapshot(ctx context.Context, request operati
 				return nil, err
 			}
 
-			var out sdkerrors.Error
+			var out sdkerrors.APIError
 			if err := utils.UnmarshalJsonFromResponseBody(bytes.NewBuffer(rawBody), &out, ""); err != nil {
 				return nil, err
 			}
@@ -1076,7 +1076,7 @@ func (s *McpboxSnapshots) GetMcpboxSnapshot(ctx context.Context, request operati
 				return nil, err
 			}
 
-			var out sdkerrors.Error
+			var out sdkerrors.APIError
 			if err := utils.UnmarshalJsonFromResponseBody(bytes.NewBuffer(rawBody), &out, ""); err != nil {
 				return nil, err
 			}
@@ -1117,9 +1117,9 @@ func (s *McpboxSnapshots) GetMcpboxSnapshot(ctx context.Context, request operati
 
 }
 
-// UpdateMcpboxSnapshot - Update MCP Box Snapshot
+// Update MCP Box Snapshot
 // Renames an MCP Box Snapshot or replaces its metadata. Omitted fields keep their current values. Its tools do not change. Catalog Snapshots cannot be updated.
-func (s *McpboxSnapshots) UpdateMcpboxSnapshot(ctx context.Context, request operations.UpdateMcpboxSnapshotRequest, opts ...operations.Option) (*operations.UpdateMcpboxSnapshotResponse, error) {
+func (s *McpboxSnapshots) Update(ctx context.Context, request operations.UpdateMcpboxSnapshotRequest, opts ...operations.Option) (*operations.UpdateMcpboxSnapshotResponse, error) {
 	o := operations.Options{}
 	supportedOptions := []string{
 		operations.SupportedOptionTimeout,
@@ -1278,7 +1278,7 @@ func (s *McpboxSnapshots) UpdateMcpboxSnapshot(ctx context.Context, request oper
 				return nil, err
 			}
 
-			var out sdkerrors.Error
+			var out sdkerrors.APIError
 			if err := utils.UnmarshalJsonFromResponseBody(bytes.NewBuffer(rawBody), &out, ""); err != nil {
 				return nil, err
 			}
@@ -1305,7 +1305,7 @@ func (s *McpboxSnapshots) UpdateMcpboxSnapshot(ctx context.Context, request oper
 				return nil, err
 			}
 
-			var out sdkerrors.Error
+			var out sdkerrors.APIError
 			if err := utils.UnmarshalJsonFromResponseBody(bytes.NewBuffer(rawBody), &out, ""); err != nil {
 				return nil, err
 			}
@@ -1346,9 +1346,9 @@ func (s *McpboxSnapshots) UpdateMcpboxSnapshot(ctx context.Context, request oper
 
 }
 
-// CancelMcpboxSnapshot - Cancel MCP Box Snapshot build
+// Cancel MCP Box Snapshot build
 // Requests cancellation of a pending or active build and returns the Snapshot without waiting for the build to stop. Get the Snapshot until its status leaves pending or building. The build can finish before cancellation takes effect. A Snapshot whose build has settled is returned unchanged.
-func (s *McpboxSnapshots) CancelMcpboxSnapshot(ctx context.Context, request operations.CancelMcpboxSnapshotRequest, opts ...operations.Option) (*operations.CancelMcpboxSnapshotResponse, error) {
+func (s *McpboxSnapshots) Cancel(ctx context.Context, request operations.CancelMcpboxSnapshotRequest, opts ...operations.Option) (*operations.CancelMcpboxSnapshotResponse, error) {
 	o := operations.Options{}
 	supportedOptions := []string{
 		operations.SupportedOptionTimeout,
@@ -1490,7 +1490,7 @@ func (s *McpboxSnapshots) CancelMcpboxSnapshot(ctx context.Context, request oper
 				return nil, err
 			}
 
-			var out sdkerrors.Error
+			var out sdkerrors.APIError
 			if err := utils.UnmarshalJsonFromResponseBody(bytes.NewBuffer(rawBody), &out, ""); err != nil {
 				return nil, err
 			}
@@ -1517,7 +1517,7 @@ func (s *McpboxSnapshots) CancelMcpboxSnapshot(ctx context.Context, request oper
 				return nil, err
 			}
 
-			var out sdkerrors.Error
+			var out sdkerrors.APIError
 			if err := utils.UnmarshalJsonFromResponseBody(bytes.NewBuffer(rawBody), &out, ""); err != nil {
 				return nil, err
 			}
@@ -1558,9 +1558,9 @@ func (s *McpboxSnapshots) CancelMcpboxSnapshot(ctx context.Context, request oper
 
 }
 
-// CloneMcpboxSnapshot - Clone MCP Box Snapshot
+// Clone MCP Box Snapshot
 // Creates a ready copy of a ready MCP Box Snapshot in another workspace, without a build. The clone has a new ID and the source's artifact, documents and saved state; the source is unchanged. The clone records no credentials, since they belong to the source workspace, and no parent or source Snapshot. An API Box Snapshot of the source workspace that the MCP Box Snapshot was built against is cloned with it, and the clone is built against the copy; a catalog one is kept. The source is the caller's workspace. An API key may clone into any other workspace of its organization.
-func (s *McpboxSnapshots) CloneMcpboxSnapshot(ctx context.Context, request operations.CloneMcpboxSnapshotRequest, opts ...operations.Option) (*operations.CloneMcpboxSnapshotResponse, error) {
+func (s *McpboxSnapshots) Clone(ctx context.Context, request operations.CloneMcpboxSnapshotRequest, opts ...operations.Option) (*operations.CloneMcpboxSnapshotResponse, error) {
 	o := operations.Options{}
 	supportedOptions := []string{
 		operations.SupportedOptionTimeout,
@@ -1723,7 +1723,7 @@ func (s *McpboxSnapshots) CloneMcpboxSnapshot(ctx context.Context, request opera
 				return nil, err
 			}
 
-			var out sdkerrors.Error
+			var out sdkerrors.APIError
 			if err := utils.UnmarshalJsonFromResponseBody(bytes.NewBuffer(rawBody), &out, ""); err != nil {
 				return nil, err
 			}
@@ -1750,7 +1750,7 @@ func (s *McpboxSnapshots) CloneMcpboxSnapshot(ctx context.Context, request opera
 				return nil, err
 			}
 
-			var out sdkerrors.Error
+			var out sdkerrors.APIError
 			if err := utils.UnmarshalJsonFromResponseBody(bytes.NewBuffer(rawBody), &out, ""); err != nil {
 				return nil, err
 			}
@@ -1791,9 +1791,9 @@ func (s *McpboxSnapshots) CloneMcpboxSnapshot(ctx context.Context, request opera
 
 }
 
-// ResumeMcpboxSnapshot - Resume MCP Box Snapshot build
+// Resume MCP Box Snapshot build
 // Resumes a build that waits, as build.waiting reports: at QA because its live credential was rejected or the live source rate limited its calls, or for more time after it used its time limit. For a credential wait, refresh the credential it names with PATCH /v1/credentials/{id} first: QA then runs again with its current value, and the build goes on to finalize. For a rate-limit wait, resume once the rate limit resets: QA then runs again. For a wait for more time, send add_seconds: the build continues where it stopped, with that much time from the resume. Returns the Snapshot, still building. A wait does not count toward the build's time limit: a build resumed from a QA wait has the time it had left when it began waiting. A build that is not waiting returns 409 mcpbox_snapshot_not_waiting.
-func (s *McpboxSnapshots) ResumeMcpboxSnapshot(ctx context.Context, request operations.ResumeMcpboxSnapshotRequest, opts ...operations.Option) (*operations.ResumeMcpboxSnapshotResponse, error) {
+func (s *McpboxSnapshots) Resume(ctx context.Context, request operations.ResumeMcpboxSnapshotRequest, opts ...operations.Option) (*operations.ResumeMcpboxSnapshotResponse, error) {
 	o := operations.Options{}
 	supportedOptions := []string{
 		operations.SupportedOptionTimeout,
@@ -1952,7 +1952,7 @@ func (s *McpboxSnapshots) ResumeMcpboxSnapshot(ctx context.Context, request oper
 				return nil, err
 			}
 
-			var out sdkerrors.Error
+			var out sdkerrors.APIError
 			if err := utils.UnmarshalJsonFromResponseBody(bytes.NewBuffer(rawBody), &out, ""); err != nil {
 				return nil, err
 			}
@@ -1979,7 +1979,7 @@ func (s *McpboxSnapshots) ResumeMcpboxSnapshot(ctx context.Context, request oper
 				return nil, err
 			}
 
-			var out sdkerrors.Error
+			var out sdkerrors.APIError
 			if err := utils.UnmarshalJsonFromResponseBody(bytes.NewBuffer(rawBody), &out, ""); err != nil {
 				return nil, err
 			}

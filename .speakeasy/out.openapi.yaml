@@ -558,7 +558,7 @@ components:
             internal:
               $ref: "#/components/examples/internal"
           schema:
-            $ref: "#/components/schemas/Error"
+            $ref: "#/components/schemas/APIError"
       description: Internal Server Error
     PayloadTooLarge:
       content:
@@ -567,7 +567,7 @@ components:
             payload_too_large:
               $ref: "#/components/examples/payload_too_large"
           schema:
-            $ref: "#/components/schemas/Error"
+            $ref: "#/components/schemas/APIError"
       description: Request Entity Too Large
     RequestTimeout:
       content:
@@ -576,7 +576,7 @@ components:
             request_timeout:
               $ref: "#/components/examples/request_timeout"
           schema:
-            $ref: "#/components/schemas/Error"
+            $ref: "#/components/schemas/APIError"
       description: Request Timeout
     Unauthorized:
       content:
@@ -587,7 +587,7 @@ components:
             auth_invalid_missing:
               $ref: "#/components/examples/auth_invalid_missing"
           schema:
-            $ref: "#/components/schemas/Error"
+            $ref: "#/components/schemas/APIError"
       description: Unauthorized
     UnsupportedMediaType:
       content:
@@ -596,7 +596,7 @@ components:
             unsupported_media_type:
               $ref: "#/components/examples/unsupported_media_type"
           schema:
-            $ref: "#/components/schemas/Error"
+            $ref: "#/components/schemas/APIError"
       description: Unsupported Media Type
   schemas:
     APIBox:
@@ -797,20 +797,24 @@ components:
         - source_snapshot_id
         - created_at
       type: object
-    APIBoxTokenResponse:
+    APIError:
       additionalProperties: false
       properties:
-        apibox:
-          $ref: "#/components/schemas/APIBox"
-          description: The API Box.
-        token:
-          description: The API Box's token, which lasts until the API Box is deleted.
-          type:
-            - string
-            - "null"
+        code:
+          description: Stable machine-readable error code.
+          minLength: 1
+          type: string
+        detail:
+          description: Safe human-readable error detail.
+          minLength: 1
+          type: string
+        validation:
+          $ref: "#/components/schemas/SpecificationValidation"
+          description: Safe specification diagnostics for a rejected build request, when available.
       required:
-        - apibox
-        - token
+        - validation
+        - code
+        - detail
       type: object
     Actor:
       additionalProperties: false
@@ -1146,7 +1150,7 @@ components:
             - $ref: "#/components/schemas/BuildWaiting"
             - type: "null"
         waiting_until:
-          description: When the usage limit resets while agent_state is waiting_for_limit. The agent continues then, within the build's time limit. Null otherwise.
+          description: When the usage limit resets while agent_state is waiting_for_limit. The agent continues then, and the wait does not use the build's time limit. Null otherwise.
           format: date-time
           type:
             - string
@@ -1234,7 +1238,7 @@ components:
           type: string
         mode:
           default: api
-          description: "What the Simulator simulates. api, the default, builds the vendor's API from a spec, or from a parent with instructions. web_app builds the vendor's logged-in web app and the private API behind it: it takes no spec, spec_kind or filter, needs exactly one Web App login credential in credential_ids, runs on a Claude model or combined, and its builder and QA use the live app through that login. With parent_id and instructions, it builds from a ready web_app Simulator."
+          description: "What the Simulator simulates. api, the default, builds the vendor's API from a spec, or from a parent with instructions. web_app builds the vendor's logged-in web app and the private API behind it: it takes no spec, spec_kind or filter, needs exactly one Web App login credential in credential_ids, and its builder and QA use the live app through that login. With parent_id and instructions, it builds from a ready web_app Simulator."
           enum:
             - api
             - web_app
@@ -1330,7 +1334,7 @@ components:
           maxLength: 16384
           type: string
         model:
-          description: "Model that builds and reviews the Snapshot: a Claude model or combined, the default. combined currently builds, reviews, and runs QA exactly as claude-opus-5-5 does."
+          description: Model that builds and reviews the Snapshot. Defaults to combined. Its provider is derived from the model. combined currently builds, reviews, and runs QA exactly as claude-opus-5-5 does.
           type: string
         name:
           description: Name for the Snapshot. Omission generates a name. Names must not contain U+0000. The ID stays its identity, and names need not be unique.
@@ -1552,6 +1556,21 @@ components:
       required:
         - snapshot_id
       type: object
+    CreateAPIBoxResponse:
+      additionalProperties: false
+      properties:
+        apibox:
+          $ref: "#/components/schemas/APIBox"
+          description: The API Box.
+        token:
+          description: The API Box's token, which lasts until the API Box is deleted.
+          type:
+            - string
+            - "null"
+      required:
+        - apibox
+        - token
+      type: object
     CreateCredentialRequest:
       additionalProperties: false
       examples:
@@ -1607,6 +1626,21 @@ components:
       required:
         - snapshot_id
         - apibox_id
+      type: object
+    CreateMCPBoxResponse:
+      additionalProperties: false
+      properties:
+        mcpbox:
+          $ref: "#/components/schemas/MCPBox"
+          description: The MCP Box.
+        token:
+          description: The MCP Box's token, which lasts until the MCP Box is deleted.
+          type:
+            - string
+            - "null"
+      required:
+        - mcpbox
+        - token
       type: object
     CreateSimulationRequest:
       additionalProperties: false
@@ -1974,25 +2008,6 @@ components:
       required:
         - token
         - expires_at
-      type: object
-    Error:
-      additionalProperties: false
-      properties:
-        code:
-          description: Stable machine-readable error code.
-          minLength: 1
-          type: string
-        detail:
-          description: Safe human-readable error detail.
-          minLength: 1
-          type: string
-        validation:
-          $ref: "#/components/schemas/SpecificationValidation"
-          description: Safe specification diagnostics for a rejected build request, when available.
-      required:
-        - validation
-        - code
-        - detail
       type: object
     GetAPIBoxResponse:
       additionalProperties: false
@@ -2635,21 +2650,6 @@ components:
         - source_box_id
         - source_snapshot_id
         - created_at
-      type: object
-    MCPBoxTokenResponse:
-      additionalProperties: false
-      properties:
-        mcpbox:
-          $ref: "#/components/schemas/MCPBox"
-          description: The MCP Box.
-        token:
-          description: The MCP Box's token, which lasts until the MCP Box is deleted.
-          type:
-            - string
-            - "null"
-      required:
-        - mcpbox
-        - token
       type: object
     ResourceError:
       additionalProperties: false
@@ -3670,7 +3670,7 @@ paths:
                 bad_request:
                   $ref: "#/components/examples/bad_request"
               schema:
-                $ref: "#/components/schemas/Error"
+                $ref: "#/components/schemas/APIError"
           description: Bad Request
         "401":
           $ref: "#/components/responses/Unauthorized"
@@ -3681,7 +3681,7 @@ paths:
                 validation_list_limit:
                   $ref: "#/components/examples/validation_list_limit"
               schema:
-                $ref: "#/components/schemas/Error"
+                $ref: "#/components/schemas/APIError"
           description: Unprocessable Entity
         "500":
           $ref: "#/components/responses/InternalServerError"
@@ -3694,13 +3694,14 @@ paths:
                 internal_unavailable:
                   $ref: "#/components/examples/internal_unavailable"
               schema:
-                $ref: "#/components/schemas/Error"
+                $ref: "#/components/schemas/APIError"
           description: Service Unavailable
       security:
         - apiKeyAuth: []
       summary: List API Boxes
       tags:
-        - apibox
+        - apiboxes
+      x-speakeasy-name-override: list
       x-speakeasy-pagination:
         inputs:
           - in: parameters
@@ -3742,7 +3743,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/APIBoxTokenResponse"
+                $ref: "#/components/schemas/CreateAPIBoxResponse"
           description: Accepted
         "400":
           content:
@@ -3751,7 +3752,7 @@ paths:
                 bad_request_body:
                   $ref: "#/components/examples/bad_request_body"
               schema:
-                $ref: "#/components/schemas/Error"
+                $ref: "#/components/schemas/APIError"
           description: Bad Request
         "401":
           $ref: "#/components/responses/Unauthorized"
@@ -3762,7 +3763,7 @@ paths:
                 apibox_snapshot_not_found:
                   $ref: "#/components/examples/apibox_snapshot_not_found"
               schema:
-                $ref: "#/components/schemas/Error"
+                $ref: "#/components/schemas/APIError"
           description: Not Found
         "408":
           $ref: "#/components/responses/RequestTimeout"
@@ -3773,7 +3774,7 @@ paths:
                 apibox_snapshot_not_ready:
                   $ref: "#/components/examples/apibox_snapshot_not_ready"
               schema:
-                $ref: "#/components/schemas/Error"
+                $ref: "#/components/schemas/APIError"
           description: Conflict
         "413":
           $ref: "#/components/responses/PayloadTooLarge"
@@ -3786,7 +3787,7 @@ paths:
                 validation_metadata:
                   $ref: "#/components/examples/validation_metadata"
               schema:
-                $ref: "#/components/schemas/Error"
+                $ref: "#/components/schemas/APIError"
           description: Unprocessable Entity
         "429":
           content:
@@ -3795,7 +3796,7 @@ paths:
                 box_quota_exceeded:
                   $ref: "#/components/examples/box_quota_exceeded"
               schema:
-                $ref: "#/components/schemas/Error"
+                $ref: "#/components/schemas/APIError"
           description: Too Many Requests
         "500":
           $ref: "#/components/responses/InternalServerError"
@@ -3808,13 +3809,14 @@ paths:
                 internal_unavailable:
                   $ref: "#/components/examples/internal_unavailable"
               schema:
-                $ref: "#/components/schemas/Error"
+                $ref: "#/components/schemas/APIError"
           description: Service Unavailable
       security:
         - apiKeyAuth: []
       summary: Create API Box
       tags:
-        - apibox
+        - apiboxes
+      x-speakeasy-name-override: create
   /v1/apibox-snapshots:
     get:
       description: Returns the workspace's API Box Snapshots and the catalog's, newest first. Results can be filtered by source and status, and by the API Box a Snapshot was saved from.
@@ -3859,7 +3861,7 @@ paths:
         - description: Optional filter for the Snapshots saved from this Box.
           explode: false
           in: query
-          name: box_id
+          name: source_box_id
           schema:
             type: string
       responses:
@@ -3876,7 +3878,7 @@ paths:
                 bad_request:
                   $ref: "#/components/examples/bad_request"
               schema:
-                $ref: "#/components/schemas/Error"
+                $ref: "#/components/schemas/APIError"
           description: Bad Request
         "401":
           $ref: "#/components/responses/Unauthorized"
@@ -3887,7 +3889,7 @@ paths:
                 validation_list_limit:
                   $ref: "#/components/examples/validation_list_limit"
               schema:
-                $ref: "#/components/schemas/Error"
+                $ref: "#/components/schemas/APIError"
           description: Unprocessable Entity
         "500":
           $ref: "#/components/responses/InternalServerError"
@@ -3900,13 +3902,14 @@ paths:
                 internal_unavailable:
                   $ref: "#/components/examples/internal_unavailable"
               schema:
-                $ref: "#/components/schemas/Error"
+                $ref: "#/components/schemas/APIError"
           description: Service Unavailable
       security:
         - apiKeyAuth: []
       summary: List API Box Snapshots
       tags:
         - apibox-snapshots
+      x-speakeasy-name-override: list
       x-speakeasy-pagination:
         inputs:
           - in: parameters
@@ -3985,7 +3988,7 @@ paths:
                 bad_request_body:
                   $ref: "#/components/examples/bad_request_body"
               schema:
-                $ref: "#/components/schemas/Error"
+                $ref: "#/components/schemas/APIError"
           description: Bad Request
         "401":
           $ref: "#/components/responses/Unauthorized"
@@ -3998,7 +4001,7 @@ paths:
                 credential_not_found_build:
                   $ref: "#/components/examples/credential_not_found_build"
               schema:
-                $ref: "#/components/schemas/Error"
+                $ref: "#/components/schemas/APIError"
           description: Not Found
         "408":
           $ref: "#/components/responses/RequestTimeout"
@@ -4009,7 +4012,7 @@ paths:
                 apibox_snapshot_not_ready_parent:
                   $ref: "#/components/examples/apibox_snapshot_not_ready_parent"
               schema:
-                $ref: "#/components/schemas/Error"
+                $ref: "#/components/schemas/APIError"
           description: Conflict
         "413":
           $ref: "#/components/responses/PayloadTooLarge"
@@ -4022,7 +4025,7 @@ paths:
                 build_rate_exceeded:
                   $ref: "#/components/examples/build_rate_exceeded"
               schema:
-                $ref: "#/components/schemas/Error"
+                $ref: "#/components/schemas/APIError"
           description: Too Many Requests
           headers:
             Retry-After:
@@ -4041,7 +4044,7 @@ paths:
                 internal_unavailable:
                   $ref: "#/components/examples/internal_unavailable"
               schema:
-                $ref: "#/components/schemas/Error"
+                $ref: "#/components/schemas/APIError"
           description: Service Unavailable
           headers:
             Retry-After:
@@ -4054,6 +4057,7 @@ paths:
       summary: Create API Box Snapshot
       tags:
         - apibox-snapshots
+      x-speakeasy-name-override: create
   /v1/apibox-snapshots/{id}:
     delete:
       description: Deletes an API Box Snapshot. A build that is still pending or building is canceled first. A Snapshot that API Boxes started from or MCP Box Snapshots were built against returns 409 apibox_snapshot_in_use; delete those first. While a build that names it as parent_id is pending or building, it returns 409 apibox_snapshot_parent_in_use; retry after the build finishes. Catalog Snapshots cannot be deleted.
@@ -4078,7 +4082,7 @@ paths:
                 auth_forbidden_catalog_apibox:
                   $ref: "#/components/examples/auth_forbidden_catalog_apibox"
               schema:
-                $ref: "#/components/schemas/Error"
+                $ref: "#/components/schemas/APIError"
           description: Forbidden
         "404":
           content:
@@ -4087,7 +4091,7 @@ paths:
                 apibox_snapshot_not_found:
                   $ref: "#/components/examples/apibox_snapshot_not_found"
               schema:
-                $ref: "#/components/schemas/Error"
+                $ref: "#/components/schemas/APIError"
           description: Not Found
         "409":
           content:
@@ -4098,7 +4102,7 @@ paths:
                 apibox_snapshot_parent_in_use:
                   $ref: "#/components/examples/apibox_snapshot_parent_in_use"
               schema:
-                $ref: "#/components/schemas/Error"
+                $ref: "#/components/schemas/APIError"
           description: Conflict
         "500":
           $ref: "#/components/responses/InternalServerError"
@@ -4111,13 +4115,14 @@ paths:
                 internal_unavailable:
                   $ref: "#/components/examples/internal_unavailable"
               schema:
-                $ref: "#/components/schemas/Error"
+                $ref: "#/components/schemas/APIError"
           description: Service Unavailable
       security:
         - apiKeyAuth: []
       summary: Delete API Box Snapshot
       tags:
         - apibox-snapshots
+      x-speakeasy-name-override: delete
     get:
       description: Returns an API Box Snapshot of the workspace or the catalog, and its build status.
       operationId: get-apibox-snapshot
@@ -4145,7 +4150,7 @@ paths:
                 apibox_snapshot_not_found:
                   $ref: "#/components/examples/apibox_snapshot_not_found"
               schema:
-                $ref: "#/components/schemas/Error"
+                $ref: "#/components/schemas/APIError"
           description: Not Found
         "500":
           $ref: "#/components/responses/InternalServerError"
@@ -4158,13 +4163,14 @@ paths:
                 internal_unavailable:
                   $ref: "#/components/examples/internal_unavailable"
               schema:
-                $ref: "#/components/schemas/Error"
+                $ref: "#/components/schemas/APIError"
           description: Service Unavailable
       security:
         - apiKeyAuth: []
       summary: Get API Box Snapshot
       tags:
         - apibox-snapshots
+      x-speakeasy-name-override: get
       x-speakeasy-retries:
         backoff:
           exponent: 1.5
@@ -4208,7 +4214,7 @@ paths:
                 bad_request_body:
                   $ref: "#/components/examples/bad_request_body"
               schema:
-                $ref: "#/components/schemas/Error"
+                $ref: "#/components/schemas/APIError"
           description: Bad Request
         "401":
           $ref: "#/components/responses/Unauthorized"
@@ -4219,7 +4225,7 @@ paths:
                 auth_forbidden_catalog_apibox:
                   $ref: "#/components/examples/auth_forbidden_catalog_apibox"
               schema:
-                $ref: "#/components/schemas/Error"
+                $ref: "#/components/schemas/APIError"
           description: Forbidden
         "404":
           content:
@@ -4228,7 +4234,7 @@ paths:
                 apibox_snapshot_not_found:
                   $ref: "#/components/examples/apibox_snapshot_not_found"
               schema:
-                $ref: "#/components/schemas/Error"
+                $ref: "#/components/schemas/APIError"
           description: Not Found
         "408":
           $ref: "#/components/responses/RequestTimeout"
@@ -4245,7 +4251,7 @@ paths:
                 validation_name:
                   $ref: "#/components/examples/validation_name"
               schema:
-                $ref: "#/components/schemas/Error"
+                $ref: "#/components/schemas/APIError"
           description: Unprocessable Entity
         "500":
           $ref: "#/components/responses/InternalServerError"
@@ -4258,13 +4264,14 @@ paths:
                 internal_unavailable:
                   $ref: "#/components/examples/internal_unavailable"
               schema:
-                $ref: "#/components/schemas/Error"
+                $ref: "#/components/schemas/APIError"
           description: Service Unavailable
       security:
         - apiKeyAuth: []
       summary: Update API Box Snapshot
       tags:
         - apibox-snapshots
+      x-speakeasy-name-override: update
   /v1/apibox-snapshots/{id}/cancel:
     post:
       description: Requests cancellation of a pending or active build and returns the Snapshot without waiting for the build to stop. Get the Snapshot until its status leaves pending or building. The build can finish before cancellation takes effect. A Snapshot whose build has settled is returned unchanged.
@@ -4293,7 +4300,7 @@ paths:
                 auth_forbidden_catalog_apibox:
                   $ref: "#/components/examples/auth_forbidden_catalog_apibox"
               schema:
-                $ref: "#/components/schemas/Error"
+                $ref: "#/components/schemas/APIError"
           description: Forbidden
         "404":
           content:
@@ -4302,7 +4309,7 @@ paths:
                 apibox_snapshot_not_found:
                   $ref: "#/components/examples/apibox_snapshot_not_found"
               schema:
-                $ref: "#/components/schemas/Error"
+                $ref: "#/components/schemas/APIError"
           description: Not Found
         "500":
           $ref: "#/components/responses/InternalServerError"
@@ -4315,13 +4322,14 @@ paths:
                 internal_unavailable:
                   $ref: "#/components/examples/internal_unavailable"
               schema:
-                $ref: "#/components/schemas/Error"
+                $ref: "#/components/schemas/APIError"
           description: Service Unavailable
       security:
         - apiKeyAuth: []
       summary: Cancel API Box Snapshot build
       tags:
         - apibox-snapshots
+      x-speakeasy-name-override: cancel
   /v1/apibox-snapshots/{id}/clone:
     post:
       description: Creates a ready copy of a ready API Box Snapshot in another workspace, without a build. The clone has a new ID and the source's artifact, documents and saved state; the source is unchanged. The clone records no credentials, since they belong to the source workspace, and no parent or source Snapshot. The source is the caller's workspace. An API key may clone into any other workspace of its organization.
@@ -4362,7 +4370,7 @@ paths:
                 bad_request_clone_target:
                   $ref: "#/components/examples/bad_request_clone_target"
               schema:
-                $ref: "#/components/schemas/Error"
+                $ref: "#/components/schemas/APIError"
           description: Bad Request
         "401":
           $ref: "#/components/responses/Unauthorized"
@@ -4373,7 +4381,7 @@ paths:
                 auth_forbidden_clone:
                   $ref: "#/components/examples/auth_forbidden_clone"
               schema:
-                $ref: "#/components/schemas/Error"
+                $ref: "#/components/schemas/APIError"
           description: Forbidden
         "404":
           content:
@@ -4384,7 +4392,7 @@ paths:
                 workspace_not_found:
                   $ref: "#/components/examples/workspace_not_found"
               schema:
-                $ref: "#/components/schemas/Error"
+                $ref: "#/components/schemas/APIError"
           description: Not Found
         "408":
           $ref: "#/components/responses/RequestTimeout"
@@ -4397,7 +4405,7 @@ paths:
                 idempotency_conflict:
                   $ref: "#/components/examples/idempotency_conflict"
               schema:
-                $ref: "#/components/schemas/Error"
+                $ref: "#/components/schemas/APIError"
           description: Conflict
         "413":
           $ref: "#/components/responses/PayloadTooLarge"
@@ -4410,7 +4418,7 @@ paths:
                 validation_idempotency_key:
                   $ref: "#/components/examples/validation_idempotency_key"
               schema:
-                $ref: "#/components/schemas/Error"
+                $ref: "#/components/schemas/APIError"
           description: Unprocessable Entity
         "500":
           $ref: "#/components/responses/InternalServerError"
@@ -4423,13 +4431,14 @@ paths:
                 internal_unavailable:
                   $ref: "#/components/examples/internal_unavailable"
               schema:
-                $ref: "#/components/schemas/Error"
+                $ref: "#/components/schemas/APIError"
           description: Service Unavailable
       security:
         - apiKeyAuth: []
       summary: Clone API Box Snapshot
       tags:
         - apibox-snapshots
+      x-speakeasy-name-override: clone
   /v1/apibox-snapshots/{id}/resume:
     post:
       description: "Resumes a build that waits, as build.waiting reports: at QA because its live credentials were rejected or the live systems rate limited its calls, or for more time after it used its time limit. For a credential wait, refresh each credential it names with PATCH /v1/credentials/{id} first: QA then runs again with their current values, and the build goes on to finalize. For a rate-limit wait, resume once the rate limit resets: QA then runs again. For a wait for more time, send add_seconds: the build continues where it stopped, with that much time from the resume. Returns the Snapshot, still building. A wait does not count toward the build's time limit: a build resumed from a QA wait has the time it had left when it began waiting. A build that is not waiting returns 409 apibox_snapshot_not_waiting."
@@ -4463,7 +4472,7 @@ paths:
                 bad_request_body:
                   $ref: "#/components/examples/bad_request_body"
               schema:
-                $ref: "#/components/schemas/Error"
+                $ref: "#/components/schemas/APIError"
           description: Bad Request
         "401":
           $ref: "#/components/responses/Unauthorized"
@@ -4474,7 +4483,7 @@ paths:
                 auth_forbidden_catalog_apibox:
                   $ref: "#/components/examples/auth_forbidden_catalog_apibox"
               schema:
-                $ref: "#/components/schemas/Error"
+                $ref: "#/components/schemas/APIError"
           description: Forbidden
         "404":
           content:
@@ -4483,7 +4492,7 @@ paths:
                 apibox_snapshot_not_found:
                   $ref: "#/components/examples/apibox_snapshot_not_found"
               schema:
-                $ref: "#/components/schemas/Error"
+                $ref: "#/components/schemas/APIError"
           description: Not Found
         "408":
           $ref: "#/components/responses/RequestTimeout"
@@ -4494,7 +4503,7 @@ paths:
                 apibox_snapshot_not_waiting:
                   $ref: "#/components/examples/apibox_snapshot_not_waiting"
               schema:
-                $ref: "#/components/schemas/Error"
+                $ref: "#/components/schemas/APIError"
           description: Conflict
         "413":
           $ref: "#/components/responses/PayloadTooLarge"
@@ -4511,13 +4520,14 @@ paths:
                 internal_unavailable:
                   $ref: "#/components/examples/internal_unavailable"
               schema:
-                $ref: "#/components/schemas/Error"
+                $ref: "#/components/schemas/APIError"
           description: Service Unavailable
       security:
         - apiKeyAuth: []
       summary: Resume API Box Snapshot build
       tags:
         - apibox-snapshots
+      x-speakeasy-name-override: resume
   /v1/apibox/{id}:
     delete:
       description: Deletes an API Box, running or stopped, with its state. Its runtime is released after the response. An API Box that MCP Boxes front returns 409 apibox_in_use; delete them first.
@@ -4542,7 +4552,7 @@ paths:
                 apibox_not_found:
                   $ref: "#/components/examples/apibox_not_found"
               schema:
-                $ref: "#/components/schemas/Error"
+                $ref: "#/components/schemas/APIError"
           description: Not Found
         "409":
           content:
@@ -4551,7 +4561,7 @@ paths:
                 apibox_in_use:
                   $ref: "#/components/examples/apibox_in_use"
               schema:
-                $ref: "#/components/schemas/Error"
+                $ref: "#/components/schemas/APIError"
           description: Conflict
         "500":
           $ref: "#/components/responses/InternalServerError"
@@ -4564,13 +4574,14 @@ paths:
                 internal_unavailable:
                   $ref: "#/components/examples/internal_unavailable"
               schema:
-                $ref: "#/components/schemas/Error"
+                $ref: "#/components/schemas/APIError"
           description: Service Unavailable
       security:
         - apiKeyAuth: []
       summary: Delete API Box
       tags:
-        - apibox
+        - apiboxes
+      x-speakeasy-name-override: delete
     get:
       description: "Returns an API Box, its status and its connection: its endpoint and token, whether it is running or stopped. Requests reach it only while it is running."
       operationId: get-apibox
@@ -4598,7 +4609,7 @@ paths:
                 apibox_not_found:
                   $ref: "#/components/examples/apibox_not_found"
               schema:
-                $ref: "#/components/schemas/Error"
+                $ref: "#/components/schemas/APIError"
           description: Not Found
         "500":
           $ref: "#/components/responses/InternalServerError"
@@ -4611,13 +4622,14 @@ paths:
                 internal_unavailable:
                   $ref: "#/components/examples/internal_unavailable"
               schema:
-                $ref: "#/components/schemas/Error"
+                $ref: "#/components/schemas/APIError"
           description: Service Unavailable
       security:
         - apiKeyAuth: []
       summary: Get API Box
       tags:
-        - apibox
+        - apiboxes
+      x-speakeasy-name-override: get
       x-speakeasy-retries:
         backoff:
           exponent: 1.5
@@ -4661,7 +4673,7 @@ paths:
                 bad_request_body:
                   $ref: "#/components/examples/bad_request_body"
               schema:
-                $ref: "#/components/schemas/Error"
+                $ref: "#/components/schemas/APIError"
           description: Bad Request
         "401":
           $ref: "#/components/responses/Unauthorized"
@@ -4672,7 +4684,7 @@ paths:
                 apibox_not_found:
                   $ref: "#/components/examples/apibox_not_found"
               schema:
-                $ref: "#/components/schemas/Error"
+                $ref: "#/components/schemas/APIError"
           description: Not Found
         "408":
           $ref: "#/components/responses/RequestTimeout"
@@ -4689,7 +4701,7 @@ paths:
                 validation_name:
                   $ref: "#/components/examples/validation_name"
               schema:
-                $ref: "#/components/schemas/Error"
+                $ref: "#/components/schemas/APIError"
           description: Unprocessable Entity
         "500":
           $ref: "#/components/responses/InternalServerError"
@@ -4702,13 +4714,14 @@ paths:
                 internal_unavailable:
                   $ref: "#/components/examples/internal_unavailable"
               schema:
-                $ref: "#/components/schemas/Error"
+                $ref: "#/components/schemas/APIError"
           description: Service Unavailable
       security:
         - apiKeyAuth: []
       summary: Update API Box
       tags:
-        - apibox
+        - apiboxes
+      x-speakeasy-name-override: update
   /v1/apibox/{id}/snapshot:
     post:
       description: Saves a running API Box's service and current state as an API Box Snapshot, ready when the response returns. The API Box keeps running, and a paused one is woken. API Boxes created from the Snapshot start with the saved state instead of a new workspace, so they refuse include_sample_data. The Snapshot outlives the API Box. A starting API Box returns 409 apibox_starting; a stopping or stopped one returns 409 apibox_stopped; one whose runtime cannot save its state returns 409 apibox_rebuild_required.
@@ -4746,7 +4759,7 @@ paths:
                 bad_request_body:
                   $ref: "#/components/examples/bad_request_body"
               schema:
-                $ref: "#/components/schemas/Error"
+                $ref: "#/components/schemas/APIError"
           description: Bad Request
         "401":
           $ref: "#/components/responses/Unauthorized"
@@ -4757,7 +4770,7 @@ paths:
                 apibox_not_found:
                   $ref: "#/components/examples/apibox_not_found"
               schema:
-                $ref: "#/components/schemas/Error"
+                $ref: "#/components/schemas/APIError"
           description: Not Found
         "408":
           $ref: "#/components/responses/RequestTimeout"
@@ -4772,7 +4785,7 @@ paths:
                 apibox_stopped:
                   $ref: "#/components/examples/apibox_stopped"
               schema:
-                $ref: "#/components/schemas/Error"
+                $ref: "#/components/schemas/APIError"
           description: Conflict
         "413":
           $ref: "#/components/responses/PayloadTooLarge"
@@ -4785,7 +4798,7 @@ paths:
                 validation_metadata:
                   $ref: "#/components/examples/validation_metadata"
               schema:
-                $ref: "#/components/schemas/Error"
+                $ref: "#/components/schemas/APIError"
           description: Unprocessable Entity
         "500":
           $ref: "#/components/responses/InternalServerError"
@@ -4798,13 +4811,14 @@ paths:
                 internal_unavailable:
                   $ref: "#/components/examples/internal_unavailable"
               schema:
-                $ref: "#/components/schemas/Error"
+                $ref: "#/components/schemas/APIError"
           description: Service Unavailable
       security:
         - apiKeyAuth: []
       summary: Save API Box as Snapshot
       tags:
-        - apibox
+        - apiboxes
+      x-speakeasy-name-override: save_snapshot
   /v1/apibox/{id}/start:
     post:
       description: Starts a stopped API Box from the state its stop saved, and returns at once with status starting; get the API Box until it is running. Its token stays the same; its get returns it. A running, starting or stopping API Box returns 409 apibox_not_stopped.
@@ -4833,7 +4847,7 @@ paths:
                 apibox_not_found:
                   $ref: "#/components/examples/apibox_not_found"
               schema:
-                $ref: "#/components/schemas/Error"
+                $ref: "#/components/schemas/APIError"
           description: Not Found
         "409":
           content:
@@ -4842,7 +4856,7 @@ paths:
                 apibox_not_stopped:
                   $ref: "#/components/examples/apibox_not_stopped"
               schema:
-                $ref: "#/components/schemas/Error"
+                $ref: "#/components/schemas/APIError"
           description: Conflict
         "429":
           content:
@@ -4851,7 +4865,7 @@ paths:
                 box_quota_exceeded:
                   $ref: "#/components/examples/box_quota_exceeded"
               schema:
-                $ref: "#/components/schemas/Error"
+                $ref: "#/components/schemas/APIError"
           description: Too Many Requests
         "500":
           $ref: "#/components/responses/InternalServerError"
@@ -4864,13 +4878,14 @@ paths:
                 internal_unavailable:
                   $ref: "#/components/examples/internal_unavailable"
               schema:
-                $ref: "#/components/schemas/Error"
+                $ref: "#/components/schemas/APIError"
           description: Service Unavailable
       security:
         - apiKeyAuth: []
       summary: Start API Box
       tags:
-        - apibox
+        - apiboxes
+      x-speakeasy-name-override: start
   /v1/apibox/{id}/steps:
     get:
       description: Lists the API Box's steps in order. Each request that changed state is one step; a request that only reads registers none. An API Box that is not running returns 409 apibox_stopped.
@@ -4911,7 +4926,7 @@ paths:
                 bad_request:
                   $ref: "#/components/examples/bad_request"
               schema:
-                $ref: "#/components/schemas/Error"
+                $ref: "#/components/schemas/APIError"
           description: Bad Request
         "401":
           $ref: "#/components/responses/Unauthorized"
@@ -4922,7 +4937,7 @@ paths:
                 apibox_not_found:
                   $ref: "#/components/examples/apibox_not_found"
               schema:
-                $ref: "#/components/schemas/Error"
+                $ref: "#/components/schemas/APIError"
           description: Not Found
         "409":
           content:
@@ -4933,7 +4948,7 @@ paths:
                 apibox_stopped:
                   $ref: "#/components/examples/apibox_stopped"
               schema:
-                $ref: "#/components/schemas/Error"
+                $ref: "#/components/schemas/APIError"
           description: Conflict
         "422":
           content:
@@ -4942,7 +4957,7 @@ paths:
                 validation_list_limit:
                   $ref: "#/components/examples/validation_list_limit"
               schema:
-                $ref: "#/components/schemas/Error"
+                $ref: "#/components/schemas/APIError"
           description: Unprocessable Entity
         "500":
           $ref: "#/components/responses/InternalServerError"
@@ -4955,13 +4970,14 @@ paths:
                 internal_unavailable:
                   $ref: "#/components/examples/internal_unavailable"
               schema:
-                $ref: "#/components/schemas/Error"
+                $ref: "#/components/schemas/APIError"
           description: Service Unavailable
       security:
         - apiKeyAuth: []
       summary: List API Box steps
       tags:
-        - apibox
+        - apiboxes
+      x-speakeasy-name-override: list_steps
       x-speakeasy-pagination:
         inputs:
           - in: parameters
@@ -5010,7 +5026,7 @@ paths:
                 apibox_not_found:
                   $ref: "#/components/examples/apibox_not_found"
               schema:
-                $ref: "#/components/schemas/Error"
+                $ref: "#/components/schemas/APIError"
           description: Not Found
         "409":
           content:
@@ -5019,7 +5035,7 @@ paths:
                 apibox_starting:
                   $ref: "#/components/examples/apibox_starting"
               schema:
-                $ref: "#/components/schemas/Error"
+                $ref: "#/components/schemas/APIError"
           description: Conflict
         "500":
           $ref: "#/components/responses/InternalServerError"
@@ -5032,13 +5048,14 @@ paths:
                 internal_unavailable:
                   $ref: "#/components/examples/internal_unavailable"
               schema:
-                $ref: "#/components/schemas/Error"
+                $ref: "#/components/schemas/APIError"
           description: Service Unavailable
       security:
         - apiKeyAuth: []
       summary: Stop API Box
       tags:
-        - apibox
+        - apiboxes
+      x-speakeasy-name-override: stop
   /v1/credentials:
     get:
       description: Returns the workspace's credentials, newest first. Credential values are never returned.
@@ -5072,7 +5089,7 @@ paths:
                 bad_request:
                   $ref: "#/components/examples/bad_request"
               schema:
-                $ref: "#/components/schemas/Error"
+                $ref: "#/components/schemas/APIError"
           description: Bad Request
         "401":
           $ref: "#/components/responses/Unauthorized"
@@ -5083,7 +5100,7 @@ paths:
                 validation_list_limit:
                   $ref: "#/components/examples/validation_list_limit"
               schema:
-                $ref: "#/components/schemas/Error"
+                $ref: "#/components/schemas/APIError"
           description: Unprocessable Entity
         "500":
           $ref: "#/components/responses/InternalServerError"
@@ -5096,13 +5113,14 @@ paths:
                 internal_unavailable:
                   $ref: "#/components/examples/internal_unavailable"
               schema:
-                $ref: "#/components/schemas/Error"
+                $ref: "#/components/schemas/APIError"
           description: Service Unavailable
       security:
         - apiKeyAuth: []
       summary: List credentials
       tags:
         - credentials
+      x-speakeasy-name-override: list
       x-speakeasy-pagination:
         inputs:
           - in: parameters
@@ -5153,7 +5171,7 @@ paths:
                 bad_request_body:
                   $ref: "#/components/examples/bad_request_body"
               schema:
-                $ref: "#/components/schemas/Error"
+                $ref: "#/components/schemas/APIError"
           description: Bad Request
         "401":
           $ref: "#/components/responses/Unauthorized"
@@ -5166,7 +5184,7 @@ paths:
                 idempotency_conflict:
                   $ref: "#/components/examples/idempotency_conflict"
               schema:
-                $ref: "#/components/schemas/Error"
+                $ref: "#/components/schemas/APIError"
           description: Conflict
         "413":
           $ref: "#/components/responses/PayloadTooLarge"
@@ -5181,7 +5199,7 @@ paths:
                 validation_idempotency_key:
                   $ref: "#/components/examples/validation_idempotency_key"
               schema:
-                $ref: "#/components/schemas/Error"
+                $ref: "#/components/schemas/APIError"
           description: Unprocessable Entity
         "500":
           $ref: "#/components/responses/InternalServerError"
@@ -5194,13 +5212,14 @@ paths:
                 internal_unavailable:
                   $ref: "#/components/examples/internal_unavailable"
               schema:
-                $ref: "#/components/schemas/Error"
+                $ref: "#/components/schemas/APIError"
           description: Service Unavailable
       security:
         - apiKeyAuth: []
       summary: Create credential
       tags:
         - credentials
+      x-speakeasy-name-override: create
   /v1/credentials/{id}:
     delete:
       description: Deletes a credential and its stored value.
@@ -5225,7 +5244,7 @@ paths:
                 auth_forbidden_credential:
                   $ref: "#/components/examples/auth_forbidden_credential"
               schema:
-                $ref: "#/components/schemas/Error"
+                $ref: "#/components/schemas/APIError"
           description: Forbidden
         "404":
           content:
@@ -5234,7 +5253,7 @@ paths:
                 credential_not_found:
                   $ref: "#/components/examples/credential_not_found"
               schema:
-                $ref: "#/components/schemas/Error"
+                $ref: "#/components/schemas/APIError"
           description: Not Found
         "500":
           $ref: "#/components/responses/InternalServerError"
@@ -5247,13 +5266,14 @@ paths:
                 internal_unavailable:
                   $ref: "#/components/examples/internal_unavailable"
               schema:
-                $ref: "#/components/schemas/Error"
+                $ref: "#/components/schemas/APIError"
           description: Service Unavailable
       security:
         - apiKeyAuth: []
       summary: Delete credential
       tags:
         - credentials
+      x-speakeasy-name-override: delete
     get:
       description: Returns a credential without its value.
       operationId: get-credential
@@ -5281,7 +5301,7 @@ paths:
                 auth_forbidden_credential:
                   $ref: "#/components/examples/auth_forbidden_credential"
               schema:
-                $ref: "#/components/schemas/Error"
+                $ref: "#/components/schemas/APIError"
           description: Forbidden
         "404":
           content:
@@ -5290,7 +5310,7 @@ paths:
                 credential_not_found:
                   $ref: "#/components/examples/credential_not_found"
               schema:
-                $ref: "#/components/schemas/Error"
+                $ref: "#/components/schemas/APIError"
           description: Not Found
         "500":
           $ref: "#/components/responses/InternalServerError"
@@ -5303,13 +5323,14 @@ paths:
                 internal_unavailable:
                   $ref: "#/components/examples/internal_unavailable"
               schema:
-                $ref: "#/components/schemas/Error"
+                $ref: "#/components/schemas/APIError"
           description: Service Unavailable
       security:
         - apiKeyAuth: []
       summary: Get credential
       tags:
         - credentials
+      x-speakeasy-name-override: get
       x-speakeasy-retries:
         backoff:
           exponent: 1.5
@@ -5353,7 +5374,7 @@ paths:
                 bad_request_body:
                   $ref: "#/components/examples/bad_request_body"
               schema:
-                $ref: "#/components/schemas/Error"
+                $ref: "#/components/schemas/APIError"
           description: Bad Request
         "401":
           $ref: "#/components/responses/Unauthorized"
@@ -5364,7 +5385,7 @@ paths:
                 auth_forbidden_credential:
                   $ref: "#/components/examples/auth_forbidden_credential"
               schema:
-                $ref: "#/components/schemas/Error"
+                $ref: "#/components/schemas/APIError"
           description: Forbidden
         "404":
           content:
@@ -5373,7 +5394,7 @@ paths:
                 credential_not_found:
                   $ref: "#/components/examples/credential_not_found"
               schema:
-                $ref: "#/components/schemas/Error"
+                $ref: "#/components/schemas/APIError"
           description: Not Found
         "408":
           $ref: "#/components/responses/RequestTimeout"
@@ -5390,7 +5411,7 @@ paths:
                 validation_credential_value:
                   $ref: "#/components/examples/validation_credential_value"
               schema:
-                $ref: "#/components/schemas/Error"
+                $ref: "#/components/schemas/APIError"
           description: Unprocessable Entity
         "500":
           $ref: "#/components/responses/InternalServerError"
@@ -5403,13 +5424,14 @@ paths:
                 internal_unavailable:
                   $ref: "#/components/examples/internal_unavailable"
               schema:
-                $ref: "#/components/schemas/Error"
+                $ref: "#/components/schemas/APIError"
           description: Service Unavailable
       security:
         - apiKeyAuth: []
       summary: Update credential
       tags:
         - credentials
+      x-speakeasy-name-override: update
   /v1/mcpbox:
     get:
       description: Returns the workspace's MCP Boxes, newest first. Results can be filtered by status and Snapshot.
@@ -5461,7 +5483,7 @@ paths:
                 bad_request:
                   $ref: "#/components/examples/bad_request"
               schema:
-                $ref: "#/components/schemas/Error"
+                $ref: "#/components/schemas/APIError"
           description: Bad Request
         "401":
           $ref: "#/components/responses/Unauthorized"
@@ -5472,7 +5494,7 @@ paths:
                 validation_list_limit:
                   $ref: "#/components/examples/validation_list_limit"
               schema:
-                $ref: "#/components/schemas/Error"
+                $ref: "#/components/schemas/APIError"
           description: Unprocessable Entity
         "500":
           $ref: "#/components/responses/InternalServerError"
@@ -5485,13 +5507,14 @@ paths:
                 internal_unavailable:
                   $ref: "#/components/examples/internal_unavailable"
               schema:
-                $ref: "#/components/schemas/Error"
+                $ref: "#/components/schemas/APIError"
           description: Service Unavailable
       security:
         - apiKeyAuth: []
       summary: List MCP Boxes
       tags:
-        - mcpbox
+        - mcpboxes
+      x-speakeasy-name-override: list
       x-speakeasy-pagination:
         inputs:
           - in: parameters
@@ -5533,7 +5556,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/MCPBoxTokenResponse"
+                $ref: "#/components/schemas/CreateMCPBoxResponse"
           description: Accepted
         "400":
           content:
@@ -5542,7 +5565,7 @@ paths:
                 bad_request_body:
                   $ref: "#/components/examples/bad_request_body"
               schema:
-                $ref: "#/components/schemas/Error"
+                $ref: "#/components/schemas/APIError"
           description: Bad Request
         "401":
           $ref: "#/components/responses/Unauthorized"
@@ -5555,7 +5578,7 @@ paths:
                 mcpbox_snapshot_not_found:
                   $ref: "#/components/examples/mcpbox_snapshot_not_found"
               schema:
-                $ref: "#/components/schemas/Error"
+                $ref: "#/components/schemas/APIError"
           description: Not Found
         "408":
           $ref: "#/components/responses/RequestTimeout"
@@ -5566,7 +5589,7 @@ paths:
                 mcpbox_snapshot_not_ready:
                   $ref: "#/components/examples/mcpbox_snapshot_not_ready"
               schema:
-                $ref: "#/components/schemas/Error"
+                $ref: "#/components/schemas/APIError"
           description: Conflict
         "413":
           $ref: "#/components/responses/PayloadTooLarge"
@@ -5581,7 +5604,7 @@ paths:
                 validation_metadata:
                   $ref: "#/components/examples/validation_metadata"
               schema:
-                $ref: "#/components/schemas/Error"
+                $ref: "#/components/schemas/APIError"
           description: Unprocessable Entity
         "429":
           content:
@@ -5590,7 +5613,7 @@ paths:
                 box_quota_exceeded:
                   $ref: "#/components/examples/box_quota_exceeded"
               schema:
-                $ref: "#/components/schemas/Error"
+                $ref: "#/components/schemas/APIError"
           description: Too Many Requests
         "500":
           $ref: "#/components/responses/InternalServerError"
@@ -5603,13 +5626,14 @@ paths:
                 internal_unavailable:
                   $ref: "#/components/examples/internal_unavailable"
               schema:
-                $ref: "#/components/schemas/Error"
+                $ref: "#/components/schemas/APIError"
           description: Service Unavailable
       security:
         - apiKeyAuth: []
       summary: Create MCP Box
       tags:
-        - mcpbox
+        - mcpboxes
+      x-speakeasy-name-override: create
   /v1/mcpbox-snapshots:
     get:
       description: Returns the workspace's MCP Box Snapshots and the catalog's, newest first. Results can be filtered by status and source, and by the MCP Box a Snapshot was saved from.
@@ -5654,7 +5678,7 @@ paths:
         - description: Optional filter for the Snapshots saved from this Box.
           explode: false
           in: query
-          name: box_id
+          name: source_box_id
           schema:
             type: string
       responses:
@@ -5671,7 +5695,7 @@ paths:
                 bad_request:
                   $ref: "#/components/examples/bad_request"
               schema:
-                $ref: "#/components/schemas/Error"
+                $ref: "#/components/schemas/APIError"
           description: Bad Request
         "401":
           $ref: "#/components/responses/Unauthorized"
@@ -5682,7 +5706,7 @@ paths:
                 validation_list_limit:
                   $ref: "#/components/examples/validation_list_limit"
               schema:
-                $ref: "#/components/schemas/Error"
+                $ref: "#/components/schemas/APIError"
           description: Unprocessable Entity
         "500":
           $ref: "#/components/responses/InternalServerError"
@@ -5695,13 +5719,14 @@ paths:
                 internal_unavailable:
                   $ref: "#/components/examples/internal_unavailable"
               schema:
-                $ref: "#/components/schemas/Error"
+                $ref: "#/components/schemas/APIError"
           description: Service Unavailable
       security:
         - apiKeyAuth: []
       summary: List MCP Box Snapshots
       tags:
         - mcpbox-snapshots
+      x-speakeasy-name-override: list
       x-speakeasy-pagination:
         inputs:
           - in: parameters
@@ -5772,7 +5797,7 @@ paths:
                 bad_request_body:
                   $ref: "#/components/examples/bad_request_body"
               schema:
-                $ref: "#/components/schemas/Error"
+                $ref: "#/components/schemas/APIError"
           description: Bad Request
         "401":
           $ref: "#/components/responses/Unauthorized"
@@ -5787,7 +5812,7 @@ paths:
                 mcpbox_snapshot_not_found_parent:
                   $ref: "#/components/examples/mcpbox_snapshot_not_found_parent"
               schema:
-                $ref: "#/components/schemas/Error"
+                $ref: "#/components/schemas/APIError"
           description: Not Found
         "408":
           $ref: "#/components/responses/RequestTimeout"
@@ -5800,7 +5825,7 @@ paths:
                 mcpbox_snapshot_not_ready_parent:
                   $ref: "#/components/examples/mcpbox_snapshot_not_ready_parent"
               schema:
-                $ref: "#/components/schemas/Error"
+                $ref: "#/components/schemas/APIError"
           description: Conflict
         "413":
           $ref: "#/components/responses/PayloadTooLarge"
@@ -5813,7 +5838,7 @@ paths:
                 build_rate_exceeded:
                   $ref: "#/components/examples/build_rate_exceeded"
               schema:
-                $ref: "#/components/schemas/Error"
+                $ref: "#/components/schemas/APIError"
           description: Too Many Requests
           headers:
             Retry-After:
@@ -5832,7 +5857,7 @@ paths:
                 internal_unavailable:
                   $ref: "#/components/examples/internal_unavailable"
               schema:
-                $ref: "#/components/schemas/Error"
+                $ref: "#/components/schemas/APIError"
           description: Service Unavailable
           headers:
             Retry-After:
@@ -5845,6 +5870,7 @@ paths:
       summary: Create MCP Box Snapshot
       tags:
         - mcpbox-snapshots
+      x-speakeasy-name-override: create
   /v1/mcpbox-snapshots/{id}:
     delete:
       description: Deletes an MCP Box Snapshot. A build that is still pending or building is canceled first. The API Box Snapshot it was built against stays. A Snapshot that MCP Boxes serve returns 409 mcpbox_snapshot_in_use; delete those MCP Boxes first. While a build that names it as parent_id is pending or building, it returns 409 mcpbox_snapshot_parent_in_use; retry after the build finishes.
@@ -5869,7 +5895,7 @@ paths:
                 auth_forbidden_catalog_mcpbox:
                   $ref: "#/components/examples/auth_forbidden_catalog_mcpbox"
               schema:
-                $ref: "#/components/schemas/Error"
+                $ref: "#/components/schemas/APIError"
           description: Forbidden
         "404":
           content:
@@ -5878,7 +5904,7 @@ paths:
                 mcpbox_snapshot_not_found:
                   $ref: "#/components/examples/mcpbox_snapshot_not_found"
               schema:
-                $ref: "#/components/schemas/Error"
+                $ref: "#/components/schemas/APIError"
           description: Not Found
         "409":
           content:
@@ -5889,7 +5915,7 @@ paths:
                 mcpbox_snapshot_parent_in_use:
                   $ref: "#/components/examples/mcpbox_snapshot_parent_in_use"
               schema:
-                $ref: "#/components/schemas/Error"
+                $ref: "#/components/schemas/APIError"
           description: Conflict
         "500":
           $ref: "#/components/responses/InternalServerError"
@@ -5902,13 +5928,14 @@ paths:
                 internal_unavailable:
                   $ref: "#/components/examples/internal_unavailable"
               schema:
-                $ref: "#/components/schemas/Error"
+                $ref: "#/components/schemas/APIError"
           description: Service Unavailable
       security:
         - apiKeyAuth: []
       summary: Delete MCP Box Snapshot
       tags:
         - mcpbox-snapshots
+      x-speakeasy-name-override: delete
     get:
       description: Returns an MCP Box Snapshot of the workspace or the catalog, and its build status.
       operationId: get-mcpbox-snapshot
@@ -5936,7 +5963,7 @@ paths:
                 mcpbox_snapshot_not_found:
                   $ref: "#/components/examples/mcpbox_snapshot_not_found"
               schema:
-                $ref: "#/components/schemas/Error"
+                $ref: "#/components/schemas/APIError"
           description: Not Found
         "500":
           $ref: "#/components/responses/InternalServerError"
@@ -5949,13 +5976,14 @@ paths:
                 internal_unavailable:
                   $ref: "#/components/examples/internal_unavailable"
               schema:
-                $ref: "#/components/schemas/Error"
+                $ref: "#/components/schemas/APIError"
           description: Service Unavailable
       security:
         - apiKeyAuth: []
       summary: Get MCP Box Snapshot
       tags:
         - mcpbox-snapshots
+      x-speakeasy-name-override: get
       x-speakeasy-retries:
         backoff:
           exponent: 1.5
@@ -5999,7 +6027,7 @@ paths:
                 bad_request_body:
                   $ref: "#/components/examples/bad_request_body"
               schema:
-                $ref: "#/components/schemas/Error"
+                $ref: "#/components/schemas/APIError"
           description: Bad Request
         "401":
           $ref: "#/components/responses/Unauthorized"
@@ -6010,7 +6038,7 @@ paths:
                 auth_forbidden_catalog_mcpbox:
                   $ref: "#/components/examples/auth_forbidden_catalog_mcpbox"
               schema:
-                $ref: "#/components/schemas/Error"
+                $ref: "#/components/schemas/APIError"
           description: Forbidden
         "404":
           content:
@@ -6019,7 +6047,7 @@ paths:
                 mcpbox_snapshot_not_found:
                   $ref: "#/components/examples/mcpbox_snapshot_not_found"
               schema:
-                $ref: "#/components/schemas/Error"
+                $ref: "#/components/schemas/APIError"
           description: Not Found
         "408":
           $ref: "#/components/responses/RequestTimeout"
@@ -6036,7 +6064,7 @@ paths:
                 validation_name:
                   $ref: "#/components/examples/validation_name"
               schema:
-                $ref: "#/components/schemas/Error"
+                $ref: "#/components/schemas/APIError"
           description: Unprocessable Entity
         "500":
           $ref: "#/components/responses/InternalServerError"
@@ -6049,13 +6077,14 @@ paths:
                 internal_unavailable:
                   $ref: "#/components/examples/internal_unavailable"
               schema:
-                $ref: "#/components/schemas/Error"
+                $ref: "#/components/schemas/APIError"
           description: Service Unavailable
       security:
         - apiKeyAuth: []
       summary: Update MCP Box Snapshot
       tags:
         - mcpbox-snapshots
+      x-speakeasy-name-override: update
   /v1/mcpbox-snapshots/{id}/cancel:
     post:
       description: Requests cancellation of a pending or active build and returns the Snapshot without waiting for the build to stop. Get the Snapshot until its status leaves pending or building. The build can finish before cancellation takes effect. A Snapshot whose build has settled is returned unchanged.
@@ -6084,7 +6113,7 @@ paths:
                 auth_forbidden_catalog_mcpbox:
                   $ref: "#/components/examples/auth_forbidden_catalog_mcpbox"
               schema:
-                $ref: "#/components/schemas/Error"
+                $ref: "#/components/schemas/APIError"
           description: Forbidden
         "404":
           content:
@@ -6093,7 +6122,7 @@ paths:
                 mcpbox_snapshot_not_found:
                   $ref: "#/components/examples/mcpbox_snapshot_not_found"
               schema:
-                $ref: "#/components/schemas/Error"
+                $ref: "#/components/schemas/APIError"
           description: Not Found
         "500":
           $ref: "#/components/responses/InternalServerError"
@@ -6106,13 +6135,14 @@ paths:
                 internal_unavailable:
                   $ref: "#/components/examples/internal_unavailable"
               schema:
-                $ref: "#/components/schemas/Error"
+                $ref: "#/components/schemas/APIError"
           description: Service Unavailable
       security:
         - apiKeyAuth: []
       summary: Cancel MCP Box Snapshot build
       tags:
         - mcpbox-snapshots
+      x-speakeasy-name-override: cancel
   /v1/mcpbox-snapshots/{id}/clone:
     post:
       description: Creates a ready copy of a ready MCP Box Snapshot in another workspace, without a build. The clone has a new ID and the source's artifact, documents and saved state; the source is unchanged. The clone records no credentials, since they belong to the source workspace, and no parent or source Snapshot. An API Box Snapshot of the source workspace that the MCP Box Snapshot was built against is cloned with it, and the clone is built against the copy; a catalog one is kept. The source is the caller's workspace. An API key may clone into any other workspace of its organization.
@@ -6153,7 +6183,7 @@ paths:
                 bad_request_clone_target:
                   $ref: "#/components/examples/bad_request_clone_target"
               schema:
-                $ref: "#/components/schemas/Error"
+                $ref: "#/components/schemas/APIError"
           description: Bad Request
         "401":
           $ref: "#/components/responses/Unauthorized"
@@ -6164,7 +6194,7 @@ paths:
                 auth_forbidden_clone:
                   $ref: "#/components/examples/auth_forbidden_clone"
               schema:
-                $ref: "#/components/schemas/Error"
+                $ref: "#/components/schemas/APIError"
           description: Forbidden
         "404":
           content:
@@ -6175,7 +6205,7 @@ paths:
                 workspace_not_found:
                   $ref: "#/components/examples/workspace_not_found"
               schema:
-                $ref: "#/components/schemas/Error"
+                $ref: "#/components/schemas/APIError"
           description: Not Found
         "408":
           $ref: "#/components/responses/RequestTimeout"
@@ -6188,7 +6218,7 @@ paths:
                 mcpbox_snapshot_not_ready:
                   $ref: "#/components/examples/mcpbox_snapshot_not_ready"
               schema:
-                $ref: "#/components/schemas/Error"
+                $ref: "#/components/schemas/APIError"
           description: Conflict
         "413":
           $ref: "#/components/responses/PayloadTooLarge"
@@ -6201,7 +6231,7 @@ paths:
                 validation_idempotency_key:
                   $ref: "#/components/examples/validation_idempotency_key"
               schema:
-                $ref: "#/components/schemas/Error"
+                $ref: "#/components/schemas/APIError"
           description: Unprocessable Entity
         "500":
           $ref: "#/components/responses/InternalServerError"
@@ -6214,13 +6244,14 @@ paths:
                 internal_unavailable:
                   $ref: "#/components/examples/internal_unavailable"
               schema:
-                $ref: "#/components/schemas/Error"
+                $ref: "#/components/schemas/APIError"
           description: Service Unavailable
       security:
         - apiKeyAuth: []
       summary: Clone MCP Box Snapshot
       tags:
         - mcpbox-snapshots
+      x-speakeasy-name-override: clone
   /v1/mcpbox-snapshots/{id}/resume:
     post:
       description: "Resumes a build that waits, as build.waiting reports: at QA because its live credential was rejected or the live source rate limited its calls, or for more time after it used its time limit. For a credential wait, refresh the credential it names with PATCH /v1/credentials/{id} first: QA then runs again with its current value, and the build goes on to finalize. For a rate-limit wait, resume once the rate limit resets: QA then runs again. For a wait for more time, send add_seconds: the build continues where it stopped, with that much time from the resume. Returns the Snapshot, still building. A wait does not count toward the build's time limit: a build resumed from a QA wait has the time it had left when it began waiting. A build that is not waiting returns 409 mcpbox_snapshot_not_waiting."
@@ -6254,7 +6285,7 @@ paths:
                 bad_request_body:
                   $ref: "#/components/examples/bad_request_body"
               schema:
-                $ref: "#/components/schemas/Error"
+                $ref: "#/components/schemas/APIError"
           description: Bad Request
         "401":
           $ref: "#/components/responses/Unauthorized"
@@ -6265,7 +6296,7 @@ paths:
                 auth_forbidden_catalog_mcpbox:
                   $ref: "#/components/examples/auth_forbidden_catalog_mcpbox"
               schema:
-                $ref: "#/components/schemas/Error"
+                $ref: "#/components/schemas/APIError"
           description: Forbidden
         "404":
           content:
@@ -6274,7 +6305,7 @@ paths:
                 mcpbox_snapshot_not_found:
                   $ref: "#/components/examples/mcpbox_snapshot_not_found"
               schema:
-                $ref: "#/components/schemas/Error"
+                $ref: "#/components/schemas/APIError"
           description: Not Found
         "408":
           $ref: "#/components/responses/RequestTimeout"
@@ -6285,7 +6316,7 @@ paths:
                 mcpbox_snapshot_not_waiting:
                   $ref: "#/components/examples/mcpbox_snapshot_not_waiting"
               schema:
-                $ref: "#/components/schemas/Error"
+                $ref: "#/components/schemas/APIError"
           description: Conflict
         "413":
           $ref: "#/components/responses/PayloadTooLarge"
@@ -6302,13 +6333,14 @@ paths:
                 internal_unavailable:
                   $ref: "#/components/examples/internal_unavailable"
               schema:
-                $ref: "#/components/schemas/Error"
+                $ref: "#/components/schemas/APIError"
           description: Service Unavailable
       security:
         - apiKeyAuth: []
       summary: Resume MCP Box Snapshot build
       tags:
         - mcpbox-snapshots
+      x-speakeasy-name-override: resume
   /v1/mcpbox/{id}:
     delete:
       description: Deletes an MCP Box, running or stopped. Its API Box stays. Its runtime is released after the response.
@@ -6333,7 +6365,7 @@ paths:
                 mcpbox_not_found:
                   $ref: "#/components/examples/mcpbox_not_found"
               schema:
-                $ref: "#/components/schemas/Error"
+                $ref: "#/components/schemas/APIError"
           description: Not Found
         "500":
           $ref: "#/components/responses/InternalServerError"
@@ -6346,13 +6378,14 @@ paths:
                 internal_unavailable:
                   $ref: "#/components/examples/internal_unavailable"
               schema:
-                $ref: "#/components/schemas/Error"
+                $ref: "#/components/schemas/APIError"
           description: Service Unavailable
       security:
         - apiKeyAuth: []
       summary: Delete MCP Box
       tags:
-        - mcpbox
+        - mcpboxes
+      x-speakeasy-name-override: delete
     get:
       description: "Returns an MCP Box, its status and its connection: its endpoint and token, whether it is running or stopped. Requests reach it only while it is running."
       operationId: get-mcpbox
@@ -6380,7 +6413,7 @@ paths:
                 mcpbox_not_found:
                   $ref: "#/components/examples/mcpbox_not_found"
               schema:
-                $ref: "#/components/schemas/Error"
+                $ref: "#/components/schemas/APIError"
           description: Not Found
         "500":
           $ref: "#/components/responses/InternalServerError"
@@ -6393,13 +6426,14 @@ paths:
                 internal_unavailable:
                   $ref: "#/components/examples/internal_unavailable"
               schema:
-                $ref: "#/components/schemas/Error"
+                $ref: "#/components/schemas/APIError"
           description: Service Unavailable
       security:
         - apiKeyAuth: []
       summary: Get MCP Box
       tags:
-        - mcpbox
+        - mcpboxes
+      x-speakeasy-name-override: get
       x-speakeasy-retries:
         backoff:
           exponent: 1.5
@@ -6443,7 +6477,7 @@ paths:
                 bad_request_body:
                   $ref: "#/components/examples/bad_request_body"
               schema:
-                $ref: "#/components/schemas/Error"
+                $ref: "#/components/schemas/APIError"
           description: Bad Request
         "401":
           $ref: "#/components/responses/Unauthorized"
@@ -6454,7 +6488,7 @@ paths:
                 mcpbox_not_found:
                   $ref: "#/components/examples/mcpbox_not_found"
               schema:
-                $ref: "#/components/schemas/Error"
+                $ref: "#/components/schemas/APIError"
           description: Not Found
         "408":
           $ref: "#/components/responses/RequestTimeout"
@@ -6471,7 +6505,7 @@ paths:
                 validation_name:
                   $ref: "#/components/examples/validation_name"
               schema:
-                $ref: "#/components/schemas/Error"
+                $ref: "#/components/schemas/APIError"
           description: Unprocessable Entity
         "500":
           $ref: "#/components/responses/InternalServerError"
@@ -6484,13 +6518,14 @@ paths:
                 internal_unavailable:
                   $ref: "#/components/examples/internal_unavailable"
               schema:
-                $ref: "#/components/schemas/Error"
+                $ref: "#/components/schemas/APIError"
           description: Service Unavailable
       security:
         - apiKeyAuth: []
       summary: Update MCP Box
       tags:
-        - mcpbox
+        - mcpboxes
+      x-speakeasy-name-override: update
   /v1/mcpbox/{id}/snapshot:
     post:
       description: Saves an MCP Box and the API Box it fronts as a new MCP Box Snapshot and a new API Box Snapshot, both ready when the response returns, or neither. The API Box must be running; a paused one is woken, and it keeps running. The MCP Box Snapshot serves the MCP Box's tools and is built against the API Box Snapshot, which holds the API Box's service and current state. Create an API Box from apibox_snapshot_id, then an MCP Box from the MCP Box Snapshot in front of it. Both Snapshots outlive the Boxes. An MCP Box whose API Box was deleted returns 409 mcpbox_apibox_gone; a starting API Box returns 409 apibox_starting; a stopping or stopped one returns 409 apibox_stopped; one whose runtime cannot save its state returns 409 mcpbox_rebuild_required.
@@ -6528,7 +6563,7 @@ paths:
                 bad_request_body:
                   $ref: "#/components/examples/bad_request_body"
               schema:
-                $ref: "#/components/schemas/Error"
+                $ref: "#/components/schemas/APIError"
           description: Bad Request
         "401":
           $ref: "#/components/responses/Unauthorized"
@@ -6539,7 +6574,7 @@ paths:
                 mcpbox_not_found:
                   $ref: "#/components/examples/mcpbox_not_found"
               schema:
-                $ref: "#/components/schemas/Error"
+                $ref: "#/components/schemas/APIError"
           description: Not Found
         "408":
           $ref: "#/components/responses/RequestTimeout"
@@ -6556,7 +6591,7 @@ paths:
                 mcpbox_rebuild_required:
                   $ref: "#/components/examples/mcpbox_rebuild_required"
               schema:
-                $ref: "#/components/schemas/Error"
+                $ref: "#/components/schemas/APIError"
           description: Conflict
         "413":
           $ref: "#/components/responses/PayloadTooLarge"
@@ -6569,7 +6604,7 @@ paths:
                 validation_metadata:
                   $ref: "#/components/examples/validation_metadata"
               schema:
-                $ref: "#/components/schemas/Error"
+                $ref: "#/components/schemas/APIError"
           description: Unprocessable Entity
         "500":
           $ref: "#/components/responses/InternalServerError"
@@ -6582,13 +6617,14 @@ paths:
                 internal_unavailable:
                   $ref: "#/components/examples/internal_unavailable"
               schema:
-                $ref: "#/components/schemas/Error"
+                $ref: "#/components/schemas/APIError"
           description: Service Unavailable
       security:
         - apiKeyAuth: []
       summary: Save MCP Box as Snapshot
       tags:
-        - mcpbox
+        - mcpboxes
+      x-speakeasy-name-override: save_snapshot
   /v1/mcpbox/{id}/start:
     post:
       description: Starts a stopped MCP Box in front of its API Box, and returns at once with status starting; get the MCP Box until it is running. Its token stays the same; its get returns it. A running, starting or stopping MCP Box returns 409 mcpbox_not_stopped, and one whose API Box was deleted 409 mcpbox_apibox_gone.
@@ -6617,7 +6653,7 @@ paths:
                 mcpbox_not_found:
                   $ref: "#/components/examples/mcpbox_not_found"
               schema:
-                $ref: "#/components/schemas/Error"
+                $ref: "#/components/schemas/APIError"
           description: Not Found
         "409":
           content:
@@ -6628,7 +6664,7 @@ paths:
                 mcpbox_not_stopped:
                   $ref: "#/components/examples/mcpbox_not_stopped"
               schema:
-                $ref: "#/components/schemas/Error"
+                $ref: "#/components/schemas/APIError"
           description: Conflict
         "429":
           content:
@@ -6637,7 +6673,7 @@ paths:
                 box_quota_exceeded:
                   $ref: "#/components/examples/box_quota_exceeded"
               schema:
-                $ref: "#/components/schemas/Error"
+                $ref: "#/components/schemas/APIError"
           description: Too Many Requests
         "500":
           $ref: "#/components/responses/InternalServerError"
@@ -6650,13 +6686,14 @@ paths:
                 internal_unavailable:
                   $ref: "#/components/examples/internal_unavailable"
               schema:
-                $ref: "#/components/schemas/Error"
+                $ref: "#/components/schemas/APIError"
           description: Service Unavailable
       security:
         - apiKeyAuth: []
       summary: Start MCP Box
       tags:
-        - mcpbox
+        - mcpboxes
+      x-speakeasy-name-override: start
   /v1/mcpbox/{id}/stop:
     post:
       description: Stops a running MCP Box and releases its runtime; its API Box keeps running, and its token stays for the next start. It returns at once with status stopping; get the MCP Box until it is stopped. A stopped MCP Box is returned unchanged; a starting one returns 409 mcpbox_starting.
@@ -6685,7 +6722,7 @@ paths:
                 mcpbox_not_found:
                   $ref: "#/components/examples/mcpbox_not_found"
               schema:
-                $ref: "#/components/schemas/Error"
+                $ref: "#/components/schemas/APIError"
           description: Not Found
         "409":
           content:
@@ -6694,7 +6731,7 @@ paths:
                 mcpbox_starting:
                   $ref: "#/components/examples/mcpbox_starting"
               schema:
-                $ref: "#/components/schemas/Error"
+                $ref: "#/components/schemas/APIError"
           description: Conflict
         "500":
           $ref: "#/components/responses/InternalServerError"
@@ -6707,13 +6744,14 @@ paths:
                 internal_unavailable:
                   $ref: "#/components/examples/internal_unavailable"
               schema:
-                $ref: "#/components/schemas/Error"
+                $ref: "#/components/schemas/APIError"
           description: Service Unavailable
       security:
         - apiKeyAuth: []
       summary: Stop MCP Box
       tags:
-        - mcpbox
+        - mcpboxes
+      x-speakeasy-name-override: stop
   /v1/simulation-snapshots:
     get:
       deprecated: true
@@ -6758,7 +6796,7 @@ paths:
                 bad_request:
                   $ref: "#/components/examples/bad_request"
               schema:
-                $ref: "#/components/schemas/Error"
+                $ref: "#/components/schemas/APIError"
           description: Bad Request
         "401":
           $ref: "#/components/responses/Unauthorized"
@@ -6769,7 +6807,7 @@ paths:
                 validation_list_limit:
                   $ref: "#/components/examples/validation_list_limit"
               schema:
-                $ref: "#/components/schemas/Error"
+                $ref: "#/components/schemas/APIError"
           description: Unprocessable Entity
         "500":
           $ref: "#/components/responses/InternalServerError"
@@ -6782,7 +6820,7 @@ paths:
                 internal_unavailable:
                   $ref: "#/components/examples/internal_unavailable"
               schema:
-                $ref: "#/components/schemas/Error"
+                $ref: "#/components/schemas/APIError"
           description: Service Unavailable
       security:
         - apiKeyAuth: []
@@ -6844,7 +6882,7 @@ paths:
                 bad_request_body:
                   $ref: "#/components/examples/bad_request_body"
               schema:
-                $ref: "#/components/schemas/Error"
+                $ref: "#/components/schemas/APIError"
           description: Bad Request
         "401":
           $ref: "#/components/responses/Unauthorized"
@@ -6855,7 +6893,7 @@ paths:
                 auth_forbidden_simulation:
                   $ref: "#/components/examples/auth_forbidden_simulation"
               schema:
-                $ref: "#/components/schemas/Error"
+                $ref: "#/components/schemas/APIError"
           description: Forbidden
         "404":
           content:
@@ -6864,7 +6902,7 @@ paths:
                 simulation_not_found:
                   $ref: "#/components/examples/simulation_not_found"
               schema:
-                $ref: "#/components/schemas/Error"
+                $ref: "#/components/schemas/APIError"
           description: Not Found
         "408":
           $ref: "#/components/responses/RequestTimeout"
@@ -6883,7 +6921,7 @@ paths:
                 simulation_stopped:
                   $ref: "#/components/examples/simulation_stopped"
               schema:
-                $ref: "#/components/schemas/Error"
+                $ref: "#/components/schemas/APIError"
           description: Conflict
         "413":
           $ref: "#/components/responses/PayloadTooLarge"
@@ -6896,7 +6934,7 @@ paths:
                 validation_idempotency_key:
                   $ref: "#/components/examples/validation_idempotency_key"
               schema:
-                $ref: "#/components/schemas/Error"
+                $ref: "#/components/schemas/APIError"
           description: Unprocessable Entity
         "500":
           $ref: "#/components/responses/InternalServerError"
@@ -6911,7 +6949,7 @@ paths:
                 simulation_environment_offline_request:
                   $ref: "#/components/examples/simulation_environment_offline_request"
               schema:
-                $ref: "#/components/schemas/Error"
+                $ref: "#/components/schemas/APIError"
           description: Service Unavailable
       security:
         - apiKeyAuth: []
@@ -6947,7 +6985,7 @@ paths:
                 snapshot_not_found:
                   $ref: "#/components/examples/snapshot_not_found"
               schema:
-                $ref: "#/components/schemas/Error"
+                $ref: "#/components/schemas/APIError"
           description: Not Found
         "409":
           content:
@@ -6960,7 +6998,7 @@ paths:
                 snapshot_not_ready:
                   $ref: "#/components/examples/snapshot_not_ready"
               schema:
-                $ref: "#/components/schemas/Error"
+                $ref: "#/components/schemas/APIError"
           description: Conflict
         "500":
           $ref: "#/components/responses/InternalServerError"
@@ -6975,7 +7013,7 @@ paths:
                 simulation_environment_offline_request:
                   $ref: "#/components/examples/simulation_environment_offline_request"
               schema:
-                $ref: "#/components/schemas/Error"
+                $ref: "#/components/schemas/APIError"
           description: Service Unavailable
       security:
         - apiKeyAuth: []
@@ -7014,7 +7052,7 @@ paths:
                 snapshot_not_found:
                   $ref: "#/components/examples/snapshot_not_found"
               schema:
-                $ref: "#/components/schemas/Error"
+                $ref: "#/components/schemas/APIError"
           description: Not Found
         "500":
           $ref: "#/components/responses/InternalServerError"
@@ -7027,7 +7065,7 @@ paths:
                 internal_unavailable:
                   $ref: "#/components/examples/internal_unavailable"
               schema:
-                $ref: "#/components/schemas/Error"
+                $ref: "#/components/schemas/APIError"
           description: Service Unavailable
       security:
         - apiKeyAuth: []
@@ -7082,7 +7120,7 @@ paths:
                 bad_request_body:
                   $ref: "#/components/examples/bad_request_body"
               schema:
-                $ref: "#/components/schemas/Error"
+                $ref: "#/components/schemas/APIError"
           description: Bad Request
         "401":
           $ref: "#/components/responses/Unauthorized"
@@ -7093,7 +7131,7 @@ paths:
                 snapshot_not_found:
                   $ref: "#/components/examples/snapshot_not_found"
               schema:
-                $ref: "#/components/schemas/Error"
+                $ref: "#/components/schemas/APIError"
           description: Not Found
         "408":
           $ref: "#/components/responses/RequestTimeout"
@@ -7108,7 +7146,7 @@ paths:
                 validation_name:
                   $ref: "#/components/examples/validation_name"
               schema:
-                $ref: "#/components/schemas/Error"
+                $ref: "#/components/schemas/APIError"
           description: Unprocessable Entity
         "500":
           $ref: "#/components/responses/InternalServerError"
@@ -7121,7 +7159,7 @@ paths:
                 internal_unavailable:
                   $ref: "#/components/examples/internal_unavailable"
               schema:
-                $ref: "#/components/schemas/Error"
+                $ref: "#/components/schemas/APIError"
           description: Service Unavailable
       security:
         - apiKeyAuth: []
@@ -7207,7 +7245,7 @@ paths:
                 simulator_unknown:
                   $ref: "#/components/examples/simulator_unknown"
               schema:
-                $ref: "#/components/schemas/Error"
+                $ref: "#/components/schemas/APIError"
           description: Bad Request
         "401":
           $ref: "#/components/responses/Unauthorized"
@@ -7222,7 +7260,7 @@ paths:
                 validation_simulator_id:
                   $ref: "#/components/examples/validation_simulator_id"
               schema:
-                $ref: "#/components/schemas/Error"
+                $ref: "#/components/schemas/APIError"
           description: Unprocessable Entity
         "500":
           $ref: "#/components/responses/InternalServerError"
@@ -7235,7 +7273,7 @@ paths:
                 internal_unavailable:
                   $ref: "#/components/examples/internal_unavailable"
               schema:
-                $ref: "#/components/schemas/Error"
+                $ref: "#/components/schemas/APIError"
           description: Service Unavailable
       security:
         - apiKeyAuth: []
@@ -7305,7 +7343,7 @@ paths:
                 simulator_unknown:
                   $ref: "#/components/examples/simulator_unknown"
               schema:
-                $ref: "#/components/schemas/Error"
+                $ref: "#/components/schemas/APIError"
           description: Bad Request
         "401":
           $ref: "#/components/responses/Unauthorized"
@@ -7318,7 +7356,7 @@ paths:
                 snapshot_not_found:
                   $ref: "#/components/examples/snapshot_not_found"
               schema:
-                $ref: "#/components/schemas/Error"
+                $ref: "#/components/schemas/APIError"
           description: Not Found
         "408":
           $ref: "#/components/responses/RequestTimeout"
@@ -7335,7 +7373,7 @@ paths:
                 snapshot_not_ready:
                   $ref: "#/components/examples/snapshot_not_ready"
               schema:
-                $ref: "#/components/schemas/Error"
+                $ref: "#/components/schemas/APIError"
           description: Conflict
         "413":
           $ref: "#/components/responses/PayloadTooLarge"
@@ -7352,7 +7390,7 @@ paths:
                 validation_simulator_id:
                   $ref: "#/components/examples/validation_simulator_id"
               schema:
-                $ref: "#/components/schemas/Error"
+                $ref: "#/components/schemas/APIError"
           description: Unprocessable Entity
         "429":
           content:
@@ -7361,7 +7399,7 @@ paths:
                 simulation_quota_exceeded:
                   $ref: "#/components/examples/simulation_quota_exceeded"
               schema:
-                $ref: "#/components/schemas/Error"
+                $ref: "#/components/schemas/APIError"
           description: Too Many Requests
         "500":
           $ref: "#/components/responses/InternalServerError"
@@ -7378,7 +7416,7 @@ paths:
                 simulation_provider_unavailable:
                   $ref: "#/components/examples/simulation_provider_unavailable"
               schema:
-                $ref: "#/components/schemas/Error"
+                $ref: "#/components/schemas/APIError"
           description: Service Unavailable
       security:
         - apiKeyAuth: []
@@ -7414,7 +7452,7 @@ paths:
                 auth_forbidden_simulation:
                   $ref: "#/components/examples/auth_forbidden_simulation"
               schema:
-                $ref: "#/components/schemas/Error"
+                $ref: "#/components/schemas/APIError"
           description: Forbidden
         "404":
           content:
@@ -7423,7 +7461,7 @@ paths:
                 simulation_not_found:
                   $ref: "#/components/examples/simulation_not_found"
               schema:
-                $ref: "#/components/schemas/Error"
+                $ref: "#/components/schemas/APIError"
           description: Not Found
         "500":
           $ref: "#/components/responses/InternalServerError"
@@ -7438,7 +7476,7 @@ paths:
                 simulation_environment_offline_request:
                   $ref: "#/components/examples/simulation_environment_offline_request"
               schema:
-                $ref: "#/components/schemas/Error"
+                $ref: "#/components/schemas/APIError"
           description: Service Unavailable
       security:
         - apiKeyAuth: []
@@ -7477,7 +7515,7 @@ paths:
                 auth_forbidden_simulation:
                   $ref: "#/components/examples/auth_forbidden_simulation"
               schema:
-                $ref: "#/components/schemas/Error"
+                $ref: "#/components/schemas/APIError"
           description: Forbidden
         "404":
           content:
@@ -7486,7 +7524,7 @@ paths:
                 simulation_not_found:
                   $ref: "#/components/examples/simulation_not_found"
               schema:
-                $ref: "#/components/schemas/Error"
+                $ref: "#/components/schemas/APIError"
           description: Not Found
         "500":
           $ref: "#/components/responses/InternalServerError"
@@ -7499,7 +7537,7 @@ paths:
                 internal_unavailable:
                   $ref: "#/components/examples/internal_unavailable"
               schema:
-                $ref: "#/components/schemas/Error"
+                $ref: "#/components/schemas/APIError"
           description: Service Unavailable
       security:
         - apiKeyAuth: []
@@ -7562,7 +7600,7 @@ paths:
                 bad_request_body:
                   $ref: "#/components/examples/bad_request_body"
               schema:
-                $ref: "#/components/schemas/Error"
+                $ref: "#/components/schemas/APIError"
           description: Bad Request
         "401":
           $ref: "#/components/responses/Unauthorized"
@@ -7573,7 +7611,7 @@ paths:
                 auth_forbidden_simulation:
                   $ref: "#/components/examples/auth_forbidden_simulation"
               schema:
-                $ref: "#/components/schemas/Error"
+                $ref: "#/components/schemas/APIError"
           description: Forbidden
         "404":
           content:
@@ -7582,7 +7620,7 @@ paths:
                 simulation_not_found:
                   $ref: "#/components/examples/simulation_not_found"
               schema:
-                $ref: "#/components/schemas/Error"
+                $ref: "#/components/schemas/APIError"
           description: Not Found
         "408":
           $ref: "#/components/responses/RequestTimeout"
@@ -7599,7 +7637,7 @@ paths:
                 validation_name:
                   $ref: "#/components/examples/validation_name"
               schema:
-                $ref: "#/components/schemas/Error"
+                $ref: "#/components/schemas/APIError"
           description: Unprocessable Entity
         "500":
           $ref: "#/components/responses/InternalServerError"
@@ -7612,7 +7650,7 @@ paths:
                 internal_unavailable:
                   $ref: "#/components/examples/internal_unavailable"
               schema:
-                $ref: "#/components/schemas/Error"
+                $ref: "#/components/schemas/APIError"
           description: Service Unavailable
       security:
         - apiKeyAuth: []
@@ -7664,7 +7702,7 @@ paths:
                 bad_request_body:
                   $ref: "#/components/examples/bad_request_body"
               schema:
-                $ref: "#/components/schemas/Error"
+                $ref: "#/components/schemas/APIError"
           description: Bad Request
         "401":
           $ref: "#/components/responses/Unauthorized"
@@ -7675,7 +7713,7 @@ paths:
                 auth_forbidden_simulation:
                   $ref: "#/components/examples/auth_forbidden_simulation"
               schema:
-                $ref: "#/components/schemas/Error"
+                $ref: "#/components/schemas/APIError"
           description: Forbidden
         "404":
           content:
@@ -7684,7 +7722,7 @@ paths:
                 simulation_not_found:
                   $ref: "#/components/examples/simulation_not_found"
               schema:
-                $ref: "#/components/schemas/Error"
+                $ref: "#/components/schemas/APIError"
           description: Not Found
         "408":
           $ref: "#/components/responses/RequestTimeout"
@@ -7701,7 +7739,7 @@ paths:
                 simulation_stopped:
                   $ref: "#/components/examples/simulation_stopped"
               schema:
-                $ref: "#/components/schemas/Error"
+                $ref: "#/components/schemas/APIError"
           description: Conflict
         "413":
           $ref: "#/components/responses/PayloadTooLarge"
@@ -7714,7 +7752,7 @@ paths:
                 validation_clock_time:
                   $ref: "#/components/examples/validation_clock_time"
               schema:
-                $ref: "#/components/schemas/Error"
+                $ref: "#/components/schemas/APIError"
           description: Unprocessable Entity
         "500":
           $ref: "#/components/responses/InternalServerError"
@@ -7727,7 +7765,7 @@ paths:
                 internal_unavailable:
                   $ref: "#/components/examples/internal_unavailable"
               schema:
-                $ref: "#/components/schemas/Error"
+                $ref: "#/components/schemas/APIError"
           description: Service Unavailable
       security:
         - apiKeyAuth: []
@@ -7774,7 +7812,7 @@ paths:
                 auth_forbidden_simulation:
                   $ref: "#/components/examples/auth_forbidden_simulation"
               schema:
-                $ref: "#/components/schemas/Error"
+                $ref: "#/components/schemas/APIError"
           description: Forbidden
         "404":
           content:
@@ -7785,7 +7823,7 @@ paths:
                 simulation_not_found:
                   $ref: "#/components/examples/simulation_not_found"
               schema:
-                $ref: "#/components/schemas/Error"
+                $ref: "#/components/schemas/APIError"
           description: Not Found
         "409":
           content:
@@ -7798,7 +7836,7 @@ paths:
                 simulation_stopped:
                   $ref: "#/components/examples/simulation_stopped"
               schema:
-                $ref: "#/components/schemas/Error"
+                $ref: "#/components/schemas/APIError"
           description: Conflict
         "500":
           $ref: "#/components/responses/InternalServerError"
@@ -7811,7 +7849,7 @@ paths:
                 internal_unavailable:
                   $ref: "#/components/examples/internal_unavailable"
               schema:
-                $ref: "#/components/schemas/Error"
+                $ref: "#/components/schemas/APIError"
           description: Service Unavailable
       security:
         - apiKeyAuth: []
@@ -7882,7 +7920,7 @@ paths:
                 bad_request:
                   $ref: "#/components/examples/bad_request"
               schema:
-                $ref: "#/components/schemas/Error"
+                $ref: "#/components/schemas/APIError"
           description: Bad Request
         "401":
           $ref: "#/components/responses/Unauthorized"
@@ -7893,7 +7931,7 @@ paths:
                 auth_forbidden_simulation:
                   $ref: "#/components/examples/auth_forbidden_simulation"
               schema:
-                $ref: "#/components/schemas/Error"
+                $ref: "#/components/schemas/APIError"
           description: Forbidden
         "404":
           content:
@@ -7904,7 +7942,7 @@ paths:
                 simulation_not_found:
                   $ref: "#/components/examples/simulation_not_found"
               schema:
-                $ref: "#/components/schemas/Error"
+                $ref: "#/components/schemas/APIError"
           description: Not Found
         "409":
           content:
@@ -7917,7 +7955,7 @@ paths:
                 simulation_stopped:
                   $ref: "#/components/examples/simulation_stopped"
               schema:
-                $ref: "#/components/schemas/Error"
+                $ref: "#/components/schemas/APIError"
           description: Conflict
         "422":
           content:
@@ -7926,7 +7964,7 @@ paths:
                 validation_list_limit:
                   $ref: "#/components/examples/validation_list_limit"
               schema:
-                $ref: "#/components/schemas/Error"
+                $ref: "#/components/schemas/APIError"
           description: Unprocessable Entity
         "500":
           $ref: "#/components/responses/InternalServerError"
@@ -7939,7 +7977,7 @@ paths:
                 internal_unavailable:
                   $ref: "#/components/examples/internal_unavailable"
               schema:
-                $ref: "#/components/schemas/Error"
+                $ref: "#/components/schemas/APIError"
           description: Service Unavailable
       security:
         - apiKeyAuth: []
@@ -7999,7 +8037,7 @@ paths:
                 auth_forbidden_simulation:
                   $ref: "#/components/examples/auth_forbidden_simulation"
               schema:
-                $ref: "#/components/schemas/Error"
+                $ref: "#/components/schemas/APIError"
           description: Forbidden
         "404":
           content:
@@ -8008,7 +8046,7 @@ paths:
                 simulation_not_found:
                   $ref: "#/components/examples/simulation_not_found"
               schema:
-                $ref: "#/components/schemas/Error"
+                $ref: "#/components/schemas/APIError"
           description: Not Found
         "409":
           content:
@@ -8019,7 +8057,7 @@ paths:
                 simulation_stopping:
                   $ref: "#/components/examples/simulation_stopping"
               schema:
-                $ref: "#/components/schemas/Error"
+                $ref: "#/components/schemas/APIError"
           description: Conflict
         "429":
           content:
@@ -8028,7 +8066,7 @@ paths:
                 simulation_quota_exceeded:
                   $ref: "#/components/examples/simulation_quota_exceeded"
               schema:
-                $ref: "#/components/schemas/Error"
+                $ref: "#/components/schemas/APIError"
           description: Too Many Requests
         "500":
           $ref: "#/components/responses/InternalServerError"
@@ -8043,7 +8081,7 @@ paths:
                 simulation_environment_offline_request:
                   $ref: "#/components/examples/simulation_environment_offline_request"
               schema:
-                $ref: "#/components/schemas/Error"
+                $ref: "#/components/schemas/APIError"
           description: Service Unavailable
       security:
         - apiKeyAuth: []
@@ -8095,7 +8133,7 @@ paths:
                 bad_request:
                   $ref: "#/components/examples/bad_request"
               schema:
-                $ref: "#/components/schemas/Error"
+                $ref: "#/components/schemas/APIError"
           description: Bad Request
         "401":
           $ref: "#/components/responses/Unauthorized"
@@ -8106,7 +8144,7 @@ paths:
                 auth_forbidden_simulation:
                   $ref: "#/components/examples/auth_forbidden_simulation"
               schema:
-                $ref: "#/components/schemas/Error"
+                $ref: "#/components/schemas/APIError"
           description: Forbidden
         "404":
           content:
@@ -8115,7 +8153,7 @@ paths:
                 simulation_not_found:
                   $ref: "#/components/examples/simulation_not_found"
               schema:
-                $ref: "#/components/schemas/Error"
+                $ref: "#/components/schemas/APIError"
           description: Not Found
         "409":
           content:
@@ -8128,7 +8166,7 @@ paths:
                 simulation_stopped:
                   $ref: "#/components/examples/simulation_stopped"
               schema:
-                $ref: "#/components/schemas/Error"
+                $ref: "#/components/schemas/APIError"
           description: Conflict
         "422":
           content:
@@ -8137,7 +8175,7 @@ paths:
                 validation_list_limit:
                   $ref: "#/components/examples/validation_list_limit"
               schema:
-                $ref: "#/components/schemas/Error"
+                $ref: "#/components/schemas/APIError"
           description: Unprocessable Entity
         "500":
           $ref: "#/components/responses/InternalServerError"
@@ -8150,7 +8188,7 @@ paths:
                 internal_unavailable:
                   $ref: "#/components/examples/internal_unavailable"
               schema:
-                $ref: "#/components/schemas/Error"
+                $ref: "#/components/schemas/APIError"
           description: Service Unavailable
       security:
         - apiKeyAuth: []
@@ -8210,7 +8248,7 @@ paths:
                 auth_forbidden_simulation:
                   $ref: "#/components/examples/auth_forbidden_simulation"
               schema:
-                $ref: "#/components/schemas/Error"
+                $ref: "#/components/schemas/APIError"
           description: Forbidden
         "404":
           content:
@@ -8219,7 +8257,7 @@ paths:
                 simulation_not_found:
                   $ref: "#/components/examples/simulation_not_found"
               schema:
-                $ref: "#/components/schemas/Error"
+                $ref: "#/components/schemas/APIError"
           description: Not Found
         "409":
           content:
@@ -8230,7 +8268,7 @@ paths:
                 simulation_starting:
                   $ref: "#/components/examples/simulation_starting"
               schema:
-                $ref: "#/components/schemas/Error"
+                $ref: "#/components/schemas/APIError"
           description: Conflict
         "500":
           $ref: "#/components/responses/InternalServerError"
@@ -8245,7 +8283,7 @@ paths:
                 simulation_environment_offline_request:
                   $ref: "#/components/examples/simulation_environment_offline_request"
               schema:
-                $ref: "#/components/schemas/Error"
+                $ref: "#/components/schemas/APIError"
           description: Service Unavailable
       security:
         - apiKeyAuth: []
@@ -8289,7 +8327,7 @@ paths:
                 auth_forbidden_simulation:
                   $ref: "#/components/examples/auth_forbidden_simulation"
               schema:
-                $ref: "#/components/schemas/Error"
+                $ref: "#/components/schemas/APIError"
           description: Forbidden
         "404":
           content:
@@ -8298,7 +8336,7 @@ paths:
                 simulation_not_found:
                   $ref: "#/components/examples/simulation_not_found"
               schema:
-                $ref: "#/components/schemas/Error"
+                $ref: "#/components/schemas/APIError"
           description: Not Found
         "500":
           $ref: "#/components/responses/InternalServerError"
@@ -8311,7 +8349,7 @@ paths:
                 internal_unavailable:
                   $ref: "#/components/examples/internal_unavailable"
               schema:
-                $ref: "#/components/schemas/Error"
+                $ref: "#/components/schemas/APIError"
           description: Service Unavailable
       security:
         - apiKeyAuth: []
@@ -8375,7 +8413,7 @@ paths:
                 auth_forbidden_simulation:
                   $ref: "#/components/examples/auth_forbidden_simulation"
               schema:
-                $ref: "#/components/schemas/Error"
+                $ref: "#/components/schemas/APIError"
           description: Forbidden
         "404":
           content:
@@ -8384,7 +8422,7 @@ paths:
                 simulation_not_found:
                   $ref: "#/components/examples/simulation_not_found"
               schema:
-                $ref: "#/components/schemas/Error"
+                $ref: "#/components/schemas/APIError"
           description: Not Found
         "409":
           content:
@@ -8393,7 +8431,7 @@ paths:
                 simulation_token_regeneration_superseded:
                   $ref: "#/components/examples/simulation_token_regeneration_superseded"
               schema:
-                $ref: "#/components/schemas/Error"
+                $ref: "#/components/schemas/APIError"
           description: Conflict
         "422":
           content:
@@ -8402,7 +8440,7 @@ paths:
                 validation_idempotency_key:
                   $ref: "#/components/examples/validation_idempotency_key"
               schema:
-                $ref: "#/components/schemas/Error"
+                $ref: "#/components/schemas/APIError"
           description: Unprocessable Entity
         "500":
           $ref: "#/components/responses/InternalServerError"
@@ -8413,7 +8451,7 @@ paths:
                 simulation_unreachable:
                   $ref: "#/components/examples/simulation_unreachable"
               schema:
-                $ref: "#/components/schemas/Error"
+                $ref: "#/components/schemas/APIError"
           description: Bad Gateway
         "503":
           content:
@@ -8428,7 +8466,7 @@ paths:
                 simulation_environment_offline_request:
                   $ref: "#/components/examples/simulation_environment_offline_request"
               schema:
-                $ref: "#/components/schemas/Error"
+                $ref: "#/components/schemas/APIError"
           description: Service Unavailable
       security:
         - apiKeyAuth: []
@@ -8485,7 +8523,7 @@ paths:
                 bad_request:
                   $ref: "#/components/examples/bad_request"
               schema:
-                $ref: "#/components/schemas/Error"
+                $ref: "#/components/schemas/APIError"
           description: Bad Request
         "401":
           $ref: "#/components/responses/Unauthorized"
@@ -8496,7 +8534,7 @@ paths:
                 validation_list_limit:
                   $ref: "#/components/examples/validation_list_limit"
               schema:
-                $ref: "#/components/schemas/Error"
+                $ref: "#/components/schemas/APIError"
           description: Unprocessable Entity
         "500":
           $ref: "#/components/responses/InternalServerError"
@@ -8509,7 +8547,7 @@ paths:
                 internal_unavailable:
                   $ref: "#/components/examples/internal_unavailable"
               schema:
-                $ref: "#/components/schemas/Error"
+                $ref: "#/components/schemas/APIError"
           description: Service Unavailable
       security:
         - apiKeyAuth: []
@@ -8601,7 +8639,7 @@ paths:
                 simulator_unknown_parent:
                   $ref: "#/components/examples/simulator_unknown_parent"
               schema:
-                $ref: "#/components/schemas/Error"
+                $ref: "#/components/schemas/APIError"
           description: Bad Request
         "401":
           $ref: "#/components/responses/Unauthorized"
@@ -8612,7 +8650,7 @@ paths:
                 credential_not_found_build:
                   $ref: "#/components/examples/credential_not_found_build"
               schema:
-                $ref: "#/components/schemas/Error"
+                $ref: "#/components/schemas/APIError"
           description: Not Found
         "408":
           $ref: "#/components/responses/RequestTimeout"
@@ -8625,7 +8663,7 @@ paths:
                 simulator_not_ready_base:
                   $ref: "#/components/examples/simulator_not_ready_base"
               schema:
-                $ref: "#/components/schemas/Error"
+                $ref: "#/components/schemas/APIError"
           description: Conflict
         "413":
           $ref: "#/components/responses/PayloadTooLarge"
@@ -8642,7 +8680,7 @@ paths:
                 validation_simulator_id:
                   $ref: "#/components/examples/validation_simulator_id"
               schema:
-                $ref: "#/components/schemas/Error"
+                $ref: "#/components/schemas/APIError"
           description: Unprocessable Entity
         "429":
           content:
@@ -8651,7 +8689,7 @@ paths:
                 build_rate_exceeded:
                   $ref: "#/components/examples/build_rate_exceeded"
               schema:
-                $ref: "#/components/schemas/Error"
+                $ref: "#/components/schemas/APIError"
           description: Too Many Requests
           headers:
             Retry-After:
@@ -8672,7 +8710,7 @@ paths:
                 internal_unavailable_build_storage:
                   $ref: "#/components/examples/internal_unavailable_build_storage"
               schema:
-                $ref: "#/components/schemas/Error"
+                $ref: "#/components/schemas/APIError"
           description: Service Unavailable
           headers:
             Retry-After:
@@ -8716,7 +8754,7 @@ paths:
                 auth_forbidden_simulator:
                   $ref: "#/components/examples/auth_forbidden_simulator"
               schema:
-                $ref: "#/components/schemas/Error"
+                $ref: "#/components/schemas/APIError"
           description: Forbidden
         "404":
           content:
@@ -8725,7 +8763,7 @@ paths:
                 simulator_not_found:
                   $ref: "#/components/examples/simulator_not_found"
               schema:
-                $ref: "#/components/schemas/Error"
+                $ref: "#/components/schemas/APIError"
           description: Not Found
         "409":
           content:
@@ -8743,7 +8781,7 @@ paths:
                 validation_simulator_id:
                   $ref: "#/components/examples/validation_simulator_id"
               schema:
-                $ref: "#/components/schemas/Error"
+                $ref: "#/components/schemas/APIError"
           description: Unprocessable Entity
         "500":
           $ref: "#/components/responses/InternalServerError"
@@ -8756,7 +8794,7 @@ paths:
                 internal_unavailable:
                   $ref: "#/components/examples/internal_unavailable"
               schema:
-                $ref: "#/components/schemas/Error"
+                $ref: "#/components/schemas/APIError"
           description: Service Unavailable
       security:
         - apiKeyAuth: []
@@ -8795,7 +8833,7 @@ paths:
                 auth_forbidden_simulator:
                   $ref: "#/components/examples/auth_forbidden_simulator"
               schema:
-                $ref: "#/components/schemas/Error"
+                $ref: "#/components/schemas/APIError"
           description: Forbidden
         "404":
           content:
@@ -8804,7 +8842,7 @@ paths:
                 simulator_not_found:
                   $ref: "#/components/examples/simulator_not_found"
               schema:
-                $ref: "#/components/schemas/Error"
+                $ref: "#/components/schemas/APIError"
           description: Not Found
         "422":
           content:
@@ -8813,7 +8851,7 @@ paths:
                 validation_simulator_id:
                   $ref: "#/components/examples/validation_simulator_id"
               schema:
-                $ref: "#/components/schemas/Error"
+                $ref: "#/components/schemas/APIError"
           description: Unprocessable Entity
         "500":
           $ref: "#/components/responses/InternalServerError"
@@ -8826,7 +8864,7 @@ paths:
                 internal_unavailable:
                   $ref: "#/components/examples/internal_unavailable"
               schema:
-                $ref: "#/components/schemas/Error"
+                $ref: "#/components/schemas/APIError"
           description: Service Unavailable
       security:
         - apiKeyAuth: []
@@ -8881,7 +8919,7 @@ paths:
                 bad_request_body:
                   $ref: "#/components/examples/bad_request_body"
               schema:
-                $ref: "#/components/schemas/Error"
+                $ref: "#/components/schemas/APIError"
           description: Bad Request
         "401":
           $ref: "#/components/responses/Unauthorized"
@@ -8894,7 +8932,7 @@ paths:
                 auth_forbidden_simulator:
                   $ref: "#/components/examples/auth_forbidden_simulator"
               schema:
-                $ref: "#/components/schemas/Error"
+                $ref: "#/components/schemas/APIError"
           description: Forbidden
         "404":
           content:
@@ -8903,7 +8941,7 @@ paths:
                 simulator_not_found:
                   $ref: "#/components/examples/simulator_not_found"
               schema:
-                $ref: "#/components/schemas/Error"
+                $ref: "#/components/schemas/APIError"
           description: Not Found
         "408":
           $ref: "#/components/responses/RequestTimeout"
@@ -8920,7 +8958,7 @@ paths:
                 validation_simulator_id:
                   $ref: "#/components/examples/validation_simulator_id"
               schema:
-                $ref: "#/components/schemas/Error"
+                $ref: "#/components/schemas/APIError"
           description: Unprocessable Entity
         "500":
           $ref: "#/components/responses/InternalServerError"
@@ -8933,7 +8971,7 @@ paths:
                 internal_unavailable:
                   $ref: "#/components/examples/internal_unavailable"
               schema:
-                $ref: "#/components/schemas/Error"
+                $ref: "#/components/schemas/APIError"
           description: Service Unavailable
       security:
         - apiKeyAuth: []
@@ -8975,7 +9013,7 @@ paths:
                 auth_forbidden_simulator:
                   $ref: "#/components/examples/auth_forbidden_simulator"
               schema:
-                $ref: "#/components/schemas/Error"
+                $ref: "#/components/schemas/APIError"
           description: Forbidden
         "404":
           content:
@@ -8984,7 +9022,7 @@ paths:
                 simulator_not_found:
                   $ref: "#/components/examples/simulator_not_found"
               schema:
-                $ref: "#/components/schemas/Error"
+                $ref: "#/components/schemas/APIError"
           description: Not Found
         "422":
           content:
@@ -8993,7 +9031,7 @@ paths:
                 validation_simulator_id:
                   $ref: "#/components/examples/validation_simulator_id"
               schema:
-                $ref: "#/components/schemas/Error"
+                $ref: "#/components/schemas/APIError"
           description: Unprocessable Entity
         "500":
           $ref: "#/components/responses/InternalServerError"
@@ -9006,7 +9044,7 @@ paths:
                 internal_unavailable:
                   $ref: "#/components/examples/internal_unavailable"
               schema:
-                $ref: "#/components/schemas/Error"
+                $ref: "#/components/schemas/APIError"
           description: Service Unavailable
       security:
         - apiKeyAuth: []
@@ -9058,7 +9096,7 @@ paths:
                 bad_request_clone_target:
                   $ref: "#/components/examples/bad_request_clone_target"
               schema:
-                $ref: "#/components/schemas/Error"
+                $ref: "#/components/schemas/APIError"
           description: Bad Request
         "401":
           $ref: "#/components/responses/Unauthorized"
@@ -9069,7 +9107,7 @@ paths:
                 auth_forbidden_clone:
                   $ref: "#/components/examples/auth_forbidden_clone"
               schema:
-                $ref: "#/components/schemas/Error"
+                $ref: "#/components/schemas/APIError"
           description: Forbidden
         "404":
           content:
@@ -9082,7 +9120,7 @@ paths:
                 workspace_not_found:
                   $ref: "#/components/examples/workspace_not_found"
               schema:
-                $ref: "#/components/schemas/Error"
+                $ref: "#/components/schemas/APIError"
           description: Not Found
         "408":
           $ref: "#/components/responses/RequestTimeout"
@@ -9095,7 +9133,7 @@ paths:
                 simulator_not_ready_clone:
                   $ref: "#/components/examples/simulator_not_ready_clone"
               schema:
-                $ref: "#/components/schemas/Error"
+                $ref: "#/components/schemas/APIError"
           description: Conflict
         "413":
           $ref: "#/components/responses/PayloadTooLarge"
@@ -9112,7 +9150,7 @@ paths:
                 validation_simulator_id:
                   $ref: "#/components/examples/validation_simulator_id"
               schema:
-                $ref: "#/components/schemas/Error"
+                $ref: "#/components/schemas/APIError"
           description: Unprocessable Entity
         "500":
           $ref: "#/components/responses/InternalServerError"
@@ -9127,7 +9165,7 @@ paths:
                 registry_unavailable:
                   $ref: "#/components/examples/registry_unavailable"
               schema:
-                $ref: "#/components/schemas/Error"
+                $ref: "#/components/schemas/APIError"
           description: Service Unavailable
       security:
         - apiKeyAuth: []
@@ -9172,7 +9210,7 @@ paths:
                 bad_request_body:
                   $ref: "#/components/examples/bad_request_body"
               schema:
-                $ref: "#/components/schemas/Error"
+                $ref: "#/components/schemas/APIError"
           description: Bad Request
         "401":
           $ref: "#/components/responses/Unauthorized"
@@ -9185,7 +9223,7 @@ paths:
                 auth_forbidden_simulator:
                   $ref: "#/components/examples/auth_forbidden_simulator"
               schema:
-                $ref: "#/components/schemas/Error"
+                $ref: "#/components/schemas/APIError"
           description: Forbidden
         "404":
           content:
@@ -9194,7 +9232,7 @@ paths:
                 simulator_not_found:
                   $ref: "#/components/examples/simulator_not_found"
               schema:
-                $ref: "#/components/schemas/Error"
+                $ref: "#/components/schemas/APIError"
           description: Not Found
         "408":
           $ref: "#/components/responses/RequestTimeout"
@@ -9205,7 +9243,7 @@ paths:
                 simulator_not_waiting:
                   $ref: "#/components/examples/simulator_not_waiting"
               schema:
-                $ref: "#/components/schemas/Error"
+                $ref: "#/components/schemas/APIError"
           description: Conflict
         "413":
           $ref: "#/components/responses/PayloadTooLarge"
@@ -9218,7 +9256,7 @@ paths:
                 validation_simulator_id:
                   $ref: "#/components/examples/validation_simulator_id"
               schema:
-                $ref: "#/components/schemas/Error"
+                $ref: "#/components/schemas/APIError"
           description: Unprocessable Entity
         "500":
           $ref: "#/components/responses/InternalServerError"
@@ -9231,7 +9269,7 @@ paths:
                 internal_unavailable:
                   $ref: "#/components/examples/internal_unavailable"
               schema:
-                $ref: "#/components/schemas/Error"
+                $ref: "#/components/schemas/APIError"
           description: Service Unavailable
       security:
         - apiKeyAuth: []
@@ -9290,7 +9328,7 @@ paths:
                 bad_request:
                   $ref: "#/components/examples/bad_request"
               schema:
-                $ref: "#/components/schemas/Error"
+                $ref: "#/components/schemas/APIError"
           description: Bad Request
         "401":
           $ref: "#/components/responses/Unauthorized"
@@ -9301,7 +9339,7 @@ paths:
                 validation_list_limit:
                   $ref: "#/components/examples/validation_list_limit"
               schema:
-                $ref: "#/components/schemas/Error"
+                $ref: "#/components/schemas/APIError"
           description: Unprocessable Entity
         "500":
           $ref: "#/components/responses/InternalServerError"
@@ -9314,13 +9352,14 @@ paths:
                 internal_unavailable:
                   $ref: "#/components/examples/internal_unavailable"
               schema:
-                $ref: "#/components/schemas/Error"
+                $ref: "#/components/schemas/APIError"
           description: Service Unavailable
       security:
         - apiKeyAuth: []
       summary: List Web Boxes
       tags:
-        - webbox
+        - webboxes
+      x-speakeasy-name-override: list
       x-speakeasy-pagination:
         inputs:
           - in: parameters
@@ -9371,7 +9410,7 @@ paths:
                 bad_request_body:
                   $ref: "#/components/examples/bad_request_body"
               schema:
-                $ref: "#/components/schemas/Error"
+                $ref: "#/components/schemas/APIError"
           description: Bad Request
         "401":
           $ref: "#/components/responses/Unauthorized"
@@ -9382,7 +9421,7 @@ paths:
                 webbox_snapshot_not_found:
                   $ref: "#/components/examples/webbox_snapshot_not_found"
               schema:
-                $ref: "#/components/schemas/Error"
+                $ref: "#/components/schemas/APIError"
           description: Not Found
         "408":
           $ref: "#/components/responses/RequestTimeout"
@@ -9393,7 +9432,7 @@ paths:
                 webbox_snapshot_not_ready:
                   $ref: "#/components/examples/webbox_snapshot_not_ready"
               schema:
-                $ref: "#/components/schemas/Error"
+                $ref: "#/components/schemas/APIError"
           description: Conflict
         "413":
           $ref: "#/components/responses/PayloadTooLarge"
@@ -9406,7 +9445,7 @@ paths:
                 validation_metadata:
                   $ref: "#/components/examples/validation_metadata"
               schema:
-                $ref: "#/components/schemas/Error"
+                $ref: "#/components/schemas/APIError"
           description: Unprocessable Entity
         "429":
           content:
@@ -9415,7 +9454,7 @@ paths:
                 box_quota_exceeded:
                   $ref: "#/components/examples/box_quota_exceeded"
               schema:
-                $ref: "#/components/schemas/Error"
+                $ref: "#/components/schemas/APIError"
           description: Too Many Requests
         "500":
           $ref: "#/components/responses/InternalServerError"
@@ -9428,13 +9467,14 @@ paths:
                 internal_unavailable:
                   $ref: "#/components/examples/internal_unavailable"
               schema:
-                $ref: "#/components/schemas/Error"
+                $ref: "#/components/schemas/APIError"
           description: Service Unavailable
       security:
         - apiKeyAuth: []
       summary: Create Web Box
       tags:
-        - webbox
+        - webboxes
+      x-speakeasy-name-override: create
   /v1/webbox-snapshots:
     get:
       description: Returns the workspace's Web Box Snapshots and the catalog's, newest first. Results can be filtered by source and status, and by the Web Box a Snapshot was saved from.
@@ -9479,7 +9519,7 @@ paths:
         - description: Optional filter for the Snapshots saved from this Box.
           explode: false
           in: query
-          name: box_id
+          name: source_box_id
           schema:
             type: string
       responses:
@@ -9496,7 +9536,7 @@ paths:
                 bad_request:
                   $ref: "#/components/examples/bad_request"
               schema:
-                $ref: "#/components/schemas/Error"
+                $ref: "#/components/schemas/APIError"
           description: Bad Request
         "401":
           $ref: "#/components/responses/Unauthorized"
@@ -9507,7 +9547,7 @@ paths:
                 validation_list_limit:
                   $ref: "#/components/examples/validation_list_limit"
               schema:
-                $ref: "#/components/schemas/Error"
+                $ref: "#/components/schemas/APIError"
           description: Unprocessable Entity
         "500":
           $ref: "#/components/responses/InternalServerError"
@@ -9520,13 +9560,14 @@ paths:
                 internal_unavailable:
                   $ref: "#/components/examples/internal_unavailable"
               schema:
-                $ref: "#/components/schemas/Error"
+                $ref: "#/components/schemas/APIError"
           description: Service Unavailable
       security:
         - apiKeyAuth: []
       summary: List Web Box Snapshots
       tags:
         - webbox-snapshots
+      x-speakeasy-name-override: list
       x-speakeasy-pagination:
         inputs:
           - in: parameters
@@ -9597,7 +9638,7 @@ paths:
                 bad_request_body:
                   $ref: "#/components/examples/bad_request_body"
               schema:
-                $ref: "#/components/schemas/Error"
+                $ref: "#/components/schemas/APIError"
           description: Bad Request
         "401":
           $ref: "#/components/responses/Unauthorized"
@@ -9610,7 +9651,7 @@ paths:
                 webbox_snapshot_not_found_parent:
                   $ref: "#/components/examples/webbox_snapshot_not_found_parent"
               schema:
-                $ref: "#/components/schemas/Error"
+                $ref: "#/components/schemas/APIError"
           description: Not Found
         "408":
           $ref: "#/components/responses/RequestTimeout"
@@ -9621,7 +9662,7 @@ paths:
                 webbox_snapshot_not_ready_parent:
                   $ref: "#/components/examples/webbox_snapshot_not_ready_parent"
               schema:
-                $ref: "#/components/schemas/Error"
+                $ref: "#/components/schemas/APIError"
           description: Conflict
         "413":
           $ref: "#/components/responses/PayloadTooLarge"
@@ -9634,7 +9675,7 @@ paths:
                 build_rate_exceeded:
                   $ref: "#/components/examples/build_rate_exceeded"
               schema:
-                $ref: "#/components/schemas/Error"
+                $ref: "#/components/schemas/APIError"
           description: Too Many Requests
           headers:
             Retry-After:
@@ -9653,7 +9694,7 @@ paths:
                 internal_unavailable:
                   $ref: "#/components/examples/internal_unavailable"
               schema:
-                $ref: "#/components/schemas/Error"
+                $ref: "#/components/schemas/APIError"
           description: Service Unavailable
           headers:
             Retry-After:
@@ -9666,6 +9707,7 @@ paths:
       summary: Create Web Box Snapshot
       tags:
         - webbox-snapshots
+      x-speakeasy-name-override: create
   /v1/webbox-snapshots/{id}:
     delete:
       description: Deletes a Web Box Snapshot. A build that is still pending or building is canceled first. A Snapshot that Web Boxes started from returns 409 webbox_snapshot_in_use; delete those Web Boxes first. While a build that names it as parent_id is pending or building, it returns 409 webbox_snapshot_parent_in_use; retry after the build finishes. Catalog Snapshots cannot be deleted.
@@ -9690,7 +9732,7 @@ paths:
                 auth_forbidden_catalog_webbox:
                   $ref: "#/components/examples/auth_forbidden_catalog_webbox"
               schema:
-                $ref: "#/components/schemas/Error"
+                $ref: "#/components/schemas/APIError"
           description: Forbidden
         "404":
           content:
@@ -9699,7 +9741,7 @@ paths:
                 webbox_snapshot_not_found:
                   $ref: "#/components/examples/webbox_snapshot_not_found"
               schema:
-                $ref: "#/components/schemas/Error"
+                $ref: "#/components/schemas/APIError"
           description: Not Found
         "409":
           content:
@@ -9710,7 +9752,7 @@ paths:
                 webbox_snapshot_parent_in_use:
                   $ref: "#/components/examples/webbox_snapshot_parent_in_use"
               schema:
-                $ref: "#/components/schemas/Error"
+                $ref: "#/components/schemas/APIError"
           description: Conflict
         "500":
           $ref: "#/components/responses/InternalServerError"
@@ -9723,13 +9765,14 @@ paths:
                 internal_unavailable:
                   $ref: "#/components/examples/internal_unavailable"
               schema:
-                $ref: "#/components/schemas/Error"
+                $ref: "#/components/schemas/APIError"
           description: Service Unavailable
       security:
         - apiKeyAuth: []
       summary: Delete Web Box Snapshot
       tags:
         - webbox-snapshots
+      x-speakeasy-name-override: delete
     get:
       description: Returns a Web Box Snapshot of the workspace or the catalog, and its build status.
       operationId: get-webbox-snapshot
@@ -9757,7 +9800,7 @@ paths:
                 webbox_snapshot_not_found:
                   $ref: "#/components/examples/webbox_snapshot_not_found"
               schema:
-                $ref: "#/components/schemas/Error"
+                $ref: "#/components/schemas/APIError"
           description: Not Found
         "500":
           $ref: "#/components/responses/InternalServerError"
@@ -9770,13 +9813,14 @@ paths:
                 internal_unavailable:
                   $ref: "#/components/examples/internal_unavailable"
               schema:
-                $ref: "#/components/schemas/Error"
+                $ref: "#/components/schemas/APIError"
           description: Service Unavailable
       security:
         - apiKeyAuth: []
       summary: Get Web Box Snapshot
       tags:
         - webbox-snapshots
+      x-speakeasy-name-override: get
       x-speakeasy-retries:
         backoff:
           exponent: 1.5
@@ -9820,7 +9864,7 @@ paths:
                 bad_request_body:
                   $ref: "#/components/examples/bad_request_body"
               schema:
-                $ref: "#/components/schemas/Error"
+                $ref: "#/components/schemas/APIError"
           description: Bad Request
         "401":
           $ref: "#/components/responses/Unauthorized"
@@ -9831,7 +9875,7 @@ paths:
                 auth_forbidden_catalog_webbox:
                   $ref: "#/components/examples/auth_forbidden_catalog_webbox"
               schema:
-                $ref: "#/components/schemas/Error"
+                $ref: "#/components/schemas/APIError"
           description: Forbidden
         "404":
           content:
@@ -9840,7 +9884,7 @@ paths:
                 webbox_snapshot_not_found:
                   $ref: "#/components/examples/webbox_snapshot_not_found"
               schema:
-                $ref: "#/components/schemas/Error"
+                $ref: "#/components/schemas/APIError"
           description: Not Found
         "408":
           $ref: "#/components/responses/RequestTimeout"
@@ -9857,7 +9901,7 @@ paths:
                 validation_name:
                   $ref: "#/components/examples/validation_name"
               schema:
-                $ref: "#/components/schemas/Error"
+                $ref: "#/components/schemas/APIError"
           description: Unprocessable Entity
         "500":
           $ref: "#/components/responses/InternalServerError"
@@ -9870,13 +9914,14 @@ paths:
                 internal_unavailable:
                   $ref: "#/components/examples/internal_unavailable"
               schema:
-                $ref: "#/components/schemas/Error"
+                $ref: "#/components/schemas/APIError"
           description: Service Unavailable
       security:
         - apiKeyAuth: []
       summary: Update Web Box Snapshot
       tags:
         - webbox-snapshots
+      x-speakeasy-name-override: update
   /v1/webbox-snapshots/{id}/cancel:
     post:
       description: Requests cancellation of a pending or active build and returns the Snapshot without waiting for the build to stop. Get the Snapshot until its status leaves pending or building. The build can finish before cancellation takes effect. A Snapshot whose build has settled is returned unchanged.
@@ -9905,7 +9950,7 @@ paths:
                 auth_forbidden_catalog_webbox:
                   $ref: "#/components/examples/auth_forbidden_catalog_webbox"
               schema:
-                $ref: "#/components/schemas/Error"
+                $ref: "#/components/schemas/APIError"
           description: Forbidden
         "404":
           content:
@@ -9914,7 +9959,7 @@ paths:
                 webbox_snapshot_not_found:
                   $ref: "#/components/examples/webbox_snapshot_not_found"
               schema:
-                $ref: "#/components/schemas/Error"
+                $ref: "#/components/schemas/APIError"
           description: Not Found
         "500":
           $ref: "#/components/responses/InternalServerError"
@@ -9927,13 +9972,14 @@ paths:
                 internal_unavailable:
                   $ref: "#/components/examples/internal_unavailable"
               schema:
-                $ref: "#/components/schemas/Error"
+                $ref: "#/components/schemas/APIError"
           description: Service Unavailable
       security:
         - apiKeyAuth: []
       summary: Cancel Web Box Snapshot build
       tags:
         - webbox-snapshots
+      x-speakeasy-name-override: cancel
   /v1/webbox-snapshots/{id}/clone:
     post:
       description: Creates a ready copy of a ready Web Box Snapshot in another workspace, without a build. The clone has a new ID and the source's artifact, documents and saved state; the source is unchanged. The clone records no credentials, since they belong to the source workspace, and no parent or source Snapshot. The source is the caller's workspace. An API key may clone into any other workspace of its organization.
@@ -9974,7 +10020,7 @@ paths:
                 bad_request_clone_target:
                   $ref: "#/components/examples/bad_request_clone_target"
               schema:
-                $ref: "#/components/schemas/Error"
+                $ref: "#/components/schemas/APIError"
           description: Bad Request
         "401":
           $ref: "#/components/responses/Unauthorized"
@@ -9985,7 +10031,7 @@ paths:
                 auth_forbidden_clone:
                   $ref: "#/components/examples/auth_forbidden_clone"
               schema:
-                $ref: "#/components/schemas/Error"
+                $ref: "#/components/schemas/APIError"
           description: Forbidden
         "404":
           content:
@@ -9996,7 +10042,7 @@ paths:
                 workspace_not_found:
                   $ref: "#/components/examples/workspace_not_found"
               schema:
-                $ref: "#/components/schemas/Error"
+                $ref: "#/components/schemas/APIError"
           description: Not Found
         "408":
           $ref: "#/components/responses/RequestTimeout"
@@ -10009,7 +10055,7 @@ paths:
                 webbox_snapshot_not_ready:
                   $ref: "#/components/examples/webbox_snapshot_not_ready"
               schema:
-                $ref: "#/components/schemas/Error"
+                $ref: "#/components/schemas/APIError"
           description: Conflict
         "413":
           $ref: "#/components/responses/PayloadTooLarge"
@@ -10022,7 +10068,7 @@ paths:
                 validation_idempotency_key:
                   $ref: "#/components/examples/validation_idempotency_key"
               schema:
-                $ref: "#/components/schemas/Error"
+                $ref: "#/components/schemas/APIError"
           description: Unprocessable Entity
         "500":
           $ref: "#/components/responses/InternalServerError"
@@ -10035,13 +10081,14 @@ paths:
                 internal_unavailable:
                   $ref: "#/components/examples/internal_unavailable"
               schema:
-                $ref: "#/components/schemas/Error"
+                $ref: "#/components/schemas/APIError"
           description: Service Unavailable
       security:
         - apiKeyAuth: []
       summary: Clone Web Box Snapshot
       tags:
         - webbox-snapshots
+      x-speakeasy-name-override: clone
   /v1/webbox-snapshots/{id}/resume:
     post:
       description: "Resumes a build that waits, as build.waiting reports: at QA because its live credentials were rejected or the live systems rate limited its calls, or for more time after it used its time limit. For a credential wait, refresh each credential it names with PATCH /v1/credentials/{id} first: QA then runs again with their current values, and the build goes on to finalize. For a rate-limit wait, resume once the rate limit resets: QA then runs again. For a wait for more time, send add_seconds: the build continues where it stopped, with that much time from the resume. Returns the Snapshot, still building. A wait does not count toward the build's time limit: a build resumed from a QA wait has the time it had left when it began waiting. A build that is not waiting returns 409 webbox_snapshot_not_waiting."
@@ -10075,7 +10122,7 @@ paths:
                 bad_request_body:
                   $ref: "#/components/examples/bad_request_body"
               schema:
-                $ref: "#/components/schemas/Error"
+                $ref: "#/components/schemas/APIError"
           description: Bad Request
         "401":
           $ref: "#/components/responses/Unauthorized"
@@ -10086,7 +10133,7 @@ paths:
                 auth_forbidden_catalog_webbox:
                   $ref: "#/components/examples/auth_forbidden_catalog_webbox"
               schema:
-                $ref: "#/components/schemas/Error"
+                $ref: "#/components/schemas/APIError"
           description: Forbidden
         "404":
           content:
@@ -10095,7 +10142,7 @@ paths:
                 webbox_snapshot_not_found:
                   $ref: "#/components/examples/webbox_snapshot_not_found"
               schema:
-                $ref: "#/components/schemas/Error"
+                $ref: "#/components/schemas/APIError"
           description: Not Found
         "408":
           $ref: "#/components/responses/RequestTimeout"
@@ -10106,7 +10153,7 @@ paths:
                 webbox_snapshot_not_waiting:
                   $ref: "#/components/examples/webbox_snapshot_not_waiting"
               schema:
-                $ref: "#/components/schemas/Error"
+                $ref: "#/components/schemas/APIError"
           description: Conflict
         "413":
           $ref: "#/components/responses/PayloadTooLarge"
@@ -10123,13 +10170,14 @@ paths:
                 internal_unavailable:
                   $ref: "#/components/examples/internal_unavailable"
               schema:
-                $ref: "#/components/schemas/Error"
+                $ref: "#/components/schemas/APIError"
           description: Service Unavailable
       security:
         - apiKeyAuth: []
       summary: Resume Web Box Snapshot build
       tags:
         - webbox-snapshots
+      x-speakeasy-name-override: resume
   /v1/webbox/{id}:
     delete:
       description: Deletes a Web Box, running or stopped, with its state. Its runtime is released after the response.
@@ -10154,7 +10202,7 @@ paths:
                 webbox_not_found:
                   $ref: "#/components/examples/webbox_not_found"
               schema:
-                $ref: "#/components/schemas/Error"
+                $ref: "#/components/schemas/APIError"
           description: Not Found
         "500":
           $ref: "#/components/responses/InternalServerError"
@@ -10167,13 +10215,14 @@ paths:
                 internal_unavailable:
                   $ref: "#/components/examples/internal_unavailable"
               schema:
-                $ref: "#/components/schemas/Error"
+                $ref: "#/components/schemas/APIError"
           description: Service Unavailable
       security:
         - apiKeyAuth: []
       summary: Delete Web Box
       tags:
-        - webbox
+        - webboxes
+      x-speakeasy-name-override: delete
     get:
       description: "Returns a Web Box, its status and its connection: the URL that opens its app, whether it is running or stopped. The app answers only while the Web Box is running."
       operationId: get-webbox
@@ -10201,7 +10250,7 @@ paths:
                 webbox_not_found:
                   $ref: "#/components/examples/webbox_not_found"
               schema:
-                $ref: "#/components/schemas/Error"
+                $ref: "#/components/schemas/APIError"
           description: Not Found
         "500":
           $ref: "#/components/responses/InternalServerError"
@@ -10214,13 +10263,14 @@ paths:
                 internal_unavailable:
                   $ref: "#/components/examples/internal_unavailable"
               schema:
-                $ref: "#/components/schemas/Error"
+                $ref: "#/components/schemas/APIError"
           description: Service Unavailable
       security:
         - apiKeyAuth: []
       summary: Get Web Box
       tags:
-        - webbox
+        - webboxes
+      x-speakeasy-name-override: get
       x-speakeasy-retries:
         backoff:
           exponent: 1.5
@@ -10264,7 +10314,7 @@ paths:
                 bad_request_body:
                   $ref: "#/components/examples/bad_request_body"
               schema:
-                $ref: "#/components/schemas/Error"
+                $ref: "#/components/schemas/APIError"
           description: Bad Request
         "401":
           $ref: "#/components/responses/Unauthorized"
@@ -10275,7 +10325,7 @@ paths:
                 webbox_not_found:
                   $ref: "#/components/examples/webbox_not_found"
               schema:
-                $ref: "#/components/schemas/Error"
+                $ref: "#/components/schemas/APIError"
           description: Not Found
         "408":
           $ref: "#/components/responses/RequestTimeout"
@@ -10292,7 +10342,7 @@ paths:
                 validation_name:
                   $ref: "#/components/examples/validation_name"
               schema:
-                $ref: "#/components/schemas/Error"
+                $ref: "#/components/schemas/APIError"
           description: Unprocessable Entity
         "500":
           $ref: "#/components/responses/InternalServerError"
@@ -10305,13 +10355,14 @@ paths:
                 internal_unavailable:
                   $ref: "#/components/examples/internal_unavailable"
               schema:
-                $ref: "#/components/schemas/Error"
+                $ref: "#/components/schemas/APIError"
           description: Service Unavailable
       security:
         - apiKeyAuth: []
       summary: Update Web Box
       tags:
-        - webbox
+        - webboxes
+      x-speakeasy-name-override: update
   /v1/webbox/{id}/snapshot:
     post:
       description: Saves a running Web Box's app and current state as a Web Box Snapshot, ready when the response returns. The Web Box keeps running, and a paused one is woken. Web Boxes created from the Snapshot start with the saved state instead of a new workspace, so they refuse include_sample_data. The Snapshot outlives the Web Box. A starting Web Box returns 409 webbox_starting; a stopping or stopped one returns 409 webbox_stopped; one whose runtime cannot save its state returns 409 webbox_rebuild_required.
@@ -10349,7 +10400,7 @@ paths:
                 bad_request_body:
                   $ref: "#/components/examples/bad_request_body"
               schema:
-                $ref: "#/components/schemas/Error"
+                $ref: "#/components/schemas/APIError"
           description: Bad Request
         "401":
           $ref: "#/components/responses/Unauthorized"
@@ -10360,7 +10411,7 @@ paths:
                 webbox_not_found:
                   $ref: "#/components/examples/webbox_not_found"
               schema:
-                $ref: "#/components/schemas/Error"
+                $ref: "#/components/schemas/APIError"
           description: Not Found
         "408":
           $ref: "#/components/responses/RequestTimeout"
@@ -10375,7 +10426,7 @@ paths:
                 webbox_stopped:
                   $ref: "#/components/examples/webbox_stopped"
               schema:
-                $ref: "#/components/schemas/Error"
+                $ref: "#/components/schemas/APIError"
           description: Conflict
         "413":
           $ref: "#/components/responses/PayloadTooLarge"
@@ -10388,7 +10439,7 @@ paths:
                 validation_metadata:
                   $ref: "#/components/examples/validation_metadata"
               schema:
-                $ref: "#/components/schemas/Error"
+                $ref: "#/components/schemas/APIError"
           description: Unprocessable Entity
         "500":
           $ref: "#/components/responses/InternalServerError"
@@ -10401,13 +10452,14 @@ paths:
                 internal_unavailable:
                   $ref: "#/components/examples/internal_unavailable"
               schema:
-                $ref: "#/components/schemas/Error"
+                $ref: "#/components/schemas/APIError"
           description: Service Unavailable
       security:
         - apiKeyAuth: []
       summary: Save Web Box as Snapshot
       tags:
-        - webbox
+        - webboxes
+      x-speakeasy-name-override: save_snapshot
   /v1/webbox/{id}/start:
     post:
       description: Starts a stopped Web Box from the state its stop saved, and returns at once with status starting. A running, starting or stopping Web Box returns 409 webbox_not_stopped.
@@ -10436,7 +10488,7 @@ paths:
                 webbox_not_found:
                   $ref: "#/components/examples/webbox_not_found"
               schema:
-                $ref: "#/components/schemas/Error"
+                $ref: "#/components/schemas/APIError"
           description: Not Found
         "409":
           content:
@@ -10445,7 +10497,7 @@ paths:
                 webbox_not_stopped:
                   $ref: "#/components/examples/webbox_not_stopped"
               schema:
-                $ref: "#/components/schemas/Error"
+                $ref: "#/components/schemas/APIError"
           description: Conflict
         "429":
           content:
@@ -10454,7 +10506,7 @@ paths:
                 box_quota_exceeded:
                   $ref: "#/components/examples/box_quota_exceeded"
               schema:
-                $ref: "#/components/schemas/Error"
+                $ref: "#/components/schemas/APIError"
           description: Too Many Requests
         "500":
           $ref: "#/components/responses/InternalServerError"
@@ -10467,13 +10519,14 @@ paths:
                 internal_unavailable:
                   $ref: "#/components/examples/internal_unavailable"
               schema:
-                $ref: "#/components/schemas/Error"
+                $ref: "#/components/schemas/APIError"
           description: Service Unavailable
       security:
         - apiKeyAuth: []
       summary: Start Web Box
       tags:
-        - webbox
+        - webboxes
+      x-speakeasy-name-override: start
   /v1/webbox/{id}/steps:
     get:
       description: Lists the Web Box's steps in order. Each request that changed state is one step; a request that only reads registers none. A Web Box that is not running returns 409 webbox_stopped.
@@ -10514,7 +10567,7 @@ paths:
                 bad_request:
                   $ref: "#/components/examples/bad_request"
               schema:
-                $ref: "#/components/schemas/Error"
+                $ref: "#/components/schemas/APIError"
           description: Bad Request
         "401":
           $ref: "#/components/responses/Unauthorized"
@@ -10525,7 +10578,7 @@ paths:
                 webbox_not_found:
                   $ref: "#/components/examples/webbox_not_found"
               schema:
-                $ref: "#/components/schemas/Error"
+                $ref: "#/components/schemas/APIError"
           description: Not Found
         "409":
           content:
@@ -10536,7 +10589,7 @@ paths:
                 webbox_stopped:
                   $ref: "#/components/examples/webbox_stopped"
               schema:
-                $ref: "#/components/schemas/Error"
+                $ref: "#/components/schemas/APIError"
           description: Conflict
         "422":
           content:
@@ -10545,7 +10598,7 @@ paths:
                 validation_list_limit:
                   $ref: "#/components/examples/validation_list_limit"
               schema:
-                $ref: "#/components/schemas/Error"
+                $ref: "#/components/schemas/APIError"
           description: Unprocessable Entity
         "500":
           $ref: "#/components/responses/InternalServerError"
@@ -10558,13 +10611,14 @@ paths:
                 internal_unavailable:
                   $ref: "#/components/examples/internal_unavailable"
               schema:
-                $ref: "#/components/schemas/Error"
+                $ref: "#/components/schemas/APIError"
           description: Service Unavailable
       security:
         - apiKeyAuth: []
       summary: List Web Box steps
       tags:
-        - webbox
+        - webboxes
+      x-speakeasy-name-override: list_steps
       x-speakeasy-pagination:
         inputs:
           - in: parameters
@@ -10613,7 +10667,7 @@ paths:
                 webbox_not_found:
                   $ref: "#/components/examples/webbox_not_found"
               schema:
-                $ref: "#/components/schemas/Error"
+                $ref: "#/components/schemas/APIError"
           description: Not Found
         "409":
           content:
@@ -10622,7 +10676,7 @@ paths:
                 webbox_starting:
                   $ref: "#/components/examples/webbox_starting"
               schema:
-                $ref: "#/components/schemas/Error"
+                $ref: "#/components/schemas/APIError"
           description: Conflict
         "500":
           $ref: "#/components/responses/InternalServerError"
@@ -10635,31 +10689,32 @@ paths:
                 internal_unavailable:
                   $ref: "#/components/examples/internal_unavailable"
               schema:
-                $ref: "#/components/schemas/Error"
+                $ref: "#/components/schemas/APIError"
           description: Service Unavailable
       security:
         - apiKeyAuth: []
       summary: Stop Web Box
       tags:
-        - webbox
+        - webboxes
+      x-speakeasy-name-override: stop
 servers:
   - description: Continuous production API.
     url: https://api.continuouslabs.ai
 tags:
   - description: Start API Boxes from API Box Snapshots. Each API Box serves its Snapshot's API at its own endpoint, with its own state, in real time. Stop, start and delete them.
-    name: apibox
+    name: apiboxes
     x-group: API Boxes
   - description: Build API Box Snapshots from an OpenAPI, WSDL or GraphQL document, or use the catalog's. API Boxes start from a ready Snapshot.
     name: apibox-snapshots
     x-group: API Box Snapshots
   - description: Start Web Boxes from Web Box Snapshots. Each Web Box serves its Snapshot's web app at a host of its own, with its own state, in real time. Stop, start and delete them.
-    name: webbox
+    name: webboxes
     x-group: Web Boxes
   - description: Build Web Box Snapshots from a vendor's live web app, or use the catalog's. Web Boxes start from a ready Snapshot.
     name: webbox-snapshots
     x-group: Web Box Snapshots
   - description: Start MCP Boxes from MCP Box Snapshots. Each MCP Box serves its Snapshot's tools over MCP in front of an API Box. Stop, start and delete them.
-    name: mcpbox
+    name: mcpboxes
     x-group: MCP Boxes
   - description: Build MCP Box Snapshots of an MCP server's tools against a ready API Box Snapshot. MCP Boxes serve a ready Snapshot.
     name: mcpbox-snapshots

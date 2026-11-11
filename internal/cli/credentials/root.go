@@ -20,23 +20,23 @@ func InitCredentialsRoot(parent *cobra.Command) error {
 		},
 	}
 
-	if err := initListCredentialsCmd(CredentialsCmd); err != nil {
+	if err := initListCmd(CredentialsCmd); err != nil {
 		return err
 	}
 
-	if err := initCreateCredentialCmd(CredentialsCmd); err != nil {
+	if err := initCreateCmd(CredentialsCmd); err != nil {
 		return err
 	}
 
-	if err := initDeleteCredentialCmd(CredentialsCmd); err != nil {
+	if err := initDeleteCmd(CredentialsCmd); err != nil {
 		return err
 	}
 
-	if err := initGetCredentialCmd(CredentialsCmd); err != nil {
+	if err := initGetCmd(CredentialsCmd); err != nil {
 		return err
 	}
 
-	if err := initUpdateCredentialCmd(CredentialsCmd); err != nil {
+	if err := initUpdateCmd(CredentialsCmd); err != nil {
 		return err
 	}
 
