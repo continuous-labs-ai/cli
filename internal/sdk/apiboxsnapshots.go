@@ -35,9 +35,9 @@ func newApiboxSnapshots(rootSDK *ContinuousSimulation, sdkConfig config.SDKConfi
 	}
 }
 
-// ListApiboxSnapshots - List API Box Snapshots
+// List API Box Snapshots
 // Returns the workspace's API Box Snapshots and the catalog's, newest first. Results can be filtered by source and status, and by the API Box a Snapshot was saved from.
-func (s *ApiboxSnapshots) ListApiboxSnapshots(ctx context.Context, request *operations.ListApiboxSnapshotsRequest, opts ...operations.Option) (*operations.ListApiboxSnapshotsResponse, error) {
+func (s *ApiboxSnapshots) List(ctx context.Context, request *operations.ListApiboxSnapshotsRequest, opts ...operations.Option) (*operations.ListApiboxSnapshotsResponse, error) {
 	o := operations.Options{}
 	supportedOptions := []string{
 		operations.SupportedOptionRetries,
@@ -256,7 +256,7 @@ func (s *ApiboxSnapshots) ListApiboxSnapshots(ctx context.Context, request *oper
 		}
 		request.Cursor = &nCVal
 
-		return s.ListApiboxSnapshots(
+		return s.List(
 			paginationCtx,
 			request,
 			opts...,
@@ -302,7 +302,7 @@ func (s *ApiboxSnapshots) ListApiboxSnapshots(ctx context.Context, request *oper
 				return nil, err
 			}
 
-			var out sdkerrors.Error
+			var out sdkerrors.APIError
 			if err := utils.UnmarshalJsonFromResponseBody(bytes.NewBuffer(rawBody), &out, ""); err != nil {
 				return nil, err
 			}
@@ -329,7 +329,7 @@ func (s *ApiboxSnapshots) ListApiboxSnapshots(ctx context.Context, request *oper
 				return nil, err
 			}
 
-			var out sdkerrors.Error
+			var out sdkerrors.APIError
 			if err := utils.UnmarshalJsonFromResponseBody(bytes.NewBuffer(rawBody), &out, ""); err != nil {
 				return nil, err
 			}
@@ -370,9 +370,9 @@ func (s *ApiboxSnapshots) ListApiboxSnapshots(ctx context.Context, request *oper
 
 }
 
-// CreateApiboxSnapshot - Create API Box Snapshot
+// Create API Box Snapshot
 // Starts an asynchronous build and returns the API Box Snapshot with status pending. Get the Snapshot until its status is ready, failed or canceled; API Boxes start from a ready one. The build runs in real time: the built service has no simulated clock, and its scheduled work runs at the first request at or after its time. Builds of every kind share one queue and the daily quota. Send multipart/form-data with a JSON part named request, a file part named spec with the OpenAPI, WSDL or GraphQL document, and optional file parts named document with vendor documentation. To build on a ready Snapshot, set parent_id; the spec part is then optional.
-func (s *ApiboxSnapshots) CreateApiboxSnapshot(ctx context.Context, request operations.CreateApiboxSnapshotRequest, opts ...operations.Option) (*operations.CreateApiboxSnapshotResponse, error) {
+func (s *ApiboxSnapshots) Create(ctx context.Context, request operations.CreateApiboxSnapshotRequest, opts ...operations.Option) (*operations.CreateApiboxSnapshotResponse, error) {
 	o := operations.Options{}
 	supportedOptions := []string{
 		operations.SupportedOptionTimeout,
@@ -531,7 +531,7 @@ func (s *ApiboxSnapshots) CreateApiboxSnapshot(ctx context.Context, request oper
 				return nil, err
 			}
 
-			var out sdkerrors.Error
+			var out sdkerrors.APIError
 			if err := utils.UnmarshalJsonFromResponseBody(bytes.NewBuffer(rawBody), &out, ""); err != nil {
 				return nil, err
 			}
@@ -558,7 +558,7 @@ func (s *ApiboxSnapshots) CreateApiboxSnapshot(ctx context.Context, request oper
 				return nil, err
 			}
 
-			var out sdkerrors.Error
+			var out sdkerrors.APIError
 			if err := utils.UnmarshalJsonFromResponseBody(bytes.NewBuffer(rawBody), &out, ""); err != nil {
 				return nil, err
 			}
@@ -583,7 +583,7 @@ func (s *ApiboxSnapshots) CreateApiboxSnapshot(ctx context.Context, request oper
 				return nil, err
 			}
 
-			var out sdkerrors.Error
+			var out sdkerrors.APIError
 			if err := utils.UnmarshalJsonFromResponseBody(bytes.NewBuffer(rawBody), &out, ""); err != nil {
 				return nil, err
 			}
@@ -610,7 +610,7 @@ func (s *ApiboxSnapshots) CreateApiboxSnapshot(ctx context.Context, request oper
 				return nil, err
 			}
 
-			var out sdkerrors.Error
+			var out sdkerrors.APIError
 			if err := utils.UnmarshalJsonFromResponseBody(bytes.NewBuffer(rawBody), &out, ""); err != nil {
 				return nil, err
 			}
@@ -651,9 +651,9 @@ func (s *ApiboxSnapshots) CreateApiboxSnapshot(ctx context.Context, request oper
 
 }
 
-// DeleteApiboxSnapshot - Delete API Box Snapshot
+// Delete API Box Snapshot
 // Deletes an API Box Snapshot. A build that is still pending or building is canceled first. A Snapshot that API Boxes started from or MCP Box Snapshots were built against returns 409 apibox_snapshot_in_use; delete those first. While a build that names it as parent_id is pending or building, it returns 409 apibox_snapshot_parent_in_use; retry after the build finishes. Catalog Snapshots cannot be deleted.
-func (s *ApiboxSnapshots) DeleteApiboxSnapshot(ctx context.Context, request operations.DeleteApiboxSnapshotRequest, opts ...operations.Option) (*operations.DeleteApiboxSnapshotResponse, error) {
+func (s *ApiboxSnapshots) Delete(ctx context.Context, request operations.DeleteApiboxSnapshotRequest, opts ...operations.Option) (*operations.DeleteApiboxSnapshotResponse, error) {
 	o := operations.Options{}
 	supportedOptions := []string{
 		operations.SupportedOptionTimeout,
@@ -768,7 +768,7 @@ func (s *ApiboxSnapshots) DeleteApiboxSnapshot(ctx context.Context, request oper
 				return nil, err
 			}
 
-			var out sdkerrors.Error
+			var out sdkerrors.APIError
 			if err := utils.UnmarshalJsonFromResponseBody(bytes.NewBuffer(rawBody), &out, ""); err != nil {
 				return nil, err
 			}
@@ -795,7 +795,7 @@ func (s *ApiboxSnapshots) DeleteApiboxSnapshot(ctx context.Context, request oper
 				return nil, err
 			}
 
-			var out sdkerrors.Error
+			var out sdkerrors.APIError
 			if err := utils.UnmarshalJsonFromResponseBody(bytes.NewBuffer(rawBody), &out, ""); err != nil {
 				return nil, err
 			}
@@ -836,9 +836,9 @@ func (s *ApiboxSnapshots) DeleteApiboxSnapshot(ctx context.Context, request oper
 
 }
 
-// GetApiboxSnapshot - Get API Box Snapshot
+// Get API Box Snapshot
 // Returns an API Box Snapshot of the workspace or the catalog, and its build status.
-func (s *ApiboxSnapshots) GetApiboxSnapshot(ctx context.Context, request operations.GetApiboxSnapshotRequest, opts ...operations.Option) (*operations.GetApiboxSnapshotResponse, error) {
+func (s *ApiboxSnapshots) Get(ctx context.Context, request operations.GetApiboxSnapshotRequest, opts ...operations.Option) (*operations.GetApiboxSnapshotResponse, error) {
 	o := operations.Options{}
 	supportedOptions := []string{
 		operations.SupportedOptionRetries,
@@ -1049,7 +1049,7 @@ func (s *ApiboxSnapshots) GetApiboxSnapshot(ctx context.Context, request operati
 				return nil, err
 			}
 
-			var out sdkerrors.Error
+			var out sdkerrors.APIError
 			if err := utils.UnmarshalJsonFromResponseBody(bytes.NewBuffer(rawBody), &out, ""); err != nil {
 				return nil, err
 			}
@@ -1076,7 +1076,7 @@ func (s *ApiboxSnapshots) GetApiboxSnapshot(ctx context.Context, request operati
 				return nil, err
 			}
 
-			var out sdkerrors.Error
+			var out sdkerrors.APIError
 			if err := utils.UnmarshalJsonFromResponseBody(bytes.NewBuffer(rawBody), &out, ""); err != nil {
 				return nil, err
 			}
@@ -1117,9 +1117,9 @@ func (s *ApiboxSnapshots) GetApiboxSnapshot(ctx context.Context, request operati
 
 }
 
-// UpdateApiboxSnapshot - Update API Box Snapshot
+// Update API Box Snapshot
 // Renames an API Box Snapshot or replaces its metadata. Omitted fields keep their current values. The built service does not change. Catalog Snapshots cannot be updated.
-func (s *ApiboxSnapshots) UpdateApiboxSnapshot(ctx context.Context, request operations.UpdateApiboxSnapshotRequest, opts ...operations.Option) (*operations.UpdateApiboxSnapshotResponse, error) {
+func (s *ApiboxSnapshots) Update(ctx context.Context, request operations.UpdateApiboxSnapshotRequest, opts ...operations.Option) (*operations.UpdateApiboxSnapshotResponse, error) {
 	o := operations.Options{}
 	supportedOptions := []string{
 		operations.SupportedOptionTimeout,
@@ -1278,7 +1278,7 @@ func (s *ApiboxSnapshots) UpdateApiboxSnapshot(ctx context.Context, request oper
 				return nil, err
 			}
 
-			var out sdkerrors.Error
+			var out sdkerrors.APIError
 			if err := utils.UnmarshalJsonFromResponseBody(bytes.NewBuffer(rawBody), &out, ""); err != nil {
 				return nil, err
 			}
@@ -1305,7 +1305,7 @@ func (s *ApiboxSnapshots) UpdateApiboxSnapshot(ctx context.Context, request oper
 				return nil, err
 			}
 
-			var out sdkerrors.Error
+			var out sdkerrors.APIError
 			if err := utils.UnmarshalJsonFromResponseBody(bytes.NewBuffer(rawBody), &out, ""); err != nil {
 				return nil, err
 			}
@@ -1346,9 +1346,9 @@ func (s *ApiboxSnapshots) UpdateApiboxSnapshot(ctx context.Context, request oper
 
 }
 
-// CancelApiboxSnapshot - Cancel API Box Snapshot build
+// Cancel API Box Snapshot build
 // Requests cancellation of a pending or active build and returns the Snapshot without waiting for the build to stop. Get the Snapshot until its status leaves pending or building. The build can finish before cancellation takes effect. A Snapshot whose build has settled is returned unchanged.
-func (s *ApiboxSnapshots) CancelApiboxSnapshot(ctx context.Context, request operations.CancelApiboxSnapshotRequest, opts ...operations.Option) (*operations.CancelApiboxSnapshotResponse, error) {
+func (s *ApiboxSnapshots) Cancel(ctx context.Context, request operations.CancelApiboxSnapshotRequest, opts ...operations.Option) (*operations.CancelApiboxSnapshotResponse, error) {
 	o := operations.Options{}
 	supportedOptions := []string{
 		operations.SupportedOptionTimeout,
@@ -1490,7 +1490,7 @@ func (s *ApiboxSnapshots) CancelApiboxSnapshot(ctx context.Context, request oper
 				return nil, err
 			}
 
-			var out sdkerrors.Error
+			var out sdkerrors.APIError
 			if err := utils.UnmarshalJsonFromResponseBody(bytes.NewBuffer(rawBody), &out, ""); err != nil {
 				return nil, err
 			}
@@ -1517,7 +1517,7 @@ func (s *ApiboxSnapshots) CancelApiboxSnapshot(ctx context.Context, request oper
 				return nil, err
 			}
 
-			var out sdkerrors.Error
+			var out sdkerrors.APIError
 			if err := utils.UnmarshalJsonFromResponseBody(bytes.NewBuffer(rawBody), &out, ""); err != nil {
 				return nil, err
 			}
@@ -1558,9 +1558,9 @@ func (s *ApiboxSnapshots) CancelApiboxSnapshot(ctx context.Context, request oper
 
 }
 
-// CloneApiboxSnapshot - Clone API Box Snapshot
+// Clone API Box Snapshot
 // Creates a ready copy of a ready API Box Snapshot in another workspace, without a build. The clone has a new ID and the source's artifact, documents and saved state; the source is unchanged. The clone records no credentials, since they belong to the source workspace, and no parent or source Snapshot. The source is the caller's workspace. An API key may clone into any other workspace of its organization.
-func (s *ApiboxSnapshots) CloneApiboxSnapshot(ctx context.Context, request operations.CloneApiboxSnapshotRequest, opts ...operations.Option) (*operations.CloneApiboxSnapshotResponse, error) {
+func (s *ApiboxSnapshots) Clone(ctx context.Context, request operations.CloneApiboxSnapshotRequest, opts ...operations.Option) (*operations.CloneApiboxSnapshotResponse, error) {
 	o := operations.Options{}
 	supportedOptions := []string{
 		operations.SupportedOptionTimeout,
@@ -1723,7 +1723,7 @@ func (s *ApiboxSnapshots) CloneApiboxSnapshot(ctx context.Context, request opera
 				return nil, err
 			}
 
-			var out sdkerrors.Error
+			var out sdkerrors.APIError
 			if err := utils.UnmarshalJsonFromResponseBody(bytes.NewBuffer(rawBody), &out, ""); err != nil {
 				return nil, err
 			}
@@ -1750,7 +1750,7 @@ func (s *ApiboxSnapshots) CloneApiboxSnapshot(ctx context.Context, request opera
 				return nil, err
 			}
 
-			var out sdkerrors.Error
+			var out sdkerrors.APIError
 			if err := utils.UnmarshalJsonFromResponseBody(bytes.NewBuffer(rawBody), &out, ""); err != nil {
 				return nil, err
 			}
@@ -1791,9 +1791,9 @@ func (s *ApiboxSnapshots) CloneApiboxSnapshot(ctx context.Context, request opera
 
 }
 
-// ResumeApiboxSnapshot - Resume API Box Snapshot build
+// Resume API Box Snapshot build
 // Resumes a build that waits, as build.waiting reports: at QA because its live credentials were rejected or the live systems rate limited its calls, or for more time after it used its time limit. For a credential wait, refresh each credential it names with PATCH /v1/credentials/{id} first: QA then runs again with their current values, and the build goes on to finalize. For a rate-limit wait, resume once the rate limit resets: QA then runs again. For a wait for more time, send add_seconds: the build continues where it stopped, with that much time from the resume. Returns the Snapshot, still building. A wait does not count toward the build's time limit: a build resumed from a QA wait has the time it had left when it began waiting. A build that is not waiting returns 409 apibox_snapshot_not_waiting.
-func (s *ApiboxSnapshots) ResumeApiboxSnapshot(ctx context.Context, request operations.ResumeApiboxSnapshotRequest, opts ...operations.Option) (*operations.ResumeApiboxSnapshotResponse, error) {
+func (s *ApiboxSnapshots) Resume(ctx context.Context, request operations.ResumeApiboxSnapshotRequest, opts ...operations.Option) (*operations.ResumeApiboxSnapshotResponse, error) {
 	o := operations.Options{}
 	supportedOptions := []string{
 		operations.SupportedOptionTimeout,
@@ -1952,7 +1952,7 @@ func (s *ApiboxSnapshots) ResumeApiboxSnapshot(ctx context.Context, request oper
 				return nil, err
 			}
 
-			var out sdkerrors.Error
+			var out sdkerrors.APIError
 			if err := utils.UnmarshalJsonFromResponseBody(bytes.NewBuffer(rawBody), &out, ""); err != nil {
 				return nil, err
 			}
@@ -1979,7 +1979,7 @@ func (s *ApiboxSnapshots) ResumeApiboxSnapshot(ctx context.Context, request oper
 				return nil, err
 			}
 
-			var out sdkerrors.Error
+			var out sdkerrors.APIError
 			if err := utils.UnmarshalJsonFromResponseBody(bytes.NewBuffer(rawBody), &out, ""); err != nil {
 				return nil, err
 			}

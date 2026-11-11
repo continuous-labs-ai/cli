@@ -30,7 +30,7 @@ func (c *CreateApiboxRequest) GetBody() components.CreateAPIBoxRequest {
 type CreateApiboxResponse struct {
 	HTTPMeta components.HTTPMetadata `json:"-"`
 	// Accepted
-	APIBoxTokenResponse *components.APIBoxTokenResponse
+	CreateAPIBoxResponse *components.CreateAPIBoxResponse
 }
 
 func (c CreateApiboxResponse) MarshalJSON() ([]byte, error) {
@@ -51,9 +51,9 @@ func (c *CreateApiboxResponse) GetHTTPMeta() components.HTTPMetadata {
 	return c.HTTPMeta
 }
 
-func (c *CreateApiboxResponse) GetAPIBoxTokenResponse() *components.APIBoxTokenResponse {
+func (c *CreateApiboxResponse) GetCreateAPIBoxResponse() *components.CreateAPIBoxResponse {
 	if c == nil {
 		return nil
 	}
-	return c.APIBoxTokenResponse
+	return c.CreateAPIBoxResponse
 }

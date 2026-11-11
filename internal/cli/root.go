@@ -4,15 +4,15 @@ package cli
 
 import (
 	"fmt"
-	"github.com/continuous-labs-ai/cli/internal/cli/apibox"
+	"github.com/continuous-labs-ai/cli/internal/cli/apiboxes"
 	"github.com/continuous-labs-ai/cli/internal/cli/apiboxsnapshots"
 	"github.com/continuous-labs-ai/cli/internal/cli/credentials"
-	"github.com/continuous-labs-ai/cli/internal/cli/mcpbox"
+	"github.com/continuous-labs-ai/cli/internal/cli/mcpboxes"
 	"github.com/continuous-labs-ai/cli/internal/cli/mcpboxsnapshots"
 	"github.com/continuous-labs-ai/cli/internal/cli/simulations"
 	"github.com/continuous-labs-ai/cli/internal/cli/simulationsnapshots"
 	"github.com/continuous-labs-ai/cli/internal/cli/simulators"
-	"github.com/continuous-labs-ai/cli/internal/cli/webbox"
+	"github.com/continuous-labs-ai/cli/internal/cli/webboxes"
 	"github.com/continuous-labs-ai/cli/internal/cli/webboxsnapshots"
 	"github.com/continuous-labs-ai/cli/internal/config"
 	"github.com/continuous-labs-ai/cli/internal/explorer"
@@ -55,8 +55,8 @@ func NewRootCommand() (*cobra.Command, error) {
 			return nil
 		},
 	}
-	if err := apibox.InitApiboxRoot(rootCmd); err != nil {
-		return nil, fmt.Errorf("init apibox: %w", err)
+	if err := apiboxes.InitApiboxesRoot(rootCmd); err != nil {
+		return nil, fmt.Errorf("init apiboxes: %w", err)
 	}
 	if err := apiboxsnapshots.InitApiboxSnapshotsRoot(rootCmd); err != nil {
 		return nil, fmt.Errorf("init apibox-snapshots: %w", err)
@@ -64,8 +64,8 @@ func NewRootCommand() (*cobra.Command, error) {
 	if err := credentials.InitCredentialsRoot(rootCmd); err != nil {
 		return nil, fmt.Errorf("init credentials: %w", err)
 	}
-	if err := mcpbox.InitMcpboxRoot(rootCmd); err != nil {
-		return nil, fmt.Errorf("init mcpbox: %w", err)
+	if err := mcpboxes.InitMcpboxesRoot(rootCmd); err != nil {
+		return nil, fmt.Errorf("init mcpboxes: %w", err)
 	}
 	if err := mcpboxsnapshots.InitMcpboxSnapshotsRoot(rootCmd); err != nil {
 		return nil, fmt.Errorf("init mcpbox-snapshots: %w", err)
@@ -79,8 +79,8 @@ func NewRootCommand() (*cobra.Command, error) {
 	if err := simulators.InitSimulatorsRoot(rootCmd); err != nil {
 		return nil, fmt.Errorf("init simulators: %w", err)
 	}
-	if err := webbox.InitWebboxRoot(rootCmd); err != nil {
-		return nil, fmt.Errorf("init webbox: %w", err)
+	if err := webboxes.InitWebboxesRoot(rootCmd); err != nil {
+		return nil, fmt.Errorf("init webboxes: %w", err)
 	}
 	if err := webboxsnapshots.InitWebboxSnapshotsRoot(rootCmd); err != nil {
 		return nil, fmt.Errorf("init webbox-snapshots: %w", err)

@@ -11,7 +11,7 @@ type BuildWebBoxSnapshotRequest struct {
 	CredentialIds []string `json:"credential_ids,omitzero"`
 	// Instructions for the builder. At most 16,384 characters and 65,536 UTF-8 bytes; must not be blank or contain U+0000.
 	Instructions *string `json:"instructions,omitzero"`
-	// Model that builds and reviews the Snapshot: a Claude model or combined, the default. combined currently builds, reviews, and runs QA exactly as claude-opus-5-5 does.
+	// Model that builds and reviews the Snapshot. Defaults to combined. Its provider is derived from the model. combined currently builds, reviews, and runs QA exactly as claude-opus-5-5 does.
 	Model *string `json:"model,omitzero"`
 	// Name for the Snapshot. Omission generates a name. Names must not contain U+0000. The ID stays its identity, and names need not be unique.
 	Name *string `json:"name,omitzero"`

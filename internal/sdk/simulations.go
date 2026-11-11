@@ -306,7 +306,7 @@ func (s *Simulations) ListSimulations(ctx context.Context, request *operations.L
 				return nil, err
 			}
 
-			var out sdkerrors.Error
+			var out sdkerrors.APIError
 			if err := utils.UnmarshalJsonFromResponseBody(bytes.NewBuffer(rawBody), &out, ""); err != nil {
 				return nil, err
 			}
@@ -333,7 +333,7 @@ func (s *Simulations) ListSimulations(ctx context.Context, request *operations.L
 				return nil, err
 			}
 
-			var out sdkerrors.Error
+			var out sdkerrors.APIError
 			if err := utils.UnmarshalJsonFromResponseBody(bytes.NewBuffer(rawBody), &out, ""); err != nil {
 				return nil, err
 			}
@@ -545,7 +545,7 @@ func (s *Simulations) CreateSimulation(ctx context.Context, request operations.C
 				return nil, err
 			}
 
-			var out sdkerrors.Error
+			var out sdkerrors.APIError
 			if err := utils.UnmarshalJsonFromResponseBody(bytes.NewBuffer(rawBody), &out, ""); err != nil {
 				return nil, err
 			}
@@ -572,7 +572,7 @@ func (s *Simulations) CreateSimulation(ctx context.Context, request operations.C
 				return nil, err
 			}
 
-			var out sdkerrors.Error
+			var out sdkerrors.APIError
 			if err := utils.UnmarshalJsonFromResponseBody(bytes.NewBuffer(rawBody), &out, ""); err != nil {
 				return nil, err
 			}
@@ -732,7 +732,7 @@ func (s *Simulations) DeleteSimulation(ctx context.Context, request operations.D
 				return nil, err
 			}
 
-			var out sdkerrors.Error
+			var out sdkerrors.APIError
 			if err := utils.UnmarshalJsonFromResponseBody(bytes.NewBuffer(rawBody), &out, ""); err != nil {
 				return nil, err
 			}
@@ -759,7 +759,7 @@ func (s *Simulations) DeleteSimulation(ctx context.Context, request operations.D
 				return nil, err
 			}
 
-			var out sdkerrors.Error
+			var out sdkerrors.APIError
 			if err := utils.UnmarshalJsonFromResponseBody(bytes.NewBuffer(rawBody), &out, ""); err != nil {
 				return nil, err
 			}
@@ -1019,7 +1019,7 @@ func (s *Simulations) GetSimulation(ctx context.Context, request operations.GetS
 				return nil, err
 			}
 
-			var out sdkerrors.Error
+			var out sdkerrors.APIError
 			if err := utils.UnmarshalJsonFromResponseBody(bytes.NewBuffer(rawBody), &out, ""); err != nil {
 				return nil, err
 			}
@@ -1046,7 +1046,7 @@ func (s *Simulations) GetSimulation(ctx context.Context, request operations.GetS
 				return nil, err
 			}
 
-			var out sdkerrors.Error
+			var out sdkerrors.APIError
 			if err := utils.UnmarshalJsonFromResponseBody(bytes.NewBuffer(rawBody), &out, ""); err != nil {
 				return nil, err
 			}
@@ -1252,7 +1252,7 @@ func (s *Simulations) UpdateSimulation(ctx context.Context, request operations.U
 				return nil, err
 			}
 
-			var out sdkerrors.Error
+			var out sdkerrors.APIError
 			if err := utils.UnmarshalJsonFromResponseBody(bytes.NewBuffer(rawBody), &out, ""); err != nil {
 				return nil, err
 			}
@@ -1279,7 +1279,7 @@ func (s *Simulations) UpdateSimulation(ctx context.Context, request operations.U
 				return nil, err
 			}
 
-			var out sdkerrors.Error
+			var out sdkerrors.APIError
 			if err := utils.UnmarshalJsonFromResponseBody(bytes.NewBuffer(rawBody), &out, ""); err != nil {
 				return nil, err
 			}
@@ -1489,7 +1489,7 @@ func (s *Simulations) CreateSimulationAdvance(ctx context.Context, request opera
 				return nil, err
 			}
 
-			var out sdkerrors.Error
+			var out sdkerrors.APIError
 			if err := utils.UnmarshalJsonFromResponseBody(bytes.NewBuffer(rawBody), &out, ""); err != nil {
 				return nil, err
 			}
@@ -1516,7 +1516,7 @@ func (s *Simulations) CreateSimulationAdvance(ctx context.Context, request opera
 				return nil, err
 			}
 
-			var out sdkerrors.Error
+			var out sdkerrors.APIError
 			if err := utils.UnmarshalJsonFromResponseBody(bytes.NewBuffer(rawBody), &out, ""); err != nil {
 				return nil, err
 			}
@@ -1778,7 +1778,7 @@ func (s *Simulations) GetSimulationAdvance(ctx context.Context, request operatio
 				return nil, err
 			}
 
-			var out sdkerrors.Error
+			var out sdkerrors.APIError
 			if err := utils.UnmarshalJsonFromResponseBody(bytes.NewBuffer(rawBody), &out, ""); err != nil {
 				return nil, err
 			}
@@ -1805,7 +1805,7 @@ func (s *Simulations) GetSimulationAdvance(ctx context.Context, request operatio
 				return nil, err
 			}
 
-			var out sdkerrors.Error
+			var out sdkerrors.APIError
 			if err := utils.UnmarshalJsonFromResponseBody(bytes.NewBuffer(rawBody), &out, ""); err != nil {
 				return nil, err
 			}
@@ -2120,7 +2120,7 @@ func (s *Simulations) ListSimulationAdvanceEvents(ctx context.Context, request o
 				return nil, err
 			}
 
-			var out sdkerrors.Error
+			var out sdkerrors.APIError
 			if err := utils.UnmarshalJsonFromResponseBody(bytes.NewBuffer(rawBody), &out, ""); err != nil {
 				return nil, err
 			}
@@ -2147,7 +2147,7 @@ func (s *Simulations) ListSimulationAdvanceEvents(ctx context.Context, request o
 				return nil, err
 			}
 
-			var out sdkerrors.Error
+			var out sdkerrors.APIError
 			if err := utils.UnmarshalJsonFromResponseBody(bytes.NewBuffer(rawBody), &out, ""); err != nil {
 				return nil, err
 			}
@@ -2340,7 +2340,7 @@ func (s *Simulations) StartSimulation(ctx context.Context, request operations.St
 				return nil, err
 			}
 
-			var out sdkerrors.Error
+			var out sdkerrors.APIError
 			if err := utils.UnmarshalJsonFromResponseBody(bytes.NewBuffer(rawBody), &out, ""); err != nil {
 				return nil, err
 			}
@@ -2367,7 +2367,7 @@ func (s *Simulations) StartSimulation(ctx context.Context, request operations.St
 				return nil, err
 			}
 
-			var out sdkerrors.Error
+			var out sdkerrors.APIError
 			if err := utils.UnmarshalJsonFromResponseBody(bytes.NewBuffer(rawBody), &out, ""); err != nil {
 				return nil, err
 			}
@@ -2682,7 +2682,7 @@ func (s *Simulations) ListSimulationSteps(ctx context.Context, request operation
 				return nil, err
 			}
 
-			var out sdkerrors.Error
+			var out sdkerrors.APIError
 			if err := utils.UnmarshalJsonFromResponseBody(bytes.NewBuffer(rawBody), &out, ""); err != nil {
 				return nil, err
 			}
@@ -2709,7 +2709,7 @@ func (s *Simulations) ListSimulationSteps(ctx context.Context, request operation
 				return nil, err
 			}
 
-			var out sdkerrors.Error
+			var out sdkerrors.APIError
 			if err := utils.UnmarshalJsonFromResponseBody(bytes.NewBuffer(rawBody), &out, ""); err != nil {
 				return nil, err
 			}
@@ -2900,7 +2900,7 @@ func (s *Simulations) StopSimulation(ctx context.Context, request operations.Sto
 				return nil, err
 			}
 
-			var out sdkerrors.Error
+			var out sdkerrors.APIError
 			if err := utils.UnmarshalJsonFromResponseBody(bytes.NewBuffer(rawBody), &out, ""); err != nil {
 				return nil, err
 			}
@@ -2927,7 +2927,7 @@ func (s *Simulations) StopSimulation(ctx context.Context, request operations.Sto
 				return nil, err
 			}
 
-			var out sdkerrors.Error
+			var out sdkerrors.APIError
 			if err := utils.UnmarshalJsonFromResponseBody(bytes.NewBuffer(rawBody), &out, ""); err != nil {
 				return nil, err
 			}
@@ -3189,7 +3189,7 @@ func (s *Simulations) GetSimulationToken(ctx context.Context, request operations
 				return nil, err
 			}
 
-			var out sdkerrors.Error
+			var out sdkerrors.APIError
 			if err := utils.UnmarshalJsonFromResponseBody(bytes.NewBuffer(rawBody), &out, ""); err != nil {
 				return nil, err
 			}
@@ -3216,7 +3216,7 @@ func (s *Simulations) GetSimulationToken(ctx context.Context, request operations
 				return nil, err
 			}
 
-			var out sdkerrors.Error
+			var out sdkerrors.APIError
 			if err := utils.UnmarshalJsonFromResponseBody(bytes.NewBuffer(rawBody), &out, ""); err != nil {
 				return nil, err
 			}
@@ -3413,7 +3413,7 @@ func (s *Simulations) RegenerateSimulationToken(ctx context.Context, request ope
 				return nil, err
 			}
 
-			var out sdkerrors.Error
+			var out sdkerrors.APIError
 			if err := utils.UnmarshalJsonFromResponseBody(bytes.NewBuffer(rawBody), &out, ""); err != nil {
 				return nil, err
 			}
@@ -3442,7 +3442,7 @@ func (s *Simulations) RegenerateSimulationToken(ctx context.Context, request ope
 				return nil, err
 			}
 
-			var out sdkerrors.Error
+			var out sdkerrors.APIError
 			if err := utils.UnmarshalJsonFromResponseBody(bytes.NewBuffer(rawBody), &out, ""); err != nil {
 				return nil, err
 			}

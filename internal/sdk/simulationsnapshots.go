@@ -306,7 +306,7 @@ func (s *SimulationSnapshots) ListSimulationSnapshots(ctx context.Context, reque
 				return nil, err
 			}
 
-			var out sdkerrors.Error
+			var out sdkerrors.APIError
 			if err := utils.UnmarshalJsonFromResponseBody(bytes.NewBuffer(rawBody), &out, ""); err != nil {
 				return nil, err
 			}
@@ -333,7 +333,7 @@ func (s *SimulationSnapshots) ListSimulationSnapshots(ctx context.Context, reque
 				return nil, err
 			}
 
-			var out sdkerrors.Error
+			var out sdkerrors.APIError
 			if err := utils.UnmarshalJsonFromResponseBody(bytes.NewBuffer(rawBody), &out, ""); err != nil {
 				return nil, err
 			}
@@ -543,7 +543,7 @@ func (s *SimulationSnapshots) CreateSimulationSnapshot(ctx context.Context, requ
 				return nil, err
 			}
 
-			var out sdkerrors.Error
+			var out sdkerrors.APIError
 			if err := utils.UnmarshalJsonFromResponseBody(bytes.NewBuffer(rawBody), &out, ""); err != nil {
 				return nil, err
 			}
@@ -570,7 +570,7 @@ func (s *SimulationSnapshots) CreateSimulationSnapshot(ctx context.Context, requ
 				return nil, err
 			}
 
-			var out sdkerrors.Error
+			var out sdkerrors.APIError
 			if err := utils.UnmarshalJsonFromResponseBody(bytes.NewBuffer(rawBody), &out, ""); err != nil {
 				return nil, err
 			}
@@ -730,7 +730,7 @@ func (s *SimulationSnapshots) DeleteSimulationSnapshot(ctx context.Context, requ
 				return nil, err
 			}
 
-			var out sdkerrors.Error
+			var out sdkerrors.APIError
 			if err := utils.UnmarshalJsonFromResponseBody(bytes.NewBuffer(rawBody), &out, ""); err != nil {
 				return nil, err
 			}
@@ -757,7 +757,7 @@ func (s *SimulationSnapshots) DeleteSimulationSnapshot(ctx context.Context, requ
 				return nil, err
 			}
 
-			var out sdkerrors.Error
+			var out sdkerrors.APIError
 			if err := utils.UnmarshalJsonFromResponseBody(bytes.NewBuffer(rawBody), &out, ""); err != nil {
 				return nil, err
 			}
@@ -1015,7 +1015,7 @@ func (s *SimulationSnapshots) GetSimulationSnapshot(ctx context.Context, request
 				return nil, err
 			}
 
-			var out sdkerrors.Error
+			var out sdkerrors.APIError
 			if err := utils.UnmarshalJsonFromResponseBody(bytes.NewBuffer(rawBody), &out, ""); err != nil {
 				return nil, err
 			}
@@ -1042,7 +1042,7 @@ func (s *SimulationSnapshots) GetSimulationSnapshot(ctx context.Context, request
 				return nil, err
 			}
 
-			var out sdkerrors.Error
+			var out sdkerrors.APIError
 			if err := utils.UnmarshalJsonFromResponseBody(bytes.NewBuffer(rawBody), &out, ""); err != nil {
 				return nil, err
 			}
@@ -1246,7 +1246,7 @@ func (s *SimulationSnapshots) UpdateSimulationSnapshot(ctx context.Context, requ
 				return nil, err
 			}
 
-			var out sdkerrors.Error
+			var out sdkerrors.APIError
 			if err := utils.UnmarshalJsonFromResponseBody(bytes.NewBuffer(rawBody), &out, ""); err != nil {
 				return nil, err
 			}
@@ -1273,7 +1273,7 @@ func (s *SimulationSnapshots) UpdateSimulationSnapshot(ctx context.Context, requ
 				return nil, err
 			}
 
-			var out sdkerrors.Error
+			var out sdkerrors.APIError
 			if err := utils.UnmarshalJsonFromResponseBody(bytes.NewBuffer(rawBody), &out, ""); err != nil {
 				return nil, err
 			}

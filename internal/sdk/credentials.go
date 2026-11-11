@@ -35,9 +35,9 @@ func newCredentials(rootSDK *ContinuousSimulation, sdkConfig config.SDKConfigura
 	}
 }
 
-// ListCredentials - List credentials
+// List credentials
 // Returns the workspace's credentials, newest first. Credential values are never returned.
-func (s *Credentials) ListCredentials(ctx context.Context, request *operations.ListCredentialsRequest, opts ...operations.Option) (*operations.ListCredentialsResponse, error) {
+func (s *Credentials) List(ctx context.Context, request *operations.ListCredentialsRequest, opts ...operations.Option) (*operations.ListCredentialsResponse, error) {
 	o := operations.Options{}
 	supportedOptions := []string{
 		operations.SupportedOptionRetries,
@@ -256,7 +256,7 @@ func (s *Credentials) ListCredentials(ctx context.Context, request *operations.L
 		}
 		request.Cursor = &nCVal
 
-		return s.ListCredentials(
+		return s.List(
 			paginationCtx,
 			request,
 			opts...,
@@ -302,7 +302,7 @@ func (s *Credentials) ListCredentials(ctx context.Context, request *operations.L
 				return nil, err
 			}
 
-			var out sdkerrors.Error
+			var out sdkerrors.APIError
 			if err := utils.UnmarshalJsonFromResponseBody(bytes.NewBuffer(rawBody), &out, ""); err != nil {
 				return nil, err
 			}
@@ -329,7 +329,7 @@ func (s *Credentials) ListCredentials(ctx context.Context, request *operations.L
 				return nil, err
 			}
 
-			var out sdkerrors.Error
+			var out sdkerrors.APIError
 			if err := utils.UnmarshalJsonFromResponseBody(bytes.NewBuffer(rawBody), &out, ""); err != nil {
 				return nil, err
 			}
@@ -370,9 +370,9 @@ func (s *Credentials) ListCredentials(ctx context.Context, request *operations.L
 
 }
 
-// CreateCredential - Create credential
+// Create credential
 // Stores a connection to a real system: an API base URL and the header that carries the credential, with either the header value or an OAuth 2.0 client whose access token the API gets and renews; or a Web App login with its sign-in URL, which a person then signs in to by hand in the console. Returns the credential without its value.
-func (s *Credentials) CreateCredential(ctx context.Context, request operations.CreateCredentialRequest, opts ...operations.Option) (*operations.CreateCredentialResponse, error) {
+func (s *Credentials) Create(ctx context.Context, request operations.CreateCredentialRequest, opts ...operations.Option) (*operations.CreateCredentialResponse, error) {
 	o := operations.Options{}
 	supportedOptions := []string{
 		operations.SupportedOptionTimeout,
@@ -531,7 +531,7 @@ func (s *Credentials) CreateCredential(ctx context.Context, request operations.C
 				return nil, err
 			}
 
-			var out sdkerrors.Error
+			var out sdkerrors.APIError
 			if err := utils.UnmarshalJsonFromResponseBody(bytes.NewBuffer(rawBody), &out, ""); err != nil {
 				return nil, err
 			}
@@ -558,7 +558,7 @@ func (s *Credentials) CreateCredential(ctx context.Context, request operations.C
 				return nil, err
 			}
 
-			var out sdkerrors.Error
+			var out sdkerrors.APIError
 			if err := utils.UnmarshalJsonFromResponseBody(bytes.NewBuffer(rawBody), &out, ""); err != nil {
 				return nil, err
 			}
@@ -599,9 +599,9 @@ func (s *Credentials) CreateCredential(ctx context.Context, request operations.C
 
 }
 
-// DeleteCredential - Delete credential
+// Delete credential
 // Deletes a credential and its stored value.
-func (s *Credentials) DeleteCredential(ctx context.Context, request operations.DeleteCredentialRequest, opts ...operations.Option) (*operations.DeleteCredentialResponse, error) {
+func (s *Credentials) Delete(ctx context.Context, request operations.DeleteCredentialRequest, opts ...operations.Option) (*operations.DeleteCredentialResponse, error) {
 	o := operations.Options{}
 	supportedOptions := []string{
 		operations.SupportedOptionTimeout,
@@ -714,7 +714,7 @@ func (s *Credentials) DeleteCredential(ctx context.Context, request operations.D
 				return nil, err
 			}
 
-			var out sdkerrors.Error
+			var out sdkerrors.APIError
 			if err := utils.UnmarshalJsonFromResponseBody(bytes.NewBuffer(rawBody), &out, ""); err != nil {
 				return nil, err
 			}
@@ -741,7 +741,7 @@ func (s *Credentials) DeleteCredential(ctx context.Context, request operations.D
 				return nil, err
 			}
 
-			var out sdkerrors.Error
+			var out sdkerrors.APIError
 			if err := utils.UnmarshalJsonFromResponseBody(bytes.NewBuffer(rawBody), &out, ""); err != nil {
 				return nil, err
 			}
@@ -782,9 +782,9 @@ func (s *Credentials) DeleteCredential(ctx context.Context, request operations.D
 
 }
 
-// GetCredential - Get credential
+// Get credential
 // Returns a credential without its value.
-func (s *Credentials) GetCredential(ctx context.Context, request operations.GetCredentialRequest, opts ...operations.Option) (*operations.GetCredentialResponse, error) {
+func (s *Credentials) Get(ctx context.Context, request operations.GetCredentialRequest, opts ...operations.Option) (*operations.GetCredentialResponse, error) {
 	o := operations.Options{}
 	supportedOptions := []string{
 		operations.SupportedOptionRetries,
@@ -997,7 +997,7 @@ func (s *Credentials) GetCredential(ctx context.Context, request operations.GetC
 				return nil, err
 			}
 
-			var out sdkerrors.Error
+			var out sdkerrors.APIError
 			if err := utils.UnmarshalJsonFromResponseBody(bytes.NewBuffer(rawBody), &out, ""); err != nil {
 				return nil, err
 			}
@@ -1024,7 +1024,7 @@ func (s *Credentials) GetCredential(ctx context.Context, request operations.GetC
 				return nil, err
 			}
 
-			var out sdkerrors.Error
+			var out sdkerrors.APIError
 			if err := utils.UnmarshalJsonFromResponseBody(bytes.NewBuffer(rawBody), &out, ""); err != nil {
 				return nil, err
 			}
@@ -1065,9 +1065,9 @@ func (s *Credentials) GetCredential(ctx context.Context, request operations.GetC
 
 }
 
-// UpdateCredential - Update credential
+// Update credential
 // Renames a credential, changes its base URL and header or its login, or replaces its value or its OAuth 2.0 client. An API credential can move between a value and an OAuth client; a login stays a login. Omitted fields keep their current values.
-func (s *Credentials) UpdateCredential(ctx context.Context, request operations.UpdateCredentialRequest, opts ...operations.Option) (*operations.UpdateCredentialResponse, error) {
+func (s *Credentials) Update(ctx context.Context, request operations.UpdateCredentialRequest, opts ...operations.Option) (*operations.UpdateCredentialResponse, error) {
 	o := operations.Options{}
 	supportedOptions := []string{
 		operations.SupportedOptionTimeout,
@@ -1226,7 +1226,7 @@ func (s *Credentials) UpdateCredential(ctx context.Context, request operations.U
 				return nil, err
 			}
 
-			var out sdkerrors.Error
+			var out sdkerrors.APIError
 			if err := utils.UnmarshalJsonFromResponseBody(bytes.NewBuffer(rawBody), &out, ""); err != nil {
 				return nil, err
 			}
@@ -1253,7 +1253,7 @@ func (s *Credentials) UpdateCredential(ctx context.Context, request operations.U
 				return nil, err
 			}
 
-			var out sdkerrors.Error
+			var out sdkerrors.APIError
 			if err := utils.UnmarshalJsonFromResponseBody(bytes.NewBuffer(rawBody), &out, ""); err != nil {
 				return nil, err
 			}

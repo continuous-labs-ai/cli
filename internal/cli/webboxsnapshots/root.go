@@ -21,35 +21,35 @@ func InitWebboxSnapshotsRoot(parent *cobra.Command) error {
 		Aliases: []string{"ws"},
 	}
 
-	if err := initListWebboxSnapshotsCmd(WebboxSnapshotsCmd); err != nil {
+	if err := initListCmd(WebboxSnapshotsCmd); err != nil {
 		return err
 	}
 
-	if err := initCreateWebboxSnapshotCmd(WebboxSnapshotsCmd); err != nil {
+	if err := initCreateCmd(WebboxSnapshotsCmd); err != nil {
 		return err
 	}
 
-	if err := initDeleteWebboxSnapshotCmd(WebboxSnapshotsCmd); err != nil {
+	if err := initDeleteCmd(WebboxSnapshotsCmd); err != nil {
 		return err
 	}
 
-	if err := initGetWebboxSnapshotCmd(WebboxSnapshotsCmd); err != nil {
+	if err := initGetCmd(WebboxSnapshotsCmd); err != nil {
 		return err
 	}
 
-	if err := initUpdateWebboxSnapshotCmd(WebboxSnapshotsCmd); err != nil {
+	if err := initUpdateCmd(WebboxSnapshotsCmd); err != nil {
 		return err
 	}
 
-	if err := initCancelWebboxSnapshotCmd(WebboxSnapshotsCmd); err != nil {
+	if err := initCancelCmd(WebboxSnapshotsCmd); err != nil {
 		return err
 	}
 
-	if err := initCloneWebboxSnapshotCmd(WebboxSnapshotsCmd); err != nil {
+	if err := initCloneCmd(WebboxSnapshotsCmd); err != nil {
 		return err
 	}
 
-	if err := initResumeWebboxSnapshotCmd(WebboxSnapshotsCmd); err != nil {
+	if err := initResumeCmd(WebboxSnapshotsCmd); err != nil {
 		return err
 	}
 
