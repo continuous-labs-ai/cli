@@ -9,19 +9,19 @@ import (
 	"github.com/continuous-labs-ai/cli/internal/interactive"
 	"github.com/continuous-labs-ai/cli/internal/output"
 	"github.com/continuous-labs-ai/cli/internal/sdk"
-	"github.com/continuous-labs-ai/cli/internal/sdk/models/components"
 	"github.com/continuous-labs-ai/cli/internal/sdk/models/operations"
 	"github.com/continuous-labs-ai/cli/internal/usage"
 	"github.com/spf13/cobra"
 )
 
 var createCredentialCmdMeta = []flagutil.FlagMeta{
-	{FlagName: "base-url", Shorthand: "b", FieldPath: "BaseURL", Kind: flagutil.FlagKindString, Optional: true, Description: "The https URL of the real system. Requests go to paths under it. Send exactly one of base_url and login."},
-	{FlagName: "header", FieldPath: "Header", Kind: flagutil.FlagKindString, Optional: true, Description: "The HTTP header that carries the value. Defaults to Authorization. Not allowed with login."},
-	{FlagName: "login", Shorthand: "l", FieldPath: "Login", Kind: flagutil.FlagKindJSON, Optional: true, Annotations: `json:"login,omitempty"`, Description: "JSON object"},
-	{FlagName: "name", Shorthand: "n", FieldPath: "Name", Kind: flagutil.FlagKindString, Required: true, Description: "Credential name. [required]"},
-	{FlagName: "oauth", FieldPath: "Oauth", Kind: flagutil.FlagKindJSON, Optional: true, Annotations: `json:"oauth,omitempty"`, Description: "JSON object"},
-	{FlagName: "value", Shorthand: "v", FieldPath: "Value", Kind: flagutil.FlagKindString, Optional: true, Description: "The full header value, for example Bearer followed by a token. Required with base_url unless oauth is sent; not allowed with login, which a person signs in to by hand after the credential exists. The API never returns it."},
+	{FlagName: "idempotency-key", Shorthand: "i", FieldPath: "IdempotencyKey", Kind: flagutil.FlagKindString, Optional: true, Description: "Optional key for retrying this create safely. A retry with the same key and request returns the original result with its status, even with other secrets; the same key with a different request returns 409 idempotency_conflict. Without a key, each request creates a new resource."},
+	{FlagName: "base-url", Shorthand: "b", FieldPath: "Body.BaseURL", Kind: flagutil.FlagKindString, Optional: true, Description: "The https URL of the real system. Requests go to paths under it. Send exactly one of base_url and login."},
+	{FlagName: "header", FieldPath: "Body.Header", Kind: flagutil.FlagKindString, Optional: true, Description: "The HTTP header that carries the value. Defaults to Authorization. Not allowed with login."},
+	{FlagName: "login", Shorthand: "l", FieldPath: "Body.Login", Kind: flagutil.FlagKindJSON, Optional: true, Annotations: `json:"login,omitempty"`, Description: "JSON object"},
+	{FlagName: "name", Shorthand: "n", FieldPath: "Body.Name", Kind: flagutil.FlagKindString, Required: true, Description: "Credential name. [required]"},
+	{FlagName: "oauth", FieldPath: "Body.Oauth", Kind: flagutil.FlagKindJSON, Optional: true, Annotations: `json:"oauth,omitempty"`, Description: "JSON object"},
+	{FlagName: "value", Shorthand: "v", FieldPath: "Body.Value", Kind: flagutil.FlagKindString, Optional: true, Description: "The full header value, for example Bearer followed by a token. Required with base_url unless oauth is sent; not allowed with login, which a person signs in to by hand after the credential exists. The API never returns it."},
 }
 
 // initCreateCredentialCmd initializes the create-credential command.
@@ -34,7 +34,7 @@ func initCreateCredentialCmd(parent *cobra.Command) error {
 		RunE:    runCreateCredentialCmd,
 	}
 	flagutil.RegisterFlags(cmd, createCredentialCmdMeta)
-	if err := flagutil.ValidateMeta[components.CreateCredentialRequest](createCredentialCmdMeta); err != nil {
+	if err := flagutil.ValidateMeta[operations.CreateCredentialRequest](createCredentialCmdMeta); err != nil {
 		return fmt.Errorf("invalid metadata for create-credential: %w", err)
 	}
 	cmd.Flags().String("body", "", "Request body as JSON (alternative to individual flags). Can also be provided via stdin.")
@@ -52,7 +52,7 @@ func runCreateCredentialCmd(cmd *cobra.Command, args []string) error {
 			return err
 		}
 	}
-	request, err := flagutil.BuildRequest[components.CreateCredentialRequest](cmd, createCredentialCmdMeta, "", "body")
+	req, err := flagutil.BuildRequest[operations.CreateCredentialRequest](cmd, createCredentialCmdMeta, "Body", "body")
 	if err != nil {
 		return err
 	}
@@ -75,7 +75,7 @@ func runCreateCredentialCmd(cmd *cobra.Command, args []string) error {
 	if output.WantsRawJSON(cmd) {
 		sdkOpts = append(sdkOpts, operations.WithSkipDeserialization())
 	}
-	res, err := s.Credentials.CreateCredential(cmd.Context(), *request, sdkOpts...)
+	res, err := s.Credentials.CreateCredential(cmd.Context(), *req, sdkOpts...)
 	if err != nil {
 		return output.Error(cmd, err)
 	}

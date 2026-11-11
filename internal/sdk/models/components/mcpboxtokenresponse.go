@@ -4,7 +4,7 @@ package components
 
 type MCPBoxTokenResponse struct {
 	Mcpbox MCPBox `json:"mcpbox"`
-	// The MCP Box's token, which lasts until the MCP Box is deleted. It is null only for a box created before boxes stored their tokens.
+	// The MCP Box's token, which lasts until the MCP Box is deleted.
 	Token *string `json:"token"`
 }
 

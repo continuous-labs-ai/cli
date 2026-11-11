@@ -7,7 +7,7 @@ import (
 	"time"
 )
 
-// APIBoxSnapshotSource - catalog for a Snapshot Continuous publishes, build for one built or published into the workspace, box for one saved from an API Box.
+// APIBoxSnapshotSource - catalog for a Snapshot Continuous publishes, build for one built or cloned into the workspace, box for one saved from an API Box.
 type APIBoxSnapshotSource string
 
 const (
@@ -109,11 +109,11 @@ type APIBoxSnapshot struct {
 	ParentID *string `json:"parent_id"`
 	// The build's research stage, or null when research did not run.
 	Research *BuildResearch `json:"research"`
-	// catalog for a Snapshot Continuous publishes, build for one built or published into the workspace, box for one saved from an API Box.
+	// catalog for a Snapshot Continuous publishes, build for one built or cloned into the workspace, box for one saved from an API Box.
 	Source APIBoxSnapshotSource `json:"source"`
-	// The box the Snapshot was saved from, or null for a built or published Snapshot.
+	// The box the Snapshot was saved from, or null for a Snapshot not saved from a box.
 	SourceBoxID *string `json:"source_box_id"`
-	// The Snapshot the box it was saved from started from, or null for a built or published Snapshot, or once that Snapshot is deleted.
+	// The Snapshot the box it was saved from started from, or null for a Snapshot not saved from a box, or once that Snapshot is deleted.
 	SourceSnapshotID *string `json:"source_snapshot_id"`
 	// The specification the Snapshot was built from, or null until the build has read it.
 	SpecKind *APIBoxSnapshotSpecKind `json:"spec_kind"`

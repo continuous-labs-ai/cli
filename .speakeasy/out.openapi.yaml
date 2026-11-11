@@ -20,11 +20,6 @@ components:
         code: apibox_rebuild_required
         detail: The runtime of the API Box with ID "abx_01J8Z5X4K70000000000000001" cannot save its state. Rebuild its Snapshot, then save a Box created from the new one.
         validation: null
-    apibox_snapshot_catalog:
-      value:
-        code: auth_forbidden
-        detail: The API Box Snapshot with ID "abs_01J8Z5X4K70000000000000002" belongs to the Continuous catalog and cannot be changed.
-        validation: null
     apibox_snapshot_in_use:
       value:
         code: apibox_snapshot_in_use
@@ -35,10 +30,20 @@ components:
         code: apibox_snapshot_not_found
         detail: No API Box Snapshot was found with ID "abs_01J8Z5X4K70000000000000002".
         validation: null
+    apibox_snapshot_not_found_parent:
+      value:
+        code: apibox_snapshot_not_found
+        detail: No API Box Snapshot of the workspace or the catalog has the parent_id "abs_01J8Z5X4K70000000000000002".
+        validation: null
     apibox_snapshot_not_ready:
       value:
         code: apibox_snapshot_not_ready
         detail: The API Box Snapshot with ID "abs_01J8Z5X4K70000000000000002" is building; API Boxes start only from a ready one.
+        validation: null
+    apibox_snapshot_not_ready_parent:
+      value:
+        code: apibox_snapshot_not_ready
+        detail: The parent API Box Snapshot with ID "abs_01J8Z5X4K70000000000000002" is building. Build on a ready one.
         validation: null
     apibox_snapshot_not_waiting:
       value:
@@ -49,16 +54,6 @@ components:
       value:
         code: apibox_snapshot_parent_in_use
         detail: A build that starts from the API Box Snapshot with ID "abs_01J8Z5X4K70000000000000002" is pending or building. Retry after it finishes, or cancel it.
-        validation: null
-    apibox_snapshot_parent_not_ready:
-      value:
-        code: validation
-        detail: The parent API Box Snapshot with ID "abs_01J8Z5X4K70000000000000002" is building. Build on a ready one.
-        validation: null
-    apibox_snapshot_parent_unknown:
-      value:
-        code: validation
-        detail: No API Box Snapshot of the workspace or the catalog has the parent_id "abs_01J8Z5X4K70000000000000002".
         validation: null
     apibox_starting:
       value:
@@ -79,6 +74,21 @@ components:
       value:
         code: auth_forbidden
         detail: The Simulator with ID "smr_01J8Z5X4K7M2N9P0Q1R2S3T4V5" belongs to the Continuous catalog and cannot be changed.
+        validation: null
+    auth_forbidden_catalog_apibox:
+      value:
+        code: auth_forbidden
+        detail: The API Box Snapshot with ID "abs_01J8Z5X4K70000000000000002" belongs to the Continuous catalog and cannot be changed.
+        validation: null
+    auth_forbidden_catalog_mcpbox:
+      value:
+        code: auth_forbidden
+        detail: The MCP Box Snapshot with ID "mbs_01J8Z5X4K70000000000000007" belongs to the Continuous catalog and cannot be changed.
+        validation: null
+    auth_forbidden_catalog_webbox:
+      value:
+        code: auth_forbidden
+        detail: The Web Box Snapshot with ID "wbs_01J8Z5X4K70000000000000005" belongs to the Continuous catalog and cannot be changed.
         validation: null
     auth_forbidden_clone:
       value:
@@ -115,7 +125,7 @@ components:
         code: auth_invalid
         detail: The authentication credential is invalid.
         validation: null
-    auth_missing:
+    auth_invalid_missing:
       value:
         code: auth_invalid
         detail: Authentication credentials are required.
@@ -160,11 +170,6 @@ components:
         code: build_rate_exceeded
         detail: The workspace has used 10 of its limit of 10 builds for the current UTC day. The limit resets at the next UTC midnight.
         validation: null
-    build_storage_unavailable:
-      value:
-        code: internal_unavailable
-        detail: simulator spec storage is unavailable
-        validation: null
     clock_advance_not_found:
       value:
         code: clock_advance_not_found
@@ -179,6 +184,11 @@ components:
       value:
         code: credential_not_found
         detail: No credential was found with ID "crd_01J8Z5X4K7M2N9P0Q1R2S3T4VA".
+        validation: null
+    credential_not_found_build:
+      value:
+        code: credential_not_found
+        detail: No credential of the workspace was found with ID "crd_01J8Z5X4K7M2N9P0Q1R2S3T4VA" in credential_ids.
         validation: null
     idempotency_conflict:
       value:
@@ -200,15 +210,15 @@ components:
         code: internal_unavailable
         detail: The service is temporarily unavailable. Retry the request after a short delay.
         validation: null
+    internal_unavailable_build_storage:
+      value:
+        code: internal_unavailable
+        detail: simulator spec storage is unavailable
+        validation: null
     mcpbox_apibox_gone:
       value:
         code: mcpbox_apibox_gone
         detail: The API Box with ID "abx_01J8Z5X4K70000000000000001" that the MCP Box with ID "mbx_01J8Z5X4K70000000000000006" fronts was deleted. Create a new MCP Box in front of another API Box.
-        validation: null
-    mcpbox_apibox_mismatch:
-      value:
-        code: validation
-        detail: The API Box with ID "abx_01J8Z5X4K70000000000000001" started from API Box Snapshot "abs_01J8Z5X4K70000000000000002", but the MCP Box Snapshot was built against "abs_01J8Z5X4K70000000000000003".
         validation: null
     mcpbox_not_found:
       value:
@@ -225,11 +235,6 @@ components:
         code: mcpbox_rebuild_required
         detail: The runtime of the API Box with ID "abx_01J8Z5X4K70000000000000001" that the MCP Box with ID "mbx_01J8Z5X4K70000000000000006" fronts cannot save its state. Rebuild its API Box Snapshot and an MCP Box Snapshot against the new one, then save an MCP Box created from them.
         validation: null
-    mcpbox_snapshot_catalog:
-      value:
-        code: auth_forbidden
-        detail: The MCP Box Snapshot with ID "mbs_01J8Z5X4K70000000000000007" belongs to the Continuous catalog and cannot be changed.
-        validation: null
     mcpbox_snapshot_in_use:
       value:
         code: mcpbox_snapshot_in_use
@@ -240,10 +245,20 @@ components:
         code: mcpbox_snapshot_not_found
         detail: No MCP Box Snapshot was found with ID "mbs_01J8Z5X4K70000000000000007".
         validation: null
+    mcpbox_snapshot_not_found_parent:
+      value:
+        code: mcpbox_snapshot_not_found
+        detail: No MCP Box Snapshot of the workspace or the catalog has the parent_id "mbs_01J8Z5X4K70000000000000007".
+        validation: null
     mcpbox_snapshot_not_ready:
       value:
         code: mcpbox_snapshot_not_ready
         detail: The MCP Box Snapshot with ID "mbs_01J8Z5X4K70000000000000007" is building; MCP Boxes start only from a ready one.
+        validation: null
+    mcpbox_snapshot_not_ready_parent:
+      value:
+        code: mcpbox_snapshot_not_ready
+        detail: The parent MCP Box Snapshot with ID "mbs_01J8Z5X4K70000000000000007" is building. Build on a ready one.
         validation: null
     mcpbox_snapshot_not_waiting:
       value:
@@ -254,16 +269,6 @@ components:
       value:
         code: mcpbox_snapshot_parent_in_use
         detail: A build that starts from the MCP Box Snapshot with ID "mbs_01J8Z5X4K70000000000000007" is pending or building. Retry after it finishes, or cancel it.
-        validation: null
-    mcpbox_snapshot_parent_not_ready:
-      value:
-        code: validation
-        detail: The parent MCP Box Snapshot with ID "mbs_01J8Z5X4K70000000000000007" is building. Build on a ready one.
-        validation: null
-    mcpbox_snapshot_parent_unknown:
-      value:
-        code: validation
-        detail: No MCP Box Snapshot of the workspace or the catalog has the parent_id "mbs_01J8Z5X4K70000000000000007".
         validation: null
     mcpbox_starting:
       value:
@@ -285,11 +290,6 @@ components:
         code: request_timeout
         detail: The request body was not received before the timeout. Retry the request.
         validation: null
-    simulation_boot_failed:
-      value:
-        code: simulation_not_found
-        detail: The Simulation's runtime could not start, so the Simulation was deleted. Create it again.
-        validation: null
     simulation_environment_offline:
       value:
         code: simulation_environment_offline
@@ -305,10 +305,20 @@ components:
         code: simulation_not_found
         detail: No Simulation was found with ID "sim_01J8Z5X4K7M2N9P0Q1R2S3T4V6".
         validation: null
+    simulation_not_found_boot_failed:
+      value:
+        code: simulation_not_found
+        detail: The Simulation's runtime could not start, so the Simulation was deleted. Create it again.
+        validation: null
     simulation_observation_external:
       value:
         code: simulation_observation_external
         detail: The Simulation with ID "sim_01J8Z5X4K7M2N9P0Q1R2S3T4V6" is served outside the Continuous API, which does not read or copy its state, so this operation is unavailable.
+        validation: null
+    simulation_observation_external_snapshot:
+      value:
+        code: simulation_observation_external
+        detail: The Snapshot with ID "sns_01J8Z5X4K7M2N9P0Q1R2S3T4VC" is kept where Snapshots cannot be served now, so this operation is unavailable.
         validation: null
     simulation_provider_unavailable:
       value:
@@ -410,20 +420,15 @@ components:
         code: snapshot_not_ready
         detail: The Snapshot is not ready.
         validation: null
-    snapshot_observation_external:
-      value:
-        code: simulation_observation_external
-        detail: The Snapshot with ID "sns_01J8Z5X4K7M2N9P0Q1R2S3T4VC" is kept where Snapshots cannot be served now, so this operation is unavailable.
-        validation: null
     unsupported_media_type:
       value:
         code: unsupported_media_type
         detail: The request Content-Type is not supported.
         validation: null
-    validation_build_credential:
+    validation_apibox_mismatch:
       value:
         code: validation
-        detail: The credential with ID "crd_01J8Z5X4K7M2N9P0Q1R2S3T4VA" is unknown or belongs to another workspace.
+        detail: The API Box with ID "abx_01J8Z5X4K70000000000000001" started from API Box Snapshot "abs_01J8Z5X4K70000000000000002", but the MCP Box Snapshot was built against "abs_01J8Z5X4K70000000000000003".
         validation: null
     validation_build_simulator:
       value:
@@ -495,11 +500,6 @@ components:
         code: webbox_rebuild_required
         detail: The runtime of the Web Box with ID "wbx_01J8Z5X4K70000000000000004" cannot save its state. Rebuild its Snapshot, then save a Box created from the new one.
         validation: null
-    webbox_snapshot_catalog:
-      value:
-        code: auth_forbidden
-        detail: The Web Box Snapshot with ID "wbs_01J8Z5X4K70000000000000005" belongs to the Continuous catalog and cannot be changed.
-        validation: null
     webbox_snapshot_in_use:
       value:
         code: webbox_snapshot_in_use
@@ -510,10 +510,20 @@ components:
         code: webbox_snapshot_not_found
         detail: No Web Box Snapshot was found with ID "wbs_01J8Z5X4K70000000000000005".
         validation: null
+    webbox_snapshot_not_found_parent:
+      value:
+        code: webbox_snapshot_not_found
+        detail: No Web Box Snapshot of the workspace or the catalog has the parent_id "wbs_01J8Z5X4K70000000000000005".
+        validation: null
     webbox_snapshot_not_ready:
       value:
         code: webbox_snapshot_not_ready
         detail: The Web Box Snapshot with ID "wbs_01J8Z5X4K70000000000000005" is building; Web Boxes start only from a ready one.
+        validation: null
+    webbox_snapshot_not_ready_parent:
+      value:
+        code: webbox_snapshot_not_ready
+        detail: The parent Web Box Snapshot with ID "wbs_01J8Z5X4K70000000000000005" is building. Build on a ready one.
         validation: null
     webbox_snapshot_not_waiting:
       value:
@@ -524,16 +534,6 @@ components:
       value:
         code: webbox_snapshot_parent_in_use
         detail: A build that starts from the Web Box Snapshot with ID "wbs_01J8Z5X4K70000000000000005" is pending or building. Retry after it finishes, or cancel it.
-        validation: null
-    webbox_snapshot_parent_not_ready:
-      value:
-        code: validation
-        detail: The parent Web Box Snapshot with ID "wbs_01J8Z5X4K70000000000000005" is building. Build on a ready one.
-        validation: null
-    webbox_snapshot_parent_unknown:
-      value:
-        code: validation
-        detail: No Web Box Snapshot of the workspace or the catalog has the parent_id "wbs_01J8Z5X4K70000000000000005".
         validation: null
     webbox_starting:
       value:
@@ -584,8 +584,8 @@ components:
           examples:
             auth_invalid:
               $ref: "#/components/examples/auth_invalid"
-            auth_missing:
-              $ref: "#/components/examples/auth_missing"
+            auth_invalid_missing:
+              $ref: "#/components/examples/auth_invalid_missing"
           schema:
             $ref: "#/components/schemas/Error"
       description: Unauthorized
@@ -698,6 +698,7 @@ components:
         credential_ids:
           description: Workspace credentials the build used, such as a web app login or credentials it was allowed to call real systems with. Empty when none.
           items:
+            pattern: ^crd_[0-9A-HJKMNP-TV-Z]{26}$
             type: string
           type: array
         error:
@@ -728,6 +729,7 @@ components:
           type: string
         parent_id:
           description: The Snapshot an incremental build started from, or null for any other Snapshot or once that Snapshot is deleted.
+          pattern: ^abs_[0-9A-HJKMNP-TV-Z]{26}$
           type:
             - string
             - "null"
@@ -737,19 +739,21 @@ components:
             - $ref: "#/components/schemas/BuildResearch"
             - type: "null"
         source:
-          description: catalog for a Snapshot Continuous publishes, build for one built or published into the workspace, box for one saved from an API Box.
+          description: catalog for a Snapshot Continuous publishes, build for one built or cloned into the workspace, box for one saved from an API Box.
           enum:
             - catalog
             - build
             - box
           type: string
         source_box_id:
-          description: The box the Snapshot was saved from, or null for a built or published Snapshot.
+          description: The box the Snapshot was saved from, or null for a Snapshot not saved from a box.
+          pattern: ^abx_[0-9A-HJKMNP-TV-Z]{26}$
           type:
             - string
             - "null"
         source_snapshot_id:
-          description: The Snapshot the box it was saved from started from, or null for a built or published Snapshot, or once that Snapshot is deleted.
+          description: The Snapshot the box it was saved from started from, or null for a Snapshot not saved from a box, or once that Snapshot is deleted.
+          pattern: ^abs_[0-9A-HJKMNP-TV-Z]{26}$
           type:
             - string
             - "null"
@@ -800,7 +804,7 @@ components:
           $ref: "#/components/schemas/APIBox"
           description: The API Box.
         token:
-          description: The API Box's token, which lasts until the API Box is deleted. It is null only for a box created before boxes stored their tokens.
+          description: The API Box's token, which lasts until the API Box is deleted.
           type:
             - string
             - "null"
@@ -1040,7 +1044,7 @@ components:
       additionalProperties: false
       properties:
         agent_state:
-          description: "What the build's agent was doing when the build last checked on it, every few minutes: working while it thinks or runs a command, idle when its turn ended without a tool call, waiting_for_limit while a subscription model waits for its usage limit to reset. Null when the build is not running, while it waits for the requester, or for a build recorded before agents reported it."
+          description: "What the build's agent was doing when the build last checked on it, every few minutes: working while it thinks or runs a command, idle when its turn ended without a tool call, waiting_for_limit while a subscription model waits for its usage limit to reset. Null when the build is not running or while it waits for the requester."
           enum:
             - working
             - idle
@@ -1081,7 +1085,7 @@ components:
           maxItems: 50
           type: array
         model:
-          description: The model the builder and reviewer run on, or combined, which currently runs as claude-opus-5-5. A build recorded before model selection reports its provider's default.
+          description: The model the builder and reviewer run on, or combined, which currently runs as claude-opus-5-5.
           enum:
             - gpt-6-astra
             - gpt-6.1-sol
@@ -1282,10 +1286,11 @@ components:
         credential_ids:
           description: The credentials to refresh with PATCH /v1/credentials/{id} before resuming the build. Empty for live_rate_limit and time_limit.
           items:
+            pattern: ^crd_[0-9A-HJKMNP-TV-Z]{26}$
             type: string
           type: array
         deadline:
-          description: "When the wait ends, 7 days after it began: a build not resumed by then fails, with error code live_credential_rejected for live_credentials, live_rate_limited for live_rate_limit, and for its time limit for time_limit. The wait does not count toward the build's time limit."
+          description: "When the wait ends, 7 days after it began: a build not resumed by then fails with error code live_credential_rejected for live_credentials, live_rate_limited for live_rate_limit, or build_failed with reason time_limit for time_limit. The wait does not count toward the build's time limit."
           format: date-time
           type: string
         reason:
@@ -1476,6 +1481,7 @@ components:
         target_workspace_id:
           description: Workspace that receives the clone. It must differ from the source workspace.
           minLength: 1
+          pattern: ^ws_[0-9A-HJKMNP-TV-Z]{26}$
           type: string
       required:
         - target_workspace_id
@@ -1490,6 +1496,7 @@ components:
         target_workspace_id:
           description: Workspace that receives the clone. It must differ from the source workspace.
           minLength: 1
+          pattern: ^ws_[0-9A-HJKMNP-TV-Z]{26}$
           type: string
       required:
         - target_workspace_id
@@ -1991,7 +1998,7 @@ components:
       additionalProperties: false
       properties:
         connection:
-          description: The API Box's endpoint and token, or null for a box created before boxes stored their tokens.
+          description: The API Box's endpoint and token.
           oneOf:
             - $ref: "#/components/schemas/APIBoxConnection"
             - type: "null"
@@ -2061,7 +2068,7 @@ components:
           pattern: ^abx_[0-9A-HJKMNP-TV-Z]{26}$
           type: string
         connection:
-          description: The MCP Box's endpoint and token, or null for a box created before boxes stored their tokens.
+          description: The MCP Box's endpoint and token.
           oneOf:
             - $ref: "#/components/schemas/MCPBoxConnection"
             - type: "null"
@@ -2536,6 +2543,7 @@ components:
         credential_ids:
           description: Workspace credentials the build used, such as a web app login or credentials it was allowed to call real systems with. Empty when none.
           items:
+            pattern: ^crd_[0-9A-HJKMNP-TV-Z]{26}$
             type: string
           type: array
         error:
@@ -2566,6 +2574,7 @@ components:
           type: string
         parent_id:
           description: The Snapshot an incremental build started from, or null for any other Snapshot or once that Snapshot is deleted.
+          pattern: ^mbs_[0-9A-HJKMNP-TV-Z]{26}$
           type:
             - string
             - "null"
@@ -2575,19 +2584,21 @@ components:
             - $ref: "#/components/schemas/BuildResearch"
             - type: "null"
         source:
-          description: catalog for a Snapshot Continuous publishes, build for one built or published into the workspace, box for one saved from an MCP Box.
+          description: catalog for a Snapshot Continuous publishes, build for one built or cloned into the workspace, box for one saved from an MCP Box.
           enum:
             - catalog
             - build
             - box
           type: string
         source_box_id:
-          description: The box the Snapshot was saved from, or null for a built or published Snapshot.
+          description: The box the Snapshot was saved from, or null for a Snapshot not saved from a box.
+          pattern: ^mbx_[0-9A-HJKMNP-TV-Z]{26}$
           type:
             - string
             - "null"
         source_snapshot_id:
-          description: The Snapshot the box it was saved from started from, or null for a built or published Snapshot, or once that Snapshot is deleted.
+          description: The Snapshot the box it was saved from started from, or null for a Snapshot not saved from a box, or once that Snapshot is deleted.
+          pattern: ^mbs_[0-9A-HJKMNP-TV-Z]{26}$
           type:
             - string
             - "null"
@@ -2632,7 +2643,7 @@ components:
           $ref: "#/components/schemas/MCPBox"
           description: The MCP Box.
         token:
-          description: The MCP Box's token, which lasts until the MCP Box is deleted. It is null only for a box created before boxes stored their tokens.
+          description: The MCP Box's token, which lasts until the MCP Box is deleted.
           type:
             - string
             - "null"
@@ -2992,6 +3003,7 @@ components:
         credential_ids:
           description: Workspace credentials the build was allowed to call real systems with. Empty when none.
           items:
+            pattern: ^crd_[0-9A-HJKMNP-TV-Z]{26}$
             type: string
           type: array
         error:
@@ -3507,6 +3519,7 @@ components:
         credential_ids:
           description: Workspace credentials the build used, such as a web app login or credentials it was allowed to call real systems with. Empty when none.
           items:
+            pattern: ^crd_[0-9A-HJKMNP-TV-Z]{26}$
             type: string
           type: array
         error:
@@ -3537,6 +3550,7 @@ components:
           type: string
         parent_id:
           description: The Snapshot an incremental build started from, or null for any other Snapshot or once that Snapshot is deleted.
+          pattern: ^wbs_[0-9A-HJKMNP-TV-Z]{26}$
           type:
             - string
             - "null"
@@ -3553,12 +3567,14 @@ components:
             - box
           type: string
         source_box_id:
-          description: The box the Snapshot was saved from, or null for a built or published Snapshot.
+          description: The box the Snapshot was saved from, or null for a Snapshot not saved from a box.
+          pattern: ^wbx_[0-9A-HJKMNP-TV-Z]{26}$
           type:
             - string
             - "null"
         source_snapshot_id:
-          description: The Snapshot the box it was saved from started from, or null for a built or published Snapshot, or once that Snapshot is deleted.
+          description: The Snapshot the box it was saved from started from, or null for a Snapshot not saved from a box, or once that Snapshot is deleted.
+          pattern: ^wbs_[0-9A-HJKMNP-TV-Z]{26}$
           type:
             - string
             - "null"
@@ -3973,25 +3989,32 @@ paths:
           description: Bad Request
         "401":
           $ref: "#/components/responses/Unauthorized"
+        "404":
+          content:
+            application/problem+json:
+              examples:
+                apibox_snapshot_not_found_parent:
+                  $ref: "#/components/examples/apibox_snapshot_not_found_parent"
+                credential_not_found_build:
+                  $ref: "#/components/examples/credential_not_found_build"
+              schema:
+                $ref: "#/components/schemas/Error"
+          description: Not Found
         "408":
           $ref: "#/components/responses/RequestTimeout"
+        "409":
+          content:
+            application/problem+json:
+              examples:
+                apibox_snapshot_not_ready_parent:
+                  $ref: "#/components/examples/apibox_snapshot_not_ready_parent"
+              schema:
+                $ref: "#/components/schemas/Error"
+          description: Conflict
         "413":
           $ref: "#/components/responses/PayloadTooLarge"
         "415":
           $ref: "#/components/responses/UnsupportedMediaType"
-        "422":
-          content:
-            application/problem+json:
-              examples:
-                apibox_snapshot_parent_not_ready:
-                  $ref: "#/components/examples/apibox_snapshot_parent_not_ready"
-                apibox_snapshot_parent_unknown:
-                  $ref: "#/components/examples/apibox_snapshot_parent_unknown"
-                validation_build_credential:
-                  $ref: "#/components/examples/validation_build_credential"
-              schema:
-                $ref: "#/components/schemas/Error"
-          description: Unprocessable Entity
         "429":
           content:
             application/problem+json:
@@ -4052,8 +4075,8 @@ paths:
           content:
             application/problem+json:
               examples:
-                apibox_snapshot_catalog:
-                  $ref: "#/components/examples/apibox_snapshot_catalog"
+                auth_forbidden_catalog_apibox:
+                  $ref: "#/components/examples/auth_forbidden_catalog_apibox"
               schema:
                 $ref: "#/components/schemas/Error"
           description: Forbidden
@@ -4193,8 +4216,8 @@ paths:
           content:
             application/problem+json:
               examples:
-                apibox_snapshot_catalog:
-                  $ref: "#/components/examples/apibox_snapshot_catalog"
+                auth_forbidden_catalog_apibox:
+                  $ref: "#/components/examples/auth_forbidden_catalog_apibox"
               schema:
                 $ref: "#/components/schemas/Error"
           description: Forbidden
@@ -4267,8 +4290,8 @@ paths:
           content:
             application/problem+json:
               examples:
-                apibox_snapshot_catalog:
-                  $ref: "#/components/examples/apibox_snapshot_catalog"
+                auth_forbidden_catalog_apibox:
+                  $ref: "#/components/examples/auth_forbidden_catalog_apibox"
               schema:
                 $ref: "#/components/schemas/Error"
           description: Forbidden
@@ -4301,7 +4324,7 @@ paths:
         - apibox-snapshots
   /v1/apibox-snapshots/{id}/clone:
     post:
-      description: "Creates a ready copy of a ready API Box Snapshot in another workspace, without a build. The clone has a new ID and the source's artifact, documents and saved state; the source is unchanged. The clone records no credentials, since they belong to the source workspace, and no parent or source Snapshot. The source is the caller's workspace: an API key's own workspace, or X-Workspace-Id for a session. An API key may clone into any other workspace of its organization."
+      description: Creates a ready copy of a ready API Box Snapshot in another workspace, without a build. The clone has a new ID and the source's artifact, documents and saved state; the source is unchanged. The clone records no credentials, since they belong to the source workspace, and no parent or source Snapshot. The source is the caller's workspace. An API key may clone into any other workspace of its organization.
       operationId: clone-apibox-snapshot
       parameters:
         - description: Source Snapshot ID.
@@ -4448,8 +4471,8 @@ paths:
           content:
             application/problem+json:
               examples:
-                apibox_snapshot_catalog:
-                  $ref: "#/components/examples/apibox_snapshot_catalog"
+                auth_forbidden_catalog_apibox:
+                  $ref: "#/components/examples/auth_forbidden_catalog_apibox"
               schema:
                 $ref: "#/components/schemas/Error"
           description: Forbidden
@@ -5103,6 +5126,13 @@ paths:
     post:
       description: "Stores a connection to a real system: an API base URL and the header that carries the credential, with either the header value or an OAuth 2.0 client whose access token the API gets and renews; or a Web App login with its sign-in URL, which a person then signs in to by hand in the console. Returns the credential without its value."
       operationId: create-credential
+      parameters:
+        - description: Optional key for retrying this create safely. A retry with the same key and request returns the original result with its status, even with other secrets; the same key with a different request returns 409 idempotency_conflict. Without a key, each request creates a new resource.
+          in: header
+          name: Idempotency-Key
+          schema:
+            maxLength: 256
+            type: string
       requestBody:
         content:
           application/json:
@@ -5129,6 +5159,15 @@ paths:
           $ref: "#/components/responses/Unauthorized"
         "408":
           $ref: "#/components/responses/RequestTimeout"
+        "409":
+          content:
+            application/problem+json:
+              examples:
+                idempotency_conflict:
+                  $ref: "#/components/examples/idempotency_conflict"
+              schema:
+                $ref: "#/components/schemas/Error"
+          description: Conflict
         "413":
           $ref: "#/components/responses/PayloadTooLarge"
         "415":
@@ -5139,6 +5178,8 @@ paths:
               examples:
                 validation_credential:
                   $ref: "#/components/examples/validation_credential"
+                validation_idempotency_key:
+                  $ref: "#/components/examples/validation_idempotency_key"
               schema:
                 $ref: "#/components/schemas/Error"
           description: Unprocessable Entity
@@ -5170,6 +5211,7 @@ paths:
           name: id
           required: true
           schema:
+            pattern: ^crd_[0-9A-HJKMNP-TV-Z]{26}$
             type: string
       responses:
         "204":
@@ -5221,6 +5263,7 @@ paths:
           name: id
           required: true
           schema:
+            pattern: ^crd_[0-9A-HJKMNP-TV-Z]{26}$
             type: string
       responses:
         "200":
@@ -5288,6 +5331,7 @@ paths:
           name: id
           required: true
           schema:
+            pattern: ^crd_[0-9A-HJKMNP-TV-Z]{26}$
             type: string
       requestBody:
         content:
@@ -5532,8 +5576,8 @@ paths:
           content:
             application/problem+json:
               examples:
-                mcpbox_apibox_mismatch:
-                  $ref: "#/components/examples/mcpbox_apibox_mismatch"
+                validation_apibox_mismatch:
+                  $ref: "#/components/examples/validation_apibox_mismatch"
                 validation_metadata:
                   $ref: "#/components/examples/validation_metadata"
               schema:
@@ -5738,6 +5782,10 @@ paths:
               examples:
                 apibox_snapshot_not_found:
                   $ref: "#/components/examples/apibox_snapshot_not_found"
+                credential_not_found_build:
+                  $ref: "#/components/examples/credential_not_found_build"
+                mcpbox_snapshot_not_found_parent:
+                  $ref: "#/components/examples/mcpbox_snapshot_not_found_parent"
               schema:
                 $ref: "#/components/schemas/Error"
           description: Not Found
@@ -5749,6 +5797,8 @@ paths:
               examples:
                 apibox_snapshot_not_ready:
                   $ref: "#/components/examples/apibox_snapshot_not_ready"
+                mcpbox_snapshot_not_ready_parent:
+                  $ref: "#/components/examples/mcpbox_snapshot_not_ready_parent"
               schema:
                 $ref: "#/components/schemas/Error"
           description: Conflict
@@ -5756,19 +5806,6 @@ paths:
           $ref: "#/components/responses/PayloadTooLarge"
         "415":
           $ref: "#/components/responses/UnsupportedMediaType"
-        "422":
-          content:
-            application/problem+json:
-              examples:
-                mcpbox_snapshot_parent_not_ready:
-                  $ref: "#/components/examples/mcpbox_snapshot_parent_not_ready"
-                mcpbox_snapshot_parent_unknown:
-                  $ref: "#/components/examples/mcpbox_snapshot_parent_unknown"
-                validation_build_credential:
-                  $ref: "#/components/examples/validation_build_credential"
-              schema:
-                $ref: "#/components/schemas/Error"
-          description: Unprocessable Entity
         "429":
           content:
             application/problem+json:
@@ -5829,8 +5866,8 @@ paths:
           content:
             application/problem+json:
               examples:
-                mcpbox_snapshot_catalog:
-                  $ref: "#/components/examples/mcpbox_snapshot_catalog"
+                auth_forbidden_catalog_mcpbox:
+                  $ref: "#/components/examples/auth_forbidden_catalog_mcpbox"
               schema:
                 $ref: "#/components/schemas/Error"
           description: Forbidden
@@ -5970,8 +6007,8 @@ paths:
           content:
             application/problem+json:
               examples:
-                mcpbox_snapshot_catalog:
-                  $ref: "#/components/examples/mcpbox_snapshot_catalog"
+                auth_forbidden_catalog_mcpbox:
+                  $ref: "#/components/examples/auth_forbidden_catalog_mcpbox"
               schema:
                 $ref: "#/components/schemas/Error"
           description: Forbidden
@@ -6044,8 +6081,8 @@ paths:
           content:
             application/problem+json:
               examples:
-                mcpbox_snapshot_catalog:
-                  $ref: "#/components/examples/mcpbox_snapshot_catalog"
+                auth_forbidden_catalog_mcpbox:
+                  $ref: "#/components/examples/auth_forbidden_catalog_mcpbox"
               schema:
                 $ref: "#/components/schemas/Error"
           description: Forbidden
@@ -6078,7 +6115,7 @@ paths:
         - mcpbox-snapshots
   /v1/mcpbox-snapshots/{id}/clone:
     post:
-      description: "Creates a ready copy of a ready MCP Box Snapshot in another workspace, without a build. The clone has a new ID and the source's artifact, documents and saved state; the source is unchanged. The clone records no credentials, since they belong to the source workspace, and no parent or source Snapshot. An API Box Snapshot of the source workspace that the MCP Box Snapshot was built against is cloned with it, and the clone is built against the copy; a catalog one is kept. The source is the caller's workspace: an API key's own workspace, or X-Workspace-Id for a session. An API key may clone into any other workspace of its organization."
+      description: Creates a ready copy of a ready MCP Box Snapshot in another workspace, without a build. The clone has a new ID and the source's artifact, documents and saved state; the source is unchanged. The clone records no credentials, since they belong to the source workspace, and no parent or source Snapshot. An API Box Snapshot of the source workspace that the MCP Box Snapshot was built against is cloned with it, and the clone is built against the copy; a catalog one is kept. The source is the caller's workspace. An API key may clone into any other workspace of its organization.
       operationId: clone-mcpbox-snapshot
       parameters:
         - description: Source Snapshot ID.
@@ -6225,8 +6262,8 @@ paths:
           content:
             application/problem+json:
               examples:
-                mcpbox_snapshot_catalog:
-                  $ref: "#/components/examples/mcpbox_snapshot_catalog"
+                auth_forbidden_catalog_mcpbox:
+                  $ref: "#/components/examples/auth_forbidden_catalog_mcpbox"
               schema:
                 $ref: "#/components/schemas/Error"
           description: Forbidden
@@ -6916,12 +6953,12 @@ paths:
           content:
             application/problem+json:
               examples:
+                simulation_observation_external_snapshot:
+                  $ref: "#/components/examples/simulation_observation_external_snapshot"
                 snapshot_in_use:
                   $ref: "#/components/examples/snapshot_in_use"
                 snapshot_not_ready:
                   $ref: "#/components/examples/snapshot_not_ready"
-                snapshot_observation_external:
-                  $ref: "#/components/examples/snapshot_observation_external"
               schema:
                 $ref: "#/components/schemas/Error"
           description: Conflict
@@ -7276,8 +7313,8 @@ paths:
           content:
             application/problem+json:
               examples:
-                simulation_boot_failed:
-                  $ref: "#/components/examples/simulation_boot_failed"
+                simulation_not_found_boot_failed:
+                  $ref: "#/components/examples/simulation_not_found_boot_failed"
                 snapshot_not_found:
                   $ref: "#/components/examples/snapshot_not_found"
               schema:
@@ -7291,12 +7328,12 @@ paths:
               examples:
                 idempotency_conflict:
                   $ref: "#/components/examples/idempotency_conflict"
+                simulation_observation_external_snapshot:
+                  $ref: "#/components/examples/simulation_observation_external_snapshot"
                 simulator_not_ready:
                   $ref: "#/components/examples/simulator_not_ready"
                 snapshot_not_ready:
                   $ref: "#/components/examples/snapshot_not_ready"
-                snapshot_observation_external:
-                  $ref: "#/components/examples/snapshot_observation_external"
               schema:
                 $ref: "#/components/schemas/Error"
           description: Conflict
@@ -8568,6 +8605,15 @@ paths:
           description: Bad Request
         "401":
           $ref: "#/components/responses/Unauthorized"
+        "404":
+          content:
+            application/problem+json:
+              examples:
+                credential_not_found_build:
+                  $ref: "#/components/examples/credential_not_found_build"
+              schema:
+                $ref: "#/components/schemas/Error"
+          description: Not Found
         "408":
           $ref: "#/components/responses/RequestTimeout"
         "409":
@@ -8589,8 +8635,6 @@ paths:
           content:
             application/problem+json:
               examples:
-                validation_build_credential:
-                  $ref: "#/components/examples/validation_build_credential"
                 validation_build_simulator:
                   $ref: "#/components/examples/validation_build_simulator"
                 validation_idempotency_key:
@@ -8623,10 +8667,10 @@ paths:
               examples:
                 auth_provider_unavailable:
                   $ref: "#/components/examples/auth_provider_unavailable"
-                build_storage_unavailable:
-                  $ref: "#/components/examples/build_storage_unavailable"
                 internal_unavailable:
                   $ref: "#/components/examples/internal_unavailable"
+                internal_unavailable_build_storage:
+                  $ref: "#/components/examples/internal_unavailable_build_storage"
               schema:
                 $ref: "#/components/schemas/Error"
           description: Service Unavailable
@@ -8974,7 +9018,7 @@ paths:
     post:
       deprecated: true
       description: |-
-        Creates a ready copy of a ready Simulator in another workspace. The clone has a new ID and the source's image digest; the source is unchanged. The source is the caller's workspace: an API key's own workspace, or X-Workspace-Id for a session. An API key may clone into any other workspace of its organization.
+        Creates a ready copy of a ready Simulator in another workspace. The clone has a new ID and the source's image digest; the source is unchanged. The source is the caller's workspace. An API key may clone into any other workspace of its organization.
 
         Deprecated. Use API Box for APIs and Web Box for web apps.
       operationId: clone-simulator
@@ -9557,25 +9601,32 @@ paths:
           description: Bad Request
         "401":
           $ref: "#/components/responses/Unauthorized"
+        "404":
+          content:
+            application/problem+json:
+              examples:
+                credential_not_found_build:
+                  $ref: "#/components/examples/credential_not_found_build"
+                webbox_snapshot_not_found_parent:
+                  $ref: "#/components/examples/webbox_snapshot_not_found_parent"
+              schema:
+                $ref: "#/components/schemas/Error"
+          description: Not Found
         "408":
           $ref: "#/components/responses/RequestTimeout"
+        "409":
+          content:
+            application/problem+json:
+              examples:
+                webbox_snapshot_not_ready_parent:
+                  $ref: "#/components/examples/webbox_snapshot_not_ready_parent"
+              schema:
+                $ref: "#/components/schemas/Error"
+          description: Conflict
         "413":
           $ref: "#/components/responses/PayloadTooLarge"
         "415":
           $ref: "#/components/responses/UnsupportedMediaType"
-        "422":
-          content:
-            application/problem+json:
-              examples:
-                validation_build_credential:
-                  $ref: "#/components/examples/validation_build_credential"
-                webbox_snapshot_parent_not_ready:
-                  $ref: "#/components/examples/webbox_snapshot_parent_not_ready"
-                webbox_snapshot_parent_unknown:
-                  $ref: "#/components/examples/webbox_snapshot_parent_unknown"
-              schema:
-                $ref: "#/components/schemas/Error"
-          description: Unprocessable Entity
         "429":
           content:
             application/problem+json:
@@ -9636,8 +9687,8 @@ paths:
           content:
             application/problem+json:
               examples:
-                webbox_snapshot_catalog:
-                  $ref: "#/components/examples/webbox_snapshot_catalog"
+                auth_forbidden_catalog_webbox:
+                  $ref: "#/components/examples/auth_forbidden_catalog_webbox"
               schema:
                 $ref: "#/components/schemas/Error"
           description: Forbidden
@@ -9777,8 +9828,8 @@ paths:
           content:
             application/problem+json:
               examples:
-                webbox_snapshot_catalog:
-                  $ref: "#/components/examples/webbox_snapshot_catalog"
+                auth_forbidden_catalog_webbox:
+                  $ref: "#/components/examples/auth_forbidden_catalog_webbox"
               schema:
                 $ref: "#/components/schemas/Error"
           description: Forbidden
@@ -9851,8 +9902,8 @@ paths:
           content:
             application/problem+json:
               examples:
-                webbox_snapshot_catalog:
-                  $ref: "#/components/examples/webbox_snapshot_catalog"
+                auth_forbidden_catalog_webbox:
+                  $ref: "#/components/examples/auth_forbidden_catalog_webbox"
               schema:
                 $ref: "#/components/schemas/Error"
           description: Forbidden
@@ -9885,7 +9936,7 @@ paths:
         - webbox-snapshots
   /v1/webbox-snapshots/{id}/clone:
     post:
-      description: "Creates a ready copy of a ready Web Box Snapshot in another workspace, without a build. The clone has a new ID and the source's artifact, documents and saved state; the source is unchanged. The clone records no credentials, since they belong to the source workspace, and no parent or source Snapshot. The source is the caller's workspace: an API key's own workspace, or X-Workspace-Id for a session. An API key may clone into any other workspace of its organization."
+      description: Creates a ready copy of a ready Web Box Snapshot in another workspace, without a build. The clone has a new ID and the source's artifact, documents and saved state; the source is unchanged. The clone records no credentials, since they belong to the source workspace, and no parent or source Snapshot. The source is the caller's workspace. An API key may clone into any other workspace of its organization.
       operationId: clone-webbox-snapshot
       parameters:
         - description: Source Snapshot ID.
@@ -10032,8 +10083,8 @@ paths:
           content:
             application/problem+json:
               examples:
-                webbox_snapshot_catalog:
-                  $ref: "#/components/examples/webbox_snapshot_catalog"
+                auth_forbidden_catalog_webbox:
+                  $ref: "#/components/examples/auth_forbidden_catalog_webbox"
               schema:
                 $ref: "#/components/schemas/Error"
           description: Forbidden

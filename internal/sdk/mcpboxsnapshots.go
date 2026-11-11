@@ -524,8 +524,6 @@ func (s *McpboxSnapshots) CreateMcpboxSnapshot(ctx context.Context, request oper
 	case httpRes.StatusCode == 413:
 		fallthrough
 	case httpRes.StatusCode == 415:
-		fallthrough
-	case httpRes.StatusCode == 422:
 		switch {
 		case utils.MatchContentType(httpRes.Header.Get("Content-Type"), `application/problem+json`):
 			rawBody, err := utils.ConsumeRawBody(httpRes)
@@ -1561,7 +1559,7 @@ func (s *McpboxSnapshots) CancelMcpboxSnapshot(ctx context.Context, request oper
 }
 
 // CloneMcpboxSnapshot - Clone MCP Box Snapshot
-// Creates a ready copy of a ready MCP Box Snapshot in another workspace, without a build. The clone has a new ID and the source's artifact, documents and saved state; the source is unchanged. The clone records no credentials, since they belong to the source workspace, and no parent or source Snapshot. An API Box Snapshot of the source workspace that the MCP Box Snapshot was built against is cloned with it, and the clone is built against the copy; a catalog one is kept. The source is the caller's workspace: an API key's own workspace, or X-Workspace-Id for a session. An API key may clone into any other workspace of its organization.
+// Creates a ready copy of a ready MCP Box Snapshot in another workspace, without a build. The clone has a new ID and the source's artifact, documents and saved state; the source is unchanged. The clone records no credentials, since they belong to the source workspace, and no parent or source Snapshot. An API Box Snapshot of the source workspace that the MCP Box Snapshot was built against is cloned with it, and the clone is built against the copy; a catalog one is kept. The source is the caller's workspace. An API key may clone into any other workspace of its organization.
 func (s *McpboxSnapshots) CloneMcpboxSnapshot(ctx context.Context, request operations.CloneMcpboxSnapshotRequest, opts ...operations.Option) (*operations.CloneMcpboxSnapshotResponse, error) {
 	o := operations.Options{}
 	supportedOptions := []string{

@@ -7,7 +7,7 @@ import (
 	"time"
 )
 
-// MCPBoxSnapshotSource - catalog for a Snapshot Continuous publishes, build for one built or published into the workspace, box for one saved from an MCP Box.
+// MCPBoxSnapshotSource - catalog for a Snapshot Continuous publishes, build for one built or cloned into the workspace, box for one saved from an MCP Box.
 type MCPBoxSnapshotSource string
 
 const (
@@ -87,11 +87,11 @@ type MCPBoxSnapshot struct {
 	ParentID *string `json:"parent_id"`
 	// The build's research stage, or null when research did not run.
 	Research *BuildResearch `json:"research"`
-	// catalog for a Snapshot Continuous publishes, build for one built or published into the workspace, box for one saved from an MCP Box.
+	// catalog for a Snapshot Continuous publishes, build for one built or cloned into the workspace, box for one saved from an MCP Box.
 	Source MCPBoxSnapshotSource `json:"source"`
-	// The box the Snapshot was saved from, or null for a built or published Snapshot.
+	// The box the Snapshot was saved from, or null for a Snapshot not saved from a box.
 	SourceBoxID *string `json:"source_box_id"`
-	// The Snapshot the box it was saved from started from, or null for a built or published Snapshot, or once that Snapshot is deleted.
+	// The Snapshot the box it was saved from started from, or null for a Snapshot not saved from a box, or once that Snapshot is deleted.
 	SourceSnapshotID *string `json:"source_snapshot_id"`
 	// The source MCP server whose tools the MCP Box serves, or empty when the build called no live source.
 	SourceURL string `json:"source_url"`
