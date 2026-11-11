@@ -372,7 +372,7 @@ func (s *Credentials) ListCredentials(ctx context.Context, request *operations.L
 
 // CreateCredential - Create credential
 // Stores a connection to a real system: an API base URL and the header that carries the credential, with either the header value or an OAuth 2.0 client whose access token the API gets and renews; or a Web App login with its sign-in URL, which a person then signs in to by hand in the console. Returns the credential without its value.
-func (s *Credentials) CreateCredential(ctx context.Context, request components.CreateCredentialRequest, opts ...operations.Option) (*operations.CreateCredentialResponse, error) {
+func (s *Credentials) CreateCredential(ctx context.Context, request operations.CreateCredentialRequest, opts ...operations.Option) (*operations.CreateCredentialResponse, error) {
 	o := operations.Options{}
 	supportedOptions := []string{
 		operations.SupportedOptionTimeout,
@@ -405,7 +405,7 @@ func (s *Credentials) CreateCredential(ctx context.Context, request components.C
 		OAuth2Scopes:     nil,
 		SecuritySource:   s.sdkConfiguration.Security,
 	}
-	bodyReader, reqContentType, err := utils.SerializeRequestBody(ctx, request, false, false, "Request", "json", `request:"mediaType=application/json"`)
+	bodyReader, reqContentType, err := utils.SerializeRequestBody(ctx, request, false, false, "Body", "json", `request:"mediaType=application/json"`)
 	if err != nil {
 		return nil, err
 	}
@@ -437,6 +437,8 @@ func (s *Credentials) CreateCredential(ctx context.Context, request components.C
 	if reqContentType != "" {
 		req.Header.Set("Content-Type", reqContentType)
 	}
+
+	utils.PopulateHeaders(ctx, req, request, nil)
 
 	if err := utils.PopulateSecurity(ctx, req, s.sdkConfiguration.Security); err != nil {
 		return nil, err
@@ -514,6 +516,8 @@ func (s *Credentials) CreateCredential(ctx context.Context, request components.C
 	case httpRes.StatusCode == 401:
 		fallthrough
 	case httpRes.StatusCode == 408:
+		fallthrough
+	case httpRes.StatusCode == 409:
 		fallthrough
 	case httpRes.StatusCode == 413:
 		fallthrough

@@ -87,9 +87,9 @@ type WebBoxSnapshot struct {
 	Research *BuildResearch `json:"research"`
 	// catalog for a Snapshot Continuous publishes, build for one built into the workspace, box for one saved from a Web Box.
 	Source WebBoxSnapshotSource `json:"source"`
-	// The box the Snapshot was saved from, or null for a built or published Snapshot.
+	// The box the Snapshot was saved from, or null for a Snapshot not saved from a box.
 	SourceBoxID *string `json:"source_box_id"`
-	// The Snapshot the box it was saved from started from, or null for a built or published Snapshot, or once that Snapshot is deleted.
+	// The Snapshot the box it was saved from started from, or null for a Snapshot not saved from a box, or once that Snapshot is deleted.
 	SourceSnapshotID *string `json:"source_snapshot_id"`
 	// pending while waiting for capacity; building while the build runs; ready when boxes can start from it; failed when the build failed; canceled when a cancel request took effect.
 	Status WebBoxSnapshotStatus `json:"status"`

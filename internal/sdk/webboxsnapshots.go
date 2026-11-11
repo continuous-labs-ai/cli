@@ -515,13 +515,15 @@ func (s *WebboxSnapshots) CreateWebboxSnapshot(ctx context.Context, request oper
 		fallthrough
 	case httpRes.StatusCode == 401:
 		fallthrough
+	case httpRes.StatusCode == 404:
+		fallthrough
 	case httpRes.StatusCode == 408:
+		fallthrough
+	case httpRes.StatusCode == 409:
 		fallthrough
 	case httpRes.StatusCode == 413:
 		fallthrough
 	case httpRes.StatusCode == 415:
-		fallthrough
-	case httpRes.StatusCode == 422:
 		switch {
 		case utils.MatchContentType(httpRes.Header.Get("Content-Type"), `application/problem+json`):
 			rawBody, err := utils.ConsumeRawBody(httpRes)
@@ -1557,7 +1559,7 @@ func (s *WebboxSnapshots) CancelWebboxSnapshot(ctx context.Context, request oper
 }
 
 // CloneWebboxSnapshot - Clone Web Box Snapshot
-// Creates a ready copy of a ready Web Box Snapshot in another workspace, without a build. The clone has a new ID and the source's artifact, documents and saved state; the source is unchanged. The clone records no credentials, since they belong to the source workspace, and no parent or source Snapshot. The source is the caller's workspace: an API key's own workspace, or X-Workspace-Id for a session. An API key may clone into any other workspace of its organization.
+// Creates a ready copy of a ready Web Box Snapshot in another workspace, without a build. The clone has a new ID and the source's artifact, documents and saved state; the source is unchanged. The clone records no credentials, since they belong to the source workspace, and no parent or source Snapshot. The source is the caller's workspace. An API key may clone into any other workspace of its organization.
 func (s *WebboxSnapshots) CloneWebboxSnapshot(ctx context.Context, request operations.CloneWebboxSnapshotRequest, opts ...operations.Option) (*operations.CloneWebboxSnapshotResponse, error) {
 	o := operations.Options{}
 	supportedOptions := []string{

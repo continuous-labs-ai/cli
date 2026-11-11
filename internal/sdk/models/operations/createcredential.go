@@ -7,6 +7,26 @@ import (
 	"github.com/continuous-labs-ai/cli/internal/sdk/sdkinternal/utils"
 )
 
+type CreateCredentialRequest struct {
+	// Optional key for retrying this create safely. A retry with the same key and request returns the original result with its status, even with other secrets; the same key with a different request returns 409 idempotency_conflict. Without a key, each request creates a new resource.
+	IdempotencyKey *string                            `header:"style=simple,explode=false,name=Idempotency-Key"`
+	Body           components.CreateCredentialRequest `request:"mediaType=application/json"`
+}
+
+func (c *CreateCredentialRequest) GetIdempotencyKey() *string {
+	if c == nil {
+		return nil
+	}
+	return c.IdempotencyKey
+}
+
+func (c *CreateCredentialRequest) GetBody() components.CreateCredentialRequest {
+	if c == nil {
+		return components.CreateCredentialRequest{}
+	}
+	return c.Body
+}
+
 type CreateCredentialResponse struct {
 	HTTPMeta components.HTTPMetadata `json:"-"`
 	// Created

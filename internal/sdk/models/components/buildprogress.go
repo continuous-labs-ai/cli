@@ -7,7 +7,7 @@ import (
 	"time"
 )
 
-// AgentState - What the build's agent was doing when the build last checked on it, every few minutes: working while it thinks or runs a command, idle when its turn ended without a tool call, waiting_for_limit while a subscription model waits for its usage limit to reset. Null when the build is not running, while it waits for the requester, or for a build recorded before agents reported it.
+// AgentState - What the build's agent was doing when the build last checked on it, every few minutes: working while it thinks or runs a command, idle when its turn ended without a tool call, waiting_for_limit while a subscription model waits for its usage limit to reset. Null when the build is not running or while it waits for the requester.
 type AgentState string
 
 const (
@@ -54,7 +54,7 @@ func (e *LastSubmission) IsExact() bool {
 	return false
 }
 
-// BuildProgressModel - The model the builder and reviewer run on, or combined, which currently runs as claude-opus-5-5. A build recorded before model selection reports its provider's default.
+// BuildProgressModel - The model the builder and reviewer run on, or combined, which currently runs as claude-opus-5-5.
 type BuildProgressModel string
 
 const (
@@ -132,7 +132,7 @@ func (e *Stage) IsExact() bool {
 }
 
 type BuildProgress struct {
-	// What the build's agent was doing when the build last checked on it, every few minutes: working while it thinks or runs a command, idle when its turn ended without a tool call, waiting_for_limit while a subscription model waits for its usage limit to reset. Null when the build is not running, while it waits for the requester, or for a build recorded before agents reported it.
+	// What the build's agent was doing when the build last checked on it, every few minutes: working while it thinks or runs a command, idle when its turn ended without a tool call, waiting_for_limit while a subscription model waits for its usage limit to reset. Null when the build is not running or while it waits for the requester.
 	AgentState *AgentState `json:"agent_state"`
 	// Limitations the accepted build records beyond those listed in limitations.
 	HiddenLimitations int64 `json:"hidden_limitations"`
@@ -144,7 +144,7 @@ type BuildProgress struct {
 	LastTool *string `json:"last_tool"`
 	// Behavior the accepted build does not serve like the real system, most important first, set when the build is accepted. Empty when none.
 	Limitations []Limitation `json:"limitations"`
-	// The model the builder and reviewer run on, or combined, which currently runs as claude-opus-5-5. A build recorded before model selection reports its provider's default.
+	// The model the builder and reviewer run on, or combined, which currently runs as claude-opus-5-5.
 	Model BuildProgressModel `json:"model"`
 	// Agent phase: research while the research agent indexes the documents and saves the vendor pages they lack; build for generation, review for the separate reviewer, qa while QA tests the running service from outside, after the last review round of a build with credential_ids, repair while the author fixes the findings of a review or QA. Null when not recorded.
 	Phase *Phase `json:"phase"`
