@@ -7,53 +7,6 @@ import (
 	"time"
 )
 
-// AgentState - What the build's agent was doing when the build last checked on it, every few minutes: working while it thinks or runs a command, idle when its turn ended without a tool call, waiting_for_limit while a subscription model waits for its usage limit to reset. Null when the build is not running or while it waits for the requester.
-type AgentState string
-
-const (
-	AgentStateWorking         AgentState = "working"
-	AgentStateIdle            AgentState = "idle"
-	AgentStateWaitingForLimit AgentState = "waiting_for_limit"
-)
-
-func (e AgentState) ToPointer() *AgentState {
-	return &e
-}
-
-// IsExact returns true if the value matches a known enum value, false otherwise.
-func (e *AgentState) IsExact() bool {
-	if e != nil {
-		switch *e {
-		case "working", "idle", "waiting_for_limit":
-			return true
-		}
-	}
-	return false
-}
-
-// LastSubmission - Outcome of the most recent submit attempt, or null.
-type LastSubmission string
-
-const (
-	LastSubmissionAccepted LastSubmission = "accepted"
-	LastSubmissionRejected LastSubmission = "rejected"
-)
-
-func (e LastSubmission) ToPointer() *LastSubmission {
-	return &e
-}
-
-// IsExact returns true if the value matches a known enum value, false otherwise.
-func (e *LastSubmission) IsExact() bool {
-	if e != nil {
-		switch *e {
-		case "accepted", "rejected":
-			return true
-		}
-	}
-	return false
-}
-
 // BuildProgressModel - The model the builder and reviewer run on, or combined, which currently runs as claude-opus-5-5.
 type BuildProgressModel string
 
@@ -61,8 +14,9 @@ const (
 	BuildProgressModelGpt6Astra     BuildProgressModel = "gpt-6-astra"
 	BuildProgressModelGpt61Sol      BuildProgressModel = "gpt-6.1-sol"
 	BuildProgressModelClaudeOpus55  BuildProgressModel = "claude-opus-5-5"
-	BuildProgressModelClaudeFable51 BuildProgressModel = "claude-fable-5-1"
+	BuildProgressModelClaudeFable52 BuildProgressModel = "claude-fable-5-2"
 	BuildProgressModelGpt6Sol       BuildProgressModel = "gpt-6-sol"
+	BuildProgressModelClaudeFable51 BuildProgressModel = "claude-fable-5-1"
 	BuildProgressModelCombined      BuildProgressModel = "combined"
 )
 
@@ -74,57 +28,7 @@ func (e BuildProgressModel) ToPointer() *BuildProgressModel {
 func (e *BuildProgressModel) IsExact() bool {
 	if e != nil {
 		switch *e {
-		case "gpt-6-astra", "gpt-6.1-sol", "claude-opus-5-5", "claude-fable-5-1", "gpt-6-sol", "combined":
-			return true
-		}
-	}
-	return false
-}
-
-// Phase - Agent phase: research while the research agent indexes the documents and saves the vendor pages they lack; build for generation, review for the separate reviewer, qa while QA tests the running service from outside, after the last review round of a build with credential_ids, repair while the author fixes the findings of a review or QA. Null when not recorded.
-type Phase string
-
-const (
-	PhaseResearch Phase = "research"
-	PhaseBuild    Phase = "build"
-	PhaseReview   Phase = "review"
-	PhaseQa       Phase = "qa"
-	PhaseRepair   Phase = "repair"
-)
-
-func (e Phase) ToPointer() *Phase {
-	return &e
-}
-
-// IsExact returns true if the value matches a known enum value, false otherwise.
-func (e *Phase) IsExact() bool {
-	if e != nil {
-		switch *e {
-		case "research", "build", "review", "qa", "repair":
-			return true
-		}
-	}
-	return false
-}
-
-// Stage - derive while the effective spec, build skeleton, and sandbox are prepared; build while the coding loop runs; assemble while an accepted artifact publishes.
-type Stage string
-
-const (
-	StageDerive   Stage = "derive"
-	StageBuild    Stage = "build"
-	StageAssemble Stage = "assemble"
-)
-
-func (e Stage) ToPointer() *Stage {
-	return &e
-}
-
-// IsExact returns true if the value matches a known enum value, false otherwise.
-func (e *Stage) IsExact() bool {
-	if e != nil {
-		switch *e {
-		case "derive", "build", "assemble":
+		case "gpt-6-astra", "gpt-6.1-sol", "claude-opus-5-5", "claude-fable-5-2", "gpt-6-sol", "claude-fable-5-1", "combined":
 			return true
 		}
 	}
@@ -132,28 +36,28 @@ func (e *Stage) IsExact() bool {
 }
 
 type BuildProgress struct {
-	// What the build's agent was doing when the build last checked on it, every few minutes: working while it thinks or runs a command, idle when its turn ended without a tool call, waiting_for_limit while a subscription model waits for its usage limit to reset. Null when the build is not running or while it waits for the requester.
-	AgentState *AgentState `json:"agent_state"`
+	// What the build's agent was doing when the build last checked on it, every few minutes. The values are informational and can change. Today's values: working while it thinks or runs a command, idle when its turn ended without a tool call, waiting_for_limit while the agent waits for its usage limit to reset. Null when the build is not running or while it waits for the requester.
+	AgentState *string `json:"agent_state"`
 	// Limitations the accepted build records beyond those listed in limitations.
 	HiddenLimitations int64 `json:"hidden_limitations"`
 	// When the build last saw its agent act, with or without a tool call. Null when agent_state is null or no activity was seen.
 	LastActivityAt *time.Time `json:"last_activity_at"`
-	// Outcome of the most recent submit attempt, or null.
-	LastSubmission *LastSubmission `json:"last_submission"`
+	// Outcome of the most recent submit attempt, or null. The values are informational and can change. Today's values: accepted, rejected.
+	LastSubmission *string `json:"last_submission"`
 	// Name of the most recent tool call, or null. Tool arguments and output are private.
 	LastTool *string `json:"last_tool"`
 	// Behavior the accepted build does not serve like the real system, most important first, set when the build is accepted. Empty when none.
 	Limitations []Limitation `json:"limitations"`
 	// The model the builder and reviewer run on, or combined, which currently runs as claude-opus-5-5.
 	Model BuildProgressModel `json:"model"`
-	// Agent phase: research while the research agent indexes the documents and saves the vendor pages they lack; build for generation, review for the separate reviewer, qa while QA tests the running service from outside, after the last review round of a build with credential_ids, repair while the author fixes the findings of a review or QA. Null when not recorded.
-	Phase *Phase `json:"phase"`
+	// Agent phase. The values are informational and can change. Today's values: research while the research agent indexes the documents and saves the vendor pages they lack; build for generation, review for the separate reviewer, qa while QA tests the running service from outside, after the last review round of a build with credential_ids, repair while the author fixes the findings of a review or QA. Null when not recorded.
+	Phase *string `json:"phase"`
 	// Review round that phase review, qa, or repair belongs to, from 1. In a build with credential_ids, QA and the repair after it are in round review_rounds + 1. 0 before the first review.
 	ReviewRound int64 `json:"review_round"`
 	// Review rounds the build runs at most. Fewer run when the reviewer agrees early.
 	ReviewRounds int64 `json:"review_rounds"`
-	// derive while the effective spec, build skeleton, and sandbox are prepared; build while the coding loop runs; assemble while an accepted artifact publishes.
-	Stage Stage `json:"stage"`
+	// Build stage. The values are informational and can change. Today's values: derive while the effective spec, build skeleton, and sandbox are prepared; build while the coding loop runs; assemble while an accepted artifact publishes.
+	Stage string `json:"stage"`
 	// Submit attempts.
 	Submissions int64 `json:"submissions"`
 	// Tool calls the coding loop executed.
@@ -179,7 +83,7 @@ func (b *BuildProgress) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-func (b *BuildProgress) GetAgentState() *AgentState {
+func (b *BuildProgress) GetAgentState() *string {
 	if b == nil {
 		return nil
 	}
@@ -200,7 +104,7 @@ func (b *BuildProgress) GetLastActivityAt() *time.Time {
 	return b.LastActivityAt
 }
 
-func (b *BuildProgress) GetLastSubmission() *LastSubmission {
+func (b *BuildProgress) GetLastSubmission() *string {
 	if b == nil {
 		return nil
 	}
@@ -228,7 +132,7 @@ func (b *BuildProgress) GetModel() BuildProgressModel {
 	return b.Model
 }
 
-func (b *BuildProgress) GetPhase() *Phase {
+func (b *BuildProgress) GetPhase() *string {
 	if b == nil {
 		return nil
 	}
@@ -249,9 +153,9 @@ func (b *BuildProgress) GetReviewRounds() int64 {
 	return b.ReviewRounds
 }
 
-func (b *BuildProgress) GetStage() Stage {
+func (b *BuildProgress) GetStage() string {
 	if b == nil {
-		return Stage("")
+		return ""
 	}
 	return b.Stage
 }

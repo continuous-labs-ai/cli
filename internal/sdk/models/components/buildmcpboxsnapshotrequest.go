@@ -3,8 +3,46 @@
 package components
 
 import (
+	"encoding/json"
+	"fmt"
 	"github.com/continuous-labs-ai/cli/internal/sdk/sdkinternal/utils"
 )
+
+// BuildMCPBoxSnapshotRequestModel - Model that builds and reviews the Snapshot. Defaults to combined. Its provider is derived from the model. combined currently builds, reviews, and runs QA exactly as claude-opus-5-5 does.
+type BuildMCPBoxSnapshotRequestModel string
+
+const (
+	BuildMCPBoxSnapshotRequestModelGpt6Astra     BuildMCPBoxSnapshotRequestModel = "gpt-6-astra"
+	BuildMCPBoxSnapshotRequestModelGpt61Sol      BuildMCPBoxSnapshotRequestModel = "gpt-6.1-sol"
+	BuildMCPBoxSnapshotRequestModelClaudeOpus55  BuildMCPBoxSnapshotRequestModel = "claude-opus-5-5"
+	BuildMCPBoxSnapshotRequestModelClaudeFable52 BuildMCPBoxSnapshotRequestModel = "claude-fable-5-2"
+	BuildMCPBoxSnapshotRequestModelCombined      BuildMCPBoxSnapshotRequestModel = "combined"
+)
+
+func (e BuildMCPBoxSnapshotRequestModel) ToPointer() *BuildMCPBoxSnapshotRequestModel {
+	return &e
+}
+func (e *BuildMCPBoxSnapshotRequestModel) UnmarshalJSON(data []byte) error {
+	var v string
+	if err := json.Unmarshal(data, &v); err != nil {
+		return err
+	}
+	switch v {
+	case "gpt-6-astra":
+		fallthrough
+	case "gpt-6.1-sol":
+		fallthrough
+	case "claude-opus-5-5":
+		fallthrough
+	case "claude-fable-5-2":
+		fallthrough
+	case "combined":
+		*e = BuildMCPBoxSnapshotRequestModel(v)
+		return nil
+	default:
+		return fmt.Errorf("invalid value for BuildMCPBoxSnapshotRequestModel: %v", v)
+	}
+}
 
 type BuildMCPBoxSnapshotRequest struct {
 	// The ready API Box Snapshot of the workspace or the catalog whose API the MCP Box calls. Its spec is the build's, and must be OpenAPI or GraphQL. Required without parent_id; with it, omission takes the parent's.
@@ -14,7 +52,7 @@ type BuildMCPBoxSnapshotRequest struct {
 	// Instructions for the builder, such as the open-source MCP server to copy. At most 16,384 characters and 65,536 UTF-8 bytes; must not be blank or contain U+0000.
 	Instructions *string `json:"instructions,omitzero"`
 	// Model that builds and reviews the Snapshot. Defaults to combined. Its provider is derived from the model. combined currently builds, reviews, and runs QA exactly as claude-opus-5-5 does.
-	Model *string `json:"model,omitzero"`
+	Model *BuildMCPBoxSnapshotRequestModel `default:"combined" json:"model"`
 	// Name for the Snapshot. Omission generates a name. Names must not contain U+0000. The ID stays its identity, and names need not be unique.
 	Name *string `json:"name,omitzero"`
 	// A ready MCP Box Snapshot of the workspace or the catalog to build on. The build starts from its handlers, tests and documents; its capture and research run as a new build's, with the parent's folder for reference. What the request does not set comes from the parent: its API Box Snapshot, its documents, which an upload of the same name replaces, its model, its review rounds, and its credential if the workspace still has it. timeout_seconds keeps its default.
@@ -57,7 +95,7 @@ func (b *BuildMCPBoxSnapshotRequest) GetInstructions() *string {
 	return b.Instructions
 }
 
-func (b *BuildMCPBoxSnapshotRequest) GetModel() *string {
+func (b *BuildMCPBoxSnapshotRequest) GetModel() *BuildMCPBoxSnapshotRequestModel {
 	if b == nil {
 		return nil
 	}

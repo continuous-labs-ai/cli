@@ -213,7 +213,7 @@ components:
     internal_unavailable_build_storage:
       value:
         code: internal_unavailable
-        detail: simulator spec storage is unavailable
+        detail: spec storage is unavailable
         validation: null
     mcpbox_apibox_gone:
       value:
@@ -919,7 +919,14 @@ components:
           maxLength: 16384
           type: string
         model:
+          default: combined
           description: Model that builds and reviews the Snapshot. Defaults to combined. Its provider is derived from the model. combined currently builds, reviews, and runs QA exactly as claude-opus-5-5 does.
+          enum:
+            - gpt-6-astra
+            - gpt-6.1-sol
+            - claude-opus-5-5
+            - claude-fable-5-2
+            - combined
           type: string
         name:
           description: Name for the Snapshot. Omission generates a name. Names must not contain U+0000. The ID stays its identity, and names need not be unique.
@@ -1018,7 +1025,14 @@ components:
           maxLength: 16384
           type: string
         model:
+          default: combined
           description: Model that builds and reviews the Snapshot. Defaults to combined. Its provider is derived from the model. combined currently builds, reviews, and runs QA exactly as claude-opus-5-5 does.
+          enum:
+            - gpt-6-astra
+            - gpt-6.1-sol
+            - claude-opus-5-5
+            - claude-fable-5-2
+            - combined
           type: string
         name:
           description: Name for the Snapshot. Omission generates a name. Names must not contain U+0000. The ID stays its identity, and names need not be unique.
@@ -1048,12 +1062,7 @@ components:
       additionalProperties: false
       properties:
         agent_state:
-          description: "What the build's agent was doing when the build last checked on it, every few minutes: working while it thinks or runs a command, idle when its turn ended without a tool call, waiting_for_limit while a subscription model waits for its usage limit to reset. Null when the build is not running or while it waits for the requester."
-          enum:
-            - working
-            - idle
-            - waiting_for_limit
-            - null
+          description: "What the build's agent was doing when the build last checked on it, every few minutes. The values are informational and can change. Today's values: working while it thinks or runs a command, idle when its turn ended without a tool call, waiting_for_limit while the agent waits for its usage limit to reset. Null when the build is not running or while it waits for the requester."
           type:
             - string
             - "null"
@@ -1069,11 +1078,7 @@ components:
             - string
             - "null"
         last_submission:
-          description: Outcome of the most recent submit attempt, or null.
-          enum:
-            - accepted
-            - rejected
-            - null
+          description: "Outcome of the most recent submit attempt, or null. The values are informational and can change. Today's values: accepted, rejected."
           type:
             - string
             - "null"
@@ -1094,19 +1099,13 @@ components:
             - gpt-6-astra
             - gpt-6.1-sol
             - claude-opus-5-5
-            - claude-fable-5-1
+            - claude-fable-5-2
             - gpt-6-sol
+            - claude-fable-5-1
             - combined
           type: string
         phase:
-          description: "Agent phase: research while the research agent indexes the documents and saves the vendor pages they lack; build for generation, review for the separate reviewer, qa while QA tests the running service from outside, after the last review round of a build with credential_ids, repair while the author fixes the findings of a review or QA. Null when not recorded."
-          enum:
-            - research
-            - build
-            - review
-            - qa
-            - repair
-            - null
+          description: "Agent phase. The values are informational and can change. Today's values: research while the research agent indexes the documents and saves the vendor pages they lack; build for generation, review for the separate reviewer, qa while QA tests the running service from outside, after the last review round of a build with credential_ids, repair while the author fixes the findings of a review or QA. Null when not recorded."
           type:
             - string
             - "null"
@@ -1123,11 +1122,7 @@ components:
           minimum: 1
           type: integer
         stage:
-          description: derive while the effective spec, build skeleton, and sandbox are prepared; build while the coding loop runs; assemble while an accepted artifact publishes.
-          enum:
-            - derive
-            - build
-            - assemble
+          description: "Build stage. The values are informational and can change. Today's values: derive while the effective spec, build skeleton, and sandbox are prepared; build while the coding loop runs; assemble while an accepted artifact publishes."
           type: string
         submissions:
           description: Submit attempts.
@@ -1212,7 +1207,7 @@ components:
       examples:
         - filter: []
           instructions: Return stable example data for every operation.
-          model: claude-fable-5-1
+          model: claude-fable-5-2
           name: billing-api
           spec_kind: openapi
       properties:
@@ -1250,7 +1245,7 @@ components:
             - gpt-6-astra
             - gpt-6.1-sol
             - claude-opus-5-5
-            - claude-fable-5-1
+            - claude-fable-5-2
             - combined
           type: string
         name:
@@ -1334,7 +1329,14 @@ components:
           maxLength: 16384
           type: string
         model:
+          default: combined
           description: Model that builds and reviews the Snapshot. Defaults to combined. Its provider is derived from the model. combined currently builds, reviews, and runs QA exactly as claude-opus-5-5 does.
+          enum:
+            - gpt-6-astra
+            - gpt-6.1-sol
+            - claude-opus-5-5
+            - claude-fable-5-2
+            - combined
           type: string
         name:
           description: Name for the Snapshot. Omission generates a name. Names must not contain U+0000. The ID stays its identity, and names need not be unique.
@@ -2966,7 +2968,7 @@ components:
             last_submission: rejected
             last_tool: test
             limitations: []
-            model: claude-fable-5-1
+            model: claude-fable-5-2
             phase: build
             review_round: 0
             review_rounds: 1
