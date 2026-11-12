@@ -8,6 +8,42 @@ import (
 	"github.com/continuous-labs-ai/cli/internal/sdk/sdkinternal/utils"
 )
 
+// BuildAPIBoxSnapshotRequestModel - Model that builds and reviews the Snapshot. Defaults to combined. Its provider is derived from the model. combined currently builds, reviews, and runs QA exactly as claude-opus-5-5 does.
+type BuildAPIBoxSnapshotRequestModel string
+
+const (
+	BuildAPIBoxSnapshotRequestModelGpt6Astra     BuildAPIBoxSnapshotRequestModel = "gpt-6-astra"
+	BuildAPIBoxSnapshotRequestModelGpt61Sol      BuildAPIBoxSnapshotRequestModel = "gpt-6.1-sol"
+	BuildAPIBoxSnapshotRequestModelClaudeOpus55  BuildAPIBoxSnapshotRequestModel = "claude-opus-5-5"
+	BuildAPIBoxSnapshotRequestModelClaudeFable52 BuildAPIBoxSnapshotRequestModel = "claude-fable-5-2"
+	BuildAPIBoxSnapshotRequestModelCombined      BuildAPIBoxSnapshotRequestModel = "combined"
+)
+
+func (e BuildAPIBoxSnapshotRequestModel) ToPointer() *BuildAPIBoxSnapshotRequestModel {
+	return &e
+}
+func (e *BuildAPIBoxSnapshotRequestModel) UnmarshalJSON(data []byte) error {
+	var v string
+	if err := json.Unmarshal(data, &v); err != nil {
+		return err
+	}
+	switch v {
+	case "gpt-6-astra":
+		fallthrough
+	case "gpt-6.1-sol":
+		fallthrough
+	case "claude-opus-5-5":
+		fallthrough
+	case "claude-fable-5-2":
+		fallthrough
+	case "combined":
+		*e = BuildAPIBoxSnapshotRequestModel(v)
+		return nil
+	default:
+		return fmt.Errorf("invalid value for BuildAPIBoxSnapshotRequestModel: %v", v)
+	}
+}
+
 // BuildAPIBoxSnapshotRequestSpecKind - Source specification format. Omission detects the format; GraphQL SDL needs graphql, and a GraphQL introspection result is stored as SDL.
 type BuildAPIBoxSnapshotRequestSpecKind string
 
@@ -46,7 +82,7 @@ type BuildAPIBoxSnapshotRequest struct {
 	// Instructions for the builder. At most 16,384 characters and 65,536 UTF-8 bytes; must not be blank or contain U+0000.
 	Instructions *string `json:"instructions,omitzero"`
 	// Model that builds and reviews the Snapshot. Defaults to combined. Its provider is derived from the model. combined currently builds, reviews, and runs QA exactly as claude-opus-5-5 does.
-	Model *string `json:"model,omitzero"`
+	Model *BuildAPIBoxSnapshotRequestModel `default:"combined" json:"model"`
 	// Name for the Snapshot. Omission generates a name. Names must not contain U+0000. The ID stays its identity, and names need not be unique.
 	Name *string `json:"name,omitzero"`
 	// A ready API Box Snapshot of the workspace or the catalog to build on. The build starts from its source, documents and tests. What the request does not set comes from the parent: its spec, its documents, which an upload of the same name replaces, its model, its review rounds, and those of its credentials the workspace still has; timeout_seconds keeps its default. Without a spec part, filter narrows the parent's operations; to widen them, send the full spec.
@@ -91,7 +127,7 @@ func (b *BuildAPIBoxSnapshotRequest) GetInstructions() *string {
 	return b.Instructions
 }
 
-func (b *BuildAPIBoxSnapshotRequest) GetModel() *string {
+func (b *BuildAPIBoxSnapshotRequest) GetModel() *BuildAPIBoxSnapshotRequestModel {
 	if b == nil {
 		return nil
 	}

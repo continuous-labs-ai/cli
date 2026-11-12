@@ -3,8 +3,46 @@
 package components
 
 import (
+	"encoding/json"
+	"fmt"
 	"github.com/continuous-labs-ai/cli/internal/sdk/sdkinternal/utils"
 )
+
+// BuildWebBoxSnapshotRequestModel - Model that builds and reviews the Snapshot. Defaults to combined. Its provider is derived from the model. combined currently builds, reviews, and runs QA exactly as claude-opus-5-5 does.
+type BuildWebBoxSnapshotRequestModel string
+
+const (
+	BuildWebBoxSnapshotRequestModelGpt6Astra     BuildWebBoxSnapshotRequestModel = "gpt-6-astra"
+	BuildWebBoxSnapshotRequestModelGpt61Sol      BuildWebBoxSnapshotRequestModel = "gpt-6.1-sol"
+	BuildWebBoxSnapshotRequestModelClaudeOpus55  BuildWebBoxSnapshotRequestModel = "claude-opus-5-5"
+	BuildWebBoxSnapshotRequestModelClaudeFable52 BuildWebBoxSnapshotRequestModel = "claude-fable-5-2"
+	BuildWebBoxSnapshotRequestModelCombined      BuildWebBoxSnapshotRequestModel = "combined"
+)
+
+func (e BuildWebBoxSnapshotRequestModel) ToPointer() *BuildWebBoxSnapshotRequestModel {
+	return &e
+}
+func (e *BuildWebBoxSnapshotRequestModel) UnmarshalJSON(data []byte) error {
+	var v string
+	if err := json.Unmarshal(data, &v); err != nil {
+		return err
+	}
+	switch v {
+	case "gpt-6-astra":
+		fallthrough
+	case "gpt-6.1-sol":
+		fallthrough
+	case "claude-opus-5-5":
+		fallthrough
+	case "claude-fable-5-2":
+		fallthrough
+	case "combined":
+		*e = BuildWebBoxSnapshotRequestModel(v)
+		return nil
+	default:
+		return fmt.Errorf("invalid value for BuildWebBoxSnapshotRequestModel: %v", v)
+	}
+}
 
 type BuildWebBoxSnapshotRequest struct {
 	// Workspace credentials: exactly one login for the vendor's web app, whose saved sign-in the builder and QA use on the live app, and up to four others with a base_url that they can call real systems with. Each must belong to the workspace. Required without parent_id. QA may create test objects in the live app; use a sandbox or test account.
@@ -12,7 +50,7 @@ type BuildWebBoxSnapshotRequest struct {
 	// Instructions for the builder. At most 16,384 characters and 65,536 UTF-8 bytes; must not be blank or contain U+0000.
 	Instructions *string `json:"instructions,omitzero"`
 	// Model that builds and reviews the Snapshot. Defaults to combined. Its provider is derived from the model. combined currently builds, reviews, and runs QA exactly as claude-opus-5-5 does.
-	Model *string `json:"model,omitzero"`
+	Model *BuildWebBoxSnapshotRequestModel `default:"combined" json:"model"`
 	// Name for the Snapshot. Omission generates a name. Names must not contain U+0000. The ID stays its identity, and names need not be unique.
 	Name *string `json:"name,omitzero"`
 	// A ready Web Box Snapshot of the workspace or the catalog to build on. The build starts from its source, documents and tests. What the request does not set comes from the parent: its documents, which an upload of the same name replaces, its model, its review rounds, and those of its credentials the workspace still has, which must include its login. timeout_seconds keeps its default.
@@ -48,7 +86,7 @@ func (b *BuildWebBoxSnapshotRequest) GetInstructions() *string {
 	return b.Instructions
 }
 
-func (b *BuildWebBoxSnapshotRequest) GetModel() *string {
+func (b *BuildWebBoxSnapshotRequest) GetModel() *BuildWebBoxSnapshotRequestModel {
 	if b == nil {
 		return nil
 	}

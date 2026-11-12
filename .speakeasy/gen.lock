@@ -1,19 +1,19 @@
 lockVersion: 2.0.0
 id: ad7b08dc-357d-414c-9f26-16cfbc099767
 management:
-  docChecksum: 2be7c823c671f72203f88af75fa96ac8
+  docChecksum: ed811480ab8db4d5943a012bc8067936
   docVersion: v1
   speakeasyVersion: 1.796.4
   generationVersion: 2.935.1
-  releaseVersion: 0.5.0
-  configChecksum: 050d4a1d77ecb66ed9f26977aff025cc
+  releaseVersion: 0.5.1
+  configChecksum: ac3c077f15c9bd4649f344d1d3c52cac
   repoURL: https://github.com/continuous-labs-ai/cli.git
   installationURL: https://github.com/continuous-labs-ai/cli
   published: true
 persistentEdits:
-  generation_id: ff4ed368-f884-46f2-ad2a-4ae7426068b9
-  pristine_commit_hash: 873abdeb311279663d2c5b84cd7f236b78d56a7c
-  pristine_tree_hash: 04d765dc6d51d8fb75f43b7d305e8099ddd10320
+  generation_id: 07e82022-bc58-421b-9411-2abea5de4af1
+  pristine_commit_hash: 23990253f45f9cea2c6c94772713fc5cee21f9ea
+  pristine_tree_hash: 780e3886b94dd86d966d875002ae7bced2243518
 features:
   cli:
     constsAndDefaults: 0.0.0
@@ -353,8 +353,8 @@ trackedFiles:
     pristine_git_object: c21cdde541e0462a40f9836488f38198e4a06275
   internal/cli/version.go:
     id: 7b0665492f72
-    last_write_checksum: sha1:810d7edddd07569716cb181b00b36ba0d4a9dd3d
-    pristine_git_object: 5bf81b6ce0de5d2e917c0cb5584a1853a9f728d4
+    last_write_checksum: sha1:414fcad4decfb2e21fd9a382ced3a5fcf78b6caa
+    pristine_git_object: 1f246c884238efd21ffb6ac46e032516cbdb02e1
   internal/cli/webboxes/create.go:
     id: a6bacfcea714
     last_write_checksum: sha1:cd95488ea0a9f11b7c15b03c248abc90cf0c674f
@@ -517,8 +517,8 @@ trackedFiles:
     pristine_git_object: 42e919228e2dedf35676e08f697bc02d138bd968
   internal/sdk/continuoussimulation.go:
     id: af3aeba7b54c
-    last_write_checksum: sha1:3488752fbc5c9f65e591d1b690eea450af1784f9
-    pristine_git_object: 1b4ac9e308f2bf6d5dbde72edeee2b229947eee6
+    last_write_checksum: sha1:2b0edc2ca29e9a62bef6180ef13a80317948c528
+    pristine_git_object: 3bd2b2243cb90fa6f8787cb3fc4fd5536a069dbf
   internal/sdk/credentials.go:
     id: 67c2f2d273f9
     last_write_checksum: sha1:92fc8585fbcfba0770d81219260d36621e1f40d2
@@ -565,36 +565,36 @@ trackedFiles:
     pristine_git_object: acbc3f66e7385defdebfd17e10e1d7d36e014e56
   internal/sdk/models/components/buildapiboxsnapshotrequest.go:
     id: 231e9c1e9f54
-    last_write_checksum: sha1:aac94b1c42d7be9694efd022c22a092bc5cc31c0
-    pristine_git_object: 58e36cce26174ce8392f5946c0647ada14b6c668
+    last_write_checksum: sha1:69ca2dd6135ece62c18996e08bcb7b42f2cc2cfc
+    pristine_git_object: 704083e1566a65ecf4c984571831090f415f914c
   internal/sdk/models/components/builderror.go:
     id: e29a4441f81f
     last_write_checksum: sha1:d6f634183566d5eadfa57d130984e428fd1442cd
     pristine_git_object: fdea8a3a0bba001b053f31999f3f8b2ef978578b
   internal/sdk/models/components/buildmcpboxsnapshotrequest.go:
     id: 48a77240a503
-    last_write_checksum: sha1:e869f49549499ccd9b17c9f4becbc645dcc57e40
-    pristine_git_object: 4c618ccede7b5b7a6f8c49b44191a13c6e81607a
+    last_write_checksum: sha1:0b6233467a8de317f14bdd0501b67ebae50ffcb1
+    pristine_git_object: 1242d3c864dd2f611f28d7abf3af5a8d22ebaefa
   internal/sdk/models/components/buildprogress.go:
     id: a51df443b6d8
-    last_write_checksum: sha1:45ebb7bb2a87fe1fe6588f41852adb12db20d0f9
-    pristine_git_object: 51f7447508e395b3e1a1d1799ec60de5ec0a8848
+    last_write_checksum: sha1:8de3928ac225a3edb00c6a54b080018dca3a016f
+    pristine_git_object: 585a57a31709c7b84a361089cce4e54187cb85d7
   internal/sdk/models/components/buildresearch.go:
     id: e0534dbe9f7e
     last_write_checksum: sha1:07c2f1ad5ba05332a507977f58391b0618bcad48
     pristine_git_object: bbfb06d4de01d621e2fb657280200e9c150c582b
   internal/sdk/models/components/buildsimulatorrequest.go:
     id: 510b20fc8bb2
-    last_write_checksum: sha1:9115f949269ed35260fce5a4878aa5caea15ea5a
-    pristine_git_object: 67a7ad5d560b012c7994d5709b9ed60bff35cfd0
+    last_write_checksum: sha1:c7aba7f1800227c297c66e2bc81e0d5dea3204e6
+    pristine_git_object: 5c7f040e29d9b61ca8dcebc8e00d0db9ef2a15b7
   internal/sdk/models/components/buildwaiting.go:
     id: d924e9f357b1
     last_write_checksum: sha1:8f3d1ce8701ea7584d7d65c94ecdd07e8c59f6b0
     pristine_git_object: 53607001ee5b6030fc6567bd0d837b6856af4758
   internal/sdk/models/components/buildwebboxsnapshotrequest.go:
     id: e63ad22daa84
-    last_write_checksum: sha1:086df3cdbd339fd17d9cc2733aa4d567b2088cd1
-    pristine_git_object: 65665877c8b304c7d66d8e210cedcf3e9874bc09
+    last_write_checksum: sha1:8f1fea6a94440996133af9c86cd249cd1d7af4aa
+    pristine_git_object: 45e6bf0ad9232929227bd7d73410085e1b327999
   internal/sdk/models/components/clockadvance.go:
     id: dc688562ec2d
     last_write_checksum: sha1:4026d7d2cb3971c7ec48d296a69f5e8149673783
@@ -1329,8 +1329,8 @@ trackedFiles:
     pristine_git_object: 159a87ec97aba99e4edd132f69652e123434303e
   internal/usage/schema.go:
     id: 0f40f4612437
-    last_write_checksum: sha1:e945616e3216dca6cffbeb9401368bd1766bb332
-    pristine_git_object: ac11defb84904c71b31f86e38aaabe52adcf55d9
+    last_write_checksum: sha1:b82bebf0fef1c6668b6146376b87942366de45ff
+    pristine_git_object: 5abfc58e1d384ab0e67ca88128fd94bbf755bb10
   scripts/install.ps1:
     id: fee0853709e9
     last_write_checksum: sha1:2da33f25afaa301dc2a22ac12654c585cef5c572
@@ -1672,7 +1672,7 @@ examples:
   build-simulator:
     simulator_unknown_parent:
       requestBody:
-        multipart/form-data: {"request": {"filter": [], "instructions": "Return stable example data for every operation.", "mode": "api", "model": "claude-fable-5-1", "name": "billing-api", "review_rounds": 1, "spec_kind": "openapi", "timeout_seconds": 28800}}
+        multipart/form-data: {"request": {"filter": [], "instructions": "Return stable example data for every operation.", "mode": "api", "model": "claude-fable-5-2", "name": "billing-api", "review_rounds": 1, "spec_kind": "openapi", "timeout_seconds": 28800}}
       responses:
         "400":
           application/problem+json: {"code": "simulator_unknown", "detail": "The parent Simulator with ID \"smr_01J8Z5X4K7M2N9P0Q1R2S3T4V5\" is unknown or belongs to another workspace.", "validation": null}
@@ -1684,10 +1684,10 @@ examples:
           application/problem+json: {"code": "simulator_unknown", "detail": "The parent Simulator with ID \"smr_01J8Z5X4K7M2N9P0Q1R2S3T4V5\" is unknown or belongs to another workspace.", "validation": null}
     speakeasy-default-build-simulator:
       requestBody:
-        multipart/form-data: {"request": {"filter": [], "instructions": "Return stable example data for every operation.", "mode": "api", "model": "claude-fable-5-1", "name": "billing-api", "review_rounds": 1, "spec_kind": "openapi", "timeout_seconds": 28800}}
+        multipart/form-data: {"request": {"filter": [], "instructions": "Return stable example data for every operation.", "mode": "api", "model": "claude-fable-5-2", "name": "billing-api", "review_rounds": 1, "spec_kind": "openapi", "timeout_seconds": 28800}}
       responses:
         "202":
-          application/json: {"build": {"agent_state": "working", "hidden_limitations": 0, "last_activity_at": "2026-01-15T12:09:30Z", "last_submission": "rejected", "last_tool": "test", "limitations": [], "model": "claude-fable-5-1", "phase": "build", "review_round": 0, "review_rounds": 1, "stage": "build", "submissions": 1, "tool_calls": 7, "waited_seconds": 0, "waiting": null, "waiting_until": null, "warnings": []}, "created_at": "2026-01-15T12:00:00Z", "credential_ids": [], "error": null, "id": "smr_01J8Z5X4K7M2N9P0Q1R2S3T4V5", "instructions": "Return stable example data for every operation.", "mode": "api", "name": "billing-api", "parent_id": "smr_01J8Z5X4K7M2N9P0Q1R2S3T4V9", "publication": null, "research": null, "source": "workspace", "spec_kind": "openapi", "status": "building"}
+          application/json: {"build": {"agent_state": "working", "hidden_limitations": 0, "last_activity_at": "2026-01-15T12:09:30Z", "last_submission": "rejected", "last_tool": "test", "limitations": [], "model": "claude-fable-5-2", "phase": "build", "review_round": 0, "review_rounds": 1, "stage": "build", "submissions": 1, "tool_calls": 7, "waited_seconds": 0, "waiting": null, "waiting_until": null, "warnings": []}, "created_at": "2026-01-15T12:00:00Z", "credential_ids": [], "error": null, "id": "smr_01J8Z5X4K7M2N9P0Q1R2S3T4V5", "instructions": "Return stable example data for every operation.", "mode": "api", "name": "billing-api", "parent_id": "smr_01J8Z5X4K7M2N9P0Q1R2S3T4V9", "publication": null, "research": null, "source": "workspace", "spec_kind": "openapi", "status": "building"}
         "400":
           application/problem+json: {"code": "<value>", "detail": "<value>", "validation": {"issues": []}}
         "500":
@@ -1698,7 +1698,7 @@ examples:
           application/problem+json: {"code": "<value>", "detail": "<value>", "validation": {"issues": []}}
     bad_request_body:
       requestBody:
-        multipart/form-data: {"request": {"filter": [], "instructions": "Return stable example data for every operation.", "mode": "api", "model": "claude-fable-5-1", "name": "billing-api", "review_rounds": 1, "spec_kind": "openapi", "timeout_seconds": 28800}}
+        multipart/form-data: {"request": {"filter": [], "instructions": "Return stable example data for every operation.", "mode": "api", "model": "claude-fable-5-2", "name": "billing-api", "review_rounds": 1, "spec_kind": "openapi", "timeout_seconds": 28800}}
       responses:
         "400":
           application/problem+json: {"code": "bad_request", "detail": "request body is invalid", "validation": null}
@@ -1763,7 +1763,7 @@ examples:
           id: "<id>"
       responses:
         "200":
-          application/json: {"build": {"agent_state": "working", "hidden_limitations": 0, "last_activity_at": "2026-01-15T12:09:30Z", "last_submission": "rejected", "last_tool": "test", "limitations": [], "model": "claude-fable-5-1", "phase": "build", "review_round": 0, "review_rounds": 1, "stage": "build", "submissions": 1, "tool_calls": 7, "waited_seconds": 0, "waiting": null, "waiting_until": null, "warnings": []}, "created_at": "2026-01-15T12:00:00Z", "credential_ids": [], "error": null, "id": "smr_01J8Z5X4K7M2N9P0Q1R2S3T4V5", "instructions": "Return stable example data for every operation.", "mode": "api", "name": "billing-api", "parent_id": "smr_01J8Z5X4K7M2N9P0Q1R2S3T4V9", "publication": null, "research": null, "source": "workspace", "spec_kind": "openapi", "status": "building"}
+          application/json: {"build": {"agent_state": "working", "hidden_limitations": 0, "last_activity_at": "2026-01-15T12:09:30Z", "last_submission": "rejected", "last_tool": "test", "limitations": [], "model": "claude-fable-5-2", "phase": "build", "review_round": 0, "review_rounds": 1, "stage": "build", "submissions": 1, "tool_calls": 7, "waited_seconds": 0, "waiting": null, "waiting_until": null, "warnings": []}, "created_at": "2026-01-15T12:00:00Z", "credential_ids": [], "error": null, "id": "smr_01J8Z5X4K7M2N9P0Q1R2S3T4V5", "instructions": "Return stable example data for every operation.", "mode": "api", "name": "billing-api", "parent_id": "smr_01J8Z5X4K7M2N9P0Q1R2S3T4V9", "publication": null, "research": null, "source": "workspace", "spec_kind": "openapi", "status": "building"}
         "400":
           application/problem+json: {"code": "<value>", "detail": "<value>"}
         "500":
@@ -2269,7 +2269,7 @@ examples:
         "500":
           application/problem+json: {"code": "<value>", "detail": "<value>", "validation": {"issues": [{"code": "<value>", "kind": "invalid", "location": "<value>", "message": "<value>", "operation": "<value>", "suggestion": "<value>"}]}}
         "202":
-          application/json: {"build": {"agent_state": "working", "hidden_limitations": 0, "last_activity_at": "2026-01-15T12:09:30Z", "last_submission": "rejected", "last_tool": "test", "limitations": [], "model": "claude-fable-5-1", "phase": "build", "review_round": 0, "review_rounds": 1, "stage": "build", "submissions": 1, "tool_calls": 7, "waited_seconds": 0, "waiting": null, "waiting_until": null, "warnings": []}, "created_at": "2026-01-15T12:00:00Z", "credential_ids": [], "error": null, "id": "smr_01J8Z5X4K7M2N9P0Q1R2S3T4V5", "instructions": "Return stable example data for every operation.", "mode": "api", "name": "billing-api", "parent_id": "smr_01J8Z5X4K7M2N9P0Q1R2S3T4V9", "publication": null, "research": null, "source": "workspace", "spec_kind": "openapi", "status": "building"}
+          application/json: {"build": {"agent_state": "working", "hidden_limitations": 0, "last_activity_at": "2026-01-15T12:09:30Z", "last_submission": "rejected", "last_tool": "test", "limitations": [], "model": "claude-fable-5-2", "phase": "build", "review_round": 0, "review_rounds": 1, "stage": "build", "submissions": 1, "tool_calls": 7, "waited_seconds": 0, "waiting": null, "waiting_until": null, "warnings": []}, "created_at": "2026-01-15T12:00:00Z", "credential_ids": [], "error": null, "id": "smr_01J8Z5X4K7M2N9P0Q1R2S3T4V5", "instructions": "Return stable example data for every operation.", "mode": "api", "name": "billing-api", "parent_id": "smr_01J8Z5X4K7M2N9P0Q1R2S3T4V9", "publication": null, "research": null, "source": "workspace", "spec_kind": "openapi", "status": "building"}
     auth_invalid_missing:
       parameters:
         path:
@@ -2983,7 +2983,7 @@ examples:
         application/json: {}
       responses:
         "200":
-          application/json: {"build": {"agent_state": "working", "hidden_limitations": 0, "last_activity_at": "2026-01-15T12:09:30Z", "last_submission": "rejected", "last_tool": "test", "limitations": [], "model": "claude-fable-5-1", "phase": "build", "review_round": 0, "review_rounds": 1, "stage": "build", "submissions": 1, "tool_calls": 7, "waited_seconds": 0, "waiting": null, "waiting_until": null, "warnings": []}, "created_at": "2026-01-15T12:00:00Z", "credential_ids": [], "error": null, "id": "smr_01J8Z5X4K7M2N9P0Q1R2S3T4V5", "instructions": "Return stable example data for every operation.", "mode": "api", "name": "billing-api", "parent_id": "smr_01J8Z5X4K7M2N9P0Q1R2S3T4V9", "publication": null, "research": null, "source": "workspace", "spec_kind": "openapi", "status": "building"}
+          application/json: {"build": {"agent_state": "working", "hidden_limitations": 0, "last_activity_at": "2026-01-15T12:09:30Z", "last_submission": "rejected", "last_tool": "test", "limitations": [], "model": "claude-fable-5-2", "phase": "build", "review_round": 0, "review_rounds": 1, "stage": "build", "submissions": 1, "tool_calls": 7, "waited_seconds": 0, "waiting": null, "waiting_until": null, "warnings": []}, "created_at": "2026-01-15T12:00:00Z", "credential_ids": [], "error": null, "id": "smr_01J8Z5X4K7M2N9P0Q1R2S3T4V5", "instructions": "Return stable example data for every operation.", "mode": "api", "name": "billing-api", "parent_id": "smr_01J8Z5X4K7M2N9P0Q1R2S3T4V9", "publication": null, "research": null, "source": "workspace", "spec_kind": "openapi", "status": "building"}
         "400":
           application/problem+json: {"code": "<value>", "detail": "<value>", "validation": {"issues": [{"code": "<value>", "kind": "incomplete", "location": "<value>", "message": "<value>", "operation": "<value>", "suggestion": "<value>"}]}}
         "500":
@@ -3038,7 +3038,7 @@ examples:
           id: "<id>"
       responses:
         "202":
-          application/json: {"build": {"agent_state": "working", "hidden_limitations": 0, "last_activity_at": "2026-01-15T12:09:30Z", "last_submission": "rejected", "last_tool": "test", "limitations": [], "model": "claude-fable-5-1", "phase": "build", "review_round": 0, "review_rounds": 1, "stage": "build", "submissions": 1, "tool_calls": 7, "waited_seconds": 0, "waiting": null, "waiting_until": null, "warnings": []}, "created_at": "2026-01-15T12:00:00Z", "credential_ids": [], "error": null, "id": "smr_01J8Z5X4K7M2N9P0Q1R2S3T4V5", "instructions": "Return stable example data for every operation.", "mode": "api", "name": "billing-api", "parent_id": "smr_01J8Z5X4K7M2N9P0Q1R2S3T4V9", "publication": null, "research": null, "source": "workspace", "spec_kind": "openapi", "status": "building"}
+          application/json: {"build": {"agent_state": "working", "hidden_limitations": 0, "last_activity_at": "2026-01-15T12:09:30Z", "last_submission": "rejected", "last_tool": "test", "limitations": [], "model": "claude-fable-5-2", "phase": "build", "review_round": 0, "review_rounds": 1, "stage": "build", "submissions": 1, "tool_calls": 7, "waited_seconds": 0, "waiting": null, "waiting_until": null, "warnings": []}, "created_at": "2026-01-15T12:00:00Z", "credential_ids": [], "error": null, "id": "smr_01J8Z5X4K7M2N9P0Q1R2S3T4V5", "instructions": "Return stable example data for every operation.", "mode": "api", "name": "billing-api", "parent_id": "smr_01J8Z5X4K7M2N9P0Q1R2S3T4V9", "publication": null, "research": null, "source": "workspace", "spec_kind": "openapi", "status": "building"}
         "401":
           application/problem+json: {"code": "<value>", "detail": "<value>", "validation": {"issues": []}}
         "500":
@@ -3361,7 +3361,7 @@ examples:
   create-apibox-snapshot:
     bad_request_body:
       requestBody:
-        multipart/form-data: {"request": {"review_rounds": 1, "timeout_seconds": 28800}}
+        multipart/form-data: {"request": {"model": "combined", "review_rounds": 1, "timeout_seconds": 28800}}
       responses:
         "400":
           application/problem+json: {"code": "bad_request", "detail": "request body is invalid", "validation": null}
@@ -3373,7 +3373,7 @@ examples:
           application/problem+json: {"code": "bad_request", "detail": "request body is invalid", "validation": null}
     speakeasy-default-create-apibox-snapshot:
       requestBody:
-        multipart/form-data: {"request": {"review_rounds": 1, "timeout_seconds": 28800}}
+        multipart/form-data: {"request": {"model": "combined", "review_rounds": 1, "timeout_seconds": 28800}}
       responses:
         "202":
           application/json: {"actors": [{"default": false, "entity": "<value>", "id": "<id>", "name": "<value>", "role": "<value>"}], "build": {"agent_state": "waiting_for_limit", "hidden_limitations": 848274, "last_activity_at": null, "last_submission": null, "last_tool": "<value>", "limitations": [{"location": "<value>", "message": "<value>", "operations": ["<value 1>", "<value 2>"], "reviewed": false}], "model": "claude-opus-5-5", "phase": "review", "review_round": 132479, "review_rounds": 275550, "stage": "derive", "submissions": 995961, "tool_calls": 180750, "waited_seconds": 121407, "waiting": {"credential_ids": ["<value 1>", "<value 2>"], "deadline": "2025-03-13T17:04:42.031Z", "reason": "<value>", "since": "2024-11-13T22:02:31.552Z", "type": "time_limit"}, "waiting_until": "2025-11-17T12:26:18.537Z", "warnings": []}, "composition": {"entities": 26097, "operations": 27093, "sample": false}, "created_at": "2026-01-02T09:15:33.916Z", "credential_ids": ["<value 1>"], "error": {"agent_message": "<value>", "code": "build_failed", "detail": "<value>", "reason": "time_limit", "validation": {"issues": []}}, "hidden_limitations": 67986, "id": "<id>", "instructions": "<value>", "limitations": [], "metadata": "<value>", "name": "<value>", "parent_id": null, "research": {"bytes": 504376, "pages": 407090, "status": "running"}, "source": "catalog", "source_box_id": "<id>", "source_snapshot_id": "<id>", "spec_kind": "graphql", "status": "pending"}
@@ -3848,7 +3848,7 @@ examples:
   create-mcpbox-snapshot:
     bad_request_body:
       requestBody:
-        multipart/form-data: {"request": {"review_rounds": 1, "timeout_seconds": 28800}}
+        multipart/form-data: {"request": {"model": "combined", "review_rounds": 1, "timeout_seconds": 28800}}
       responses:
         "400":
           application/problem+json: {"code": "bad_request", "detail": "request body is invalid", "validation": null}
@@ -3860,7 +3860,7 @@ examples:
           application/problem+json: {"code": "bad_request", "detail": "request body is invalid", "validation": null}
     speakeasy-default-create-mcpbox-snapshot:
       requestBody:
-        multipart/form-data: {"request": {"review_rounds": 1, "timeout_seconds": 28800}}
+        multipart/form-data: {"request": {"model": "combined", "review_rounds": 1, "timeout_seconds": 28800}}
       responses:
         "202":
           application/json: {"actors": [{"default": false, "entity": "<value>", "id": "<id>", "name": "<value>", "role": "<value>"}], "apibox_snapshot_id": "<id>", "build": {"agent_state": "waiting_for_limit", "hidden_limitations": 741990, "last_activity_at": "2024-01-09T22:13:12.724Z", "last_submission": "accepted", "last_tool": "<value>", "limitations": [{"location": "<value>", "message": "<value>", "operations": ["<value 1>", "<value 2>"], "reviewed": true}], "model": "combined", "phase": "review", "review_round": 392293, "review_rounds": 958047, "stage": "build", "submissions": 475968, "tool_calls": 953993, "waited_seconds": 949523, "waiting": {"credential_ids": ["<value 1>", "<value 2>", "<value 3>"], "deadline": "2024-11-29T07:13:28.056Z", "reason": "<value>", "since": "2026-06-22T11:38:11.258Z", "type": "time_limit"}, "waiting_until": "2025-10-03T12:04:01.952Z", "warnings": [{"code": "spec.default_invalid", "location": "<value>", "message": "<value>", "operations": ["<value 1>"]}]}, "composition": {"entities": 718593, "operations": 8144, "sample": true}, "created_at": "2024-06-10T12:49:50.134Z", "credential_ids": ["<value 1>", "<value 2>", "<value 3>"], "error": {"agent_message": "<value>", "code": "specification_validation_failed", "detail": "<value>", "reason": "canceled", "validation": null}, "hidden_limitations": 585313, "id": "<id>", "instructions": "<value>", "limitations": [{"location": "<value>", "message": "<value>", "operations": ["<value 1>"], "reviewed": false}], "metadata": "<value>", "name": "<value>", "parent_id": "<id>", "research": {"bytes": 353810, "pages": 538370, "status": "running"}, "source": "build", "source_box_id": null, "source_snapshot_id": "<id>", "source_url": "https://sticky-harp.name/", "status": "ready"}
@@ -4360,7 +4360,7 @@ examples:
   create-webbox-snapshot:
     bad_request_body:
       requestBody:
-        multipart/form-data: {"request": {"review_rounds": 1, "timeout_seconds": 28800}}
+        multipart/form-data: {"request": {"model": "combined", "review_rounds": 1, "timeout_seconds": 28800}}
       responses:
         "400":
           application/problem+json: {"code": "bad_request", "detail": "request body is invalid", "validation": null}
@@ -4372,7 +4372,7 @@ examples:
           application/problem+json: {"code": "bad_request", "detail": "request body is invalid", "validation": null}
     speakeasy-default-create-webbox-snapshot:
       requestBody:
-        multipart/form-data: {"request": {"review_rounds": 1, "timeout_seconds": 28800}}
+        multipart/form-data: {"request": {"model": "combined", "review_rounds": 1, "timeout_seconds": 28800}}
       responses:
         "202":
           application/json: {"actors": [{"default": true, "entity": "<value>", "id": "<id>", "name": "<value>", "role": "<value>"}], "build": null, "composition": {"entities": 612094, "operations": 173088, "sample": true}, "created_at": "2025-07-20T04:18:20.874Z", "credential_ids": [], "error": {"agent_message": "<value>", "code": "specification_validation_failed", "detail": "<value>", "reason": "time_limit", "validation": {"issues": [{"code": "<value>", "kind": "limit", "location": "<value>", "message": "<value>", "operation": "<value>", "suggestion": "<value>"}]}}, "hidden_limitations": 187300, "id": "<id>", "instructions": "<value>", "limitations": [{"location": "<value>", "message": "<value>", "operations": ["<value 1>"], "reviewed": false}], "metadata": "<value>", "name": "<value>", "parent_id": "<id>", "research": {"bytes": 859524, "pages": 193083, "status": "failed"}, "source": "catalog", "source_box_id": "<id>", "source_snapshot_id": "<id>", "status": "failed"}
@@ -4746,115 +4746,4 @@ examples:
         "500":
           application/problem+json: {"code": "<value>", "detail": "<value>", "validation": {"issues": [{"code": "<value>", "kind": "invalid", "location": "<value>", "message": "<value>", "operation": "<value>", "suggestion": "<value>"}]}}
 examplesVersion: 1.0.2
-releaseNotes: |
-  ## Cli SDK Changes:
-  * `ContinuousSimulation.Apiboxes.List()`: **Added**
-  * `ContinuousSimulation.Apiboxes.Create()`: **Added**
-  * `ContinuousSimulation.Apiboxes.Delete()`: **Added**
-  * `ContinuousSimulation.Apiboxes.Get()`: **Added**
-  * `ContinuousSimulation.Apiboxes.Update()`: **Added**
-  * `ContinuousSimulation.Apiboxes.SaveSnapshot()`: **Added**
-  * `ContinuousSimulation.Apiboxes.Start()`: **Added**
-  * `ContinuousSimulation.Apiboxes.ListSteps()`: **Added**
-  * `ContinuousSimulation.Apiboxes.Stop()`: **Added**
-  * `ContinuousSimulation.ApiboxSnapshots.List()`: **Added**
-  * `ContinuousSimulation.ApiboxSnapshots.Create()`: **Added**
-  * `ContinuousSimulation.ApiboxSnapshots.Delete()`: **Added**
-  * `ContinuousSimulation.ApiboxSnapshots.Get()`: **Added**
-  * `ContinuousSimulation.ApiboxSnapshots.Update()`: **Added**
-  * `ContinuousSimulation.ApiboxSnapshots.Cancel()`: **Added**
-  * `ContinuousSimulation.ApiboxSnapshots.Clone()`: **Added**
-  * `ContinuousSimulation.ApiboxSnapshots.Resume()`: **Added**
-  * `ContinuousSimulation.Credentials.List()`: **Added**
-  * `ContinuousSimulation.Credentials.Create()`: **Added**
-  * `ContinuousSimulation.Credentials.Delete()`: **Added**
-  * `ContinuousSimulation.Credentials.Get()`: **Added**
-  * `ContinuousSimulation.Credentials.Update()`: **Added**
-  * `ContinuousSimulation.Mcpboxes.List()`: **Added**
-  * `ContinuousSimulation.Mcpboxes.Create()`: **Added**
-  * `ContinuousSimulation.Mcpboxes.Delete()`: **Added**
-  * `ContinuousSimulation.Mcpboxes.Get()`: **Added**
-  * `ContinuousSimulation.Mcpboxes.Update()`: **Added**
-  * `ContinuousSimulation.Mcpboxes.SaveSnapshot()`: **Added**
-  * `ContinuousSimulation.Mcpboxes.Start()`: **Added**
-  * `ContinuousSimulation.Mcpboxes.Stop()`: **Added**
-  * `ContinuousSimulation.McpboxSnapshots.List()`: **Added**
-  * `ContinuousSimulation.McpboxSnapshots.Create()`: **Added**
-  * `ContinuousSimulation.McpboxSnapshots.Delete()`: **Added**
-  * `ContinuousSimulation.McpboxSnapshots.Get()`: **Added**
-  * `ContinuousSimulation.McpboxSnapshots.Update()`: **Added**
-  * `ContinuousSimulation.McpboxSnapshots.Cancel()`: **Added**
-  * `ContinuousSimulation.McpboxSnapshots.Clone()`: **Added**
-  * `ContinuousSimulation.McpboxSnapshots.Resume()`: **Added**
-  * `ContinuousSimulation.Webboxes.List()`: **Added**
-  * `ContinuousSimulation.Webboxes.Create()`: **Added**
-  * `ContinuousSimulation.Webboxes.Delete()`: **Added**
-  * `ContinuousSimulation.Webboxes.Get()`: **Added**
-  * `ContinuousSimulation.Webboxes.Update()`: **Added**
-  * `ContinuousSimulation.Webboxes.SaveSnapshot()`: **Added**
-  * `ContinuousSimulation.Webboxes.Start()`: **Added**
-  * `ContinuousSimulation.Webboxes.ListSteps()`: **Added**
-  * `ContinuousSimulation.Webboxes.Stop()`: **Added**
-  * `ContinuousSimulation.WebboxSnapshots.List()`: **Added**
-  * `ContinuousSimulation.WebboxSnapshots.Create()`: **Added**
-  * `ContinuousSimulation.WebboxSnapshots.Delete()`: **Added**
-  * `ContinuousSimulation.WebboxSnapshots.Get()`: **Added**
-  * `ContinuousSimulation.WebboxSnapshots.Update()`: **Added**
-  * `ContinuousSimulation.WebboxSnapshots.Cancel()`: **Added**
-  * `ContinuousSimulation.WebboxSnapshots.Clone()`: **Added**
-  * `ContinuousSimulation.WebboxSnapshots.Resume()`: **Added**
-  * `ContinuousSimulation.Apibox.ListApiboxes()`: **Removed** (Breaking ⚠️)
-  * `ContinuousSimulation.Apibox.CreateApibox()`: **Removed** (Breaking ⚠️)
-  * `ContinuousSimulation.Apibox.DeleteApibox()`: **Removed** (Breaking ⚠️)
-  * `ContinuousSimulation.Apibox.GetApibox()`: **Removed** (Breaking ⚠️)
-  * `ContinuousSimulation.Apibox.UpdateApibox()`: **Removed** (Breaking ⚠️)
-  * `ContinuousSimulation.Apibox.SaveApiboxSnapshot()`: **Removed** (Breaking ⚠️)
-  * `ContinuousSimulation.Apibox.StartApibox()`: **Removed** (Breaking ⚠️)
-  * `ContinuousSimulation.Apibox.ListApiboxSteps()`: **Removed** (Breaking ⚠️)
-  * `ContinuousSimulation.Apibox.StopApibox()`: **Removed** (Breaking ⚠️)
-  * `ContinuousSimulation.ApiboxSnapshots.ListApiboxSnapshots()`: **Removed** (Breaking ⚠️)
-  * `ContinuousSimulation.ApiboxSnapshots.CreateApiboxSnapshot()`: **Removed** (Breaking ⚠️)
-  * `ContinuousSimulation.ApiboxSnapshots.DeleteApiboxSnapshot()`: **Removed** (Breaking ⚠️)
-  * `ContinuousSimulation.ApiboxSnapshots.GetApiboxSnapshot()`: **Removed** (Breaking ⚠️)
-  * `ContinuousSimulation.ApiboxSnapshots.UpdateApiboxSnapshot()`: **Removed** (Breaking ⚠️)
-  * `ContinuousSimulation.ApiboxSnapshots.CancelApiboxSnapshot()`: **Removed** (Breaking ⚠️)
-  * `ContinuousSimulation.ApiboxSnapshots.CloneApiboxSnapshot()`: **Removed** (Breaking ⚠️)
-  * `ContinuousSimulation.ApiboxSnapshots.ResumeApiboxSnapshot()`: **Removed** (Breaking ⚠️)
-  * `ContinuousSimulation.Credentials.ListCredentials()`: **Removed** (Breaking ⚠️)
-  * `ContinuousSimulation.Credentials.CreateCredential()`: **Removed** (Breaking ⚠️)
-  * `ContinuousSimulation.Credentials.DeleteCredential()`: **Removed** (Breaking ⚠️)
-  * `ContinuousSimulation.Credentials.GetCredential()`: **Removed** (Breaking ⚠️)
-  * `ContinuousSimulation.Credentials.UpdateCredential()`: **Removed** (Breaking ⚠️)
-  * `ContinuousSimulation.Mcpbox.ListMcpboxes()`: **Removed** (Breaking ⚠️)
-  * `ContinuousSimulation.Mcpbox.CreateMcpbox()`: **Removed** (Breaking ⚠️)
-  * `ContinuousSimulation.Mcpbox.DeleteMcpbox()`: **Removed** (Breaking ⚠️)
-  * `ContinuousSimulation.Mcpbox.GetMcpbox()`: **Removed** (Breaking ⚠️)
-  * `ContinuousSimulation.Mcpbox.UpdateMcpbox()`: **Removed** (Breaking ⚠️)
-  * `ContinuousSimulation.Mcpbox.SaveMcpboxSnapshot()`: **Removed** (Breaking ⚠️)
-  * `ContinuousSimulation.Mcpbox.StartMcpbox()`: **Removed** (Breaking ⚠️)
-  * `ContinuousSimulation.Mcpbox.StopMcpbox()`: **Removed** (Breaking ⚠️)
-  * `ContinuousSimulation.McpboxSnapshots.ListMcpboxSnapshots()`: **Removed** (Breaking ⚠️)
-  * `ContinuousSimulation.McpboxSnapshots.CreateMcpboxSnapshot()`: **Removed** (Breaking ⚠️)
-  * `ContinuousSimulation.McpboxSnapshots.DeleteMcpboxSnapshot()`: **Removed** (Breaking ⚠️)
-  * `ContinuousSimulation.McpboxSnapshots.GetMcpboxSnapshot()`: **Removed** (Breaking ⚠️)
-  * `ContinuousSimulation.McpboxSnapshots.UpdateMcpboxSnapshot()`: **Removed** (Breaking ⚠️)
-  * `ContinuousSimulation.McpboxSnapshots.CancelMcpboxSnapshot()`: **Removed** (Breaking ⚠️)
-  * `ContinuousSimulation.McpboxSnapshots.CloneMcpboxSnapshot()`: **Removed** (Breaking ⚠️)
-  * `ContinuousSimulation.McpboxSnapshots.ResumeMcpboxSnapshot()`: **Removed** (Breaking ⚠️)
-  * `ContinuousSimulation.Webbox.ListWebboxes()`: **Removed** (Breaking ⚠️)
-  * `ContinuousSimulation.Webbox.CreateWebbox()`: **Removed** (Breaking ⚠️)
-  * `ContinuousSimulation.Webbox.DeleteWebbox()`: **Removed** (Breaking ⚠️)
-  * `ContinuousSimulation.Webbox.GetWebbox()`: **Removed** (Breaking ⚠️)
-  * `ContinuousSimulation.Webbox.UpdateWebbox()`: **Removed** (Breaking ⚠️)
-  * `ContinuousSimulation.Webbox.SaveWebboxSnapshot()`: **Removed** (Breaking ⚠️)
-  * `ContinuousSimulation.Webbox.StartWebbox()`: **Removed** (Breaking ⚠️)
-  * `ContinuousSimulation.Webbox.ListWebboxSteps()`: **Removed** (Breaking ⚠️)
-  * `ContinuousSimulation.Webbox.StopWebbox()`: **Removed** (Breaking ⚠️)
-  * `ContinuousSimulation.WebboxSnapshots.ListWebboxSnapshots()`: **Removed** (Breaking ⚠️)
-  * `ContinuousSimulation.WebboxSnapshots.CreateWebboxSnapshot()`: **Removed** (Breaking ⚠️)
-  * `ContinuousSimulation.WebboxSnapshots.DeleteWebboxSnapshot()`: **Removed** (Breaking ⚠️)
-  * `ContinuousSimulation.WebboxSnapshots.GetWebboxSnapshot()`: **Removed** (Breaking ⚠️)
-  * `ContinuousSimulation.WebboxSnapshots.UpdateWebboxSnapshot()`: **Removed** (Breaking ⚠️)
-  * `ContinuousSimulation.WebboxSnapshots.CancelWebboxSnapshot()`: **Removed** (Breaking ⚠️)
-  * `ContinuousSimulation.WebboxSnapshots.CloneWebboxSnapshot()`: **Removed** (Breaking ⚠️)
-  * `ContinuousSimulation.WebboxSnapshots.ResumeWebboxSnapshot()`: **Removed** (Breaking ⚠️)
+releaseNotes: "## Cli SDK Changes:\n* `ContinuousSimulation.Apiboxes.SaveSnapshot()`:  `response.Build` **Changed** (Breaking ⚠️)\n* `ContinuousSimulation.ApiboxSnapshots.List()`:  `response.Snapshots[].Build` **Changed** (Breaking ⚠️)\n* `ContinuousSimulation.ApiboxSnapshots.Create()`: \n  *  `request.Request.Body.Request` **Changed** (Breaking ⚠️)\n  *  `response.Build` **Changed** (Breaking ⚠️)\n* `ContinuousSimulation.ApiboxSnapshots.Get()`:  `response.Build` **Changed** (Breaking ⚠️)\n* `ContinuousSimulation.ApiboxSnapshots.Update()`:  `response.Build` **Changed** (Breaking ⚠️)\n* `ContinuousSimulation.ApiboxSnapshots.Cancel()`:  `response.Build` **Changed** (Breaking ⚠️)\n* `ContinuousSimulation.ApiboxSnapshots.Clone()`:  `response.Build` **Changed** (Breaking ⚠️)\n* `ContinuousSimulation.ApiboxSnapshots.Resume()`:  `response.Build` **Changed** (Breaking ⚠️)\n* `ContinuousSimulation.Mcpboxes.SaveSnapshot()`:  `response.Build` **Changed** (Breaking ⚠️)\n* `ContinuousSimulation.McpboxSnapshots.List()`:  `response.Snapshots[].Build` **Changed** (Breaking ⚠️)\n* `ContinuousSimulation.McpboxSnapshots.Create()`: \n  *  `request.Request.Body.Request` **Changed** (Breaking ⚠️)\n  *  `response.Build` **Changed** (Breaking ⚠️)\n* `ContinuousSimulation.McpboxSnapshots.Get()`:  `response.Build` **Changed** (Breaking ⚠️)\n* `ContinuousSimulation.McpboxSnapshots.Update()`:  `response.Build` **Changed** (Breaking ⚠️)\n* `ContinuousSimulation.McpboxSnapshots.Cancel()`:  `response.Build` **Changed** (Breaking ⚠️)\n* `ContinuousSimulation.McpboxSnapshots.Clone()`:  `response.Build` **Changed** (Breaking ⚠️)\n* `ContinuousSimulation.McpboxSnapshots.Resume()`:  `response.Build` **Changed** (Breaking ⚠️)\n* `ContinuousSimulation.Simulators.ListSimulators()`:  `response.Simulators[].Build` **Changed** (Breaking ⚠️)\n* `ContinuousSimulation.Simulators.BuildSimulator()`: \n  *  `request.Request.Body.Request` **Changed** (Breaking ⚠️)\n  *  `response.Build` **Changed** (Breaking ⚠️)\n* `ContinuousSimulation.Simulators.GetSimulator()`:  `response.Build` **Changed** (Breaking ⚠️)\n* `ContinuousSimulation.Simulators.UpdateSimulator()`:  `response.Build` **Changed** (Breaking ⚠️)\n* `ContinuousSimulation.Simulators.CancelSimulator()`:  `response.Build` **Changed** (Breaking ⚠️)\n* `ContinuousSimulation.Simulators.ResumeSimulator()`:  `response.Build` **Changed** (Breaking ⚠️)\n* `ContinuousSimulation.Webboxes.SaveSnapshot()`:  `response.Build` **Changed** (Breaking ⚠️)\n* `ContinuousSimulation.WebboxSnapshots.List()`:  `response.Snapshots[].Build` **Changed** (Breaking ⚠️)\n* `ContinuousSimulation.WebboxSnapshots.Create()`: \n  *  `request.Request.Body.Request` **Changed** (Breaking ⚠️)\n  *  `response.Build` **Changed** (Breaking ⚠️)\n* `ContinuousSimulation.WebboxSnapshots.Get()`:  `response.Build` **Changed** (Breaking ⚠️)\n* `ContinuousSimulation.WebboxSnapshots.Update()`:  `response.Build` **Changed** (Breaking ⚠️)\n* `ContinuousSimulation.WebboxSnapshots.Cancel()`:  `response.Build` **Changed** (Breaking ⚠️)\n* `ContinuousSimulation.WebboxSnapshots.Clone()`:  `response.Build` **Changed** (Breaking ⚠️)\n* `ContinuousSimulation.WebboxSnapshots.Resume()`:  `response.Build` **Changed** (Breaking ⚠️)\n"
