@@ -8,7 +8,7 @@ import (
 	"github.com/continuous-labs-ai/cli/internal/sdk/sdkinternal/utils"
 )
 
-// BuildMCPBoxSnapshotRequestModel - Model that builds and reviews the Snapshot. Defaults to combined. Its provider is derived from the model. combined currently builds, reviews, and runs QA exactly as claude-opus-5-5 does.
+// BuildMCPBoxSnapshotRequestModel - Model that builds and reviews the Snapshot. Omission means combined without parent_id and the parent's model with it. Its provider is derived from the model. combined currently builds, reviews, and runs QA exactly as claude-opus-5-5 does.
 type BuildMCPBoxSnapshotRequestModel string
 
 const (
@@ -51,14 +51,14 @@ type BuildMCPBoxSnapshotRequest struct {
 	CredentialIds []string `json:"credential_ids,omitzero"`
 	// Instructions for the builder, such as the open-source MCP server to copy. At most 16,384 characters and 65,536 UTF-8 bytes; must not be blank or contain U+0000.
 	Instructions *string `json:"instructions,omitzero"`
-	// Model that builds and reviews the Snapshot. Defaults to combined. Its provider is derived from the model. combined currently builds, reviews, and runs QA exactly as claude-opus-5-5 does.
-	Model *BuildMCPBoxSnapshotRequestModel `default:"combined" json:"model"`
+	// Model that builds and reviews the Snapshot. Omission means combined without parent_id and the parent's model with it. Its provider is derived from the model. combined currently builds, reviews, and runs QA exactly as claude-opus-5-5 does.
+	Model *BuildMCPBoxSnapshotRequestModel `json:"model,omitzero"`
 	// Name for the Snapshot. Omission generates a name. Names must not contain U+0000. The ID stays its identity, and names need not be unique.
 	Name *string `json:"name,omitzero"`
 	// A ready MCP Box Snapshot of the workspace or the catalog to build on. The build starts from its handlers, tests and documents; its capture and research run as a new build's, with the parent's folder for reference. What the request does not set comes from the parent: its API Box Snapshot, its documents, which an upload of the same name replaces, its model, its review rounds, and its credential if the workspace still has it. timeout_seconds keeps its default.
 	ParentID *string `json:"parent_id,omitzero"`
-	// Review rounds, from 1 to 10. Defaults to 1. Each round is a review and a repair of its findings, by the same builder and reviewer. The rounds stop early when the reviewer reports no findings.
-	ReviewRounds *int64 `default:"1" json:"review_rounds"`
+	// Review rounds, from 1 to 10. Omission means 1 without parent_id and the parent's review rounds with it. Each round is a review and a repair of its findings, by the same builder and reviewer. The rounds stop early when the reviewer reports no findings.
+	ReviewRounds *int64 `json:"review_rounds,omitzero"`
 	// Time limit for generation and validation in seconds, from 1 to 172800. Defaults to 28800 (eight hours). Excludes queue wait, finalization, and any wait for the requester. Retries share the same deadline.
 	TimeoutSeconds *int64 `default:"28800" json:"timeout_seconds"`
 }

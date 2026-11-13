@@ -919,8 +919,7 @@ components:
           maxLength: 16384
           type: string
         model:
-          default: combined
-          description: Model that builds and reviews the Snapshot. Defaults to combined. Its provider is derived from the model. combined currently builds, reviews, and runs QA exactly as claude-opus-5-5 does.
+          description: Model that builds and reviews the Snapshot. Omission means combined without parent_id and the parent's model with it. Its provider is derived from the model. combined currently builds, reviews, and runs QA exactly as claude-opus-5-5 does.
           enum:
             - gpt-6-astra
             - gpt-6.1-sol
@@ -938,8 +937,7 @@ components:
           pattern: ^abs_[0-9A-HJKMNP-TV-Z]{26}$
           type: string
         review_rounds:
-          default: 1
-          description: Review rounds, from 1 to 10. Defaults to 1. Each round is a review and a repair of its findings, by the same builder and reviewer. The rounds stop early when the reviewer reports no findings.
+          description: Review rounds, from 1 to 10. Omission means 1 without parent_id and the parent's review rounds with it. Each round is a review and a repair of its findings, by the same builder and reviewer. The rounds stop early when the reviewer reports no findings.
           format: int64
           maximum: 10
           minimum: 1
@@ -1025,8 +1023,7 @@ components:
           maxLength: 16384
           type: string
         model:
-          default: combined
-          description: Model that builds and reviews the Snapshot. Defaults to combined. Its provider is derived from the model. combined currently builds, reviews, and runs QA exactly as claude-opus-5-5 does.
+          description: Model that builds and reviews the Snapshot. Omission means combined without parent_id and the parent's model with it. Its provider is derived from the model. combined currently builds, reviews, and runs QA exactly as claude-opus-5-5 does.
           enum:
             - gpt-6-astra
             - gpt-6.1-sol
@@ -1044,8 +1041,7 @@ components:
           pattern: ^mbs_[0-9A-HJKMNP-TV-Z]{26}$
           type: string
         review_rounds:
-          default: 1
-          description: Review rounds, from 1 to 10. Defaults to 1. Each round is a review and a repair of its findings, by the same builder and reviewer. The rounds stop early when the reviewer reports no findings.
+          description: Review rounds, from 1 to 10. Omission means 1 without parent_id and the parent's review rounds with it. Each round is a review and a repair of its findings, by the same builder and reviewer. The rounds stop early when the reviewer reports no findings.
           format: int64
           maximum: 10
           minimum: 1
@@ -1329,8 +1325,7 @@ components:
           maxLength: 16384
           type: string
         model:
-          default: combined
-          description: Model that builds and reviews the Snapshot. Defaults to combined. Its provider is derived from the model. combined currently builds, reviews, and runs QA exactly as claude-opus-5-5 does.
+          description: Model that builds and reviews the Snapshot. Omission means combined without parent_id and the parent's model with it. Its provider is derived from the model. combined currently builds, reviews, and runs QA exactly as claude-opus-5-5 does.
           enum:
             - gpt-6-astra
             - gpt-6.1-sol
@@ -1348,8 +1343,7 @@ components:
           pattern: ^wbs_[0-9A-HJKMNP-TV-Z]{26}$
           type: string
         review_rounds:
-          default: 1
-          description: Review rounds, from 1 to 10. Defaults to 1. Each round is a review and a repair of its findings, by the same builder and reviewer. The rounds stop early when the reviewer reports no findings.
+          description: Review rounds, from 1 to 10. Omission means 1 without parent_id and the parent's review rounds with it. Each round is a review and a repair of its findings, by the same builder and reviewer. The rounds stop early when the reviewer reports no findings.
           format: int64
           maximum: 10
           minimum: 1
