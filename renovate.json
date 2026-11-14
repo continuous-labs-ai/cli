@@ -33,12 +33,14 @@
   "customManagers": [
     {
       "customType": "regex",
-      "description": "Speakeasy mirror (same as continuous)",
+      "description": "Speakeasy mirror (same as continuous); CONTRIBUTING.md names the same version",
       "managerFilePatterns": [
-        "/^\\.speakeasy/workflow\\.yaml$/"
+        "/^\\.speakeasy/workflow\\.yaml$/",
+        "/^CONTRIBUTING\\.md$/"
       ],
       "matchStrings": [
-        "speakeasyVersion: (?<currentValue>\\S+)"
+        "speakeasyVersion: (?<currentValue>\\S+)",
+        "Speakeasy (?<currentValue>[0-9][^\\s:]*):"
       ],
       "datasourceTemplate": "github-releases",
       "depNameTemplate": "speakeasy-api/speakeasy",
