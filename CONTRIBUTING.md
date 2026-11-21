@@ -48,6 +48,10 @@ The generated `Release` workflow (`release.yaml`) stays because `generateRelease
 
 `release-signing-key.asc` at the repository root is the public key that matches `CLI_GPG_SECRET_KEY`. When the key rotates, replace that file and update the fingerprint in the README.
 
+## Alerts
+
+Every workflow that runs unattended, on a push to `main`, a schedule or a `workflow_run`, ends with a `slack-alert` job. It posts to Slack with the `SLACK_ALERTS_WEBHOOK_URL` organization secret when the run fails or is cancelled, and fails when the secret is missing. Give each new unattended workflow the same job.
+
 ## Homebrew
 
 Keep `cli.distribution.homebrew.enabled: true` with the tap `continuous-labs-ai/homebrew-tap`. The `publish-cli` job does not pass the tap token to GoReleaser, matching upstream, so `.goreleaser.yaml` sets `skip_upload: true` and GoReleaser pushes nothing to the tap.

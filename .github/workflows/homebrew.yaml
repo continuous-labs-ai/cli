@@ -41,3 +41,21 @@ jobs:
         run: python3 scripts/publish_homebrew.py publish --tag "$RELEASE_TAG" --formula "$RUNNER_TEMP/homebrew/continuous.rb"
         env:
           HOMEBREW_TAP_GITHUB_TOKEN: ${{ secrets.HOMEBREW_TAP_GITHUB_TOKEN }}
+
+  slack-alert:
+    name: Slack alert
+    needs: [publish]
+    if: (failure() || cancelled()) && contains(fromJSON('["push", "schedule", "workflow_run", "repository_dispatch", "release"]'), github.event_name)
+    runs-on: ubuntu-latest
+    permissions:
+      actions: read
+      contents: read
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+        with:
+          persist-credentials: false
+          sparse-checkout: .github/workflows/scripts
+      - run: .github/workflows/scripts/slack-alert.sh
+        env:
+          GH_TOKEN: ${{ github.token }}
+          SLACK_ALERTS_WEBHOOK_URL: ${{ secrets.SLACK_ALERTS_WEBHOOK_URL }}
