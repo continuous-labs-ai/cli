@@ -6,21 +6,10 @@ sources:
         sourceBlobDigest: sha256:10881a46ebcff7db4af96e42735f0d4c191d5e08813b0712a333e2aaa6b431de
         tags:
             - latest
-    continuous-simulation:
-        sourceNamespace: continuous-simulation
-        sourceRevisionDigest: sha256:89ffcfd297f4f9684823afd30868cbc088992faffe2a4d52fa0dc90ea416a623
-        sourceBlobDigest: sha256:10881a46ebcff7db4af96e42735f0d4c191d5e08813b0712a333e2aaa6b431de
-        tags:
-            - latest
 targets:
     continuous-cli:
         source: continuous-api
         sourceNamespace: continuous-api
-        sourceRevisionDigest: sha256:89ffcfd297f4f9684823afd30868cbc088992faffe2a4d52fa0dc90ea416a623
-        sourceBlobDigest: sha256:10881a46ebcff7db4af96e42735f0d4c191d5e08813b0712a333e2aaa6b431de
-    continuous-simulation-cli:
-        source: continuous-simulation
-        sourceNamespace: continuous-simulation
         sourceRevisionDigest: sha256:89ffcfd297f4f9684823afd30868cbc088992faffe2a4d52fa0dc90ea416a623
         sourceBlobDigest: sha256:10881a46ebcff7db4af96e42735f0d4c191d5e08813b0712a333e2aaa6b431de
 workflow:
