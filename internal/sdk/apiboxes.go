@@ -6,13 +6,13 @@ import (
 	"bytes"
 	"context"
 	"fmt"
-	"github.com/continuous-labs-ai/cli/internal/sdk/models/components"
-	"github.com/continuous-labs-ai/cli/internal/sdk/models/operations"
-	"github.com/continuous-labs-ai/cli/internal/sdk/models/sdkerrors"
-	"github.com/continuous-labs-ai/cli/internal/sdk/retry"
-	"github.com/continuous-labs-ai/cli/internal/sdk/sdkinternal/config"
-	"github.com/continuous-labs-ai/cli/internal/sdk/sdkinternal/hooks"
-	"github.com/continuous-labs-ai/cli/internal/sdk/sdkinternal/utils"
+	"github.com/continuous-labs-ai/continuous-cli/internal/sdk/models/components"
+	"github.com/continuous-labs-ai/continuous-cli/internal/sdk/models/operations"
+	"github.com/continuous-labs-ai/continuous-cli/internal/sdk/models/sdkerrors"
+	"github.com/continuous-labs-ai/continuous-cli/internal/sdk/retry"
+	"github.com/continuous-labs-ai/continuous-cli/internal/sdk/sdkinternal/config"
+	"github.com/continuous-labs-ai/continuous-cli/internal/sdk/sdkinternal/hooks"
+	"github.com/continuous-labs-ai/continuous-cli/internal/sdk/sdkinternal/utils"
 	"github.com/spyzhov/ajson"
 	"net/http"
 	"net/url"
@@ -22,12 +22,12 @@ import (
 
 // Apiboxes - Start API Boxes from API Box Snapshots. Each API Box serves its Snapshot's API at its own endpoint, with its own state, in real time. Stop, start and delete them.
 type Apiboxes struct {
-	rootSDK          *ContinuousSimulation
+	rootSDK          *Continuous
 	sdkConfiguration config.SDKConfiguration
 	hooks            *hooks.Hooks
 }
 
-func newApiboxes(rootSDK *ContinuousSimulation, sdkConfig config.SDKConfiguration, hooks *hooks.Hooks) *Apiboxes {
+func newApiboxes(rootSDK *Continuous, sdkConfig config.SDKConfiguration, hooks *hooks.Hooks) *Apiboxes {
 	return &Apiboxes{
 		rootSDK:          rootSDK,
 		sdkConfiguration: sdkConfig,

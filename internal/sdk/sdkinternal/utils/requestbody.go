@@ -15,7 +15,7 @@ import (
 	"reflect"
 	"regexp"
 
-	"github.com/continuous-labs-ai/cli/internal/sdk/optionalnullable"
+	"github.com/continuous-labs-ai/continuous-cli/internal/sdk/optionalnullable"
 )
 
 const (

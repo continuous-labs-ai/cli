@@ -6,13 +6,13 @@ import (
 	"bytes"
 	"context"
 	"fmt"
-	"github.com/continuous-labs-ai/cli/internal/sdk/models/components"
-	"github.com/continuous-labs-ai/cli/internal/sdk/models/operations"
-	"github.com/continuous-labs-ai/cli/internal/sdk/models/sdkerrors"
-	"github.com/continuous-labs-ai/cli/internal/sdk/retry"
-	"github.com/continuous-labs-ai/cli/internal/sdk/sdkinternal/config"
-	"github.com/continuous-labs-ai/cli/internal/sdk/sdkinternal/hooks"
-	"github.com/continuous-labs-ai/cli/internal/sdk/sdkinternal/utils"
+	"github.com/continuous-labs-ai/continuous-cli/internal/sdk/models/components"
+	"github.com/continuous-labs-ai/continuous-cli/internal/sdk/models/operations"
+	"github.com/continuous-labs-ai/continuous-cli/internal/sdk/models/sdkerrors"
+	"github.com/continuous-labs-ai/continuous-cli/internal/sdk/retry"
+	"github.com/continuous-labs-ai/continuous-cli/internal/sdk/sdkinternal/config"
+	"github.com/continuous-labs-ai/continuous-cli/internal/sdk/sdkinternal/hooks"
+	"github.com/continuous-labs-ai/continuous-cli/internal/sdk/sdkinternal/utils"
 	"github.com/spyzhov/ajson"
 	"net/http"
 	"net/url"
@@ -22,12 +22,12 @@ import (
 
 // Webboxes - Start Web Boxes from Web Box Snapshots. Each Web Box serves its Snapshot's web app at a host of its own, with its own state, in real time. Stop, start and delete them.
 type Webboxes struct {
-	rootSDK          *ContinuousSimulation
+	rootSDK          *Continuous
 	sdkConfiguration config.SDKConfiguration
 	hooks            *hooks.Hooks
 }
 
-func newWebboxes(rootSDK *ContinuousSimulation, sdkConfig config.SDKConfiguration, hooks *hooks.Hooks) *Webboxes {
+func newWebboxes(rootSDK *Continuous, sdkConfig config.SDKConfiguration, hooks *hooks.Hooks) *Webboxes {
 	return &Webboxes{
 		rootSDK:          rootSDK,
 		sdkConfiguration: sdkConfig,

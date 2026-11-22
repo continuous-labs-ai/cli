@@ -7,11 +7,11 @@ package sdk
 import (
 	"context"
 	"fmt"
-	"github.com/continuous-labs-ai/cli/internal/sdk/models/components"
-	"github.com/continuous-labs-ai/cli/internal/sdk/retry"
-	"github.com/continuous-labs-ai/cli/internal/sdk/sdkinternal/config"
-	"github.com/continuous-labs-ai/cli/internal/sdk/sdkinternal/hooks"
-	"github.com/continuous-labs-ai/cli/internal/sdk/sdkinternal/utils"
+	"github.com/continuous-labs-ai/continuous-cli/internal/sdk/models/components"
+	"github.com/continuous-labs-ai/continuous-cli/internal/sdk/retry"
+	"github.com/continuous-labs-ai/continuous-cli/internal/sdk/sdkinternal/config"
+	"github.com/continuous-labs-ai/continuous-cli/internal/sdk/sdkinternal/hooks"
+	"github.com/continuous-labs-ai/continuous-cli/internal/sdk/sdkinternal/utils"
 	"net/http"
 	"time"
 )
@@ -48,8 +48,8 @@ func Float64(f float64) *float64 { return &f }
 // Pointer provides a helper function to return a pointer to a type
 func Pointer[T any](v T) *T { return &v }
 
-// ContinuousSimulation - Continuous API: Start API Boxes, Web Boxes and MCP Boxes from Snapshots. Authenticate every request with an API key sent as a Bearer token.
-type ContinuousSimulation struct {
+// Continuous API: Start API Boxes, Web Boxes and MCP Boxes from Snapshots. Authenticate every request with an API key sent as a Bearer token.
+type Continuous struct {
 	SDKVersion string
 	// Start API Boxes from API Box Snapshots. Each API Box serves its Snapshot's API at its own endpoint, with its own state, in real time. Stop, start and delete them.
 	Apiboxes *Apiboxes
@@ -70,18 +70,18 @@ type ContinuousSimulation struct {
 	hooks            *hooks.Hooks
 }
 
-type SDKOption func(*ContinuousSimulation)
+type SDKOption func(*Continuous)
 
 // WithServerURL allows providing an alternative server URL
 func WithServerURL(serverURL string) SDKOption {
-	return func(sdk *ContinuousSimulation) {
+	return func(sdk *Continuous) {
 		sdk.sdkConfiguration.ServerURL = serverURL
 	}
 }
 
 // WithTemplatedServerURL allows the overriding of the default server URL with a templated URL populated with the provided parameters
 func WithTemplatedServerURL(serverURL string, params map[string]string) SDKOption {
-	return func(sdk *ContinuousSimulation) {
+	return func(sdk *Continuous) {
 		if params != nil {
 			serverURL = utils.ReplaceParameters(serverURL, params)
 		}
@@ -92,7 +92,7 @@ func WithTemplatedServerURL(serverURL string, params map[string]string) SDKOptio
 
 // WithServerIndex allows the overriding of the default server by index
 func WithServerIndex(serverIndex int) SDKOption {
-	return func(sdk *ContinuousSimulation) {
+	return func(sdk *Continuous) {
 		if serverIndex < 0 || serverIndex >= len(ServerList) {
 			panic(fmt.Errorf("server index %d out of range", serverIndex))
 		}
@@ -103,21 +103,21 @@ func WithServerIndex(serverIndex int) SDKOption {
 
 // WithClient allows the overriding of the default HTTP client used by the SDK
 func WithClient(client HTTPClient) SDKOption {
-	return func(sdk *ContinuousSimulation) {
+	return func(sdk *Continuous) {
 		sdk.sdkConfiguration.Client = client
 	}
 }
 
 // WithSecurity configures the SDK to use the provided security details
 func WithSecurity(security components.Security) SDKOption {
-	return func(sdk *ContinuousSimulation) {
+	return func(sdk *Continuous) {
 		sdk.sdkConfiguration.Security = utils.AsSecuritySource(security)
 	}
 }
 
 // WithSecuritySource configures the SDK to invoke the Security Source function on each method call to determine authentication
 func WithSecuritySource(security func(context.Context) (components.Security, error)) SDKOption {
-	return func(sdk *ContinuousSimulation) {
+	return func(sdk *Continuous) {
 		sdk.sdkConfiguration.Security = func(ctx context.Context) (interface{}, error) {
 			return security(ctx)
 		}
@@ -125,25 +125,25 @@ func WithSecuritySource(security func(context.Context) (components.Security, err
 }
 
 func WithRetryConfig(retryConfig retry.Config) SDKOption {
-	return func(sdk *ContinuousSimulation) {
+	return func(sdk *Continuous) {
 		sdk.sdkConfiguration.RetryConfig = &retryConfig
 	}
 }
 
 // WithTimeout Optional request timeout applied to each operation
 func WithTimeout(timeout time.Duration) SDKOption {
-	return func(sdk *ContinuousSimulation) {
+	return func(sdk *Continuous) {
 		sdk.sdkConfiguration.Timeout = &timeout
 	}
 }
 
 // New creates a new instance of the SDK with the provided options
-func New(opts ...SDKOption) *ContinuousSimulation {
-	sdk := &ContinuousSimulation{
-		SDKVersion: "0.6.1",
+func New(opts ...SDKOption) *Continuous {
+	sdk := &Continuous{
+		SDKVersion: "0.6.2",
 		sdkConfiguration: config.SDKConfiguration{
-			UserAgent:         "speakeasy-sdk/go 0.6.1 2.935.1 v1 github.com/continuous-labs-ai/cli/internal/sdk",
-			SDKVersion:        "0.6.1",
+			UserAgent:         "speakeasy-sdk/go 0.6.2 2.935.1 v1 github.com/continuous-labs-ai/continuous-cli/internal/sdk",
+			SDKVersion:        "0.6.2",
 			GenVersion:        "2.935.1",
 			OpenAPIDocVersion: "v1",
 			ServerList:        ServerList,

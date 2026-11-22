@@ -6,13 +6,13 @@ import (
 	"bytes"
 	"context"
 	"fmt"
-	"github.com/continuous-labs-ai/cli/internal/sdk/models/components"
-	"github.com/continuous-labs-ai/cli/internal/sdk/models/operations"
-	"github.com/continuous-labs-ai/cli/internal/sdk/models/sdkerrors"
-	"github.com/continuous-labs-ai/cli/internal/sdk/retry"
-	"github.com/continuous-labs-ai/cli/internal/sdk/sdkinternal/config"
-	"github.com/continuous-labs-ai/cli/internal/sdk/sdkinternal/hooks"
-	"github.com/continuous-labs-ai/cli/internal/sdk/sdkinternal/utils"
+	"github.com/continuous-labs-ai/continuous-cli/internal/sdk/models/components"
+	"github.com/continuous-labs-ai/continuous-cli/internal/sdk/models/operations"
+	"github.com/continuous-labs-ai/continuous-cli/internal/sdk/models/sdkerrors"
+	"github.com/continuous-labs-ai/continuous-cli/internal/sdk/retry"
+	"github.com/continuous-labs-ai/continuous-cli/internal/sdk/sdkinternal/config"
+	"github.com/continuous-labs-ai/continuous-cli/internal/sdk/sdkinternal/hooks"
+	"github.com/continuous-labs-ai/continuous-cli/internal/sdk/sdkinternal/utils"
 	"github.com/spyzhov/ajson"
 	"net/http"
 	"net/url"
@@ -22,12 +22,12 @@ import (
 
 // ApiboxSnapshots - Build API Box Snapshots from an OpenAPI, WSDL or GraphQL document, or use the catalog's. API Boxes start from a ready Snapshot.
 type ApiboxSnapshots struct {
-	rootSDK          *ContinuousSimulation
+	rootSDK          *Continuous
 	sdkConfiguration config.SDKConfiguration
 	hooks            *hooks.Hooks
 }
 
-func newApiboxSnapshots(rootSDK *ContinuousSimulation, sdkConfig config.SDKConfiguration, hooks *hooks.Hooks) *ApiboxSnapshots {
+func newApiboxSnapshots(rootSDK *Continuous, sdkConfig config.SDKConfiguration, hooks *hooks.Hooks) *ApiboxSnapshots {
 	return &ApiboxSnapshots{
 		rootSDK:          rootSDK,
 		sdkConfiguration: sdkConfig,

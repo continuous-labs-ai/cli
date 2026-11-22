@@ -6,13 +6,13 @@ import (
 	"bytes"
 	"context"
 	"fmt"
-	"github.com/continuous-labs-ai/cli/internal/sdk/models/components"
-	"github.com/continuous-labs-ai/cli/internal/sdk/models/operations"
-	"github.com/continuous-labs-ai/cli/internal/sdk/models/sdkerrors"
-	"github.com/continuous-labs-ai/cli/internal/sdk/retry"
-	"github.com/continuous-labs-ai/cli/internal/sdk/sdkinternal/config"
-	"github.com/continuous-labs-ai/cli/internal/sdk/sdkinternal/hooks"
-	"github.com/continuous-labs-ai/cli/internal/sdk/sdkinternal/utils"
+	"github.com/continuous-labs-ai/continuous-cli/internal/sdk/models/components"
+	"github.com/continuous-labs-ai/continuous-cli/internal/sdk/models/operations"
+	"github.com/continuous-labs-ai/continuous-cli/internal/sdk/models/sdkerrors"
+	"github.com/continuous-labs-ai/continuous-cli/internal/sdk/retry"
+	"github.com/continuous-labs-ai/continuous-cli/internal/sdk/sdkinternal/config"
+	"github.com/continuous-labs-ai/continuous-cli/internal/sdk/sdkinternal/hooks"
+	"github.com/continuous-labs-ai/continuous-cli/internal/sdk/sdkinternal/utils"
 	"github.com/spyzhov/ajson"
 	"net/http"
 	"net/url"
@@ -22,12 +22,12 @@ import (
 
 // McpboxSnapshots - Build MCP Box Snapshots of an MCP server's tools against a ready API Box Snapshot. MCP Boxes serve a ready Snapshot.
 type McpboxSnapshots struct {
-	rootSDK          *ContinuousSimulation
+	rootSDK          *Continuous
 	sdkConfiguration config.SDKConfiguration
 	hooks            *hooks.Hooks
 }
 
-func newMcpboxSnapshots(rootSDK *ContinuousSimulation, sdkConfig config.SDKConfiguration, hooks *hooks.Hooks) *McpboxSnapshots {
+func newMcpboxSnapshots(rootSDK *Continuous, sdkConfig config.SDKConfiguration, hooks *hooks.Hooks) *McpboxSnapshots {
 	return &McpboxSnapshots{
 		rootSDK:          rootSDK,
 		sdkConfiguration: sdkConfig,

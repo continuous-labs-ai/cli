@@ -4,7 +4,7 @@ package cli
 
 import (
 	"fmt"
-	"github.com/continuous-labs-ai/cli/internal/usage"
+	"github.com/continuous-labs-ai/continuous-cli/internal/usage"
 	"github.com/spf13/cobra"
 )
 
@@ -13,7 +13,7 @@ import (
 // which propagates the value here (see cmd/continuous/main.go):
 //
 //	go build -ldflags "-X main.version=x.y.z" ./cmd/continuous
-var Version = "0.6.1"
+var Version = "0.6.2"
 
 // BuildTime is optionally set at build time via ldflags targeting the main package.
 var BuildTime string
