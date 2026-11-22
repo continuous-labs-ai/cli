@@ -69,3 +69,21 @@ jobs:
           if [ "$IS_FORK" != true ]; then
             test "$GENERATION_RESULT" = success
           fi
+
+  slack-alert:
+    name: Slack alert
+    needs: [generation, build-package, all-green]
+    if: (failure() || cancelled()) && contains(fromJSON('["push", "schedule", "workflow_run", "repository_dispatch", "release"]'), github.event_name)
+    runs-on: ubuntu-latest
+    permissions:
+      actions: read
+      contents: read
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+        with:
+          persist-credentials: false
+          sparse-checkout: .github/workflows/scripts
+      - run: .github/workflows/scripts/slack-alert.sh
+        env:
+          GH_TOKEN: ${{ github.token }}
+          SLACK_ALERTS_WEBHOOK_URL: ${{ secrets.SLACK_ALERTS_WEBHOOK_URL }}
