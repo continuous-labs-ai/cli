@@ -8,7 +8,7 @@ Build checks cover generation, compilation, and packaging. This repository does 
 
 ## Install
 
-Releases are published on the [release page](https://github.com/continuous-labs-ai/cli/releases) for each new CLI version. Downloads do not need GitHub credentials.
+Releases are published on the [release page](https://github.com/continuous-labs-ai/continuous-cli/releases) for each new CLI version. Downloads do not need GitHub credentials.
 
 Each release ships archives for Linux, macOS, and Windows on amd64 and arm64, plus `checksums.txt`. Releases after `v0.1.1` also ship `checksums.txt.sig`, a detached signature made with the project's GPG key.
 
@@ -28,7 +28,7 @@ These steps need `gpg`. On macOS, install it with `brew install gnupg`. Homebrew
 Run these commands in Bash. First import the signing key. It is [`release-signing-key.asc`](release-signing-key.asc) in this repository, with fingerprint `3F97 24EA E595 A2F9 F3E8 EDA1 AF88 CF5D 4448 F191`. Check that the printed fingerprint matches.
 
 ```bash
-curl -fL https://raw.githubusercontent.com/continuous-labs-ai/cli/main/release-signing-key.asc -o release-signing-key.asc
+curl -fL https://raw.githubusercontent.com/continuous-labs-ai/continuous-cli/main/release-signing-key.asc -o release-signing-key.asc
 gpg --show-keys --with-fingerprint release-signing-key.asc
 gpg --import release-signing-key.asc
 ```
@@ -49,7 +49,7 @@ case "$(uname -m)" in
   *) echo "Unsupported architecture." >&2; exit 1 ;;
 esac
 archive="continuous_${platform}_${architecture}.tar.gz"
-release_url="https://github.com/continuous-labs-ai/cli/releases/download/$version"
+release_url="https://github.com/continuous-labs-ai/continuous-cli/releases/download/$version"
 download_dir=$(mktemp -d)
 cd "$download_dir"
 curl -fL "$release_url/$archive" -o "$archive"
@@ -82,7 +82,7 @@ $ErrorActionPreference = "Stop"
 $version = "v0.1.5"
 $architecture = "x86_64"
 $archive = "continuous_Windows_$architecture.zip"
-$releaseUrl = "https://github.com/continuous-labs-ai/cli/releases/download/$version"
+$releaseUrl = "https://github.com/continuous-labs-ai/continuous-cli/releases/download/$version"
 $downloadDir = New-Item -ItemType Directory -Path (Join-Path ([IO.Path]::GetTempPath()) ([guid]::NewGuid()))
 Set-Location $downloadDir
 curl.exe -fL "$releaseUrl/$archive" -o $archive
@@ -107,7 +107,7 @@ Speakeasy generates installers for Linux, macOS, and Windows. They verify the ar
 For Linux or macOS, download the script:
 
 ```bash
-curl -fL https://raw.githubusercontent.com/continuous-labs-ai/cli/main/scripts/install.sh -o install.sh
+curl -fL https://raw.githubusercontent.com/continuous-labs-ai/continuous-cli/main/scripts/install.sh -o install.sh
 ```
 
 Inspect `install.sh`. Then install the latest release in your user directory:
@@ -121,7 +121,7 @@ continuous version
 For Windows, download the script in PowerShell:
 
 ```powershell
-Invoke-WebRequest https://raw.githubusercontent.com/continuous-labs-ai/cli/main/scripts/install.ps1 -OutFile install.ps1
+Invoke-WebRequest https://raw.githubusercontent.com/continuous-labs-ai/continuous-cli/main/scripts/install.ps1 -OutFile install.ps1
 ```
 
 Inspect `install.ps1`. Then run it:

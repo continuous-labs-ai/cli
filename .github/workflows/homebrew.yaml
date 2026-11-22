@@ -20,7 +20,7 @@ concurrency:
 
 jobs:
   publish:
-    if: github.repository == 'continuous-labs-ai/cli' && (github.event_name == 'workflow_dispatch' || github.event.workflow_run.conclusion == 'success')
+    if: github.repository == 'continuous-labs-ai/continuous-cli' && (github.event_name == 'workflow_dispatch' || github.event.workflow_run.conclusion == 'success')
     runs-on: ubuntu-latest
     env:
       GH_TOKEN: ${{ github.token }}

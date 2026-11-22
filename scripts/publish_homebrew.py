@@ -9,7 +9,7 @@ import urllib.error
 import urllib.request
 
 
-REPOSITORY = "continuous-labs-ai/cli"
+REPOSITORY = "continuous-labs-ai/continuous-cli"
 TAP = "continuous-labs-ai/homebrew-tap"
 ARCHIVES = {
     f"continuous_{platform}_{architecture}.tar.gz"
