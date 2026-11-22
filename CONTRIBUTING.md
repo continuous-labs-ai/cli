@@ -15,7 +15,7 @@ The `.genignore` file protects owned documentation, the license, and review attr
 Run generation with Speakeasy 1.796.4:
 
 ```bash
-speakeasy run --target continuous-simulation-cli
+speakeasy run --target continuous-cli
 ```
 
 Run checks in GitHub Actions. The `Checks` workflow verifies generation, compiles the binary, and builds snapshot archives.

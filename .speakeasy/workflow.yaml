@@ -1,14 +1,14 @@
 workflowVersion: 1.0.0
 speakeasyVersion: 1.796.4
 sources:
-    continuous-simulation:
+    continuous-api:
         inputs:
-            - location: registry.speakeasyapi.dev/continuous/continuous/continuous-simulation@main
+            - location: registry.speakeasyapi.dev/continuous/continuous/continuous-api@main
         output: .speakeasy/out.openapi.yaml
 targets:
-    continuous-simulation-cli:
+    continuous-cli:
         target: cli
-        source: continuous-simulation
+        source: continuous-api
         publish:
             cli:
                 gpgPrivateKey: $cli_gpg_secret_key
