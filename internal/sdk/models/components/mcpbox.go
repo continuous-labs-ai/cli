@@ -33,10 +33,12 @@ func (e *MCPBoxStatus) IsExact() bool {
 }
 
 type MCPBox struct {
-	// The API Box it fronts, whose state its tools read and change.
+	// The API Box it fronts, whose state its tools read and change; empty for a deleted MCP Box.
 	ApiboxID string `json:"apibox_id"`
 	// MCP Box creation time.
 	CreatedAt time.Time `json:"created_at"`
+	// When the Box was deleted, in a list of deleted Boxes; null otherwise.
+	DeletedAt *time.Time `json:"deleted_at"`
 	// Base URL of the MCP Box. Send MCP Streamable HTTP requests to it followed by /mcp, with the MCP Box's token in X-Continuous-Token.
 	Endpoint string    `json:"endpoint"`
 	Error    *BoxError `json:"error"`
@@ -48,7 +50,7 @@ type MCPBox struct {
 	Metadata any `json:"metadata"`
 	// MCP Box name. The ID is its identity, and names need not be unique.
 	Name string `json:"name"`
-	// The MCP Box Snapshot it serves.
+	// The MCP Box Snapshot it serves; empty for a deleted MCP Box whose Snapshot is deleted too.
 	SnapshotID string `json:"snapshot_id"`
 	// starting while its runtime boots; running while it serves MCP; stopping while it releases its runtime; stopped when it holds no runtime.
 	Status MCPBoxStatus `json:"status"`
@@ -79,6 +81,13 @@ func (m *MCPBox) GetCreatedAt() time.Time {
 		return time.Time{}
 	}
 	return m.CreatedAt
+}
+
+func (m *MCPBox) GetDeletedAt() *time.Time {
+	if m == nil {
+		return nil
+	}
+	return m.DeletedAt
 }
 
 func (m *MCPBox) GetEndpoint() string {

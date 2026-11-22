@@ -9,9 +9,6 @@ import (
 	"github.com/continuous-labs-ai/cli/internal/cli/credentials"
 	"github.com/continuous-labs-ai/cli/internal/cli/mcpboxes"
 	"github.com/continuous-labs-ai/cli/internal/cli/mcpboxsnapshots"
-	"github.com/continuous-labs-ai/cli/internal/cli/simulations"
-	"github.com/continuous-labs-ai/cli/internal/cli/simulationsnapshots"
-	"github.com/continuous-labs-ai/cli/internal/cli/simulators"
 	"github.com/continuous-labs-ai/cli/internal/cli/webboxes"
 	"github.com/continuous-labs-ai/cli/internal/cli/webboxsnapshots"
 	"github.com/continuous-labs-ai/cli/internal/config"
@@ -69,15 +66,6 @@ func NewRootCommand() (*cobra.Command, error) {
 	}
 	if err := mcpboxsnapshots.InitMcpboxSnapshotsRoot(rootCmd); err != nil {
 		return nil, fmt.Errorf("init mcpbox-snapshots: %w", err)
-	}
-	if err := simulationsnapshots.InitSimulationSnapshotsRoot(rootCmd); err != nil {
-		return nil, fmt.Errorf("init simulation-snapshots: %w", err)
-	}
-	if err := simulations.InitSimulationsRoot(rootCmd); err != nil {
-		return nil, fmt.Errorf("init simulations: %w", err)
-	}
-	if err := simulators.InitSimulatorsRoot(rootCmd); err != nil {
-		return nil, fmt.Errorf("init simulators: %w", err)
 	}
 	if err := webboxes.InitWebboxesRoot(rootCmd); err != nil {
 		return nil, fmt.Errorf("init webboxes: %w", err)

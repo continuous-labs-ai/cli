@@ -19,6 +19,7 @@ var listCmdMeta = []flagutil.FlagMeta{
 	{FlagName: "snapshot-id", FieldPath: "SnapshotID", Kind: flagutil.FlagKindString, Optional: true, Description: "Only Web Boxes started from this Snapshot."},
 	{FlagName: "limit", Shorthand: "l", FieldPath: "Limit", Kind: flagutil.FlagKindInt64, Optional: true, HasDefault: true, DefaultInt: 50, Description: "Page size. Values below 1 use 50. Values above 200 use 200."},
 	{FlagName: "cursor", Shorthand: "c", FieldPath: "Cursor", Kind: flagutil.FlagKindString, Optional: true, Description: "Opaque next_cursor value from a previous page."},
+	{FlagName: "deleted", FieldPath: "Deleted", Kind: flagutil.FlagKindBool, Optional: true, Description: "List only the Web Boxes deleted in the last 14 days, each with when it was deleted, in place of those not deleted."},
 }
 
 // initListCmd initializes the list command.
@@ -26,7 +27,7 @@ func initListCmd(parent *cobra.Command) error {
 	var cmd = &cobra.Command{
 		Use:     "list",
 		Short:   "List Web Boxes",
-		Long:    "Returns the workspace's Web Boxes, newest first. Results can be filtered by status and Snapshot.",
+		Long:    "Returns the workspace's Web Boxes, newest first. Results can be filtered by status and Snapshot. With deleted=true, it returns the Web Boxes deleted in the last 14 days instead.",
 		Example: "  continuous webboxes list",
 		RunE:    runListCmd,
 	}

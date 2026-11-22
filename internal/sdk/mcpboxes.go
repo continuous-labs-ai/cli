@@ -36,7 +36,7 @@ func newMcpboxes(rootSDK *ContinuousSimulation, sdkConfig config.SDKConfiguratio
 }
 
 // List MCP Boxes
-// Returns the workspace's MCP Boxes, newest first. Results can be filtered by status and Snapshot.
+// Returns the workspace's MCP Boxes, newest first. Results can be filtered by status and Snapshot. With deleted=true, it returns the MCP Boxes deleted in the last 14 days instead.
 func (s *Mcpboxes) List(ctx context.Context, request *operations.ListMcpboxesRequest, opts ...operations.Option) (*operations.ListMcpboxesResponse, error) {
 	o := operations.Options{}
 	supportedOptions := []string{
