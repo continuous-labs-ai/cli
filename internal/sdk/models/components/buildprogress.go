@@ -15,8 +15,6 @@ const (
 	BuildProgressModelGpt61Sol      BuildProgressModel = "gpt-6.1-sol"
 	BuildProgressModelClaudeOpus55  BuildProgressModel = "claude-opus-5-5"
 	BuildProgressModelClaudeFable52 BuildProgressModel = "claude-fable-5-2"
-	BuildProgressModelGpt6Sol       BuildProgressModel = "gpt-6-sol"
-	BuildProgressModelClaudeFable51 BuildProgressModel = "claude-fable-5-1"
 	BuildProgressModelCombined      BuildProgressModel = "combined"
 )
 
@@ -28,7 +26,7 @@ func (e BuildProgressModel) ToPointer() *BuildProgressModel {
 func (e *BuildProgressModel) IsExact() bool {
 	if e != nil {
 		switch *e {
-		case "gpt-6-astra", "gpt-6.1-sol", "claude-opus-5-5", "claude-fable-5-2", "gpt-6-sol", "claude-fable-5-1", "combined":
+		case "gpt-6-astra", "gpt-6.1-sol", "claude-opus-5-5", "claude-fable-5-2", "combined":
 			return true
 		}
 	}
