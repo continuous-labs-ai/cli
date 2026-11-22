@@ -1,29 +1,29 @@
 speakeasyVersion: 1.796.4
 sources:
-    continuous-simulation:
-        sourceNamespace: continuous-simulation
+    continuous-api:
+        sourceNamespace: continuous-api
         sourceRevisionDigest: sha256:89ffcfd297f4f9684823afd30868cbc088992faffe2a4d52fa0dc90ea416a623
         sourceBlobDigest: sha256:10881a46ebcff7db4af96e42735f0d4c191d5e08813b0712a333e2aaa6b431de
         tags:
             - latest
 targets:
-    continuous-simulation-cli:
-        source: continuous-simulation
-        sourceNamespace: continuous-simulation
+    continuous-cli:
+        source: continuous-api
+        sourceNamespace: continuous-api
         sourceRevisionDigest: sha256:89ffcfd297f4f9684823afd30868cbc088992faffe2a4d52fa0dc90ea416a623
         sourceBlobDigest: sha256:10881a46ebcff7db4af96e42735f0d4c191d5e08813b0712a333e2aaa6b431de
 workflow:
     workflowVersion: 1.0.0
     speakeasyVersion: 1.796.4
     sources:
-        continuous-simulation:
+        continuous-api:
             inputs:
-                - location: registry.speakeasyapi.dev/continuous/continuous/continuous-simulation@main
+                - location: registry.speakeasyapi.dev/continuous/continuous/continuous-api@main
             output: .speakeasy/out.openapi.yaml
     targets:
-        continuous-simulation-cli:
+        continuous-cli:
             target: cli
-            source: continuous-simulation
+            source: continuous-api
             publish:
                 cli:
                     gpgPrivateKey: $cli_gpg_secret_key

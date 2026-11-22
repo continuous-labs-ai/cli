@@ -5,9 +5,9 @@
 # for Linux and macOS systems.
 #
 # Usage:
-#   curl -fsSL https://raw.githubusercontent.com/continuous-labs-ai/cli/main/scripts/install.sh | bash
+#   curl -fsSL https://raw.githubusercontent.com/continuous-labs-ai/continuous-cli/main/scripts/install.sh | bash
 #   or
-#   wget -qO- https://raw.githubusercontent.com/continuous-labs-ai/cli/main/scripts/install.sh | bash
+#   wget -qO- https://raw.githubusercontent.com/continuous-labs-ai/continuous-cli/main/scripts/install.sh | bash
 #
 # Options:
 #   CONTINUOUS_INSTALL_DIR - Installation directory (default: /usr/local/bin)
@@ -17,7 +17,7 @@
 set -eo pipefail
 
 # Configuration
-REPO="continuous-labs-ai/cli"
+REPO="continuous-labs-ai/continuous-cli"
 DEFAULT_INSTALL_DIR="/usr/local/bin"
 USER_INSTALL_DIR="$HOME/.local/bin"
 VERSION="${CONTINUOUS_VERSION:-latest}"

@@ -15,9 +15,9 @@ import (
 	"github.com/spf13/cobra"
 	"golang.org/x/term"
 
-	"github.com/continuous-labs-ai/cli/internal/config"
-	"github.com/continuous-labs-ai/cli/internal/flagutil"
-	"github.com/continuous-labs-ai/cli/internal/output"
+	"github.com/continuous-labs-ai/continuous-cli/internal/config"
+	"github.com/continuous-labs-ai/continuous-cli/internal/flagutil"
+	"github.com/continuous-labs-ai/continuous-cli/internal/output"
 )
 
 // IsInteractive returns true when the CLI should use interactive features.

@@ -3,9 +3,9 @@
 # This script downloads and installs the latest version of the continuous CLI
 #
 # Usage:
-#   iwr -useb https://raw.githubusercontent.com/continuous-labs-ai/cli/main/scripts/install.ps1 | iex
+#   iwr -useb https://raw.githubusercontent.com/continuous-labs-ai/continuous-cli/main/scripts/install.ps1 | iex
 #   or
-#   Invoke-WebRequest -Uri https://raw.githubusercontent.com/continuous-labs-ai/cli/main/scripts/install.ps1 -UseBasicParsing | Invoke-Expression
+#   Invoke-WebRequest -Uri https://raw.githubusercontent.com/continuous-labs-ai/continuous-cli/main/scripts/install.ps1 -UseBasicParsing | Invoke-Expression
 #
 # Options:
 #   $env:CONTINUOUS_INSTALL_DIR - Installation directory (default: $env:LOCALAPPDATA\Programs\continuous)
@@ -18,7 +18,7 @@ param()
 $ErrorActionPreference = 'Stop'
 
 # Configuration
-$Repo = "continuous-labs-ai/cli"
+$Repo = "continuous-labs-ai/continuous-cli"
 $BinaryName = "continuous.exe"
 $DefaultInstallDir = Join-Path $env:LOCALAPPDATA "Programs\continuous"
 $InstallDir = if ($env:CONTINUOUS_INSTALL_DIR) { $env:CONTINUOUS_INSTALL_DIR } else { $DefaultInstallDir }

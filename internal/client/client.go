@@ -5,12 +5,12 @@ package client
 import (
 	"encoding/json"
 	"fmt"
-	"github.com/continuous-labs-ai/cli/internal/config"
-	"github.com/continuous-labs-ai/cli/internal/flagutil"
-	"github.com/continuous-labs-ai/cli/internal/sdk"
-	"github.com/continuous-labs-ai/cli/internal/sdk/models/components"
-	"github.com/continuous-labs-ai/cli/internal/sdk/retry"
-	"github.com/continuous-labs-ai/cli/internal/testclient"
+	"github.com/continuous-labs-ai/continuous-cli/internal/config"
+	"github.com/continuous-labs-ai/continuous-cli/internal/flagutil"
+	"github.com/continuous-labs-ai/continuous-cli/internal/sdk"
+	"github.com/continuous-labs-ai/continuous-cli/internal/sdk/models/components"
+	"github.com/continuous-labs-ai/continuous-cli/internal/sdk/retry"
+	"github.com/continuous-labs-ai/continuous-cli/internal/testclient"
 	"github.com/spf13/cobra"
 	"net/http"
 	"strconv"
@@ -20,7 +20,7 @@ import (
 // NewClient creates a new SDK client configured from command flags and environment.
 // It handles global security, server URL/selection override, global parameters,
 // retry configuration, timeout, and test client injection.
-func NewClient(cmd *cobra.Command) (*sdk.ContinuousSimulation, error) {
+func NewClient(cmd *cobra.Command) (*sdk.Continuous, error) {
 	var sdkOpts []sdk.SDKOption
 	sdkOpts = append(sdkOpts, sdk.WithSecurity(buildGlobalSecurity(cmd)))
 	if serverURL, _ := flagutil.GetStringFlag(cmd, "server-url"); serverURL != "" {

@@ -3,7 +3,7 @@
 package credentials
 
 import (
-	"github.com/continuous-labs-ai/cli/internal/usage"
+	"github.com/continuous-labs-ai/continuous-cli/internal/usage"
 	"github.com/spf13/cobra"
 )
 

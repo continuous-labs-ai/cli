@@ -1,4 +1,4 @@
-module github.com/continuous-labs-ai/cli
+module github.com/continuous-labs-ai/continuous-cli
 
 go 1.25.10
 
