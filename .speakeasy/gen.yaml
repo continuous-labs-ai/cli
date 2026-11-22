@@ -1,6 +1,6 @@
 configVersion: 2.0.0
 generation:
-  sdkClassName: ContinuousSimulation
+  sdkClassName: Continuous
   maintainOpenAPIOrder: true
   usageSnippets:
     optionalPropertyRendering: withExample
@@ -70,5 +70,5 @@ cli:
     errorColor: '#F87171'
     subtleColor: '#475569'
     successColor: '#4ADE80'
-  packageName: github.com/continuous-labs-ai/cli
+  packageName: github.com/continuous-labs-ai/continuous-cli
   removeStutter: true

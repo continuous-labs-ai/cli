@@ -36,7 +36,7 @@ jobs:
           github_access_token: ${{ secrets.GITHUB_TOKEN }}
           action: "release"
           speakeasy_api_key: ${{ secrets.SPEAKEASY_API_KEY }}
-          target: continuous-simulation-cli
+          target: continuous-cli
           enable_sdk_changelog: true
       - id: log-result
         uses: speakeasy-api/sdk-generation-action@fa50f4813201c6f919c74c25196b17c070ec4ac1

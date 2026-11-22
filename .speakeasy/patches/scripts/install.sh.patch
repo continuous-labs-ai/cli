@@ -10,7 +10,7 @@ index 1a14e59..5020953 100644
 +set -eo pipefail
  
  # Configuration
- REPO="continuous-labs-ai/cli"
+ REPO="continuous-labs-ai/continuous-cli"
 @@ -42,6 +42,38 @@ log_error() {
      echo -e "${RED}[ERROR]${NC} $1"
  }

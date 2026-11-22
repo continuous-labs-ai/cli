@@ -49,7 +49,7 @@ brews:
       owner: continuous-labs-ai
       name: homebrew-tap
       branch: main
-    homepage: "https://github.com/continuous-labs-ai/cli"
+    homepage: "https://github.com/continuous-labs-ai/continuous-cli"
     description: "Build and run API, Web and MCP Boxes with the Continuous API."
     install: |
       bin.install "continuous"
