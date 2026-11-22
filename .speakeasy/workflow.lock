@@ -2,16 +2,16 @@ speakeasyVersion: 1.796.4
 sources:
     continuous-simulation:
         sourceNamespace: continuous-simulation
-        sourceRevisionDigest: sha256:e9547d7322c1c4bb1030eae768e6ddf3d5e84bd1284b504ffd9f4ee2c704fb22
-        sourceBlobDigest: sha256:7ad1d42aa502318269f9035710b776e0643c41b3b8772458365d084df376e1c6
+        sourceRevisionDigest: sha256:78c5a8ac20e4bb7d22e4c624a9ecf31d7e91f8091a93bd53dda07b5bce10e4ae
+        sourceBlobDigest: sha256:e80fbc9c8305decb4167bafc5f017e65c678becd08bcfa595d1b389b2836289d
         tags:
             - latest
 targets:
     continuous-simulation-cli:
         source: continuous-simulation
         sourceNamespace: continuous-simulation
-        sourceRevisionDigest: sha256:e9547d7322c1c4bb1030eae768e6ddf3d5e84bd1284b504ffd9f4ee2c704fb22
-        sourceBlobDigest: sha256:7ad1d42aa502318269f9035710b776e0643c41b3b8772458365d084df376e1c6
+        sourceRevisionDigest: sha256:78c5a8ac20e4bb7d22e4c624a9ecf31d7e91f8091a93bd53dda07b5bce10e4ae
+        sourceBlobDigest: sha256:e80fbc9c8305decb4167bafc5f017e65c678becd08bcfa595d1b389b2836289d
 workflow:
     workflowVersion: 1.0.0
     speakeasyVersion: 1.796.4

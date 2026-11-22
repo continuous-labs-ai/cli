@@ -26,23 +26,23 @@ func (c *CreateApiboxSnapshotDocument) GetContent() []byte {
 	return c.Content
 }
 
-type CreateApiboxSnapshotSpec struct {
+type Spec struct {
 	FileName string `multipartForm:"name=fileName"`
 	Content  []byte `multipartForm:"content"`
 }
 
-func (c *CreateApiboxSnapshotSpec) GetFileName() string {
-	if c == nil {
+func (s *Spec) GetFileName() string {
+	if s == nil {
 		return ""
 	}
-	return c.FileName
+	return s.FileName
 }
 
-func (c *CreateApiboxSnapshotSpec) GetContent() []byte {
-	if c == nil {
+func (s *Spec) GetContent() []byte {
+	if s == nil {
 		return []byte{}
 	}
-	return c.Content
+	return s.Content
 }
 
 type CreateApiboxSnapshotRequestBody struct {
@@ -50,7 +50,7 @@ type CreateApiboxSnapshotRequestBody struct {
 	Document []CreateApiboxSnapshotDocument        `multipartForm:"file,name=document"`
 	Request  components.BuildAPIBoxSnapshotRequest `multipartForm:"name=request,json"`
 	// OpenAPI, WSDL or GraphQL document, UTF-8 encoded, at most 64 MiB.
-	Spec *CreateApiboxSnapshotSpec `multipartForm:"file,name=spec"`
+	Spec *Spec `multipartForm:"file,name=spec"`
 }
 
 func (c CreateApiboxSnapshotRequestBody) MarshalJSON() ([]byte, error) {
@@ -78,7 +78,7 @@ func (c *CreateApiboxSnapshotRequestBody) GetRequest() components.BuildAPIBoxSna
 	return c.Request
 }
 
-func (c *CreateApiboxSnapshotRequestBody) GetSpec() *CreateApiboxSnapshotSpec {
+func (c *CreateApiboxSnapshotRequestBody) GetSpec() *Spec {
 	if c == nil {
 		return nil
 	}

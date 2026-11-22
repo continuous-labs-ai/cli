@@ -36,7 +36,7 @@ func newApiboxes(rootSDK *ContinuousSimulation, sdkConfig config.SDKConfiguratio
 }
 
 // List API Boxes
-// Returns the workspace's API Boxes, newest first. Results can be filtered by status and Snapshot.
+// Returns the workspace's API Boxes, newest first. Results can be filtered by status and Snapshot. With deleted=true, it returns the API Boxes deleted in the last 14 days instead.
 func (s *Apiboxes) List(ctx context.Context, request *operations.ListApiboxesRequest, opts ...operations.Option) (*operations.ListApiboxesResponse, error) {
 	o := operations.Options{}
 	supportedOptions := []string{

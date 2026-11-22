@@ -35,6 +35,8 @@ func (e *APIBoxStatus) IsExact() bool {
 type APIBox struct {
 	// API Box creation time.
 	CreatedAt time.Time `json:"created_at"`
+	// When the Box was deleted, in a list of deleted Boxes; null otherwise.
+	DeletedAt *time.Time `json:"deleted_at"`
 	// Base URL of the API Box's API. Send the API Box's token in X-Continuous-Token.
 	Endpoint string    `json:"endpoint"`
 	Error    *BoxError `json:"error"`
@@ -48,7 +50,7 @@ type APIBox struct {
 	Metadata any `json:"metadata"`
 	// API Box name. The ID is its identity, and names need not be unique.
 	Name string `json:"name"`
-	// The API Box Snapshot it started from.
+	// The API Box Snapshot it started from; empty for a deleted API Box whose Snapshot is deleted too.
 	SnapshotID string `json:"snapshot_id"`
 	// starting while its runtime boots; running while it serves requests; stopping while it saves its state; stopped when it holds no runtime. A start resumes the saved state.
 	Status APIBoxStatus `json:"status"`
@@ -72,6 +74,13 @@ func (a *APIBox) GetCreatedAt() time.Time {
 		return time.Time{}
 	}
 	return a.CreatedAt
+}
+
+func (a *APIBox) GetDeletedAt() *time.Time {
+	if a == nil {
+		return nil
+	}
+	return a.DeletedAt
 }
 
 func (a *APIBox) GetEndpoint() string {

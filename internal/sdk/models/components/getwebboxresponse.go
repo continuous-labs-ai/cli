@@ -37,7 +37,9 @@ type GetWebBoxResponse struct {
 	Connection *WebBoxConnection `json:"connection"`
 	// Web Box creation time.
 	CreatedAt time.Time `json:"created_at"`
-	Error     *BoxError `json:"error"`
+	// When the Box was deleted, in a list of deleted Boxes; null otherwise.
+	DeletedAt *time.Time `json:"deleted_at"`
+	Error     *BoxError  `json:"error"`
 	// Web Box ID.
 	ID string `json:"id"`
 	// Whether the Web Box started with the Snapshot's sample data.
@@ -48,7 +50,7 @@ type GetWebBoxResponse struct {
 	Metadata any `json:"metadata"`
 	// Web Box name. The ID is its identity, and names need not be unique.
 	Name string `json:"name"`
-	// The Web Box Snapshot it started from.
+	// The Web Box Snapshot it started from; empty for a deleted Web Box whose Snapshot is deleted too.
 	SnapshotID string `json:"snapshot_id"`
 	// starting while its runtime boots; running while it serves its app; stopping while it saves its state; stopped when it holds no runtime. A start resumes the saved state.
 	Status GetWebBoxResponseStatus `json:"status"`
@@ -81,6 +83,13 @@ func (g *GetWebBoxResponse) GetCreatedAt() time.Time {
 		return time.Time{}
 	}
 	return g.CreatedAt
+}
+
+func (g *GetWebBoxResponse) GetDeletedAt() *time.Time {
+	if g == nil {
+		return nil
+	}
+	return g.DeletedAt
 }
 
 func (g *GetWebBoxResponse) GetError() *BoxError {

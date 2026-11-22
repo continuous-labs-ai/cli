@@ -51,6 +51,8 @@ type ListMcpboxesRequest struct {
 	Limit *int64 `default:"50" queryParam:"style=form,explode=false,name=limit"`
 	// Opaque next_cursor value from a previous page.
 	Cursor *string `queryParam:"style=form,explode=false,name=cursor"`
+	// List only the MCP Boxes deleted in the last 14 days, each with when it was deleted, in place of those not deleted.
+	Deleted *bool `queryParam:"style=form,explode=false,name=deleted"`
 }
 
 func (l ListMcpboxesRequest) MarshalJSON() ([]byte, error) {
@@ -90,6 +92,13 @@ func (l *ListMcpboxesRequest) GetCursor() *string {
 		return nil
 	}
 	return l.Cursor
+}
+
+func (l *ListMcpboxesRequest) GetDeleted() *bool {
+	if l == nil {
+		return nil
+	}
+	return l.Deleted
 }
 
 type ListMcpboxesResponse struct {

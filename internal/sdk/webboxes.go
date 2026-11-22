@@ -36,7 +36,7 @@ func newWebboxes(rootSDK *ContinuousSimulation, sdkConfig config.SDKConfiguratio
 }
 
 // List Web Boxes
-// Returns the workspace's Web Boxes, newest first. Results can be filtered by status and Snapshot.
+// Returns the workspace's Web Boxes, newest first. Results can be filtered by status and Snapshot. With deleted=true, it returns the Web Boxes deleted in the last 14 days instead.
 func (s *Webboxes) List(ctx context.Context, request *operations.ListWebboxesRequest, opts ...operations.Option) (*operations.ListWebboxesResponse, error) {
 	o := operations.Options{}
 	supportedOptions := []string{

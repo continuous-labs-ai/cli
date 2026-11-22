@@ -61,12 +61,6 @@ type ContinuousSimulation struct {
 	Mcpboxes *Mcpboxes
 	// Build MCP Box Snapshots of an MCP server's tools against a ready API Box Snapshot. MCP Boxes serve a ready Snapshot.
 	McpboxSnapshots *McpboxSnapshots
-	// Deprecated. Use API Box for APIs and Web Box for web apps. Save a running Simulation's state as a Snapshot, create Simulations from it, and rename and delete it.
-	SimulationSnapshots *SimulationSnapshots
-	// Deprecated. Use API Box for APIs and Web Box for web apps. Create Simulations from ready Simulators or Snapshots, then rename, stop, start, and delete them.
-	Simulations *Simulations
-	// Deprecated. Use API Box for APIs and Web Box for web apps. Build Simulators from OpenAPI, WSDL or GraphQL documents, check or cancel a build, clone Simulators into other workspaces, and rename and delete Simulators.
-	Simulators *Simulators
 	// Start Web Boxes from Web Box Snapshots. Each Web Box serves its Snapshot's web app at a host of its own, with its own state, in real time. Stop, start and delete them.
 	Webboxes *Webboxes
 	// Build Web Box Snapshots from a vendor's live web app, or use the catalog's. Web Boxes start from a ready Snapshot.
@@ -146,10 +140,10 @@ func WithTimeout(timeout time.Duration) SDKOption {
 // New creates a new instance of the SDK with the provided options
 func New(opts ...SDKOption) *ContinuousSimulation {
 	sdk := &ContinuousSimulation{
-		SDKVersion: "0.5.2",
+		SDKVersion: "0.6.0",
 		sdkConfiguration: config.SDKConfiguration{
-			UserAgent:         "speakeasy-sdk/go 0.5.2 2.935.1 v1 github.com/continuous-labs-ai/cli/internal/sdk",
-			SDKVersion:        "0.5.2",
+			UserAgent:         "speakeasy-sdk/go 0.6.0 2.935.1 v1 github.com/continuous-labs-ai/cli/internal/sdk",
+			SDKVersion:        "0.6.0",
 			GenVersion:        "2.935.1",
 			OpenAPIDocVersion: "v1",
 			ServerList:        ServerList,
@@ -172,9 +166,6 @@ func New(opts ...SDKOption) *ContinuousSimulation {
 	sdk.Credentials = newCredentials(sdk, sdk.sdkConfiguration, sdk.hooks)
 	sdk.Mcpboxes = newMcpboxes(sdk, sdk.sdkConfiguration, sdk.hooks)
 	sdk.McpboxSnapshots = newMcpboxSnapshots(sdk, sdk.sdkConfiguration, sdk.hooks)
-	sdk.SimulationSnapshots = newSimulationSnapshots(sdk, sdk.sdkConfiguration, sdk.hooks)
-	sdk.Simulations = newSimulations(sdk, sdk.sdkConfiguration, sdk.hooks)
-	sdk.Simulators = newSimulators(sdk, sdk.sdkConfiguration, sdk.hooks)
 	sdk.Webboxes = newWebboxes(sdk, sdk.sdkConfiguration, sdk.hooks)
 	sdk.WebboxSnapshots = newWebboxSnapshots(sdk, sdk.sdkConfiguration, sdk.hooks)
 

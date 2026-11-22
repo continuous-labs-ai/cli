@@ -2,23 +2,23 @@
 
 package components
 
-// SpecificationIssueKind - Whether the input is invalid, unsupported, incomplete, exceeds a build limit, or has no specific diagnosis.
-type SpecificationIssueKind string
+// Kind - Whether the input is invalid, unsupported, incomplete, exceeds a build limit, or has no specific diagnosis.
+type Kind string
 
 const (
-	SpecificationIssueKindInvalid     SpecificationIssueKind = "invalid"
-	SpecificationIssueKindUnsupported SpecificationIssueKind = "unsupported"
-	SpecificationIssueKindIncomplete  SpecificationIssueKind = "incomplete"
-	SpecificationIssueKindLimit       SpecificationIssueKind = "limit"
-	SpecificationIssueKindUnknown     SpecificationIssueKind = "unknown"
+	KindInvalid     Kind = "invalid"
+	KindUnsupported Kind = "unsupported"
+	KindIncomplete  Kind = "incomplete"
+	KindLimit       Kind = "limit"
+	KindUnknown     Kind = "unknown"
 )
 
-func (e SpecificationIssueKind) ToPointer() *SpecificationIssueKind {
+func (e Kind) ToPointer() *Kind {
 	return &e
 }
 
 // IsExact returns true if the value matches a known enum value, false otherwise.
-func (e *SpecificationIssueKind) IsExact() bool {
+func (e *Kind) IsExact() bool {
 	if e != nil {
 		switch *e {
 		case "invalid", "unsupported", "incomplete", "limit", "unknown":
@@ -32,7 +32,7 @@ type SpecificationIssue struct {
 	// Stable validation rule code.
 	Code string `json:"code"`
 	// Whether the input is invalid, unsupported, incomplete, exceeds a build limit, or has no specific diagnosis.
-	Kind SpecificationIssueKind `json:"kind"`
+	Kind Kind `json:"kind"`
 	// Readable endpoint or field affected by this issue.
 	Location string `json:"location"`
 	// What needs attention at this location.
@@ -50,9 +50,9 @@ func (s *SpecificationIssue) GetCode() string {
 	return s.Code
 }
 
-func (s *SpecificationIssue) GetKind() SpecificationIssueKind {
+func (s *SpecificationIssue) GetKind() Kind {
 	if s == nil {
-		return SpecificationIssueKind("")
+		return Kind("")
 	}
 	return s.Kind
 }
