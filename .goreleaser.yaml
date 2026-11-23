@@ -57,7 +57,7 @@ brews:
 release:
   github:
     owner: continuous-labs-ai
-    name: cli
+    name: continuous-cli
   draft: false
   prerelease: auto
   mode: append
