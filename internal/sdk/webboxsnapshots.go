@@ -371,7 +371,7 @@ func (s *WebboxSnapshots) List(ctx context.Context, request *operations.ListWebb
 }
 
 // Create Web Box Snapshot
-// Starts an asynchronous build and returns the Web Box Snapshot with status pending. Get the Snapshot until its status is ready, failed or canceled; Web Boxes start from a ready one. The build runs in real time: the builder and QA use the vendor's live web app through its login credential, and the built app has no simulated clock. Builds of every kind share one queue and the daily quota. Send multipart/form-data with a JSON part named request and optional file parts named document with vendor documentation. To build on a ready Snapshot, set parent_id.
+// Starts an asynchronous build and returns the Web Box Snapshot with status pending. Get the Snapshot until its status is ready, failed or canceled; Web Boxes start from a ready one. The build runs in real time: the builder and QA use the vendor's live web app through its login credential, and the built app has no simulated clock. Builds of every kind share one queue and the daily quota. Send multipart/form-data with a JSON part named request and optional file parts named document with vendor documentation. To build on a ready Snapshot, set parent_id. To build the app on an API Box Snapshot's API and state, set apibox_snapshot_id.
 func (s *WebboxSnapshots) Create(ctx context.Context, request operations.CreateWebboxSnapshotRequest, opts ...operations.Option) (*operations.CreateWebboxSnapshotResponse, error) {
 	o := operations.Options{}
 	supportedOptions := []string{
@@ -652,7 +652,7 @@ func (s *WebboxSnapshots) Create(ctx context.Context, request operations.CreateW
 }
 
 // Delete Web Box Snapshot
-// Deletes a Web Box Snapshot. A build that is still pending or building is canceled first. A Snapshot that Web Boxes started from returns 409 webbox_snapshot_in_use; delete those Web Boxes first. While a build that names it as parent_id is pending or building, it returns 409 webbox_snapshot_parent_in_use; retry after the build finishes. Catalog Snapshots cannot be deleted.
+// Deletes a Web Box Snapshot. A build that is still pending or building is canceled first. A Snapshot that Web Boxes started from, or whose image API Boxes run, returns 409 webbox_snapshot_in_use; delete those Boxes first. While a build that names it as parent_id is pending or building, it returns 409 webbox_snapshot_parent_in_use; retry after the build finishes. Catalog Snapshots cannot be deleted.
 func (s *WebboxSnapshots) Delete(ctx context.Context, request operations.DeleteWebboxSnapshotRequest, opts ...operations.Option) (*operations.DeleteWebboxSnapshotResponse, error) {
 	o := operations.Options{}
 	supportedOptions := []string{
@@ -1559,7 +1559,7 @@ func (s *WebboxSnapshots) Cancel(ctx context.Context, request operations.CancelW
 }
 
 // Clone Web Box Snapshot
-// Creates a ready copy of a ready Web Box Snapshot in another workspace, without a build. The clone has a new ID and the source's artifact, documents and saved state; the source is unchanged. The clone records no credentials, since they belong to the source workspace, and no parent or source Snapshot. The source is the caller's workspace. An API key may clone into any other workspace of its organization.
+// Creates a ready copy of a ready Web Box Snapshot in another workspace, without a build. The clone has a new ID and the source's artifact, documents and saved state; the source is unchanged. The clone records no credentials, since they belong to the source workspace, and no parent or source Snapshot. A Snapshot built on an API Box Snapshot of the source workspace is cloned with a clone of that Snapshot, which the clone's apibox_snapshot_id names; one built on a catalog API Box Snapshot keeps it. The source is the caller's workspace. An API key may clone into any other workspace of its organization.
 func (s *WebboxSnapshots) Clone(ctx context.Context, request operations.CloneWebboxSnapshotRequest, opts ...operations.Option) (*operations.CloneWebboxSnapshotResponse, error) {
 	o := operations.Options{}
 	supportedOptions := []string{
@@ -1792,7 +1792,7 @@ func (s *WebboxSnapshots) Clone(ctx context.Context, request operations.CloneWeb
 }
 
 // Resume Web Box Snapshot build
-// Resumes a build that waits, as build.waiting reports: at QA because its live credentials were rejected or the live systems rate limited its calls, or for more time after it used its time limit. For a credential wait, refresh each credential it names with PATCH /v1/credentials/{id} first: QA then runs again with their current values, and the build goes on to finalize. For a rate-limit wait, resume once the rate limit resets: QA then runs again. For a wait for more time, send add_seconds: the build continues where it stopped, with that much time from the resume. Returns the Snapshot, still building. A wait does not count toward the build's time limit: a build resumed from a QA wait has the time it had left when it began waiting. A build that is not waiting returns 409 webbox_snapshot_not_waiting.
+// Resumes a build that waits, as build.waiting reports: because its live system rejected its credentials, rate limited its calls or could not be reached, or for more time after it used its time limit. For a credential wait, refresh each credential it names with PATCH /v1/credentials/{id} first. For a rate-limit wait, resume once the rate limit resets. For an unavailable wait, resume once the live system can be reached. The build then checks the live system again and continues where it stopped, or waits again if the live system still fails. For a wait for more time, send add_seconds: the build continues where it stopped, with that much time from the resume. Returns the Snapshot, still building. A wait does not count toward the build's time limit: a build resumed from a live wait has the time it had left when it began waiting. A build that is not waiting returns 409 webbox_snapshot_not_waiting.
 func (s *WebboxSnapshots) Resume(ctx context.Context, request operations.ResumeWebboxSnapshotRequest, opts ...operations.Option) (*operations.ResumeWebboxSnapshotResponse, error) {
 	o := operations.Options{}
 	supportedOptions := []string{

@@ -23,7 +23,7 @@ func initDeleteCmd(parent *cobra.Command) error {
 	var cmd = &cobra.Command{
 		Use:     "delete",
 		Short:   "Delete Web Box",
-		Long:    "Deletes a Web Box, running or stopped, with its state. Its runtime is released after the response.",
+		Long:    "Deletes a Web Box, running or stopped, with its state. Its runtime is released after the response. The API Box that a Web Box fronts stays, with its state.",
 		Example: "  continuous webboxes delete --id <id>",
 		RunE:    runDeleteCmd,
 	}

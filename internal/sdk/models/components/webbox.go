@@ -33,6 +33,8 @@ func (e *WebBoxStatus) IsExact() bool {
 }
 
 type WebBox struct {
+	// The API Box it fronts, which owns its state and runtime and serves the same data over the API; empty for a Web Box with a runtime of its own, and for a deleted Web Box. While that API Box is stopped, the Web Box's URL answers 409.
+	ApiboxID string `json:"apibox_id"`
 	// Web Box creation time.
 	CreatedAt time.Time `json:"created_at"`
 	// When the Box was deleted, in a list of deleted Boxes; null otherwise.
@@ -67,6 +69,13 @@ func (w *WebBox) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	return nil
+}
+
+func (w *WebBox) GetApiboxID() string {
+	if w == nil {
+		return ""
+	}
+	return w.ApiboxID
 }
 
 func (w *WebBox) GetCreatedAt() time.Time {

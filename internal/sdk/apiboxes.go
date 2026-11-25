@@ -604,7 +604,7 @@ func (s *Apiboxes) Create(ctx context.Context, request operations.CreateApiboxRe
 }
 
 // Delete API Box
-// Deletes an API Box, running or stopped, with its state. Its runtime is released after the response. An API Box that MCP Boxes front returns 409 apibox_in_use; delete them first.
+// Deletes an API Box, running or stopped, with its state. Its runtime is released after the response. An API Box that MCP Boxes or a Web Box front returns 409 apibox_in_use; delete them first.
 func (s *Apiboxes) Delete(ctx context.Context, request operations.DeleteApiboxRequest, opts ...operations.Option) (*operations.DeleteApiboxResponse, error) {
 	o := operations.Options{}
 	supportedOptions := []string{

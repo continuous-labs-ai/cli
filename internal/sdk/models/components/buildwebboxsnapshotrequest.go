@@ -45,6 +45,8 @@ func (e *BuildWebBoxSnapshotRequestModel) UnmarshalJSON(data []byte) error {
 }
 
 type BuildWebBoxSnapshotRequest struct {
+	// A ready API Box Snapshot of the workspace or the catalog to build the web app on. The build starts from its source and spec, keeps its API, and adds the app on the same state. Web Boxes created from the result front an API Box that serves that API. Not allowed with parent_id: a build on a parent keeps the parent's.
+	ApiboxSnapshotID *string `json:"apibox_snapshot_id,omitzero"`
 	// Workspace credentials: exactly one login for the vendor's web app, whose saved sign-in the builder and QA use on the live app, and up to four others with a base_url that they can call real systems with. Each must belong to the workspace. Required without parent_id. QA may create test objects in the live app; use a sandbox or test account.
 	CredentialIds []string `json:"credential_ids,omitzero"`
 	// Instructions for the builder. At most 16,384 characters and 65,536 UTF-8 bytes; must not be blank or contain U+0000.
@@ -70,6 +72,13 @@ func (b *BuildWebBoxSnapshotRequest) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	return nil
+}
+
+func (b *BuildWebBoxSnapshotRequest) GetApiboxSnapshotID() *string {
+	if b == nil {
+		return nil
+	}
+	return b.ApiboxSnapshotID
 }
 
 func (b *BuildWebBoxSnapshotRequest) GetCredentialIds() []string {

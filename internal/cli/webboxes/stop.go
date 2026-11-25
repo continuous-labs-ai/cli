@@ -23,7 +23,7 @@ func initStopCmd(parent *cobra.Command) error {
 	var cmd = &cobra.Command{
 		Use:     "stop",
 		Short:   "Stop Web Box",
-		Long:    "Stops a running Web Box: it saves its state, and releases its runtime. It returns at once with status stopping; get the Web Box until it is stopped. A stopped Web Box is returned unchanged; a starting one returns 409 webbox_starting.",
+		Long:    "Stops a running Web Box: it saves its state, and releases its runtime. It returns at once with status stopping; get the Web Box until it is stopped. A stopped Web Box is returned unchanged; a starting one returns 409 webbox_starting. A Web Box that fronts an API Box only closes its URL: the API Box keeps running, with the state.",
 		Example: "  continuous webboxes stop --id <id>",
 		RunE:    runStopCmd,
 	}

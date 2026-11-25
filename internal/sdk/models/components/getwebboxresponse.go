@@ -33,6 +33,8 @@ func (e *GetWebBoxResponseStatus) IsExact() bool {
 }
 
 type GetWebBoxResponse struct {
+	// The API Box it fronts, which owns its state and runtime and serves the same data over the API; empty for a Web Box with a runtime of its own, and for a deleted Web Box. While that API Box is stopped, the Web Box's URL answers 409.
+	ApiboxID string `json:"apibox_id"`
 	// The URL that opens the Web Box's app, or null where the API serves no Web App hosts.
 	Connection *WebBoxConnection `json:"connection"`
 	// Web Box creation time.
@@ -69,6 +71,13 @@ func (g *GetWebBoxResponse) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	return nil
+}
+
+func (g *GetWebBoxResponse) GetApiboxID() string {
+	if g == nil {
+		return ""
+	}
+	return g.ApiboxID
 }
 
 func (g *GetWebBoxResponse) GetConnection() *WebBoxConnection {
