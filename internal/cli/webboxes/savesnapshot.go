@@ -26,7 +26,7 @@ func initSaveSnapshotCmd(parent *cobra.Command) error {
 	var cmd = &cobra.Command{
 		Use:     "save-snapshot",
 		Short:   "Save Web Box as Snapshot",
-		Long:    "Saves a running Web Box's app and current state as a Web Box Snapshot, ready when the response returns. The Web Box keeps running, and a paused one is woken. Web Boxes created from the Snapshot start with the saved state instead of a new workspace, so they refuse include_sample_data. The Snapshot outlives the Web Box. A starting Web Box returns 409 webbox_starting; a stopping or stopped one returns 409 webbox_stopped; one whose runtime cannot save its state returns 409 webbox_rebuild_required.",
+		Long:    "Saves a running Web Box's app and current state as a Web Box Snapshot, ready when the response returns. The Web Box keeps running, and a paused one is woken. Web Boxes created from the Snapshot start with the saved state instead of a new workspace, so they refuse include_sample_data. The Snapshot outlives the Web Box. A starting Web Box returns 409 webbox_starting; a stopping or stopped one returns 409 webbox_stopped; one whose runtime cannot save its state returns 409 webbox_rebuild_required. A Web Box that fronts an API Box saves a pair, both ready or neither: a new API Box Snapshot with the API Box's current state, and the Web Box Snapshot, whose apibox_snapshot_id names it. The API Box must be running: a starting one returns 409 apibox_starting, and a stopping or stopped one 409 apibox_stopped. A Web Box created from the Web Box Snapshot starts with the saved state.",
 		Example: "  continuous webboxes save-snapshot --id <id>",
 		RunE:    runSaveSnapshotCmd,
 		Aliases: []string{"ss"},

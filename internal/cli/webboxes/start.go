@@ -23,7 +23,7 @@ func initStartCmd(parent *cobra.Command) error {
 	var cmd = &cobra.Command{
 		Use:     "start",
 		Short:   "Start Web Box",
-		Long:    "Starts a stopped Web Box from the state its stop saved, and returns at once with status starting. A running, starting or stopping Web Box returns 409 webbox_not_stopped.",
+		Long:    "Starts a stopped Web Box from the state its stop saved, and returns at once with status starting. A running, starting or stopping Web Box returns 409 webbox_not_stopped. A Web Box that fronts an API Box only opens its URL again: start the API Box on its own.",
 		Example: "  continuous webboxes start --id <id>",
 		RunE:    runStartCmd,
 	}

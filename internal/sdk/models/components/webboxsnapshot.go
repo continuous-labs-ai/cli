@@ -60,6 +60,8 @@ func (e *WebBoxSnapshotStatus) IsExact() bool {
 type WebBoxSnapshot struct {
 	// The callers a request to a Box started from the Snapshot can act as by sending an actor's id in the X-Continuous-Actor header. Without the header, a request acts as the default actor. An MCP Box Snapshot lists its API Box Snapshot's actors. A Web Box Snapshot lists its one actor, the account every page is served as, which no header selects. Empty before the Snapshot is ready, when its build names none, or in a list until the Snapshot's actors are first read.
 	Actors []Actor `json:"actors"`
+	// The API Box Snapshot it was built on, whose API it also serves; empty for a Snapshot built on none. A Web Box created from it fronts a new API Box and shares that API Box's state.
+	ApiboxSnapshotID string `json:"apibox_snapshot_id"`
 	// The build's latest progress report, or null before the first report. A settled Snapshot keeps its last report. A waiting build resumes when the Snapshot's resume is requested.
 	Build *BuildProgress `json:"build"`
 	// What a ready Snapshot serves, or null.
@@ -111,6 +113,13 @@ func (w *WebBoxSnapshot) GetActors() []Actor {
 		return []Actor{}
 	}
 	return w.Actors
+}
+
+func (w *WebBoxSnapshot) GetApiboxSnapshotID() string {
+	if w == nil {
+		return ""
+	}
+	return w.ApiboxSnapshotID
 }
 
 func (w *WebBoxSnapshot) GetBuild() *BuildProgress {

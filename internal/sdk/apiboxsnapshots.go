@@ -652,7 +652,7 @@ func (s *ApiboxSnapshots) Create(ctx context.Context, request operations.CreateA
 }
 
 // Delete API Box Snapshot
-// Deletes an API Box Snapshot. A build that is still pending or building is canceled first. A Snapshot that API Boxes started from or MCP Box Snapshots were built against returns 409 apibox_snapshot_in_use; delete those first. While a build that names it as parent_id is pending or building, it returns 409 apibox_snapshot_parent_in_use; retry after the build finishes. Catalog Snapshots cannot be deleted.
+// Deletes an API Box Snapshot. A build that is still pending or building is canceled first. A Snapshot that API Boxes started from, or that MCP Box Snapshots or Web Box Snapshots name, returns 409 apibox_snapshot_in_use; delete those first. While a build that names it as parent_id is pending or building, it returns 409 apibox_snapshot_parent_in_use; retry after the build finishes. Catalog Snapshots cannot be deleted.
 func (s *ApiboxSnapshots) Delete(ctx context.Context, request operations.DeleteApiboxSnapshotRequest, opts ...operations.Option) (*operations.DeleteApiboxSnapshotResponse, error) {
 	o := operations.Options{}
 	supportedOptions := []string{
@@ -1792,7 +1792,7 @@ func (s *ApiboxSnapshots) Clone(ctx context.Context, request operations.CloneApi
 }
 
 // Resume API Box Snapshot build
-// Resumes a build that waits, as build.waiting reports: at QA because its live credentials were rejected or the live systems rate limited its calls, or for more time after it used its time limit. For a credential wait, refresh each credential it names with PATCH /v1/credentials/{id} first: QA then runs again with their current values, and the build goes on to finalize. For a rate-limit wait, resume once the rate limit resets: QA then runs again. For a wait for more time, send add_seconds: the build continues where it stopped, with that much time from the resume. Returns the Snapshot, still building. A wait does not count toward the build's time limit: a build resumed from a QA wait has the time it had left when it began waiting. A build that is not waiting returns 409 apibox_snapshot_not_waiting.
+// Resumes a build that waits, as build.waiting reports: because its live system rejected its credentials, rate limited its calls or could not be reached, or for more time after it used its time limit. For a credential wait, refresh each credential it names with PATCH /v1/credentials/{id} first. For a rate-limit wait, resume once the rate limit resets. For an unavailable wait, resume once the live system can be reached. The build then checks the live system again and continues where it stopped, or waits again if the live system still fails. For a wait for more time, send add_seconds: the build continues where it stopped, with that much time from the resume. Returns the Snapshot, still building. A wait does not count toward the build's time limit: a build resumed from a live wait has the time it had left when it began waiting. A build that is not waiting returns 409 apibox_snapshot_not_waiting.
 func (s *ApiboxSnapshots) Resume(ctx context.Context, request operations.ResumeApiboxSnapshotRequest, opts ...operations.Option) (*operations.ResumeApiboxSnapshotResponse, error) {
 	o := operations.Options{}
 	supportedOptions := []string{

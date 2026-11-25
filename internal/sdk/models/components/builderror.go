@@ -2,7 +2,7 @@
 
 package components
 
-// BuildErrorCode - Stable build error code. live_credential_rejected is a build that waited at QA for its rejected live credentials and was not resumed within 7 days; live_rate_limited is one that waited at QA for the live systems' rate limit and was not resumed within 7 days.
+// BuildErrorCode - Stable build error code. live_credential_rejected is a build that waited for its rejected live credentials and was not resumed within 7 days; live_rate_limited is one that waited for the live system's rate limit and was not resumed within 7 days.
 type BuildErrorCode string
 
 const (
@@ -57,7 +57,7 @@ func (e *Reason) IsExact() bool {
 type BuildError struct {
 	// Plain-text explanation from the build agent when it could not continue, or the problems the check of the build's index found. At most 4096 UTF-8 bytes.
 	AgentMessage *string `json:"agent_message"`
-	// Stable build error code. live_credential_rejected is a build that waited at QA for its rejected live credentials and was not resumed within 7 days; live_rate_limited is one that waited at QA for the live systems' rate limit and was not resumed within 7 days.
+	// Stable build error code. live_credential_rejected is a build that waited for its rejected live credentials and was not resumed within 7 days; live_rate_limited is one that waited for the live system's rate limit and was not resumed within 7 days.
 	Code BuildErrorCode `json:"code"`
 	// Safe human-readable error detail.
 	Detail string `json:"detail"`

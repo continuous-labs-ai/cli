@@ -5,7 +5,9 @@ package components
 type APIBoxConnection struct {
 	// Base URL of the API Box's API.
 	Endpoint string `json:"endpoint"`
-	// The API Box's token. Send it in X-Continuous-Token on each request to the endpoint.
+	// Base URL of the private API that the web app calls, for an API Box of a pair: one paired with a Web Box, or started from the API Box Snapshot of a pair saved from a Web Box, while that pair's Web Box Snapshot exists. It takes the same token and never reaches an operation of the API. Send the path the web app sends: its own paths as they are, and a call to another host under /_origin/{host}/. Empty for any other API Box.
+	PrivateEndpoint string `json:"private_endpoint"`
+	// The API Box's token. Send it in X-Continuous-Token on each request to either endpoint.
 	Token string `json:"token"`
 }
 
@@ -14,6 +16,13 @@ func (a *APIBoxConnection) GetEndpoint() string {
 		return ""
 	}
 	return a.Endpoint
+}
+
+func (a *APIBoxConnection) GetPrivateEndpoint() string {
+	if a == nil {
+		return ""
+	}
+	return a.PrivateEndpoint
 }
 
 func (a *APIBoxConnection) GetToken() string {
