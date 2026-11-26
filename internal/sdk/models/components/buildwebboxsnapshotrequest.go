@@ -59,8 +59,8 @@ type BuildWebBoxSnapshotRequest struct {
 	ParentID *string `json:"parent_id,omitzero"`
 	// Review rounds, from 1 to 10. Omission means 1 without parent_id and the parent's review rounds with it. Each round is a review and a repair of its findings, by the same builder and reviewer. The rounds stop early when the reviewer reports no findings.
 	ReviewRounds *int64 `json:"review_rounds,omitzero"`
-	// Time limit for generation and validation in seconds, from 1 to 172800. Defaults to 28800 (eight hours). Excludes queue wait, finalization, and any wait for the requester. Retries share the same deadline.
-	TimeoutSeconds *int64 `default:"28800" json:"timeout_seconds"`
+	// Time limit for generation and validation in seconds, from 1 to 172800. Defaults to 43200 (twelve hours). Excludes queue wait, finalization, and any wait for the requester. Retries share the same deadline.
+	TimeoutSeconds *int64 `default:"43200" json:"timeout_seconds"`
 }
 
 func (b BuildWebBoxSnapshotRequest) MarshalJSON() ([]byte, error) {

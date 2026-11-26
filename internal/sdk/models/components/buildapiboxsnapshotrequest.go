@@ -91,8 +91,8 @@ type BuildAPIBoxSnapshotRequest struct {
 	ReviewRounds *int64 `json:"review_rounds,omitzero"`
 	// Source specification format. Omission detects the format; GraphQL SDL needs graphql, and a GraphQL introspection result is stored as SDL.
 	SpecKind *BuildAPIBoxSnapshotRequestSpecKind `json:"spec_kind,omitzero"`
-	// Time limit for generation and validation in seconds, from 1 to 172800. Defaults to 28800 (eight hours). Excludes queue wait, finalization, and any wait for the requester. Retries share the same deadline.
-	TimeoutSeconds *int64 `default:"28800" json:"timeout_seconds"`
+	// Time limit for generation and validation in seconds, from 1 to 172800. Defaults to 43200 (twelve hours). Excludes queue wait, finalization, and any wait for the requester. Retries share the same deadline.
+	TimeoutSeconds *int64 `default:"43200" json:"timeout_seconds"`
 }
 
 func (b BuildAPIBoxSnapshotRequest) MarshalJSON() ([]byte, error) {

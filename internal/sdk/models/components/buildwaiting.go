@@ -7,7 +7,7 @@ import (
 	"time"
 )
 
-// Type - live_credentials while the build waits for the credentials it names to be refreshed; live_rate_limit while it waits for the live system's rate limit to reset; unavailable while it waits for a live system it could not reach; time_limit while it waits for a resume that adds time with add_seconds.
+// Type - live_credentials while the build waits for the credentials it names to be refreshed; live_rate_limit while it waits for the live system's rate limit to reset; unavailable while it waits for a service it could not reach, such as its live system, its model or sandbox provider, or its own test runner; time_limit while it waits for a resume that adds time with add_seconds.
 type Type string
 
 const (
@@ -37,11 +37,11 @@ type BuildWaiting struct {
 	CredentialIds []string `json:"credential_ids"`
 	// When the wait ends, 7 days after it began: a build not resumed by then fails with error code live_credential_rejected for live_credentials, live_rate_limited for live_rate_limit, build_failed with reason service_unavailable for unavailable, or build_failed with reason time_limit for time_limit. The wait does not count toward the build's time limit.
 	Deadline time.Time `json:"deadline"`
-	// Why the build waits: for live_credentials, the status and detail of the live reply that rejected the build's credentials; for live_rate_limit, of the reply that rate limited its calls; for unavailable, of what the build could not reach.
+	// Why the build waits: for live_credentials, the status and detail of the live reply that rejected the build's credentials; for live_rate_limit, of the reply that rate limited its calls; for unavailable, what the build could not reach.
 	Reason string `json:"reason"`
 	// When the build started waiting.
 	Since time.Time `json:"since"`
-	// live_credentials while the build waits for the credentials it names to be refreshed; live_rate_limit while it waits for the live system's rate limit to reset; unavailable while it waits for a live system it could not reach; time_limit while it waits for a resume that adds time with add_seconds.
+	// live_credentials while the build waits for the credentials it names to be refreshed; live_rate_limit while it waits for the live system's rate limit to reset; unavailable while it waits for a service it could not reach, such as its live system, its model or sandbox provider, or its own test runner; time_limit while it waits for a resume that adds time with add_seconds.
 	Type Type `json:"type"`
 }
 
