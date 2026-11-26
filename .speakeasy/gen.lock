@@ -1,19 +1,19 @@
 lockVersion: 2.0.0
 id: ad7b08dc-357d-414c-9f26-16cfbc099767
 management:
-  docChecksum: daae8fc5a3371e77e7b9adfccc60855d
+  docChecksum: 89bdaf86b2e63b26024e429da7bea867
   docVersion: v1
   speakeasyVersion: 1.796.4
   generationVersion: 2.935.1
-  releaseVersion: 0.6.4
-  configChecksum: 7c2bcc91453f454da6f62a6b1eef9359
+  releaseVersion: 0.6.5
+  configChecksum: ba71170979ceffbad3dd1f4487a30da6
   repoURL: https://github.com/continuous-labs-ai/continuous-cli.git
   installationURL: https://github.com/continuous-labs-ai/continuous-cli
   published: true
 persistentEdits:
-  generation_id: 2f069023-e692-481b-a17c-7095a9e906ca
-  pristine_commit_hash: cad85ed1f9886bad6c627bbc8bb153c75327b6f9
-  pristine_tree_hash: f5eadb17a6a26928cae543a5f91bb7e76485078d
+  generation_id: 07467767-c0c5-435f-88d5-6f3e25799f6d
+  pristine_commit_hash: 267f0f12c18ad29988aa66f4e7ac29bc724cba50
+  pristine_tree_hash: c81562f8cf9cb08746b66d5016ffb3c98b1fa84b
 features:
   cli:
     constsAndDefaults: 0.0.0
@@ -111,8 +111,8 @@ trackedFiles:
     pristine_git_object: 460469aa1821671bd3e41a5a173fb8051c9a618e
   internal/cli/apiboxsnapshots/resume.go:
     id: af3214fdabbc
-    last_write_checksum: sha1:e5cce5d6c073ff4d718b5ab85027e025901ac9c9
-    pristine_git_object: 414179e582491702ee20af3249a5a3f1625af9bc
+    last_write_checksum: sha1:ae98d573ab1572f2743f049a9f7a8dc09873bf88
+    pristine_git_object: 0a0b8723af4e1f6c5b46894cbe90e203eb0fbe40
   internal/cli/apiboxsnapshots/root.go:
     id: f02934704c8d
     last_write_checksum: sha1:42703cad2fc8fa968731837377d3388f19e91fea
@@ -219,8 +219,8 @@ trackedFiles:
     pristine_git_object: 66b9b3a2c85e6af1ef660e49b739e7961a3fa8fd
   internal/cli/mcpboxsnapshots/resume.go:
     id: bbdcc0153cf1
-    last_write_checksum: sha1:4ad94ef0cfe239d9294fabed265fb33047547946
-    pristine_git_object: 69d096f9177883e73d601fd0cb87f21ff561382d
+    last_write_checksum: sha1:bfed2fcf42c7a0d5bcaedff8df4c03d22be01d26
+    pristine_git_object: 92f4a8c72c45742755c03f6048280cfb98b41518
   internal/cli/mcpboxsnapshots/root.go:
     id: 95e88f016969
     last_write_checksum: sha1:6bed1b0f5bdcab5382ccae927f8b3574c79e993c
@@ -235,8 +235,8 @@ trackedFiles:
     pristine_git_object: 8a5788fe964b556b76761e45528bfd6aa5a3c3ad
   internal/cli/version.go:
     id: 7b0665492f72
-    last_write_checksum: sha1:5fe2880cceb709ac7daa30ffa8081f49f2f8e5f1
-    pristine_git_object: 236412ceeec9ecefb4ed80ee81b1f514feb09e3c
+    last_write_checksum: sha1:67e36320352fdd1ca29c60fd0241990e032f1f5e
+    pristine_git_object: 0171d79297a688afa1288489d8c333f234cb69ec
   internal/cli/webboxes/create.go:
     id: a6bacfcea714
     last_write_checksum: sha1:b16ae7a4f7cea9e33e8e4bef5ff7d572aaeebd26
@@ -303,8 +303,8 @@ trackedFiles:
     pristine_git_object: bbb6669a421aae20bd13b5df5bddb7662e24e0a4
   internal/cli/webboxsnapshots/resume.go:
     id: d4094246945c
-    last_write_checksum: sha1:448fe30eba5a67fa369c8c4c31914fbe8562d356
-    pristine_git_object: 649bfeb54af05e9cce64c275853aaedb279521f0
+    last_write_checksum: sha1:9797b736cd818a5e8595169f72c76f9789299fe3
+    pristine_git_object: 7f8bddefb63ae2f1a8f90becf0c1cd11aef26514
   internal/cli/webboxsnapshots/root.go:
     id: 717d0b82df33
     last_write_checksum: sha1:362ba753e2b2bc437f170daa2742a9e2aadc0927
@@ -395,12 +395,12 @@ trackedFiles:
     pristine_git_object: e73e52132a55386b9d639c45a5604b2ce56707cb
   internal/sdk/apiboxsnapshots.go:
     id: 977378330b70
-    last_write_checksum: sha1:b71b3bb1b730aa8b78e6e7eeb2a2e07bca64d73e
-    pristine_git_object: 21113883bfd185b969237239dfbe51c98c3d36ed
+    last_write_checksum: sha1:2d5058c3eede9dd7986a48f5e9a60b73ee117b65
+    pristine_git_object: 37f256fcd0f8e5eb5c55d7e14e554136e5ad879e
   internal/sdk/continuous.go:
     id: f67e5726f4c7
-    last_write_checksum: sha1:bb3f45d1c863802bdb54dc6fba9471d28b1b5765
-    pristine_git_object: 7d7b3738ef76450c6ee09f8ee743e4043977a11e
+    last_write_checksum: sha1:0e7f630cebc655b375a26c34790c5e4ddf248b62
+    pristine_git_object: da69db2a8a772fae55eb3a17cd28ba5963fd450e
   internal/sdk/credentials.go:
     id: 67c2f2d273f9
     last_write_checksum: sha1:bff18f93829c474188d4cc67a5a4d234217a45b9
@@ -415,8 +415,8 @@ trackedFiles:
     pristine_git_object: 56e9ca4fc6f4839f3a72e119d6a7f5b10ce763df
   internal/sdk/mcpboxsnapshots.go:
     id: 2924aca22b73
-    last_write_checksum: sha1:56d8a50baa97aba427c6bec0a963e58ad3d43331
-    pristine_git_object: 2833944c1e7cc15d0724de71324f6cd1975fb51c
+    last_write_checksum: sha1:b0754c05477f5e205e14cddc49d45abc4ddcafca
+    pristine_git_object: 1410a32e7fcd55f0d663e7a7c57f833e577fe30a
   internal/sdk/models/components/actor.go:
     id: f1d001b7d1cf
     last_write_checksum: sha1:1a589cd932b562ffa2d099735483244286422551
@@ -443,32 +443,32 @@ trackedFiles:
     pristine_git_object: e7144a685868be727a700e59590bd76a2e72167c
   internal/sdk/models/components/buildapiboxsnapshotrequest.go:
     id: 231e9c1e9f54
-    last_write_checksum: sha1:658479224c355b100d583b634a3670eab58f4c04
-    pristine_git_object: 69309c528fad1bf5ca1007d010e133f5375c36a7
+    last_write_checksum: sha1:9897983b272db841075ff00bcf82ea42cdd2d781
+    pristine_git_object: e73f6133ed390d774c05213c210433c26f260209
   internal/sdk/models/components/builderror.go:
     id: e29a4441f81f
     last_write_checksum: sha1:39ac3affba72e5bd42e2fda7fbd00a498a16eeef
     pristine_git_object: 4e790c97e2a7aa4714af40fffe7bd2c07e1c44b0
   internal/sdk/models/components/buildmcpboxsnapshotrequest.go:
     id: 48a77240a503
-    last_write_checksum: sha1:b2695a95d784d5f57699e1e6e4c272c72fd48aa9
-    pristine_git_object: a2d8fb787b2234347313240814238ab8d3c0bbff
+    last_write_checksum: sha1:9005bd7f641ea941f06f7511a9145f7d6ee938ec
+    pristine_git_object: 49c3eb1953972845e6da02e50ce20562781798a9
   internal/sdk/models/components/buildprogress.go:
     id: a51df443b6d8
-    last_write_checksum: sha1:752ce73d15a8746790d03d31b8306466139ed665
-    pristine_git_object: 2270f23a9ecfeb82951878d4cc01bd78a4a8787f
+    last_write_checksum: sha1:ba7ca908d6fd8a12c1b3198fac8906eb2628154b
+    pristine_git_object: 13d1ca42c580da0cafee41041878dff75d1a0ee8
   internal/sdk/models/components/buildresearch.go:
     id: e0534dbe9f7e
     last_write_checksum: sha1:07c2f1ad5ba05332a507977f58391b0618bcad48
     pristine_git_object: bbfb06d4de01d621e2fb657280200e9c150c582b
   internal/sdk/models/components/buildwaiting.go:
     id: d924e9f357b1
-    last_write_checksum: sha1:a0aff8841354c4b059b813929928084591cef3e7
-    pristine_git_object: 2a9463fa6822c78b73cf311b94a45f2304623840
+    last_write_checksum: sha1:0d32ed6d082280481c582878275491b13839a3de
+    pristine_git_object: 1c7af6a3108bfbef22b5fe487b877a82777f04d3
   internal/sdk/models/components/buildwebboxsnapshotrequest.go:
     id: e63ad22daa84
-    last_write_checksum: sha1:fd1bf6f0fc6cdf22def50a3c0fa34cc521a8ca45
-    pristine_git_object: f51838fd83cfa1c5c650fb0314c321c2a494ef13
+    last_write_checksum: sha1:452cb69bd326cb558706a913008e0065626b4d23
+    pristine_git_object: 4ec7f7ff8188aaebc4fd19d42617e0b740c9cb68
   internal/sdk/models/components/cloneboxsnapshotrequest.go:
     id: 986dc8fae990
     last_write_checksum: sha1:101aa19965f9a17bed96e3c60345547d08a14deb
@@ -975,16 +975,16 @@ trackedFiles:
     pristine_git_object: 876ddf853dc015070923a30fe72320ec97c213c5
   internal/sdk/webboxsnapshots.go:
     id: 3a97e9be55d9
-    last_write_checksum: sha1:03ade42658afce99133a5bd1845930ccfc54553a
-    pristine_git_object: 0a2a19b683ff881c3e245cf313f2cf7450aff964
+    last_write_checksum: sha1:26fce2041f8968fba06ce2ff4038987cd6c8ced9
+    pristine_git_object: b8a3e16b8dc341b68c95b8eb5fe8c2519054c67b
   internal/testclient/testclient.go:
     id: 20fc511b8b00
     last_write_checksum: sha1:7107e59d336235c44af152c5a61ee3896a7841fa
     pristine_git_object: 159a87ec97aba99e4edd132f69652e123434303e
   internal/usage/schema.go:
     id: 0f40f4612437
-    last_write_checksum: sha1:49c5f5550f810dad5ea821aa7a7d5a9d687383f5
-    pristine_git_object: c0756d780bc99e9b51ae07ae178cf84bb555b216
+    last_write_checksum: sha1:355c1586ff259e52116d1d0908bce4a57f2228ec
+    pristine_git_object: 51cc256d67437d1976c3897cd7c3f2a229b79b71
   scripts/install.ps1:
     id: fee0853709e9
     last_write_checksum: sha1:bf83597d3062e626ab9655d4930994577a1b3cf8
@@ -1403,7 +1403,7 @@ examples:
   create-apibox-snapshot:
     bad_request_body:
       requestBody:
-        multipart/form-data: {"request": {"timeout_seconds": 28800}}
+        multipart/form-data: {"request": {"timeout_seconds": 43200}}
       responses:
         "400":
           application/problem+json: {"code": "bad_request", "detail": "request body is invalid", "validation": null}
@@ -1415,7 +1415,7 @@ examples:
           application/problem+json: {"code": "bad_request", "detail": "request body is invalid", "validation": null}
     speakeasy-default-create-apibox-snapshot:
       requestBody:
-        multipart/form-data: {"request": {"timeout_seconds": 28800}}
+        multipart/form-data: {"request": {"timeout_seconds": 43200}}
       responses:
         "202":
           application/json: {"actors": [{"default": false, "entity": "<value>", "id": "<id>", "name": "<value>", "role": "<value>"}], "build": {"agent_state": "waiting_for_limit", "hidden_limitations": 848274, "last_activity_at": null, "last_submission": null, "last_tool": "<value>", "limitations": [{"location": "<value>", "message": "<value>", "operations": ["<value 1>", "<value 2>"], "reviewed": false}], "model": "claude-opus-5-5", "phase": "review", "review_round": 132479, "review_rounds": 275550, "stage": "derive", "submissions": 995961, "tool_calls": 180750, "waited_seconds": 121407, "waiting": {"credential_ids": ["<value 1>", "<value 2>"], "deadline": "2025-03-13T17:04:42.031Z", "reason": "<value>", "since": "2024-11-13T22:02:31.552Z", "type": "time_limit"}, "waiting_until": "2025-11-17T12:26:18.537Z", "warnings": []}, "composition": {"entities": 26097, "operations": 27093, "sample": false}, "created_at": "2026-01-02T09:15:33.916Z", "credential_ids": ["<value 1>"], "error": {"agent_message": "<value>", "code": "build_failed", "detail": "<value>", "reason": "time_limit", "validation": {"issues": []}}, "hidden_limitations": 67986, "id": "<id>", "instructions": "<value>", "limitations": [], "metadata": "<value>", "name": "<value>", "parent_id": null, "research": {"bytes": 504376, "pages": 407090, "status": "running"}, "source": "catalog", "source_box_id": "<id>", "source_snapshot_id": "<id>", "spec_kind": "graphql", "status": "pending"}
@@ -1860,7 +1860,7 @@ examples:
   create-mcpbox-snapshot:
     bad_request_body:
       requestBody:
-        multipart/form-data: {"request": {"timeout_seconds": 28800}}
+        multipart/form-data: {"request": {"timeout_seconds": 43200}}
       responses:
         "400":
           application/problem+json: {"code": "bad_request", "detail": "request body is invalid", "validation": null}
@@ -1872,7 +1872,7 @@ examples:
           application/problem+json: {"code": "bad_request", "detail": "request body is invalid", "validation": null}
     speakeasy-default-create-mcpbox-snapshot:
       requestBody:
-        multipart/form-data: {"request": {"timeout_seconds": 28800}}
+        multipart/form-data: {"request": {"timeout_seconds": 43200}}
       responses:
         "202":
           application/json: {"actors": [{"default": false, "entity": "<value>", "id": "<id>", "name": "<value>", "role": "<value>"}], "apibox_snapshot_id": "<id>", "build": {"agent_state": "waiting_for_limit", "hidden_limitations": 741990, "last_activity_at": "2024-01-09T22:13:12.724Z", "last_submission": "accepted", "last_tool": "<value>", "limitations": [{"location": "<value>", "message": "<value>", "operations": ["<value 1>", "<value 2>"], "reviewed": true}], "model": "combined", "phase": "review", "review_round": 392293, "review_rounds": 958047, "stage": "build", "submissions": 475968, "tool_calls": 953993, "waited_seconds": 949523, "waiting": {"credential_ids": ["<value 1>", "<value 2>", "<value 3>"], "deadline": "2024-11-29T07:13:28.056Z", "reason": "<value>", "since": "2026-06-22T11:38:11.258Z", "type": "time_limit"}, "waiting_until": "2025-10-03T12:04:01.952Z", "warnings": [{"code": "spec.default_invalid", "location": "<value>", "message": "<value>", "operations": ["<value 1>"]}]}, "composition": {"entities": 718593, "operations": 8144, "sample": true}, "created_at": "2024-06-10T12:49:50.134Z", "credential_ids": ["<value 1>", "<value 2>", "<value 3>"], "error": {"agent_message": "<value>", "code": "specification_validation_failed", "detail": "<value>", "reason": "canceled", "validation": null}, "hidden_limitations": 585313, "id": "<id>", "instructions": "<value>", "limitations": [{"location": "<value>", "message": "<value>", "operations": ["<value 1>"], "reviewed": false}], "metadata": "<value>", "name": "<value>", "parent_id": "<id>", "research": {"bytes": 353810, "pages": 538370, "status": "running"}, "source": "build", "source_box_id": null, "source_snapshot_id": "<id>", "source_url": "https://sticky-harp.name/", "status": "ready"}
@@ -2342,7 +2342,7 @@ examples:
   create-webbox-snapshot:
     bad_request_body:
       requestBody:
-        multipart/form-data: {"request": {"timeout_seconds": 28800}}
+        multipart/form-data: {"request": {"timeout_seconds": 43200}}
       responses:
         "400":
           application/problem+json: {"code": "bad_request", "detail": "request body is invalid", "validation": null}
@@ -2354,7 +2354,7 @@ examples:
           application/problem+json: {"code": "bad_request", "detail": "request body is invalid", "validation": null}
     speakeasy-default-create-webbox-snapshot:
       requestBody:
-        multipart/form-data: {"request": {"timeout_seconds": 28800}}
+        multipart/form-data: {"request": {"timeout_seconds": 43200}}
       responses:
         "202":
           application/json: {"actors": [{"default": true, "entity": "<value>", "id": "<id>", "name": "<value>", "role": "<value>"}], "apibox_snapshot_id": "<id>", "build": null, "composition": {"entities": 612094, "operations": 173088, "sample": true}, "created_at": "2025-07-20T04:18:20.874Z", "credential_ids": [], "error": {"agent_message": "<value>", "code": "specification_validation_failed", "detail": "<value>", "reason": "time_limit", "validation": {"issues": [{"code": "<value>", "kind": "limit", "location": "<value>", "message": "<value>", "operation": "<value>", "suggestion": "<value>"}]}}, "hidden_limitations": 187300, "id": "<id>", "instructions": "<value>", "limitations": [{"location": "<value>", "message": "<value>", "operations": ["<value 1>"], "reviewed": false}], "metadata": "<value>", "name": "<value>", "parent_id": "<id>", "research": {"bytes": 859524, "pages": 193083, "status": "failed"}, "source": "catalog", "source_box_id": "<id>", "source_snapshot_id": "<id>", "status": "failed"}
@@ -2728,4 +2728,3 @@ examples:
         "500":
           application/problem+json: {"code": "<value>", "detail": "<value>", "validation": {"issues": [{"code": "<value>", "kind": "invalid", "location": "<value>", "message": "<value>", "operation": "<value>", "suggestion": "<value>"}]}}
 examplesVersion: 1.0.2
-releaseNotes: "## Cli SDK Changes:\n* `Continuous.Apiboxes.Get()`:  `response.Connection.PrivateEndpoint` **Added**\n* `Continuous.Apiboxes.SaveSnapshot()`:  `response.Build.Waiting.Type.Enum(unavailable)` **Added**\n* `Continuous.ApiboxSnapshots.List()`:  `response.Snapshots[].Build.Waiting.Type.Enum(unavailable)` **Added**\n* `Continuous.ApiboxSnapshots.Create()`:  `response.Build.Waiting.Type.Enum(unavailable)` **Added**\n* `Continuous.ApiboxSnapshots.Get()`:  `response.Build.Waiting.Type.Enum(unavailable)` **Added**\n* `Continuous.ApiboxSnapshots.Update()`:  `response.Build.Waiting.Type.Enum(unavailable)` **Added**\n* `Continuous.ApiboxSnapshots.Cancel()`:  `response.Build.Waiting.Type.Enum(unavailable)` **Added**\n* `Continuous.ApiboxSnapshots.Clone()`:  `response.Build.Waiting.Type.Enum(unavailable)` **Added**\n* `Continuous.ApiboxSnapshots.Resume()`:  `response.Build.Waiting.Type.Enum(unavailable)` **Added**\n* `Continuous.Mcpboxes.SaveSnapshot()`:  `response.Build.Waiting.Type.Enum(unavailable)` **Added**\n* `Continuous.McpboxSnapshots.List()`:  `response.Snapshots[].Build.Waiting.Type.Enum(unavailable)` **Added**\n* `Continuous.McpboxSnapshots.Create()`:  `response.Build.Waiting.Type.Enum(unavailable)` **Added**\n* `Continuous.McpboxSnapshots.Get()`:  `response.Build.Waiting.Type.Enum(unavailable)` **Added**\n* `Continuous.McpboxSnapshots.Update()`:  `response.Build.Waiting.Type.Enum(unavailable)` **Added**\n* `Continuous.McpboxSnapshots.Cancel()`:  `response.Build.Waiting.Type.Enum(unavailable)` **Added**\n* `Continuous.McpboxSnapshots.Clone()`:  `response.Build.Waiting.Type.Enum(unavailable)` **Added**\n* `Continuous.McpboxSnapshots.Resume()`:  `response.Build.Waiting.Type.Enum(unavailable)` **Added**\n* `Continuous.Webboxes.List()`:  `response.Webboxes[].ApiboxId` **Added**\n* `Continuous.Webboxes.Create()`:  `response.Webbox.ApiboxId` **Added**\n* `Continuous.Webboxes.Get()`:  `response.ApiboxId` **Added**\n* `Continuous.Webboxes.Update()`:  `response.ApiboxId` **Added**\n* `Continuous.Webboxes.SaveSnapshot()`:  `response` **Changed**\n* `Continuous.Webboxes.Start()`:  `response.ApiboxId` **Added**\n* `Continuous.Webboxes.Stop()`:  `response.ApiboxId` **Added**\n* `Continuous.WebboxSnapshots.List()`:  `response.Snapshots[]` **Changed**\n* `Continuous.WebboxSnapshots.Create()`: \n  *  `request.Request.Body.Request` **Changed**\n  *  `response` **Changed**\n* `Continuous.WebboxSnapshots.Get()`:  `response` **Changed**\n* `Continuous.WebboxSnapshots.Update()`:  `response` **Changed**\n* `Continuous.WebboxSnapshots.Cancel()`:  `response` **Changed**\n* `Continuous.WebboxSnapshots.Clone()`:  `response` **Changed**\n* `Continuous.WebboxSnapshots.Resume()`:  `response` **Changed**\n"
