@@ -62,7 +62,7 @@ type BuildProgress struct {
 	ToolCalls int64 `json:"tool_calls"`
 	// Total seconds of the build's ended waits, which do not count toward its time limit. 0 when none has ended. The current wait, from waiting.since, is not included.
 	WaitedSeconds int64 `json:"waited_seconds"`
-	// Set while the build waits for the requester: because the live system rejected its credentials, rate limited its calls or could not be reached, because its model or sandbox provider was unavailable, or for more time after it used its time limit. Resume it with its resource's resume operation, such as POST /v1/apibox-snapshots/{id}/resume. Null otherwise.
+	// Set while the build waits for the requester: because the live system rejected its credentials, rate limited its calls or could not be reached, because its model or sandbox provider was unavailable, for more time after it used its time limit, or because it was paused. Resume it with its resource's resume operation, such as POST /v1/apibox-snapshots/{id}/resume. Null otherwise.
 	Waiting *BuildWaiting `json:"waiting"`
 	// When the usage limit resets while agent_state is waiting_for_limit. The agent continues then, and the wait does not use the build's time limit. Null otherwise.
 	WaitingUntil *time.Time `json:"waiting_until"`

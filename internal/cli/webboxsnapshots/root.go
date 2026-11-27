@@ -49,6 +49,10 @@ func InitWebboxSnapshotsRoot(parent *cobra.Command) error {
 		return err
 	}
 
+	if err := initPauseCmd(WebboxSnapshotsCmd); err != nil {
+		return err
+	}
+
 	if err := initResumeCmd(WebboxSnapshotsCmd); err != nil {
 		return err
 	}

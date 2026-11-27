@@ -140,10 +140,10 @@ func WithTimeout(timeout time.Duration) SDKOption {
 // New creates a new instance of the SDK with the provided options
 func New(opts ...SDKOption) *Continuous {
 	sdk := &Continuous{
-		SDKVersion: "0.6.5",
+		SDKVersion: "0.6.6",
 		sdkConfiguration: config.SDKConfiguration{
-			UserAgent:         "speakeasy-sdk/go 0.6.5 2.935.1 v1 github.com/continuous-labs-ai/continuous-cli/internal/sdk",
-			SDKVersion:        "0.6.5",
+			UserAgent:         "speakeasy-sdk/go 0.6.6 2.935.1 v1 github.com/continuous-labs-ai/continuous-cli/internal/sdk",
+			SDKVersion:        "0.6.6",
 			GenVersion:        "2.935.1",
 			OpenAPIDocVersion: "v1",
 			ServerList:        ServerList,
