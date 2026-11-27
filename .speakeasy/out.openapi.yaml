@@ -45,6 +45,11 @@ components:
         code: apibox_snapshot_not_ready
         detail: The parent API Box Snapshot with ID "abs_01J8Z5X4K70000000000000002" is building. Build on a ready one.
         validation: null
+    apibox_snapshot_not_ready_pause:
+      value:
+        code: apibox_snapshot_not_ready
+        detail: The build of the API Box Snapshot with ID "abs_01J8Z5X4K70000000000000002" is waiting or has ended. Only a running build can be paused.
+        validation: null
     apibox_snapshot_not_waiting:
       value:
         code: apibox_snapshot_not_waiting
@@ -205,6 +210,11 @@ components:
         code: mcpbox_snapshot_not_ready
         detail: The parent MCP Box Snapshot with ID "mbs_01J8Z5X4K70000000000000007" is building. Build on a ready one.
         validation: null
+    mcpbox_snapshot_not_ready_pause:
+      value:
+        code: mcpbox_snapshot_not_ready
+        detail: The build of the MCP Box Snapshot with ID "mbs_01J8Z5X4K70000000000000007" is waiting or has ended. Only a running build can be paused.
+        validation: null
     mcpbox_snapshot_not_waiting:
       value:
         code: mcpbox_snapshot_not_waiting
@@ -260,6 +270,11 @@ components:
         code: validation
         detail: "validation failed: invalid integer at query.limit"
         validation: null
+    validation_message:
+      value:
+        code: validation
+        detail: message must not be blank
+        validation: null
     validation_metadata:
       value:
         code: validation
@@ -309,6 +324,11 @@ components:
       value:
         code: webbox_snapshot_not_ready
         detail: The parent Web Box Snapshot with ID "wbs_01J8Z5X4K70000000000000005" is building. Build on a ready one.
+        validation: null
+    webbox_snapshot_not_ready_pause:
+      value:
+        code: webbox_snapshot_not_ready
+        detail: The build of the Web Box Snapshot with ID "wbs_01J8Z5X4K70000000000000005" is waiting or has ended. Only a running build can be paused.
         validation: null
     webbox_snapshot_not_waiting:
       value:
@@ -920,7 +940,7 @@ components:
           minimum: 0
           type: integer
         waiting:
-          description: "Set while the build waits for the requester: because the live system rejected its credentials, rate limited its calls or could not be reached, because its model or sandbox provider was unavailable, or for more time after it used its time limit. Resume it with its resource's resume operation, such as POST /v1/apibox-snapshots/{id}/resume. Null otherwise."
+          description: "Set while the build waits for the requester: because the live system rejected its credentials, rate limited its calls or could not be reached, because its model or sandbox provider was unavailable, for more time after it used its time limit, or because it was paused. Resume it with its resource's resume operation, such as POST /v1/apibox-snapshots/{id}/resume. Null otherwise."
           oneOf:
             - $ref: "#/components/schemas/BuildWaiting"
             - type: "null"
@@ -986,13 +1006,13 @@ components:
       additionalProperties: false
       properties:
         credential_ids:
-          description: The credentials to refresh with PATCH /v1/credentials/{id} before resuming the build. Empty for live_rate_limit, unavailable and time_limit.
+          description: The credentials to refresh with PATCH /v1/credentials/{id} before resuming the build. Empty for live_rate_limit, unavailable, time_limit and paused.
           items:
             pattern: ^crd_[0-9A-HJKMNP-TV-Z]{26}$
             type: string
           type: array
         deadline:
-          description: "When the wait ends, 7 days after it began: a build not resumed by then fails with error code live_credential_rejected for live_credentials, live_rate_limited for live_rate_limit, build_failed with reason service_unavailable for unavailable, or build_failed with reason time_limit for time_limit. The wait does not count toward the build's time limit."
+          description: "When the wait ends, 7 days after it began: a build not resumed by then fails with error code live_credential_rejected for live_credentials, live_rate_limited for live_rate_limit, build_failed with reason service_unavailable for unavailable, build_failed with reason time_limit for time_limit, or build_failed with reason build_failed for paused. The wait does not count toward the build's time limit."
           format: date-time
           type: string
         reason:
@@ -1003,12 +1023,13 @@ components:
           format: date-time
           type: string
         type:
-          description: live_credentials while the build waits for the credentials it names to be refreshed; live_rate_limit while it waits for the live system's rate limit to reset; unavailable while it waits for a service it could not reach, such as its live system, its model or sandbox provider, or its own test runner; time_limit while it waits for a resume that adds time with add_seconds.
+          description: live_credentials while the build waits for the credentials it names to be refreshed; live_rate_limit while it waits for the live system's rate limit to reset; unavailable while it waits for a service it could not reach, such as its live system, its model or sandbox provider, or its own test runner; time_limit while it waits for a resume that adds time with add_seconds; paused while it waits for a resume after its resource's pause operation.
           enum:
             - live_credentials
             - live_rate_limit
             - unavailable
             - time_limit
+            - paused
           type: string
       required:
         - type
@@ -1966,6 +1987,10 @@ components:
           description: Seconds to add to a build that waits for more time, from 1 to the largest timeout_seconds a build request accepts. Required for a build whose build.waiting.type is time_limit, and refused for any other wait. The build's time limit with every addition is at most 259200 seconds (72 hours).
           format: int64
           type: integer
+        message:
+          description: A message for the builder, such as what changed while the build waited. The builder reads it once, at its next turn boundary; reviewers, QA and research never read it. At most 16,384 characters and 65,536 UTF-8 bytes; must not be blank or contain U+0000.
+          maxLength: 16384
+          type: string
       type: object
     SaveBoxSnapshotRequest:
       additionalProperties: false
@@ -3209,9 +3234,76 @@ paths:
       tags:
         - apibox-snapshots
       x-speakeasy-name-override: clone
+  /v1/apibox-snapshots/{id}/pause:
+    post:
+      description: Requests a pause of a running build and returns the Snapshot without waiting for the pause to take effect. The build ends its agent's turn and pauses once no tool result is waiting to reach the agent, which can take a few minutes; build.waiting then has type paused. Get the Snapshot until build.waiting is set. A build that is accepted before the pause takes effect finishes instead. Resume the build with POST /v1/apibox-snapshots/{id}/resume. The pause does not count toward the build's time limit, and a build not resumed within 7 days fails. A build that is waiting or has settled returns 409 apibox_snapshot_not_ready.
+      operationId: pause-apibox-snapshot
+      parameters:
+        - description: API Box Snapshot ID.
+          in: path
+          name: id
+          required: true
+          schema:
+            pattern: ^abs_[0-9A-HJKMNP-TV-Z]{26}$
+            type: string
+      responses:
+        "202":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/APIBoxSnapshot"
+          description: Accepted
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+        "403":
+          content:
+            application/problem+json:
+              examples:
+                auth_forbidden_catalog_apibox:
+                  $ref: "#/components/examples/auth_forbidden_catalog_apibox"
+              schema:
+                $ref: "#/components/schemas/APIError"
+          description: Forbidden
+        "404":
+          content:
+            application/problem+json:
+              examples:
+                apibox_snapshot_not_found:
+                  $ref: "#/components/examples/apibox_snapshot_not_found"
+              schema:
+                $ref: "#/components/schemas/APIError"
+          description: Not Found
+        "409":
+          content:
+            application/problem+json:
+              examples:
+                apibox_snapshot_not_ready_pause:
+                  $ref: "#/components/examples/apibox_snapshot_not_ready_pause"
+              schema:
+                $ref: "#/components/schemas/APIError"
+          description: Conflict
+        "500":
+          $ref: "#/components/responses/InternalServerError"
+        "503":
+          content:
+            application/problem+json:
+              examples:
+                auth_provider_unavailable:
+                  $ref: "#/components/examples/auth_provider_unavailable"
+                internal_unavailable:
+                  $ref: "#/components/examples/internal_unavailable"
+              schema:
+                $ref: "#/components/schemas/APIError"
+          description: Service Unavailable
+      security:
+        - apiKeyAuth: []
+      summary: Pause API Box Snapshot build
+      tags:
+        - apibox-snapshots
+      x-speakeasy-name-override: pause
   /v1/apibox-snapshots/{id}/resume:
     post:
-      description: "Resumes a build that waits, as build.waiting reports: because its live system rejected its credentials, rate limited its calls or could not be reached, because its model or sandbox provider was unavailable, or for more time after it used its time limit. For a credential wait, refresh each credential it names with PATCH /v1/credentials/{id} first. For a rate-limit wait, resume once the rate limit resets. For an unavailable wait, resume once what the wait's reason names can be reached. The build then tries it again and continues where it stopped, or waits again if it still fails. For a wait for more time, send add_seconds: the build continues where it stopped, with that much time from the resume. Returns the Snapshot, still building. A wait does not count toward the build's time limit: a build resumed from a live wait has the time it had left when it began waiting. A build that is not waiting returns 409 apibox_snapshot_not_waiting."
+      description: "Resumes a build that waits, as build.waiting reports: because its live system rejected its credentials, rate limited its calls or could not be reached, because its model or sandbox provider was unavailable, for more time after it used its time limit, or because it was paused. For a credential wait, refresh each credential it names with PATCH /v1/credentials/{id} first. For a rate-limit wait, resume once the rate limit resets. For an unavailable wait, resume once what the wait's reason names can be reached. The build then tries it again and continues where it stopped, or waits again if it still fails. A paused build continues where it stopped. For a wait for more time, send add_seconds: the build continues where it stopped, with that much time from the resume. To tell the builder what changed while the build waited, send message: the builder reads it once. Returns the Snapshot, still building. A wait does not count toward the build's time limit: a build resumed from a live wait has the time it had left when it began waiting. A build that is not waiting returns 409 apibox_snapshot_not_waiting."
       operationId: resume-apibox-snapshot
       parameters:
         - description: Snapshot ID.
@@ -3279,6 +3371,15 @@ paths:
           $ref: "#/components/responses/PayloadTooLarge"
         "415":
           $ref: "#/components/responses/UnsupportedMediaType"
+        "422":
+          content:
+            application/problem+json:
+              examples:
+                validation_message:
+                  $ref: "#/components/examples/validation_message"
+              schema:
+                $ref: "#/components/schemas/APIError"
+          description: Unprocessable Entity
         "500":
           $ref: "#/components/responses/InternalServerError"
         "503":
@@ -5028,9 +5129,76 @@ paths:
       tags:
         - mcpbox-snapshots
       x-speakeasy-name-override: clone
+  /v1/mcpbox-snapshots/{id}/pause:
+    post:
+      description: Requests a pause of a running build and returns the Snapshot without waiting for the pause to take effect. The build ends its agent's turn and pauses once no tool result is waiting to reach the agent, which can take a few minutes; build.waiting then has type paused. Get the Snapshot until build.waiting is set. A build that is accepted before the pause takes effect finishes instead. Resume the build with POST /v1/mcpbox-snapshots/{id}/resume. The pause does not count toward the build's time limit, and a build not resumed within 7 days fails. A build that is waiting or has settled returns 409 mcpbox_snapshot_not_ready.
+      operationId: pause-mcpbox-snapshot
+      parameters:
+        - description: MCP Box Snapshot ID.
+          in: path
+          name: id
+          required: true
+          schema:
+            pattern: ^mbs_[0-9A-HJKMNP-TV-Z]{26}$
+            type: string
+      responses:
+        "202":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/MCPBoxSnapshot"
+          description: Accepted
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+        "403":
+          content:
+            application/problem+json:
+              examples:
+                auth_forbidden_catalog_mcpbox:
+                  $ref: "#/components/examples/auth_forbidden_catalog_mcpbox"
+              schema:
+                $ref: "#/components/schemas/APIError"
+          description: Forbidden
+        "404":
+          content:
+            application/problem+json:
+              examples:
+                mcpbox_snapshot_not_found:
+                  $ref: "#/components/examples/mcpbox_snapshot_not_found"
+              schema:
+                $ref: "#/components/schemas/APIError"
+          description: Not Found
+        "409":
+          content:
+            application/problem+json:
+              examples:
+                mcpbox_snapshot_not_ready_pause:
+                  $ref: "#/components/examples/mcpbox_snapshot_not_ready_pause"
+              schema:
+                $ref: "#/components/schemas/APIError"
+          description: Conflict
+        "500":
+          $ref: "#/components/responses/InternalServerError"
+        "503":
+          content:
+            application/problem+json:
+              examples:
+                auth_provider_unavailable:
+                  $ref: "#/components/examples/auth_provider_unavailable"
+                internal_unavailable:
+                  $ref: "#/components/examples/internal_unavailable"
+              schema:
+                $ref: "#/components/schemas/APIError"
+          description: Service Unavailable
+      security:
+        - apiKeyAuth: []
+      summary: Pause MCP Box Snapshot build
+      tags:
+        - mcpbox-snapshots
+      x-speakeasy-name-override: pause
   /v1/mcpbox-snapshots/{id}/resume:
     post:
-      description: "Resumes a build that waits, as build.waiting reports: because its live source rejected its credential, rate limited its calls or could not be reached, because its model or sandbox provider was unavailable, or for more time after it used its time limit. For a credential wait, refresh the credential it names with PATCH /v1/credentials/{id} first. For a rate-limit wait, resume once the rate limit resets. For an unavailable wait, resume once what the wait's reason names can be reached. The build then tries it again and continues where it stopped, or waits again if it still fails. For a wait for more time, send add_seconds: the build continues where it stopped, with that much time from the resume. Returns the Snapshot, still building. A wait does not count toward the build's time limit: a build resumed from a live wait has the time it had left when it began waiting. A build that is not waiting returns 409 mcpbox_snapshot_not_waiting."
+      description: "Resumes a build that waits, as build.waiting reports: because its live source rejected its credential, rate limited its calls or could not be reached, because its model or sandbox provider was unavailable, for more time after it used its time limit, or because it was paused. For a credential wait, refresh the credential it names with PATCH /v1/credentials/{id} first. For a rate-limit wait, resume once the rate limit resets. For an unavailable wait, resume once what the wait's reason names can be reached. The build then tries it again and continues where it stopped, or waits again if it still fails. A paused build continues where it stopped. For a wait for more time, send add_seconds: the build continues where it stopped, with that much time from the resume. To tell the builder what changed while the build waited, send message: the builder reads it once. Returns the Snapshot, still building. A wait does not count toward the build's time limit: a build resumed from a live wait has the time it had left when it began waiting. A build that is not waiting returns 409 mcpbox_snapshot_not_waiting."
       operationId: resume-mcpbox-snapshot
       parameters:
         - description: Snapshot ID.
@@ -5098,6 +5266,15 @@ paths:
           $ref: "#/components/responses/PayloadTooLarge"
         "415":
           $ref: "#/components/responses/UnsupportedMediaType"
+        "422":
+          content:
+            application/problem+json:
+              examples:
+                validation_message:
+                  $ref: "#/components/examples/validation_message"
+              schema:
+                $ref: "#/components/schemas/APIError"
+          description: Unprocessable Entity
         "500":
           $ref: "#/components/responses/InternalServerError"
         "503":
@@ -6350,9 +6527,76 @@ paths:
       tags:
         - webbox-snapshots
       x-speakeasy-name-override: clone
+  /v1/webbox-snapshots/{id}/pause:
+    post:
+      description: Requests a pause of a running build and returns the Snapshot without waiting for the pause to take effect. The build ends its agent's turn and pauses once no tool result is waiting to reach the agent, which can take a few minutes; build.waiting then has type paused. Get the Snapshot until build.waiting is set. A build that is accepted before the pause takes effect finishes instead. Resume the build with POST /v1/webbox-snapshots/{id}/resume. The pause does not count toward the build's time limit, and a build not resumed within 7 days fails. A build that is waiting or has settled returns 409 webbox_snapshot_not_ready.
+      operationId: pause-webbox-snapshot
+      parameters:
+        - description: Web Box Snapshot ID.
+          in: path
+          name: id
+          required: true
+          schema:
+            pattern: ^wbs_[0-9A-HJKMNP-TV-Z]{26}$
+            type: string
+      responses:
+        "202":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/WebBoxSnapshot"
+          description: Accepted
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+        "403":
+          content:
+            application/problem+json:
+              examples:
+                auth_forbidden_catalog_webbox:
+                  $ref: "#/components/examples/auth_forbidden_catalog_webbox"
+              schema:
+                $ref: "#/components/schemas/APIError"
+          description: Forbidden
+        "404":
+          content:
+            application/problem+json:
+              examples:
+                webbox_snapshot_not_found:
+                  $ref: "#/components/examples/webbox_snapshot_not_found"
+              schema:
+                $ref: "#/components/schemas/APIError"
+          description: Not Found
+        "409":
+          content:
+            application/problem+json:
+              examples:
+                webbox_snapshot_not_ready_pause:
+                  $ref: "#/components/examples/webbox_snapshot_not_ready_pause"
+              schema:
+                $ref: "#/components/schemas/APIError"
+          description: Conflict
+        "500":
+          $ref: "#/components/responses/InternalServerError"
+        "503":
+          content:
+            application/problem+json:
+              examples:
+                auth_provider_unavailable:
+                  $ref: "#/components/examples/auth_provider_unavailable"
+                internal_unavailable:
+                  $ref: "#/components/examples/internal_unavailable"
+              schema:
+                $ref: "#/components/schemas/APIError"
+          description: Service Unavailable
+      security:
+        - apiKeyAuth: []
+      summary: Pause Web Box Snapshot build
+      tags:
+        - webbox-snapshots
+      x-speakeasy-name-override: pause
   /v1/webbox-snapshots/{id}/resume:
     post:
-      description: "Resumes a build that waits, as build.waiting reports: because its live system rejected its credentials, rate limited its calls or could not be reached, because its model or sandbox provider was unavailable, or for more time after it used its time limit. For a credential wait, refresh each credential it names with PATCH /v1/credentials/{id} first. For a rate-limit wait, resume once the rate limit resets. For an unavailable wait, resume once what the wait's reason names can be reached. The build then tries it again and continues where it stopped, or waits again if it still fails. For a wait for more time, send add_seconds: the build continues where it stopped, with that much time from the resume. Returns the Snapshot, still building. A wait does not count toward the build's time limit: a build resumed from a live wait has the time it had left when it began waiting. A build that is not waiting returns 409 webbox_snapshot_not_waiting."
+      description: "Resumes a build that waits, as build.waiting reports: because its live system rejected its credentials, rate limited its calls or could not be reached, because its model or sandbox provider was unavailable, for more time after it used its time limit, or because it was paused. For a credential wait, refresh each credential it names with PATCH /v1/credentials/{id} first. For a rate-limit wait, resume once the rate limit resets. For an unavailable wait, resume once what the wait's reason names can be reached. The build then tries it again and continues where it stopped, or waits again if it still fails. A paused build continues where it stopped. For a wait for more time, send add_seconds: the build continues where it stopped, with that much time from the resume. To tell the builder what changed while the build waited, send message: the builder reads it once. Returns the Snapshot, still building. A wait does not count toward the build's time limit: a build resumed from a live wait has the time it had left when it began waiting. A build that is not waiting returns 409 webbox_snapshot_not_waiting."
       operationId: resume-webbox-snapshot
       parameters:
         - description: Snapshot ID.
@@ -6420,6 +6664,15 @@ paths:
           $ref: "#/components/responses/PayloadTooLarge"
         "415":
           $ref: "#/components/responses/UnsupportedMediaType"
+        "422":
+          content:
+            application/problem+json:
+              examples:
+                validation_message:
+                  $ref: "#/components/examples/validation_message"
+              schema:
+                $ref: "#/components/schemas/APIError"
+          description: Unprocessable Entity
         "500":
           $ref: "#/components/responses/InternalServerError"
         "503":
