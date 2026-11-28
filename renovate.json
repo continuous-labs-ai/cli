@@ -1,0 +1,146 @@
+{
+  "$schema": "https://docs.renovatebot.com/renovate-schema.json",
+  "extends": [
+    ":dependencyDashboard",
+    "schedule:weekly"
+  ],
+  "enabledManagers": [
+    "custom.regex",
+    "gomod",
+    "github-actions"
+  ],
+  "minimumReleaseAge": "1 day",
+  "internalChecksFilter": "strict",
+  "ignorePaths": [
+    "**/node_modules/**"
+  ],
+  "automerge": false,
+  "prConcurrentLimit": 5,
+  "prHourlyLimit": 2,
+  "labels": [
+    "dependencies"
+  ],
+  "osvVulnerabilityAlerts": true,
+  "vulnerabilityAlerts": {
+    "labels": [
+      "dependencies",
+      "security"
+    ]
+  },
+  "postUpdateOptions": [
+    "gomodTidy"
+  ],
+  "customManagers": [
+    {
+      "customType": "regex",
+      "description": "Speakeasy mirror (same as continuous); CONTRIBUTING.md names the same version",
+      "managerFilePatterns": [
+        "/^\\.speakeasy/workflow\\.yaml$/",
+        "/^CONTRIBUTING\\.md$/"
+      ],
+      "matchStrings": [
+        "speakeasyVersion: (?<currentValue>\\S+)",
+        "Speakeasy (?<currentValue>[0-9][^\\s:]*):"
+      ],
+      "datasourceTemplate": "github-releases",
+      "depNameTemplate": "speakeasy-api/speakeasy",
+      "extractVersionTemplate": "^v(?<version>.*)$"
+    }
+  ],
+  "packageRules": [
+    {
+      "description": "Speakeasy generates go.mod and .github/workflows/release.yaml (.speakeasy/gen.lock tracks both), so regular updates stay off; the final rule keeps security updates.",
+      "matchFileNames": [
+        "go.{mod,sum}",
+        ".github/workflows/release.yaml"
+      ],
+      "matchUpdateTypes": [
+        "*"
+      ],
+      "enabled": false
+    },
+    {
+      "description": "As in continuous: manifests' toolchain and runtime constraints, workflow runners, package overrides and Go replace directives keep their hand-set versions.",
+      "matchUpdateTypes": [
+        "*"
+      ],
+      "matchDepTypes": [
+        "golang",
+        "toolchain",
+        "packageManager",
+        "engines",
+        "requires-python",
+        "required_version",
+        "github-runner",
+        "service",
+        "install",
+        "overrides",
+        "replace"
+      ],
+      "enabled": false
+    },
+    {
+      "description": "As in continuous: a Go major version is a new module path, which needs its imports rewritten by hand.",
+      "matchManagers": [
+        "gomod"
+      ],
+      "matchUpdateTypes": [
+        "major"
+      ],
+      "enabled": false
+    },
+    {
+      "matchManagers": [
+        "gomod"
+      ],
+      "matchUpdateTypes": [
+        "minor",
+        "patch"
+      ],
+      "groupName": "go-minor-patch"
+    },
+    {
+      "matchManagers": [
+        "github-actions"
+      ],
+      "matchUpdateTypes": [
+        "minor",
+        "patch"
+      ],
+      "groupName": "actions-minor-patch"
+    },
+    {
+      "matchManagers": [
+        "custom.regex"
+      ],
+      "matchUpdateTypes": [
+        "minor",
+        "patch"
+      ],
+      "groupName": "tool pins"
+    },
+    {
+      "matchManagers": [
+        "custom.regex"
+      ],
+      "addLabels": [
+        "tool-pins"
+      ]
+    },
+    {
+      "matchManagers": [
+        "gomod"
+      ],
+      "prBodyNotes": [
+        "`go.mod` is generator-owned: Speakeasy rewrites it on every regeneration. If this PR changes `go.mod`, add the same floor to `.speakeasy/gen.yaml` under `cli.additionalDependencies` in this PR, or the next regeneration reverts it. A change to the lock file only survives regeneration."
+      ]
+    },
+    {
+      "description": "As in continuous: a rule above that matches every update type disables dependencies only after lookup, when Renovate knows which updates fix a vulnerability, so this rule keeps their security updates.",
+      "matchJsonata": [
+        "isVulnerabilityAlert"
+      ],
+      "enabled": true
+    }
+  ]
+}
