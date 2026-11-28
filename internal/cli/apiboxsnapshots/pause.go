@@ -23,7 +23,7 @@ func initPauseCmd(parent *cobra.Command) error {
 	var cmd = &cobra.Command{
 		Use:     "pause",
 		Short:   "Pause API Box Snapshot build",
-		Long:    "Requests a pause of a running build and returns the Snapshot without waiting for the pause to take effect. The build ends its agent's turn and pauses once no tool result is waiting to reach the agent, which can take a few minutes; build.waiting then has type paused. Get the Snapshot until build.waiting is set. A build that is accepted before the pause takes effect finishes instead. Resume the build with POST /v1/apibox-snapshots/{id}/resume. The pause does not count toward the build's time limit, and a build not resumed within 7 days fails. A build that is waiting or has settled returns 409 apibox_snapshot_not_ready.",
+		Long:    "Requests a pause of a running build and returns the Snapshot without waiting for the pause to take effect. The build interrupts its agent's turn and pauses, usually within a minute; a host tool call in progress, such as a submit, finishes first. build.waiting then has type paused. Get the Snapshot until build.waiting is set. A build that is accepted before the pause takes effect finishes instead. Resume the build with POST /v1/apibox-snapshots/{id}/resume. The pause does not count toward the build's time limit, and a build not resumed within 7 days fails. A build that is waiting or has settled returns 409 apibox_snapshot_not_ready.",
 		Example: "  continuous apibox-snapshots pause --id <id>",
 		RunE:    runPauseCmd,
 	}

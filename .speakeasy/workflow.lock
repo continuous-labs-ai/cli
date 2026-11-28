@@ -2,16 +2,16 @@ speakeasyVersion: 1.796.4
 sources:
     continuous-api:
         sourceNamespace: continuous-api
-        sourceRevisionDigest: sha256:436c25ccb32ac37012eb020d9e736b180592571a90efb19ff751a2caa43e9546
-        sourceBlobDigest: sha256:a5e3f33ca532eb85cce711081e0aeebdf3a3491f6a1958421fedc979327c474e
+        sourceRevisionDigest: sha256:06d33acf8251b2f89c051b51220f4e53404933a1a566e5e578d474efbb15516f
+        sourceBlobDigest: sha256:db2e9717a09881f1abb83231515acea6323f7b98be792b231d2e1fa248aea8c9
         tags:
             - latest
 targets:
     continuous-cli:
         source: continuous-api
         sourceNamespace: continuous-api
-        sourceRevisionDigest: sha256:436c25ccb32ac37012eb020d9e736b180592571a90efb19ff751a2caa43e9546
-        sourceBlobDigest: sha256:a5e3f33ca532eb85cce711081e0aeebdf3a3491f6a1958421fedc979327c474e
+        sourceRevisionDigest: sha256:06d33acf8251b2f89c051b51220f4e53404933a1a566e5e578d474efbb15516f
+        sourceBlobDigest: sha256:db2e9717a09881f1abb83231515acea6323f7b98be792b231d2e1fa248aea8c9
 workflow:
     workflowVersion: 1.0.0
     speakeasyVersion: 1.796.4

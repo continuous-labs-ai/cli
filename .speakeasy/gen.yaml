@@ -31,7 +31,7 @@ generation:
     generateNewTests: false
     skipResponseBodyAssertions: false
 cli:
-  version: 0.6.6
+  version: 0.6.7
   additionalDependencies: {}
   cliName: continuous
   distribution:

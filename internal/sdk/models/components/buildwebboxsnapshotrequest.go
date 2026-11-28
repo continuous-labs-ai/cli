@@ -55,9 +55,9 @@ type BuildWebBoxSnapshotRequest struct {
 	Model *BuildWebBoxSnapshotRequestModel `json:"model,omitzero"`
 	// Name for the Snapshot. Omission generates a name. Names must not contain U+0000. The ID stays its identity, and names need not be unique.
 	Name *string `json:"name,omitzero"`
-	// A ready Web Box Snapshot of the workspace or the catalog to build on. The build starts from its source, documents and tests. What the request does not set comes from the parent: its documents, which an upload of the same name replaces, its model, its review rounds, and those of its credentials the workspace still has, which must include its login. timeout_seconds keeps its default.
+	// A ready Web Box Snapshot of the workspace or the catalog to build on. The build starts from its source, documents and tests. What the request does not set comes from the parent: its documents, which an upload of the same name replaces, its model, and those of its credentials the workspace still has, which must include its login. A login the request sends must be for the app the parent was built on. timeout_seconds keeps its default.
 	ParentID *string `json:"parent_id,omitzero"`
-	// Review rounds, from 1 to 10. Omission means 1 without parent_id and the parent's review rounds with it. Each round is a review and a repair of its findings, by the same builder and reviewer. The rounds stop early when the reviewer reports no findings.
+	// Review rounds, from 1 to 10. Omission means 1, with or without parent_id. Each round is a review and a repair of its findings, by the same builder and reviewer. The rounds stop early when the reviewer reports no findings.
 	ReviewRounds *int64 `json:"review_rounds,omitzero"`
 	// Time limit for generation and validation in seconds, from 1 to 172800. Defaults to 43200 (twelve hours). Excludes queue wait, finalization, and any wait for the requester. Retries share the same deadline.
 	TimeoutSeconds *int64 `default:"43200" json:"timeout_seconds"`
