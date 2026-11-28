@@ -23,7 +23,7 @@ func initDeleteCmd(parent *cobra.Command) error {
 	var cmd = &cobra.Command{
 		Use:     "delete",
 		Short:   "Delete Web Box",
-		Long:    "Deletes a Web Box, running or stopped, with its state. Its runtime is released after the response. The API Box that a Web Box fronts stays, with its state.",
+		Long:    "Deletes a Web Box, running or stopped, with its state. Its runtime is released after the response. A Web Box that fronts an API Box is deleted with that API Box and its state. While an MCP Box fronts the API Box, the delete removes the Web Box and returns 409 apibox_in_use: delete the MCP Box, then send the delete again.",
 		Example: "  continuous webboxes delete --id <id>",
 		RunE:    runDeleteCmd,
 	}
